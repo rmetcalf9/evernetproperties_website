@@ -3,6 +3,7 @@
 ##git subtree pull --prefix=dist/spa origin gh-pages (If change made upstream)
 
 quasar build
+echo "evernetproperties.com" > dist/spa/CNAME
 git add --all
 git commit -m"New website version"
 git push
