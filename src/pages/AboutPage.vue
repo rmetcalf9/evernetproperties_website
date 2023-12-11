@@ -5,7 +5,6 @@
       src="~assets/quasar-logo-vertical.svg"
       style="width: 200px; height: 200px"
     >About2
-    TODO Cookie screen
   </q-page>
 </template>
 

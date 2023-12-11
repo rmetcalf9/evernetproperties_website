@@ -11,7 +11,7 @@
             class="profile-picture"
           >
         </div>
-        <div style="width:500px" class="flex column">
+        <div class="flex column">
           <div v-for="feature in features" :key="feature"><q-icon name="check_box" color="green" size="32px" />{{ feature }}</div>
         </div>
       </div>
@@ -35,7 +35,7 @@ export default defineComponent({
   data () {
     return {
       features: [
-        'a',
+        'a main selling point',
         'b',
         'c',
         'c',
