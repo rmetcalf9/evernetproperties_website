@@ -1,6 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <div class="main-page fit column wrap justify-center items-center content-center">
+      <h2>Let us find you a property</h2>
       <img
         alt="Quasar logo"
         src="~assets/quasar-logo-vertical.svg"
@@ -22,7 +23,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'IndexPage'
+  name: 'HomePage'
 })
 </script>
 

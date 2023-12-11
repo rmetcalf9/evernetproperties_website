@@ -12,9 +12,9 @@
             <q-toolbar-title>
               Evernet Properties Limited
             </q-toolbar-title>
-            <q-toolbar-subtitle>
+            <div>
               We find properties
-            </q-toolbar-subtitle>
+            </div>
           </div>
         </div>
       </q-toolbar>
@@ -38,7 +38,10 @@
     </q-page-container>
 
     <q-footer elevated class="bg-grey-7 text-white">
-      <div class="footer">© 2023 All Right Reserved Evernet Properties Limited</div>
+      <div class="footer row">
+        <div class="left_footer col-grow"><router-link to="/privacy">Privacy Policy</router-link></div>
+        <div class="right_footer">© 2023 All Right Reserved</div>
+      </div>
     </q-footer>
   </q-layout>
 </template>
@@ -54,6 +57,11 @@ export default defineComponent({
         {name: 'Home', target: '/'},
         {name: 'About', target: '/about'}
       ]
+    }
+  },
+  caculated: {
+    copyright () {
+      return '© ' + new Date().getFullYear() + ' All Right Reserved Evernet Properties Limited'
     }
   }
 })
@@ -100,7 +108,11 @@ a {
   color: white;
   padding: 5px;
 }
-.footer {
+.left_footer {
+  text-align: left;
+  padding-left: 5px;
+}
+.right_footer {
   text-align: right;
   padding-right: 5px;
 }
