@@ -29,6 +29,11 @@
       <router-view />
       <div class="bottom-sub-toolbar bg-grey-5 fit column wrap justify-center items-center content-center text-white">
         <img
+          alt="PIMS Logo"
+          src="~assets/PIMS Logo White.png"
+          class="pims-logo"
+        >Membership number 34541 (Robert Metcalf)
+        <img
           class="bottom-logo"
           alt="Evernet properties logo"
           src="~assets/main_logo.svg"
@@ -48,6 +53,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { Notify, Cookies } from 'quasar'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -55,6 +61,7 @@ export default defineComponent({
     return {
       menu_items: [
         {name: 'Home', target: '/'},
+        {name: 'FAQ', target: '/faq'},
         {name: 'About', target: '/about'}
       ]
     }
@@ -63,14 +70,62 @@ export default defineComponent({
     copyright () {
       return '© ' + new Date().getFullYear() + ' All Right Reserved Evernet Properties Limited'
     }
+  },
+  methods: {
+    notifyAccept () {
+      Cookies.set('cookiesAccepted', 'true', {
+        secure: !window.location.href.includes('localhost'), // otherwise cookie not set on dev machines
+        expires: 180 // expire in 180 days
+      })
+    },
+    navigateToDataAndPrivacy () {
+      this.$router.push('/privacy')
+    },
+    hasAcceptedCookie () {
+      if (!Cookies.has('cookiesAccepted')) {
+        return false
+      }
+      var cookieData = Cookies.get('cookiesAccepted')
+      if (typeof (cookieData) === 'undefined') {
+        return false
+      }
+      if (cookieData === 'true') {
+        return true
+      }
+      return false
+    },
+    cookiePopup () {
+      var TTT = this
+      if (this.hasAcceptedCookie()) {
+        return
+      }
+      Notify.create({
+        color: 'bg-grey-2',
+        message: 'By clicking “Accept”, you agree to the storing of cookies on your device to enhance site navigation, analyze site usage, and assist in our marketing efforts. Some of these may be "third party cookies".',
+        timeout: 0,
+        actions: [
+          { label: 'View Privacy Policy', color: 'primary', handler: TTT.navigateToDataAndPrivacy },
+          { label: 'Accept', color: 'white', handler: TTT.notifyAccept }
+        ]
+      })
+    }
+  },
+  mounted () {
+    this.cookiePopup()
   }
 })
 </script>
 
 <style>
+.pims-logo {
+  width: 200px;
+  height: 80px;
+  object-fit: cover;
+  object-position: 0 -10;
+}
 .main-logo {
   width: 80px;
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 20px;
   padding-left: 10px;
   padding-right: 10px;

@@ -5,9 +5,7 @@
       src="~assets/quasar-logo-vertical.svg"
       style="width: 200px; height: 200px"
     >About2
-    TODO Complaints procedure
     TODO Cookie screen
-    TODO PIMS
   </q-page>
 </template>
 
