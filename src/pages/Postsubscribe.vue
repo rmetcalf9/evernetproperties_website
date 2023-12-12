@@ -11,8 +11,8 @@
         >
       </div>
       <div style="max-width: 400px;">
-        <h3 style="margin: 0px;">Robert Metcalf</h3>
-        Introducing Robert, a passionate real estate deal sourcer committed to identifying top-notch, profitable opportunities for investors dedicated to providing high-quality housing for tenants and guests. With Robert's keen market insight and strategic approach, he excels in uncovering deals that align with the vision of creating superior living spaces. Trust Robert to transform opportunities into successful investments, delivering exceptional value in the dynamic world of real estate.
+        <h3 style="margin: 0px;">Thank you</h3>
+        We will be in touch
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'AboutPage'
+  name: 'PostSubscribePage'
 })
 </script>
 

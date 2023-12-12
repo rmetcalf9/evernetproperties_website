@@ -8,7 +8,9 @@
         <q-card-section>
           <div><q-icon :name="stage_icon" color="grey" :size="stage_icon_size" class="stage_icon" />If you're looking to find a profitable property investment then the first step is to get on our investor list. To do this let us know your name, phone and email address:</div>
 
-          <h1>TODO FORM BELOW</h1>
+          <CrmInvestorSubForm
+            ref="CrmInvestorSubForm"
+          ></CrmInvestorSubForm>
 
           <div><q-icon :name="stage_icon" color="grey" :size="stage_icon_size" class="stage_icon" />Once you have completed this we will contact you to have a conversation about your requirements and make sure that this option is suitable for you.</div>
 
@@ -80,9 +82,13 @@
 
 <script>
 import { defineComponent } from 'vue'
+import CrmInvestorSubForm from '../components/CrmInvestorSubForm.vue'
 
 export default defineComponent({
   name: 'FAQPage',
+  components: {
+    CrmInvestorSubForm
+  },
   data () {
     return {
       stage_icon: 'crop_square',
