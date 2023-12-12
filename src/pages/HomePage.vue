@@ -35,15 +35,15 @@ export default defineComponent({
   data () {
     return {
       features: [
-        'a main selling point',
-        'b',
-        'c',
-        'c',
-        'c',
-        'c',
-        'c',
-        'c',
-        'c'
+      'Cash Flowing property found for you',
+      'Save Time and Energy',
+      'Rental and SA Market Assessed',
+      'Expert Insight',
+      'Risks Addressed',
+      'Due Diligence Support',
+      'Below Market Value Price Negotiated',
+      'Great ROI Deals Selected',
+      'Bespoke Search Service Available',
       ]
     }
   }
