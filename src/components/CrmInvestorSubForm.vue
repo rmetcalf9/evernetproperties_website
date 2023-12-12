@@ -1,14 +1,15 @@
 <template>
-  <div>
-    <div class="form_heading">Apply for investor list</div>
-    <q-form
-      @reset="onReset"
-      class="q-gutter-md"
-      action="https://suitecrm.metcarob.com/index.php?entryPoint=WebToPersonCapture" method="post"
-      name="WebToLeadForm"
-      id="WebToLeadForm"
-    >
-    <div class="row">
+  <div class="fit row wrap justify-center items-center content-center">
+    <div class="fit row wrap justify-center items-center content-center">
+      <div class="form_heading">Apply for investor list</div>
+      <div class="flex-break"></div>
+      <q-form
+        @reset="onReset"
+        class="q-gutter-md"
+        action="https://suitecrm.metcarob.com/index.php?entryPoint=WebToPersonCapture" method="post"
+        name="WebToLeadForm"
+        id="WebToLeadForm"
+      >
       <q-input
         filled
         color="grey"
@@ -49,17 +50,17 @@
         class="form-input"
         :rules="[ val => val && val.length > 0 || 'Please type something']"
       />
-    </div>
-    <input name="campaign_id" id="campaign_id" type="hidden" value="34e56d3d-9962-a6e1-b970-657865ca5495" />
-    <input name="redirect_url" id="redirect_url" type="hidden" :value="postSubscribeUrl" />
-    <input name="assigned_user_id" id="assigned_user_id" type="hidden" value="57d17220-c1e8-056b-f46f-654cc8c17b7c" />
-    <input name="moduleDir" id="moduleDir" type="hidden" value="Leads" />
+      <input name="campaign_id" id="campaign_id" type="hidden" value="34e56d3d-9962-a6e1-b970-657865ca5495" />
+      <input name="redirect_url" id="redirect_url" type="hidden" :value="postSubscribeUrl" />
+      <input name="assigned_user_id" id="assigned_user_id" type="hidden" value="57d17220-c1e8-056b-f46f-654cc8c17b7c" />
+      <input name="moduleDir" id="moduleDir" type="hidden" value="Leads" />
 
-    <div>
-      <q-btn label="Submit" type="submit" color="grey"/>
-      <q-btn label="Reset" type="reset" color="lightgrey" flat class="q-ml-sm" />
+      <div>
+        <q-btn label="Submit" type="submit" color="grey"/>
+        <q-btn label="Reset" type="reset" color="lightgrey" flat class="q-ml-sm" />
+      </div>
+      </q-form>
     </div>
-    </q-form>
   </div>
 </template>
 
