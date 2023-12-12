@@ -20,7 +20,7 @@
       </q-toolbar>
       <div class="sub-toolbar bg-grey-5 fit row no-wrap justify-center items-center content-start">
         <div v-for="item in menu_items" :key="item.name">
-          <router-link :to="item.target">{{ item.name }}</router-link>
+          <router-link :to="item.target" class="toolbar">{{ item.name }}</router-link>
         </div>
       </div>
     </q-header>
@@ -44,7 +44,7 @@
 
     <q-footer elevated class="bg-grey-7 text-white">
       <div class="footer row">
-        <div class="left_footer col-grow"><router-link to="/privacy">Privacy Policy</router-link></div>
+        <div class="left_footer col-grow"><router-link to="/privacy" class="toolbar">Privacy Policy</router-link></div>
         <div class="right_footer">© 2023 All Right Reserved</div>
       </div>
     </q-footer>
@@ -158,7 +158,7 @@ export default defineComponent({
   padding-left: 5px;
   padding-right: 5px;
 }
-a {
+a.toolbar {
   text-decoration: none;
   color: white;
   padding: 5px;
