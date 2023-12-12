@@ -35,7 +35,7 @@
         <q-card-section>
           <div>There are many reasons a deal may fall through after you have paid the sourcing fee. If the deal falls through due to the buyer pulling out or some other problem on the buyers side then we will endeavour to find you a replacement property or provide a full refund of the sourcing fee.</div>
 
-          <div>If after the cooling off period the deal falls through due to a problem at your side (for example not able to get finance) the sourcing fee is not refundable. Before buying the deal we will help you check to have the correct finance and other particulars in place which however this is your responsibility.</div>
+          <div>If after the cooling off period the deal falls through due to a problem at your side (for example not able to get finance) the sourcing fee is not refundable. Before buying the deal we will help you check to have the correct finance and other particulars in place; however this is your responsibility.</div>
         </q-card-section>
       </q-card>
     </q-expansion-item>
