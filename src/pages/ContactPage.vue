@@ -13,7 +13,7 @@
       <div style="max-width: 400px;">
         <h3 style="margin: 0px;">Contact us</h3>
         <p>Email: <a href="mailto:robert@evernetproperties.com">robert@evernetproperties.com</a><br>
-        Phone/Whatsapp: 07714916071</p>
+        Phone/Whatsapp: (+44) 07714916071</p>
       </div>
     </div>
   </div>
