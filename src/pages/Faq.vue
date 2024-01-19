@@ -21,6 +21,35 @@
         </q-card-section>
       </q-card>
     </q-expansion-item>
+
+    <q-expansion-item
+      label="What is a qualified investor?"
+    >
+      <q-card>
+        <q-card-section>
+          <div>A qualified investor is an investor who is ready to move quickly when the right opportunity comes along. We will be setting up deals where we negotiate a below market value price with the vendor. This means it is important to be in a position to act quickly to take the deal which is why if you are serious about getting an investment property you need to be ready.</div>
+        </q-card-section>
+      </q-card>
+    </q-expansion-item>
+    <q-expansion-item
+      label="What do I need to be a qualified investor?"
+    >
+      <q-card>
+        <q-card-section>
+          <div>This depends on the type of deal. For a typical BRR property these are the 5 Things you need to prepare
+          <ol>
+            <li>Photo ID</li>
+            <li>Proof of address (within last 3 months) usually a utility bill/council tax bill</li>
+            <li>Mortgage brokers details (or if you are a cash buyer a screenshot of cash in your bank or similar proof of funds)</li>
+            <li>Solicitor details</li>
+            <li>Who’s name is the property going to be in. (Is it in your name, is it in your company name.)</li>
+          </ol>
+        </div>
+        </q-card-section>
+      </q-card>
+    </q-expansion-item>
+
+
     <q-expansion-item
       label="What if I change my mind?"
     >
