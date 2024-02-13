@@ -88,7 +88,10 @@ export default defineComponent({
       console.log('TODO onSubmit')
     },
     onReset () {
-      // console.log('TODO onReset')
+      this.first_name = ''
+      this.last_name = ''
+      this.phone_mobile = ''
+      this.email1 = ''
     }
   }
 })
