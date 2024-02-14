@@ -29,6 +29,7 @@
         <a class="toolbar" @click="click_refurb_menu('photos')">Photos</a>
         <a class="toolbar" @click="click_refurb_menu('estimate')">Estimate</a>
         <a class="toolbar" @click="click_refurb_menu('report')">Report</a>
+        <a class="toolbar" @click="click_refurb_menu('json')">JSON</a>
       </div>
     </q-header>
 
