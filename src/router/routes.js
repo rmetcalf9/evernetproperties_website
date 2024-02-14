@@ -15,7 +15,7 @@ const routes = [
   },
   {
     path: '/',
-    component: () => import('layouts/NoBottomLayout.vue'),
+    component: () => import('layouts/RefurbCalcLayout.vue'),
     children: [
       { path: 'tools/refurbcalc', component: () => import('pages/tools/RefurbishmentCalc.vue') }
     ]

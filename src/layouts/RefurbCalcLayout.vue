@@ -23,6 +23,13 @@
           <router-link :to="item.target" class="toolbar">{{ item.name }}</router-link>
         </div>
       </div>
+      <div class="sub-toolbar bg-grey-5 fit row no-wrap justify-center items-center content-start">
+        <div class="toolbar_non_click">Refurb Calc</div>
+        <a class="toolbar" @click="click_refurb_menu('plans')">Plans</a>
+        <a class="toolbar" @click="click_refurb_menu('photos')">Photos</a>
+        <a class="toolbar" @click="click_refurb_menu('estimate')">Estimate</a>
+        <a class="toolbar" @click="click_refurb_menu('report')">Report</a>
+      </div>
     </q-header>
 
     <q-page-container>
@@ -51,7 +58,8 @@ export default defineComponent({
         {name: 'FAQ', target: '/faq'},
         {name: 'Contact Us', target: '/contact'},
         {name: 'About', target: '/about'}
-      ]
+      ],
+      refurb_mode: 'plans'
     }
   },
   computed: {
@@ -60,6 +68,10 @@ export default defineComponent({
     }
   },
   methods: {
+    click_refurb_menu (ite) {
+      this.refurb_mode = ite
+      this.$bus.emit('click_refurb_menu', ite)
+    },
     notifyAccept () {
       Cookies.set('cookiesAccepted', 'true', {
         secure: !window.location.href.includes('localhost'), // otherwise cookie not set on dev machines
@@ -158,5 +170,8 @@ a.toolbar {
 .right_footer {
   text-align: right;
   padding-right: 5px;
+}
+.toolbar_non_click {
+  color: black;
 }
 </style>

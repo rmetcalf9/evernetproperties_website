@@ -15,10 +15,10 @@ export default {
       allzoomedelements: undefined,
       svg: undefined,
       chartarea: {
-        xmin: -3000,
-        xmax: 3000,
-        ymin: -1400,
-        ymax: 1400
+        xmin: -1000,
+        xmax: 1000,
+        ymin: -800,
+        ymax: 800
       }
     }
   },
