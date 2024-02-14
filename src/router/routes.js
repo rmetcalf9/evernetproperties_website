@@ -10,7 +10,14 @@ const routes = [
       { path: 'faq', component: () => import('pages/Faq.vue') },
       { path: 'contact', component: () => import('pages/ContactPage.vue') },
       { path: 'postsubscribe', component: () => import('pages/Postsubscribe.vue') },
-      { path: 'calc/brr', component: () => import('pages/calc/Brr.vue') }
+      { path: 'tools/brrcalc', component: () => import('pages/tools/BrrCalc.vue') }
+    ]
+  },
+  {
+    path: '/',
+    component: () => import('layouts/NoBottomLayout.vue'),
+    children: [
+      { path: 'tools/refurbcalc', component: () => import('pages/tools/RefurbishmentCalc.vue') }
     ]
   },
 
