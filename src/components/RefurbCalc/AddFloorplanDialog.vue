@@ -52,6 +52,7 @@ export default {
     },
     launchDialog () {
       this.okdisabled = true
+      this.floorplan_url = ''
       var TTT = this
 
       TTT.visible = true // Must be visible for ref to exist

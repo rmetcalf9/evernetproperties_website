@@ -48,6 +48,21 @@ export default {
       this.$refs.addFloorplanDialog.launchDialog()
     },
     onDialogCompleteAddFloorplan (retData) {
+      retData.floorplan_url = 'https://lh3.googleusercontent.com/pw/ABLVV8715kFOUDZGlx6NcwSx-EGUnYGl_7sLJ5T-QHVLTm0ojxZ04GzAyUnwnCORsc34bM5wOiSNnj1PVVhTlxKE-hb8gUw5hMtFH5-6xUymqPObqtQx6dS-Of8tSnFUNGYrPG_d9TzkJqUce4Gtj7dCeJlFQQ=w987-h755-s-no-gm?authuser=0'
+      // retData.floorplan_url = 'https://www.samuelleeds.com/wp-content/uploads/Power-Team-2.png'
+      // tried 'embed' with 'src' instead of href
+      var myimage = this.allzoomedelements.append('svg:image')
+          .attr('href', retData.floorplan_url)
+          .attr('width', 1000)
+          .attr('height', 1000)
+          .on("error", function(d){
+              console.log('load failed', d)
+              Notify.create({
+                color: 'bg-grey-2',
+                message: 'Failed to load image',
+                timeout: 2
+              })
+          })
       Notify.create({
         color: 'bg-grey-2',
         message: 'Not Implemented.' + retData.floorplan_url,
@@ -101,7 +116,6 @@ export default {
       }
       // console.log('nodeData:', this.nodeData)
       xdiv.appendChild(chart(this))
-
     }
   },
   mounted () {
