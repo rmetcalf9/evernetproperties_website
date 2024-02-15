@@ -38,7 +38,7 @@ export default {
       Notify.create({
         color: 'bg-grey-2',
         message: 'Not Implemented.',
-        timeout: 0
+        timeout: 2
       })
     },
     clickDIV () {
