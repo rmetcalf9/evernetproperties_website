@@ -3,10 +3,13 @@
     <q-page class="flex flex-center">
       <div class="main-page fit col wrap justify-center items-center content-center">
         <h1>Refurbishment Calculator {{ refurb_mode }}</h1>
-        <plansChart
-          ref="plansChart"
-          v-if="refurb_mode === 'plans'"
-        />
+        <div
+        v-if="refurb_mode === 'plans'"
+        >
+          <plansChart
+            ref="plansChart"
+          />
+        </div>
       </div>
     </q-page>
   </div>

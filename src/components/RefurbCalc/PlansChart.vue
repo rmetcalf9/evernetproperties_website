@@ -2,11 +2,22 @@
   <div>
     <div id="chartInsetionPoint_adsdsa" @click="clickDIV($event)">
     </div>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-fab
+        color="grey"
+        icon="keyboard_arrow_up"
+        direction="up"
+        vertical-actions-align="right"
+      >
+        <q-fab-action color="grey" @click="onClickAddFloorplan" icon="add" label="Add floorplan" />
+      </q-fab>
+    </q-page-sticky>
   </div>
 </template>
 
 <script>
 import * as d3 from 'd3'
+import { Notify } from 'quasar'
 
 export default {
   name: 'ChartComponent',
@@ -23,6 +34,13 @@ export default {
     }
   },
   methods: {
+    onClickAddFloorplan () {
+      Notify.create({
+        color: 'bg-grey-2',
+        message: 'Not Implemented.',
+        timeout: 0
+      })
+    },
     clickDIV () {
       console.log('CLICK')
     },
