@@ -1,35 +1,31 @@
 <template>
-  <q-dialog v-model="visible">
-    <q-layout view="Lhh lpR fff" container class="bg-white" style="width: 700px; max-width: 80vw;">
-      <q-header class="bg-primary">
-        <q-toolbar>
-          <q-toolbar-title>
-            Add floorplan
-          </q-toolbar-title>
-          <q-btn flat v-close-popup round dense icon="close" />
-        </q-toolbar>
-      </q-header>
+<q-dialog v-model="visible">
+  <q-card>
+    <q-toolbar>
+      <q-toolbar-title>Add Floorplan</q-toolbar-title>
+      <q-btn flat round dense icon="close" v-close-popup />
+    </q-toolbar>
 
-      <q-page-container>
-        <q-page padding>
-          <div>AAAA</div>
-          <div>&nbsp;</div>
-          <q-btn
-            @click="ok"
-            color="primary"
-            label="Ok"
-            class = "float-right q-ml-xs"
-          />
-          <q-btn
-            @click="cancel"
-            label="Cancel"
-            class = "float-right"
-          />
-        </q-page>
-      </q-page-container>
+    <q-card-section>
+      Enter a web accessible URL for an image of the floorplan
+      <q-input
+        ref="urlInput"
+        filled
+        color="grey"
+        v-model="floorplan_url"
+        name="Floorplan Image URL"
+        label="URL"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || 'Enter URL']"
+      />
+    </q-card-section>
 
-    </q-layout>
-  </q-dialog>
+    <q-card-actions align="right">
+      <q-btn flat label="OK" color="black" @click="ok" />
+      <q-btn flat label="Cancel" color="primary" @click="cancel" />
+    </q-card-actions>
+  </q-card>
+</q-dialog>
 </template>
 
 <script>
@@ -39,14 +35,17 @@ export default {
   data () {
     return {
       visible: false,
+      floorplan_url: ''
     }
   },
   methods: {
     ok () {
-      this.visible = false
-      this.$emit('ok', {
-      
-      })
+      if (this.$refs.urlInput.validate()) {
+        this.visible = false
+        this.$emit('ok', {
+          floorplan_url: this.floorplan_url
+        })
+      }
     },
     cancel () {
       this.visible = false
@@ -69,4 +68,7 @@ export default {
 </script>
 
 <style>
+.dialog-class {
+
+}
 </style>

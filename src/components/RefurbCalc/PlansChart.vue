@@ -50,7 +50,7 @@ export default {
     onDialogCompleteAddFloorplan (retData) {
       Notify.create({
         color: 'bg-grey-2',
-        message: 'Not Implemented.',
+        message: 'Not Implemented.' + retData.floorplan_url,
         timeout: 2
       })
     },
