@@ -12,15 +12,24 @@
         <q-fab-action color="grey" @click="onClickAddFloorplan" icon="add" label="Add floorplan" />
       </q-fab>
     </q-page-sticky>
+    <addFloorplanDialog
+      ref="addFloorplanDialog"
+      @ok="onDialogCompleteAddFloorplan"
+    />
   </div>
 </template>
 
 <script>
 import * as d3 from 'd3'
 import { Notify } from 'quasar'
+import addFloorplanDialog from './AddFloorplanDialog.vue'
+
 
 export default {
   name: 'ChartComponent',
+  components: {
+    addFloorplanDialog,
+  },
   data () {
     return {
       allzoomedelements: undefined,
@@ -35,6 +44,10 @@ export default {
   },
   methods: {
     onClickAddFloorplan () {
+      // https://lh3.googleusercontent.com/pw/ABLVV8715kFOUDZGlx6NcwSx-EGUnYGl_7sLJ5T-QHVLTm0ojxZ04GzAyUnwnCORsc34bM5wOiSNnj1PVVhTlxKE-hb8gUw5hMtFH5-6xUymqPObqtQx6dS-Of8tSnFUNGYrPG_d9TzkJqUce4Gtj7dCeJlFQQ=w987-h755-s-no-gm?authuser=0
+      this.$refs.addFloorplanDialog.launchDialog()
+    },
+    onDialogCompleteAddFloorplan (retData) {
       Notify.create({
         color: 'bg-grey-2',
         message: 'Not Implemented.',
