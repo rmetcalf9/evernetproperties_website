@@ -25,6 +25,7 @@ import * as d3 from 'd3'
 import { Notify } from 'quasar'
 import addFloorplanDialog from './AddFloorplanDialog.vue'
 import refurbDataModel from './dataModel.js'
+import backgroundItemDrawing from './backgroundItemDrawing.js'
 
 
 export default {
@@ -54,31 +55,24 @@ export default {
       retData.floorplan_url = 'https://lh3.googleusercontent.com/pw/ABLVV8715kFOUDZGlx6NcwSx-EGUnYGl_7sLJ5T-QHVLTm0ojxZ04GzAyUnwnCORsc34bM5wOiSNnj1PVVhTlxKE-hb8gUw5hMtFH5-6xUymqPObqtQx6dS-Of8tSnFUNGYrPG_d9TzkJqUce4Gtj7dCeJlFQQ=w987-h755-s-no-gm?authuser=0'
       // retData.floorplan_url = 'https://www.samuelleeds.com/wp-content/uploads/Power-Team-2.png'
       // tried 'embed' with 'src' instead of href
-      refurbDataModel.addBackgroundItem({
-        data: this.refurbData
+      const added_item = refurbDataModel.addBackgroundItem({
+        data: this.refurbData,
+        item_data: refurbDataModel.getBackgroudnItemJson_Floorplan({
+          url: retData.floorplan_url,
+          width: 1000,
+          height: 1000
+        })
       })
-      var myimage = this.allzoomedelements.append('svg:image')
-          .attr('href', retData.floorplan_url)
-          .attr('width', 1000)
-          .attr('height', 1000)
-          .on("error", function(d){
-              console.log('load failed', d)
-              Notify.create({
-                color: 'bg-grey-2',
-                message: 'Failed to load image',
-                timeout: 2
-              })
-          })
-      Notify.create({
-        color: 'bg-grey-2',
-        message: 'Not Implemented.' + retData.floorplan_url,
-        timeout: 2
+      backgroundItemDrawing.drawSingleItem({
+        item: added_item,
+        allzoomedelements: this.allzoomedelements
       })
     },
     clickDIV () {
       console.log('CLICK')
     },
     initChart () {
+      var TTT = this
       var chart = function (viewObj) {
         var width = 800
         var height = 800
@@ -112,6 +106,11 @@ export default {
         function zoomed (event, d) {
           viewObj.allzoomedelements.attr('transform', event.transform)
         }
+
+        backgroundItemDrawing.drawAllBackgroundItems({
+          allbackgrounditems: TTT.refurbData.background_items,
+          allzoomedelements: viewObj.allzoomedelements
+        })
 
         return viewObj.svg.node()
       }

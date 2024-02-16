@@ -9,15 +9,30 @@ function getNewlyCreatedDataSet () {
   }
 }
 
-function addBackgroundItem ({data}) {
-  const item = {
-    id: uid()
+function getBackgroudnItemJson_Floorplan({url, width, height}) {
+  return {
+    type: 'floorplan',
+    url: url,
+    width: width,
+    height: height
   }
-  console.log('ss', data)
+}
+
+function addBackgroundItem ({data, item_data}) {
+  let maxOrder = data.background_items.reduce((acc, value) => {
+      return (acc = acc > value.order ? acc : value.order);
+  }, 0);
+  const item = {
+    id: uid(),
+    item_data: item_data,
+    order: maxOrder + 1
+  }
   data.background_items.push(item)
+  return item
 }
 
 export default {
   getNewlyCreatedDataSet: getNewlyCreatedDataSet,
-  addBackgroundItem: addBackgroundItem
+  addBackgroundItem: addBackgroundItem,
+  getBackgroudnItemJson_Floorplan: getBackgroudnItemJson_Floorplan
 }
