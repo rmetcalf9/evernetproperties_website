@@ -2,12 +2,13 @@
   <div>
     <q-page class="flex flex-center">
       <div class="main-page fit col wrap justify-center items-center content-center">
-        <h1>Refurbishment Calculator {{ refurb_mode }}</h1>
+        <h1>Refurbishment Calculator {{ refurb_mode }} {{ refurb_data }}</h1>
         <div
         v-if="refurb_mode === 'plans'"
         >
           <plansChart
             ref="plansChart"
+            :refurbData="refurb_data"
           />
         </div>
       </div>
@@ -18,6 +19,7 @@
 <script>
 import { defineComponent } from 'vue'
 import plansChart from '../../components/RefurbCalc/PlansChart.vue'
+import refurbDataModel from '../../components/RefurbCalc/dataModel.js'
 
 export default defineComponent({
   name: 'CalcRefurbishment',
@@ -26,7 +28,8 @@ export default defineComponent({
   },
   data () {
     return {
-      refurb_mode: 'plans'
+      refurb_mode: 'plans',
+      refurb_data: refurbDataModel.getNewlyCreatedDataSet()
     }
   },
   methods: {
