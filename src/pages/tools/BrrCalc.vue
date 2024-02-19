@@ -3,6 +3,11 @@
     <div class="main-page fit col wrap justify-center items-center content-center">
       <h1>Buy Refurbish Refinance Strategy</h1>
       <div>When working with a deal sourcer they will provide you with information about specific deals giving what the expected ROI and other figures for the investment will be. Part of the work the deal sourcer has done is research around each figure to justify how they have arrived at the expected ROI. You can use this page to perform these calculations.</div>
+
+      <GdvCard
+        ref="GdvCard"
+      />
+
       <div class="row">
         <q-card inline class="q-ma-sm card-style">
           <q-card-section>
@@ -22,16 +27,6 @@
             AAA
           </q-card-section>
         </q-card>
-        <q-card inline class="q-ma-sm card-style">
-          <q-card-section>
-            <div class="text-h6">End Value</div>
-            <div class="text-subtitle2">TODO</div>
-          </q-card-section>
-          <q-card-section>
-            <div>TODO Valuation Bricks and mortor</div>
-            <div>TODO Valuation Comercial</div>
-          </q-card-section>
-        </q-card>
         <div>TODO Buy with bridge or cash</div>
 
       </div>
@@ -41,9 +36,13 @@
 
 <script>
 import { defineComponent } from 'vue'
+import GdvCard from '../../components/BrrCalc/Gdv.vue'
 
 export default defineComponent({
-  name: 'CalcBrrToFlip'
+  name: 'CalcBrrToFlip',
+  components: {
+    GdvCard
+  }
 })
 </script>
 

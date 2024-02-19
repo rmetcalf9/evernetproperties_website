@@ -26,7 +26,7 @@
       <div class="sub-toolbar bg-grey-5 fit row no-wrap justify-center items-center content-start">
         <div class="toolbar_non_click">Refurb Calc</div>
         <a class="toolbar" @click="click_refurb_menu('plans')">Plans</a>
-        <a class="toolbar" @click="click_refurb_menu('photos')">Photos</a>
+        <a class="toolbar" @click="click_refurb_menu('viewing')">Viewing</a>
         <a class="toolbar" @click="click_refurb_menu('estimate')">Estimate</a>
         <a class="toolbar" @click="click_refurb_menu('report')">Report</a>
         <a class="toolbar" @click="click_refurb_menu('json')">JSON</a>
