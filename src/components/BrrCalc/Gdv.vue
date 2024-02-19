@@ -24,12 +24,13 @@
             :step="10000"
             drag-range
             label
-            :left-label-value="'Min £' + gdvitem.gdvrange.min / 1000 + 'k'"
-            :right-label-value="'Max £' + gdvitem.gdvrange.max / 1000 + 'k'"
+            :left-label-value="'Worst £' + gdvitem.gdvrange.min / 1000 + 'k'"
+            :right-label-value="'Best £' + gdvitem.gdvrange.max / 1000 + 'k'"
           />
         </div>
       </div>
       <q-btn round  color="primary" icon="add" @click="addgdvitem" />
+      <div>If the property is to be split into flats add the GDV of each above and the number below is the total GDV.</div>
       <div class="text-h6">Total: £{{ totalmin }} - £{{totalmax }}</div>
     </q-card-section>
   </q-card>

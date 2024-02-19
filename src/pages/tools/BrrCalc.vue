@@ -4,20 +4,14 @@
       <h1>Buy Refurbish Refinance Strategy</h1>
       <div>When working with a deal sourcer they will provide you with information about specific deals giving what the expected ROI and other figures for the investment will be. Part of the work the deal sourcer has done is research around each figure to justify how they have arrived at the expected ROI. You can use this page to perform these calculations.</div>
 
-      <GdvCard
-        ref="GdvCard"
-      />
-
       <div class="row">
-        <q-card inline class="q-ma-sm card-style">
-          <q-card-section>
-            <div class="text-h6">Purchase Price</div>
-            <div class="text-subtitle2">In this section we work out the purchase price. This figure is not just read from the listing we will aim to get a below market value (BMV) price and this will involve finding the right property seller and being able to negotiate the price.</div>
-          </q-card-section>
-          <q-card-section>
-            Purchase Price
-          </q-card-section>
-        </q-card>
+        <GdvCard
+          ref="GdvCard"
+        />
+        <PurchasePrice
+          ref="PurchasePrice"
+        />
+
         <q-card inline class="q-ma-sm card-style">
           <q-card-section>
             <div class="text-h6">Refurbishment Cost</div>
@@ -37,11 +31,13 @@
 <script>
 import { defineComponent } from 'vue'
 import GdvCard from '../../components/BrrCalc/Gdv.vue'
+import PurchasePrice from '../../components/BrrCalc/PurchasePrice.vue'
 
 export default defineComponent({
   name: 'CalcBrrToFlip',
   components: {
-    GdvCard
+    GdvCard,
+    PurchasePrice
   }
 })
 </script>
