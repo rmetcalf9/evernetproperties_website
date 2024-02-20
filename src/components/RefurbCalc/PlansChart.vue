@@ -37,11 +37,12 @@ export default {
   data () {
     return {
       allzoomedelements: undefined,
+      boudaryRect: undefined,
       svg: undefined,
       chartarea: {
-        xmin: -1000,
-        xmax: 1000,
-        ymin: -800,
+        xmin: -100,
+        xmax: 1200,
+        ymin: -100,
         ymax: 800
       }
     }
@@ -65,11 +66,23 @@ export default {
       })
       backgroundItemDrawing.drawSingleItem({
         item: added_item,
-        allzoomedelements: this.allzoomedelements
+        allbackgrounditems: this.refurbData.background_items,
+        allzoomedelements: this.allzoomedelements,
+        thencall: this.updatechartsize
       })
     },
     clickDIV () {
       console.log('CLICK')
+    },
+    updatechartsize () {
+      let totalHeight = this.refurbData.background_items.reduce((acc, value) => {
+          return (acc = acc + value.item_data.height);
+      }, 0);
+      // console.log('updatechartzied', totalHeight, this.refurbData.background_items.length)
+      // console.log('xx', this.refurbData.background_items[this.refurbData.background_items.length-1].item_data.height)
+      // console.log('yy', this.refurbData.background_items[this.refurbData.background_items.length-1])
+      this.boudaryRect
+        .attr('height', totalHeight + 200)
     },
     initChart () {
       var TTT = this
@@ -85,7 +98,7 @@ export default {
         viewObj.allzoomedelements = viewObj.svg.append('g')
 
         // Draw chart boundary
-        viewObj.allzoomedelements
+        TTT.boudaryRect = viewObj.allzoomedelements
           .append('rect')
           .attr('width', viewObj.chartarea.xmax - viewObj.chartarea.xmin)
           .attr('height', viewObj.chartarea.ymax - viewObj.chartarea.ymin)
@@ -109,7 +122,8 @@ export default {
 
         backgroundItemDrawing.drawAllBackgroundItems({
           allbackgrounditems: TTT.refurbData.background_items,
-          allzoomedelements: viewObj.allzoomedelements
+          allzoomedelements: viewObj.allzoomedelements,
+          thencall: TTT.updatechartsize
         })
 
         return viewObj.svg.node()
