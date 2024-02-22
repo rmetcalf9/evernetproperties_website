@@ -40,8 +40,8 @@ export default {
       boudaryRect: undefined,
       svg: undefined,
       chartarea: {
-        xmin: -100,
-        xmax: 1200,
+        xmin: -650,
+        xmax: 650,
         ymin: -100,
         ymax: 800
       }

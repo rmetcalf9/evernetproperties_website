@@ -14,7 +14,7 @@ function drawSingleItem ({item, allbackgrounditems, allzoomedelements, thencall}
       .attr('href', item.item_data.url)
       .attr('width',  item.item_data.width)
       // .attr('height',  item.item_data.height)
-      // .attr('x', 0)
+      .attr('x', -550)
       .attr('y', totalHeight)
       .on("error", function(d){
           console.log('load failed', d)
