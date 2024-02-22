@@ -10,6 +10,7 @@
         vertical-actions-align="right"
       >
         <q-fab-action color="grey" @click="onClickAddFloorplan" icon="add" label="Add floorplan" />
+        <q-fab-action color="grey" @click="onClickAddOtherAreas" icon="add" label="Add other areas" />
       </q-fab>
     </q-page-sticky>
     <addFloorplanDialog
@@ -26,6 +27,7 @@ import { Notify } from 'quasar'
 import addFloorplanDialog from './AddFloorplanDialog.vue'
 import refurbDataModel from './dataModel.js'
 import backgroundItemDrawing from './backgroundItemDrawing.js'
+import consts from './consts.js'
 
 
 export default {
@@ -48,6 +50,27 @@ export default {
     }
   },
   methods: {
+    onClickAddOtherAreas () {
+      var selectedOtherAreas = refurbDataModel.getSelectedOtherAreas({data: this.refurbData})
+      this.$q.dialog({
+        title: 'Options',
+        message: 'Select other areas to add to plans:',
+        options: {
+          type: 'checkbox',
+          model: selectedOtherAreas,
+          // inline: true
+          items: consts.otherareadata
+        },
+        cancel: true,
+        persistent: true
+      }).onOk(data => {
+        refurbDataModel.setSelectedOtherAreas({data: this.refurbData, selection: data})
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
     onClickAddFloorplan () {
       // https://lh3.googleusercontent.com/pw/ABLVV8715kFOUDZGlx6NcwSx-EGUnYGl_7sLJ5T-QHVLTm0ojxZ04GzAyUnwnCORsc34bM5wOiSNnj1PVVhTlxKE-hb8gUw5hMtFH5-6xUymqPObqtQx6dS-Of8tSnFUNGYrPG_d9TzkJqUce4Gtj7dCeJlFQQ=w987-h755-s-no-gm?authuser=0
       this.$refs.addFloorplanDialog.launchDialog()
@@ -60,8 +83,8 @@ export default {
         data: this.refurbData,
         item_data: refurbDataModel.getBackgroudnItemJson_Floorplan({
           url: retData.floorplan_url,
-          width: 1000,
-          height: 1000
+          width: consts.backgrounditemwidth,
+          height: 0
         })
       })
       backgroundItemDrawing.drawSingleItem({
@@ -72,7 +95,7 @@ export default {
       })
     },
     clickDIV () {
-      console.log('CLICK')
+      // console.log('CLICK')
     },
     updatechartsize () {
       let totalHeight = this.refurbData.background_items.reduce((acc, value) => {
