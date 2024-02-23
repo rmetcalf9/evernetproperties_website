@@ -1,10 +1,10 @@
 // This file DRAWS backgroudn items
 import { Notify } from 'quasar'
 import consts from './consts.js'
+import * as d3 from 'd3'
 
-function drawOtherArea ({ allzoomedelements, item, title, x, y }) {
-  console.log('ssa', title, x, y)
-  var rt = allzoomedelements
+function drawOtherArea ({ parentele, item, title, x, y }) {
+  var rt = parentele
     .append('rect')
     .attr('width', (item.item_data.width/3))
     .attr('height', (item.item_data.height/2))
@@ -12,6 +12,51 @@ function drawOtherArea ({ allzoomedelements, item, title, x, y }) {
     .attr('y', y)
     .attr('style', 'fill: white;stroke-width:1;stroke:rgb(0,0,0)')
 
+}
+
+function redrawOtherArea ({allbackgrounditems, allzoomedelements, thencall}) {
+  var otherAreaGroupSelection = d3.select('.backgroudnitemDrawing_otherAreaGroup')
+  var otherdataitems = allbackgrounditems.filter(function (x) {
+    return (x.item_data.type === consts.typeotherarea)
+  })
+  if ( otherAreaGroupSelection.size() === 0 ) {
+    // need to add other area at bottom as if it was just added
+    drawSingleItem ({
+      item: otherdataitems[0],
+      allbackgrounditems: allbackgrounditems,
+      allzoomedelements: allzoomedelements,
+      thencall: thencall
+    })
+    return
+  }
+  var current_y_pos = otherAreaGroupSelection.node().getBBox().y
+  otherAreaGroupSelection.remove()
+  drawAllOtherAreas({
+    allzoomedelements: allzoomedelements,
+    item: otherdataitems[0],
+    ypos: current_y_pos
+  })
+}
+
+function drawAllOtherAreas({ allzoomedelements, item, ypos }) {
+  var oa_x = 0
+  var oa_y = 0
+  var otherAreaGroup = allzoomedelements.append('g')
+  otherAreaGroup.attr("class", "backgroudnitemDrawing_otherAreaGroup")
+  consts.otherareadata.map(function (i) {
+    drawOtherArea({
+      parentele: otherAreaGroup,
+      item: item,
+      title: i.label,
+      x: (-550 + (oa_x * (item.item_data.width/3))),
+      y: (ypos + (oa_y * (item.item_data.height/2)))
+    })
+    oa_x += 1
+    if (oa_x > 2) {
+      oa_x = 0
+      oa_y = 1
+    }
+  })
 }
 
 function drawSingleItem ({item, allbackgrounditems, allzoomedelements, thencall}) {
@@ -45,23 +90,11 @@ function drawSingleItem ({item, allbackgrounditems, allzoomedelements, thencall}
     return
   }
   if (item.item_data.type === consts.typeotherarea) {
-    var oa_x = 0
-    var oa_y = 0
-    consts.otherareadata.map(function (i) {
-      drawOtherArea({
-        allzoomedelements: allzoomedelements,
-        item: item,
-        title: i.label,
-        x: (-550 + (oa_x * (item.item_data.width/3))),
-        y: (totalHeight + (oa_y * (item.item_data.height/2)))
-      })
-      oa_x += 1
-      if (oa_x > 2) {
-        oa_x = 0
-        oa_y = 1
-      }
+    drawAllOtherAreas({
+      allzoomedelements: allzoomedelements,
+      item: item,
+      ypos: totalHeight
     })
-
     thencall()
     return
   }
@@ -94,5 +127,6 @@ function drawAllBackgroundItems ({allbackgrounditems, allzoomedelements, thencal
 
 export default {
   drawSingleItem: drawSingleItem,
-  drawAllBackgroundItems: drawAllBackgroundItems
+  drawAllBackgroundItems: drawAllBackgroundItems,
+  redrawOtherArea: redrawOtherArea
 }

@@ -65,6 +65,11 @@ export default {
         persistent: true
       }).onOk(data => {
         refurbDataModel.setSelectedOtherAreas({data: this.refurbData, selection: data})
+        backgroundItemDrawing.redrawOtherArea({
+          allbackgrounditems: this.refurbData.background_items,
+          allzoomedelements: this.allzoomedelements,
+          thencall: this.updatechartsize
+        })
       }).onCancel(() => {
         // console.log('>>>> Cancel')
       }).onDismiss(() => {
