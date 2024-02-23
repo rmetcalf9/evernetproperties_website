@@ -7,9 +7,9 @@ function drawOtherArea ({ parentele, item, title, x, y, oadata }) {
   var rt = parentele
     .append('rect')
     .attr('width', (item.item_data.width/3))
-    .attr('height', (item.item_data.height/2))
+    .attr('height', (item.item_data.height/2) - 100)
     .attr('x', x)
-    .attr('y', y)
+    .attr('y', y + 50)
     .attr('style', 'fill: white;stroke-width:1;stroke:rgb(0,0,0)')
 
   parentele
@@ -17,7 +17,7 @@ function drawOtherArea ({ parentele, item, title, x, y, oadata }) {
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'central')
     .attr('x', x + (item.item_data.width/(2*3)))
-    .attr('y', y + 30)
+    .attr('y', y + 30 + 50)
     .attr('style', 'font-size: 20px; font-weight: 800;')
     .text(d => oadata.label)
 
