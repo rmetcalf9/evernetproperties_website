@@ -3,7 +3,7 @@ import { Notify } from 'quasar'
 import consts from './consts.js'
 import * as d3 from 'd3'
 
-function drawOtherArea ({ parentele, item, title, x, y }) {
+function drawOtherArea ({ parentele, item, title, x, y, oadata }) {
   var rt = parentele
     .append('rect')
     .attr('width', (item.item_data.width/3))
@@ -11,6 +11,15 @@ function drawOtherArea ({ parentele, item, title, x, y }) {
     .attr('x', x)
     .attr('y', y)
     .attr('style', 'fill: white;stroke-width:1;stroke:rgb(0,0,0)')
+
+  parentele
+    .append('text')
+    .attr('text-anchor', 'middle')
+    .attr('alignment-baseline', 'central')
+    .attr('x', x + (item.item_data.width/(2*3)))
+    .attr('y', y + 30)
+    .attr('style', 'font-size: 20px; font-weight: 800;')
+    .text(d => oadata.label)
 
 }
 
@@ -43,14 +52,19 @@ function drawAllOtherAreas({ allzoomedelements, item, ypos }) {
   var oa_y = 0
   var otherAreaGroup = allzoomedelements.append('g')
   otherAreaGroup.attr("class", "backgroudnitemDrawing_otherAreaGroup")
+  var oaitem = 0
   consts.otherareadata.map(function (i) {
-    drawOtherArea({
-      parentele: otherAreaGroup,
-      item: item,
-      title: i.label,
-      x: (-550 + (oa_x * (item.item_data.width/3))),
-      y: (ypos + (oa_y * (item.item_data.height/2)))
-    })
+    if (item.item_data.selection.includes(consts.otherareadata[oaitem].value)) {
+      drawOtherArea({
+        parentele: otherAreaGroup,
+        item: item,
+        title: i.label,
+        x: (-550 + (oa_x * (item.item_data.width/3))),
+        y: (ypos + (oa_y * (item.item_data.height/2))),
+        oadata: consts.otherareadata[oaitem]
+      })
+    }
+    oaitem += 1
     oa_x += 1
     if (oa_x > 2) {
       oa_x = 0
