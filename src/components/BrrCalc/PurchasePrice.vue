@@ -8,39 +8,50 @@
       <div class="col-grow ">
         &nbsp;
         <q-range
-          v-model="purchaserange"
+          v-model="purchaserangevalue"
           :min="0"
           :max="1000000"
           :step="10000"
           drag-range
           label
-          :left-label-value="'Best £' + purchaserange.min / 1000 + 'k'"
-          :right-label-value="'Worst £' + purchaserange.max / 1000 + 'k'"
+          :left-label-value="'Best £' + purchaserangevalue.min / 1000 + 'k'"
+          :right-label-value="'Worst £' + purchaserangevalue.max / 1000 + 'k'"
         />
       </div>
-      <div class="text-h6">Price: £{{ purchaserange.min }} - £{{ purchaserange.max }}</div>
+      <div class="text-h6">Price: {{ format_currency(purchaserangevalue.min) }} - {{ format_currency(purchaserangevalue.max) }}</div>
     </q-card-section>
   </q-card>
 
 </template>
 
+
 <script>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
+import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcPurchase',
+  props: ['purchaserange'],
+  emits: ['update:purchaserange'],
   data () {
     return {
-      purchaserange: {
-        min: 400000,
-        max: 600000
-      }
     }
   },
   methods: {
+    format_currency (num) {
+      return utils.format_currency(num)
+    }
   },
   computed: {
+    purchaserangevalue: {
+      get() {
+        return this.purchaserange;
+      },
+      set(value) {
+        this.$emit("update:purchaserange", value);
+      },
+    }
   }
 })
 </script>
