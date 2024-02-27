@@ -20,6 +20,7 @@
         />
         <OtherCosts
           ref="OtherCosts"
+          :purchaserange="purchaserange"
         />
 
         <div>TODO Finance SectionBuy with bridge or cash</div>
