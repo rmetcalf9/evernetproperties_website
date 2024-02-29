@@ -22,6 +22,10 @@
           ref="OtherCosts"
           :purchaserange="purchaserange"
         />
+        <DealSummary
+          ref="DealSummary"
+          :purchaserange="purchaserange"
+        />
 
         <div>TODO Finance SectionBuy with bridge or cash</div>
 
@@ -37,6 +41,7 @@ import PurchasePrice from '../../components/BrrCalc/PurchasePrice.vue'
 import RefurbCost from '../../components/BrrCalc/RefurbCost.vue'
 import StampDuty from '../../components/BrrCalc/StampDuty.vue'
 import OtherCosts from '../../components/BrrCalc/OtherCosts.vue'
+import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 
 export default defineComponent({
   name: 'CalcBrrToFlip',
@@ -45,7 +50,8 @@ export default defineComponent({
     PurchasePrice,
     RefurbCost,
     StampDuty,
-    OtherCosts
+    OtherCosts,
+    DealSummary
   },
   data () {
     return {
