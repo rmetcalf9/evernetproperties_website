@@ -1,5 +1,8 @@
 
 function format_currency (num) {
+  if (typeof(num) === 'undefined') {
+    return ''
+  }
   if (num<1000) {
     return '£' + num
   }
