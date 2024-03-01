@@ -34,6 +34,14 @@ export default defineComponent({
         min: this.purchaserange.min * 0.04,
         max: this.purchaserange.max * 0.04
       }
+    },
+    total () {
+      // only one cost so far. In future all costs are added
+      var total = {
+        min: this.fees.min,
+        max: this.fees.max
+      }
+      return total
     }
   }
 })

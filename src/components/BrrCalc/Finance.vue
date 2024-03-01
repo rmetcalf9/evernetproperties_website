@@ -5,8 +5,13 @@
       <div class="text-subtitle2">.</div>
     </q-card-section>
     <q-card-section>
+      <div class="text-h6">Money needed</div>
+      {{ format_currency(totalmoneyneeded.min) }} - {{ format_currency(totalmoneyneeded.max) }}
+    </q-card-section>
+    <q-card-section>
       <div class="text-h6">Cash</div>
-      100%
+      Cash is the money the investors put into the deal. It is free money as there is no intrest payments for this money.
+      <div>100%</div>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Loans</div>
@@ -28,8 +33,7 @@ import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcFinance',
-  props: ['purchaserange'],
-  emits: ['update:purchaserange'],
+  props: ['purchaserange', 'refurb_cost_total', 'stampduty_total', 'othercosts_total'],
   data () {
     return {
     }
@@ -40,13 +44,22 @@ export default defineComponent({
     }
   },
   computed: {
-    purchaserangevalue: {
-      get() {
-        return this.purchaserange;
-      },
-      set(value) {
-        this.$emit("update:purchaserange", value);
-      },
+    totalmoneyneeded () {
+      // purchase price
+      // refurb cost
+      // stamp duty
+      // other costs
+      var retVal = {
+        min: this.purchaserange.min + this.refurb_cost_total.min + this.stampduty_total.min + this.othercosts_total.min,
+        max: this.purchaserange.max + this.refurb_cost_total.max + this.stampduty_total.max + this.othercosts_total.max
+      }
+      return retVal
+    },
+    finance_in_items () {
+      // Currently hardcoded for 100% cash
+      return [
+        {name: 'Finance Cash', worst: this.totalmoneyneeded.max, best: this.totalmoneyneeded.min}
+      ]
     }
   }
 })

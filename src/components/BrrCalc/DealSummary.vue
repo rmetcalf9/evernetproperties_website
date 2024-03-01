@@ -68,7 +68,7 @@ function add_item(items, name, worstamt, bestamt) {
 
 export default defineComponent({
   name: 'BrrCalcDealSummary',
-  props: ['purchaserange'],
+  props: ['purchaserange', 'finance_in_items'],
   data () {
     return {
     }
@@ -81,6 +81,11 @@ export default defineComponent({
   computed: {
     items () {
       var items = []
+      if (typeof (this.finance_in_items) !== 'undefined') {
+        this.finance_in_items.map(function (x) {
+          add_item(items, x.name, x.worst, x.best)
+        })
+      }
       add_item(items, 'FIR', 4, 123)
       add_item(items, 'se', -7, -113)
       add_item(items, 'sdsd', 4, 133)

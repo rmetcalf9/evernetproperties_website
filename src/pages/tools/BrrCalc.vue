@@ -25,10 +25,14 @@
         <Finance
           ref="Finance"
           :purchaserange="purchaserange"
+          :refurb_cost_total="refurb_cost_total"
+          :stampduty_total="stampduty_total"
+          :othercosts_total="othercosts_total"
         />
         <DealSummary
           ref="DealSummary"
           :purchaserange="purchaserange"
+          :finance_in_items="finance_in_items"
         />
       </div>
     </div>
@@ -58,12 +62,42 @@ export default defineComponent({
   },
   data () {
     return {
+      isMounted: false,
       purchaserange: {
         min: 400000,
         max: 600000
       }
     }
   },
+  computed: {
+    finance_in_items () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.Finance.finance_in_items
+    },
+    refurb_cost_total () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.RefurbCost.refurb_cost_total
+    },
+    stampduty_total () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.StampDuty.stampduty
+    },
+    othercosts_total () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.OtherCosts.total
+    },
+  },
+  mounted (){
+    this.isMounted = true;
+  }
 })
 </script>
 

@@ -59,6 +59,9 @@ export default defineComponent({
   methods: {
   },
   computed: {
+    refurb_cost_total () {
+      return this.refurbrange
+    }
   }
 })
 </script>
