@@ -37,6 +37,8 @@
           :stampduty_items="stampduty_items"
           :othercosts_items="othercosts_items"
           :refurb_cost_items="refurb_cost_items"
+          :gdv_total="gdv_total"
+          :refurbmonths="refurbmonths"
         />
       </div>
     </div>
@@ -110,6 +112,12 @@ export default defineComponent({
       }
       return this.$refs.RefurbCost.refurb_cost_total
     },
+    refurbmonths () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.RefurbCost.refurbmonths
+    },
     stampduty_total () {
       if (!this.isMounted) {
         return []
@@ -122,6 +130,12 @@ export default defineComponent({
       }
       return this.$refs.OtherCosts.total
     },
+    gdv_total () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.GdvCard.total
+    }
   },
   mounted (){
     this.isMounted = true;

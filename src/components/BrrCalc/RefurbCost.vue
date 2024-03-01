@@ -18,7 +18,7 @@
           :right-label-value="'Worst £' + refurbrange.max / 1000 + 'k'"
         />
       </div>
-      <div class="text-h6">Cost: £{{ refurbrange.min }} - £{{ refurbrange.max }}</div>
+      <div class="text-h6">Cost: {{ format_currency(refurbrange.min) }} - {{ format_currency(refurbrange.max) }}</div>
       <div class="col-grow ">
         &nbsp;
         <q-range
@@ -33,6 +33,7 @@
         />
       </div>
       <div class="text-h6">Duration: {{ refurbtimerange.min }} - {{ refurbtimerange.max }} months</div>
+      <div>The important figure here is the number of months before we can expect to be able to refinance the property.</div>
     </q-card-section>
   </q-card>
 
@@ -41,6 +42,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
+import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcRefurbCost',
@@ -57,6 +59,9 @@ export default defineComponent({
     }
   },
   methods: {
+    format_currency (num) {
+      return utils.format_currency(num)
+    }
   },
   computed: {
     refurb_cost_total () {
@@ -66,6 +71,12 @@ export default defineComponent({
       return [
         {name: 'Refurbishment', worst: -1 * this.refurb_cost_total.max, best: -1 * this.refurb_cost_total.min}
       ]
+    },
+    refurbmonths () {
+      return {
+        worst: this.refurbtimerange.max,
+        best: this.refurbtimerange.min
+      }
     }
   }
 })

@@ -89,6 +89,12 @@ export default defineComponent({
     },
     totalmax () {
       return [...this.gdvitems.map(o => o.gdvrange.max)].reduce((a, b) => a + b, 0)
+    },
+    total () {
+      return {
+        min: this.totalmin,
+        max: this.totalmax
+      }
     }
   }
 })

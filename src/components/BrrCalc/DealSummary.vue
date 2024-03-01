@@ -10,18 +10,29 @@
         <tr><th></th><th colspan=3>Worst Case</th><th colspan=3>Best Case</th></tr>
         <tr><th>Item</th><th>In</th><th>Out</th><th>Balance</th><th>In</th><th>Out</th><th>Balance</th></tr>
         <tr v-for="item in items" :key="item.key">
-          <th>{{ item.name }}</th>
-          <th>{{ item.worst.in }}</th>
-          <th>{{ item.worst.out }}</th>
-          <th>{{ item.worst.bal }}</th>
-          <th>{{ item.best.in }}</th>
-          <th>{{ item.best.out }}</th>
-          <th>{{ item.best.bal }}</th>
+          <th v-if="item.type === 'ledger'">{{ item.name }}</th>
+          <td v-if="item.type === 'ledger'">{{ item.worst.in }}</td>
+          <td v-if="item.type === 'ledger'">{{ item.worst.out }}</td>
+          <td v-if="item.type === 'ledger'">{{ item.worst.bal }}</td>
+          <td v-if="item.type === 'ledger'">{{ item.best.in }}</td>
+          <td v-if="item.type === 'ledger'">{{ item.best.out }}</td>
+          <td v-if="item.type === 'ledger'">{{ item.best.bal }}</td>
+          <th v-if="item.type === 'blank'" colspan=7>&nbsp;</th>
+          <th v-if="item.type === 'title'" colspan=7>{{ item.name }}</th>
         </tr>
         </table>
         &nbsp;
       </div>
-      <div class="text-h6">ccc: {{ format_currency(12355) }} - {{ format_currency(23430) }}</div>
+      <div>
+
+      <DealSummaryExitSell
+        :money_in="money_in"
+        :final_bal="final_bal"
+        :gdv_total="gdv_total"
+        :refurbmonths="refurbmonths"
+      />
+
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -31,6 +42,20 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from './utils.js'
+import DealSummaryExitSell from './DealSummaryExitSell.vue'
+
+
+function add_item_title(items, title) {
+  items.push({
+    type: 'blank',
+    key: items.length
+  })
+  items.push({
+    type: 'title',
+    key: items.length,
+    name: title
+  })
+}
 
 function add_item(items, name, worstamt, bestamt) {
   var lastitemdetailworst = undefined
@@ -59,6 +84,7 @@ function add_item(items, name, worstamt, bestamt) {
   }
 
   items.push({
+    type: 'ledger',
     key: items.length,
     name: name,
     worst: get_item_detail(lastitemdetailworst, worstamt),
@@ -68,7 +94,10 @@ function add_item(items, name, worstamt, bestamt) {
 
 export default defineComponent({
   name: 'BrrCalcDealSummary',
-  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items'],
+  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths'],
+  components: {
+    DealSummaryExitSell
+  },
   data () {
     return {
     }
@@ -79,6 +108,30 @@ export default defineComponent({
     }
   },
   computed: {
+    final_bal () {
+      if (this.items.length === 0) {
+        return {
+          worst: 0,
+          best: 0
+        }
+      }
+      return {
+        worst: this.items[this.items.length - 1].worst.bal,
+        best: this.items[this.items.length - 1].best.bal
+      }
+    },
+    money_in () {
+      var worst = this.finance_in_items.reduce((acc, value) => {
+          return acc + value.worst
+      }, 0);
+      var best = this.finance_in_items.reduce((acc, value) => {
+          return acc + value.best
+      }, 0);
+      return {
+        worst: worst,
+        best: best
+      }
+    },
     items () {
       var items = []
       if (typeof (this.finance_in_items) !== 'undefined') {
@@ -106,6 +159,8 @@ export default defineComponent({
           add_item(items, x.name, x.worst, x.best)
         })
       }
+      // add_item_title(items,'Exit - Sell Property')
+      // add_item(items, 'Sell for GDV', this.gdv_total.min, this.gdv_total.max)
       return items
     }
   }

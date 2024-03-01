@@ -18,7 +18,7 @@
       TODO
     </q-card-section>
     <q-card-section>
-      <div class="text-h6">Bridge</div>
+      <div class="text-h6">Bridge + Refinance</div>
       TODO
     </q-card-section>
   </q-card>
