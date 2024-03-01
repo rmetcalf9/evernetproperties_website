@@ -121,6 +121,8 @@ export default defineComponent({
       }
     },
     money_in () {
+      // TODO This is wrong. MONEY IN IS NOT FINANCE IN
+      //   bridge IN is not money in
       var worst = this.finance_in_items.reduce((acc, value) => {
           return acc + value.worst
       }, 0);

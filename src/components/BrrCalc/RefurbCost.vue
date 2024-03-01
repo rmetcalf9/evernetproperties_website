@@ -33,7 +33,7 @@
         />
       </div>
       <div class="text-h6">Duration: {{ refurbtimerange.min }} - {{ refurbtimerange.max }} months</div>
-      <div>The important figure here is the number of months before we can expect to be able to refinance the property.</div>
+      <div>This figure is the amount of time to take out loans for and effects the amount of interest that needs to be paid.</div>
     </q-card-section>
   </q-card>
 
