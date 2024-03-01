@@ -68,7 +68,7 @@ function add_item(items, name, worstamt, bestamt) {
 
 export default defineComponent({
   name: 'BrrCalcDealSummary',
-  props: ['purchaserange', 'finance_in_items'],
+  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items'],
   data () {
     return {
     }
@@ -86,9 +86,26 @@ export default defineComponent({
           add_item(items, x.name, x.worst, x.best)
         })
       }
-      add_item(items, 'FIR', 4, 123)
-      add_item(items, 'se', -7, -113)
-      add_item(items, 'sdsd', 4, 133)
+      if (typeof (this.purchase_items) !== 'undefined') {
+        this.purchase_items.map(function (x) {
+          add_item(items, x.name, x.worst, x.best)
+        })
+      }
+      if (typeof (this.stampduty_items) !== 'undefined') {
+        this.stampduty_items.map(function (x) {
+          add_item(items, x.name, x.worst, x.best)
+        })
+      }
+      if (typeof (this.othercosts_items) !== 'undefined') {
+        this.othercosts_items.map(function (x) {
+          add_item(items, x.name, x.worst, x.best)
+        })
+      }
+      if (typeof (this.refurb_cost_items) !== 'undefined') {
+        this.refurb_cost_items.map(function (x) {
+          add_item(items, x.name, x.worst, x.best)
+        })
+      }
       return items
     }
   }

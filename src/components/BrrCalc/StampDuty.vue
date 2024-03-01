@@ -116,6 +116,14 @@ export default defineComponent({
         max: max
       }
     },
+    stampduty_items () {
+      if (this.stampdutydata.exempt) {
+        return []
+      }
+      return [
+        {name: 'Stamp Duty', worst: -1 * this.stampduty.max, best: -1 * this.stampduty.min}
+      ]
+    },
     stampdutybandswithamount () {
       var TTT=this
       return this.stampdutybands.bands.map(function (band) {

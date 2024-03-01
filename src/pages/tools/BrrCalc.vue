@@ -33,6 +33,10 @@
           ref="DealSummary"
           :purchaserange="purchaserange"
           :finance_in_items="finance_in_items"
+          :purchase_items="purchase_items"
+          :stampduty_items="stampduty_items"
+          :othercosts_items="othercosts_items"
+          :refurb_cost_items="refurb_cost_items"
         />
       </div>
     </div>
@@ -75,6 +79,30 @@ export default defineComponent({
         return []
       }
       return this.$refs.Finance.finance_in_items
+    },
+    purchase_items () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.PurchasePrice.purchase_items
+    },
+    stampduty_items () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.StampDuty.stampduty_items
+    },
+    othercosts_items () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.OtherCosts.othercosts_items
+    },
+    refurb_cost_items () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.RefurbCost.refurb_cost_items
     },
     refurb_cost_total () {
       if (!this.isMounted) {

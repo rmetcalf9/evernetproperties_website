@@ -61,6 +61,11 @@ export default defineComponent({
   computed: {
     refurb_cost_total () {
       return this.refurbrange
+    },
+    refurb_cost_items () {
+      return [
+        {name: 'Refurbishment', worst: -1 * this.refurb_cost_total.max, best: -1 * this.refurb_cost_total.min}
+      ]
     }
   }
 })

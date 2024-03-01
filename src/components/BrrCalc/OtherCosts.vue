@@ -42,6 +42,11 @@ export default defineComponent({
         max: this.fees.max
       }
       return total
+    },
+    othercosts_items () {
+      return [
+        {name: 'Other Costs', worst: -1 * this.total.max, best: -1 * this.total.min}
+      ]
     }
   }
 })

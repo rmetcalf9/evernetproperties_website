@@ -51,6 +51,11 @@ export default defineComponent({
       set(value) {
         this.$emit("update:purchaserange", value);
       },
+    },
+    purchase_items () {
+      return [
+        {name: 'Purchase Property', worst: -1 * this.purchaserange.max, best: -1 * this.purchaserange.min}
+      ]
     }
   }
 })
