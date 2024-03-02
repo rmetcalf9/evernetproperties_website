@@ -28,6 +28,7 @@
           :refurb_cost_total="refurb_cost_total"
           :stampduty_total="stampduty_total"
           :othercosts_total="othercosts_total"
+          :refurbmonths="refurbmonths"
         />
         <DealSummary
           ref="DealSummary"

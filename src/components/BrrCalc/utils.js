@@ -4,10 +4,10 @@ function format_currency (num) {
     return ''
   }
   if (num<1000) {
-    return '£' + num
+    return '£' + num.toFixed(0)
   }
-  var ns = num.toString()
-  return '£' + ns.substring(0, ns.length - 3) + ',' + num.toString().substring(ns.length - 3)
+  var ns = num.toFixed(0).toString()
+  return '£' + ns.substring(0, ns.length - 3) + ',' + ns.toString().substring(ns.length - 3)
 }
 
 

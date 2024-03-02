@@ -5,13 +5,13 @@
       <div class="text-subtitle2">.</div>
     </q-card-section>
     <q-card-section>
-      <div class="text-h6">Money needed</div>
-      {{ format_currency(totalmoneyneeded.min) }} - {{ format_currency(totalmoneyneeded.max) }}
+      <div class="text-h6">Total Expenditure</div>
+      {{ format_currency(totalexpenditure.min) }} - {{ format_currency(totalexpenditure.max) }}
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Cash</div>
-      Cash is the money the investors put into the deal. It is free money as there is no intrest payments for this money.
-      <div>100%</div>
+      Cash is the money the investors put into the deal. It is free money as there is no interest payments for this money.
+      <div>This calculation will assume that all money not privided for loans or bridges will be provided by investors as cash.</div>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Loans</div>
@@ -19,7 +19,31 @@
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Bridge + Refinance</div>
-      TODO
+      <q-checkbox v-model="bridge.usebridge" label="Use a bridge" />
+      <div v-if="bridge.usebridge">
+        <div>Start cost/End Cost: {{ bridge.startcost * 100 }}%/{{ bridge.endcost * 100 }}%</div>
+        <div>Monthly cost: {{ bridge.monthlycost * 100 }}%</div>
+        <div>Months cost paid upfront: {{ bridgemontghsupfront.min }} - {{ bridgemontghsupfront.max }}</div>
+        <div class="row">
+          <div class="bridgeamountdiv">
+            <div>Worst bridge amount</div>
+            <q-slider label v-model="bridge.amount.worst" :min="0" :max="purchaserange.max" :step="5000"/>
+            <div>Amount: {{ format_currency(bridge.amount.worst) }}</div>
+            <div>Cost: {{ format_currency(bridgecost.worst) }}</div>
+          </div>
+          <div class="bridgeamountdiv">
+            <div>Best bridge amount</div>
+            <q-slider label v-model="bridge.amount.best" :min="0" :max="purchaserange.min" :step="5000"/>
+            <div>Amount: {{ format_currency(bridge.amount.best) }}</div>
+            <div>Cost: {{ format_currency(bridgecost.best) }}</div>
+          </div>
+        </div>
+      </div>
+
+    </q-card-section>
+    <q-card-section>
+      <div class="text-h6">Money needed</div>
+      {{ format_currency(totalmoneyneeded.min) }} - {{ format_currency(totalmoneyneeded.max) }}
     </q-card-section>
   </q-card>
 
@@ -33,9 +57,19 @@ import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcFinance',
-  props: ['purchaserange', 'refurb_cost_total', 'stampduty_total', 'othercosts_total'],
+  props: ['purchaserange', 'refurb_cost_total', 'stampduty_total', 'othercosts_total', 'refurbmonths'],
   data () {
     return {
+      bridge: {
+        usebridge: false,
+        startcost: 0.01,
+        endcost: 0.01,
+        monthlycost: 0.01,
+        amount: {
+          worst: 1,
+          best: 1
+        }
+      }
     }
   },
   methods: {
@@ -44,7 +78,35 @@ export default defineComponent({
     }
   },
   computed: {
-    totalmoneyneeded () {
+    bridgecost () {
+      if (!this.bridge.usebridge) {
+        return {
+          best: 0,
+          worst: 0
+        }
+      }
+      var best = this.bridge.amount.best * (this.bridge.startcost + this.bridge.endcost + (this.bridge.monthlycost * this.refurbmonths.best))
+      var worst = this.bridge.amount.worst * (this.bridge.startcost + this.bridge.endcost + (this.bridge.monthlycost * this.refurbmonths.worst))
+      return {
+        best: best,
+        worst: worst
+      }
+    },
+    bridgemontghsupfront () {
+      var min = 12
+      if (this.refurbmonths.best > 12) {
+        min = this.refurbmonths.best
+      }
+      var max = 12
+      if (this.refurbmonths.worst > 12) {
+        max = this.refurbmonths.worst
+      }
+      return {
+        min: min,
+        max: max
+      }
+    },
+    totalexpenditure () {
       // purchase price
       // refurb cost
       // stamp duty
@@ -55,6 +117,10 @@ export default defineComponent({
       }
       return retVal
     },
+    totalmoneyneeded () {
+      // TODO Add finance costs
+      return this.totalexpenditure
+    },
     finance_in_items () {
       // Currently hardcoded for 100% cash
       return [
@@ -64,3 +130,9 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+.bridgeamountdiv {
+  padding: 10px;
+}
+</style>
