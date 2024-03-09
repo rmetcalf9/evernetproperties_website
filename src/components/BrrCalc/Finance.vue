@@ -32,6 +32,7 @@
             <div>Cost: {{ format_currency(bridgecost.worst) }}</div>
           </div>
           <div class="bridgeamountdiv">
+            <div>max bridging 60/70% value of money</div>
             <div>Best bridge amount</div>
             <q-slider label v-model="bridge.amount.best" :min="0" :max="purchaserange.min" :step="5000"/>
             <div>Amount: {{ format_currency(bridge.amount.best) }}</div>

@@ -10,7 +10,7 @@
         <q-range
           v-model="refurbrange"
           :min="0"
-          :max="100000"
+          :max="200000"
           :step="1000"
           drag-range
           label
