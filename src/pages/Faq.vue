@@ -106,6 +106,23 @@
         </q-card-section>
       </q-card>
     </q-expansion-item>
+    <q-expansion-item
+      label="Bespoke Investment Search"
+    >
+      <q-card>
+        <q-card-section>
+        <div>We can provide a bespoke investment search where we focus our search on the investors exact specification. This works as follows:</div>
+        <ul>
+        <li>Investor pays a bespoke fee</li>
+        <li>We will search properties matching the criteria and present to the investor before making them available to our investor list</li>
+        <li>When an investor finds a property the initial fee is deducted from the sourcing fee</li>
+        </ul>
+
+        <div>Bespoke investors get priority over our investor list and get the chance to see the deals first. If no property is found in 3 months the bespoke fee will be returned.</div>
+
+        </q-card-section>
+      </q-card>
+    </q-expansion-item>
   </q-page>
 </template>
 
