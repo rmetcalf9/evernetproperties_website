@@ -34,7 +34,19 @@
             <div>Cost: {{ format_currency(bridgecost.best) }}</div>
           </div>
         </div>
-      </div>
+        Refinance LTV<q-range
+          v-model="bridge.refinanceltv"
+          :min="0"
+          :max="100"
+          :step="5"
+          drag-range
+          label
+          :left-label-value="bridge.refinanceltv.min + '%'"
+          :right-label-value="bridge.refinanceltv.max+ '%'"
+        />
+        <!--<div>Percentage: {{ bridge.refinanceltv.min }}% - {{ bridge.refinanceltv.max }}%</div>-->
+        <div>Refinance amount: {{ format_currency(refinanceamount.worst) }} - {{ format_currency(refinanceamount.best) }}</div>
+    </div>
 
     </q-card-section>
     <q-card-section>
@@ -58,7 +70,7 @@ import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcFinance',
-  props: ['purchaserange', 'refurb_cost_total', 'stampduty_total', 'othercosts_total', 'refurbmonths'],
+  props: ['purchaserange', 'refurb_cost_total', 'stampduty_total', 'othercosts_total', 'refurbmonths', 'gdv_total'],
   data () {
     return {
       bridge: {
@@ -69,6 +81,10 @@ export default defineComponent({
         amount: {
           worst: 1,
           best: 1
+        },
+        refinanceltv: {
+          min: 75,
+          max: 75
         }
       }
     }
@@ -129,6 +145,12 @@ export default defineComponent({
       return {
         worst: this.totalexpenditure.max,
         best: this.totalexpenditure.min
+      }
+    },
+    refinanceamount () {
+      return {
+        worst: this.gdv_total.min * (this.bridge.refinanceltv.min / 100),
+        best: this.gdv_total.max * (this.bridge.refinanceltv.max / 100)
       }
     },
     finance_in_items () {

@@ -29,6 +29,7 @@
           :stampduty_total="stampduty_total"
           :othercosts_total="othercosts_total"
           :refurbmonths="refurbmonths"
+          :gdv_total="gdv_total"
         />
         <DealSummary
           ref="DealSummary"

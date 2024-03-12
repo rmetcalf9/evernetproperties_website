@@ -14,6 +14,7 @@
           :step="10000"
           drag-range
           label
+          snap
           :left-label-value="'Best £' + purchaserangevalue.min / 1000 + 'k'"
           :right-label-value="'Worst £' + purchaserangevalue.max / 1000 + 'k'"
         />
