@@ -12,7 +12,7 @@
       <div class="col" v-for="gdvitem in gdvitems" :key='gdvitem.id'>
         <div class="row">
           <q-input v-model="gdvitem.name" label="Item" />
-          <div class="col-grow" style="align-self: flex-end;">£{{ gdvitem.gdvrange.min }} - £{{ gdvitem.gdvrange.max }}</div>
+          <div class="col-grow" style="align-self: flex-end;">{{ format_currency(gdvitem.gdvrange.min) }} - {{ format_currency(gdvitem.gdvrange.max) }}</div>
           <q-btn round icon="delete" @click="delrow(gdvitem.id)" v-if="this.gdvitems.length > 1" />
         </div>
         <div class="col-grow ">
@@ -31,7 +31,7 @@
       </div>
       <q-btn round  color="primary" icon="add" @click="addgdvitem" />
       <div>If the property is to be split into flats add the GDV of each above and the number below is the total GDV.</div>
-      <div class="text-h6">Total: £{{ totalmin }} - £{{totalmax }}</div>
+      <div class="text-h6">Total: {{ format_currency(totalmin) }} - {{ format_currency(totalmax) }}</div>
     </q-card-section>
   </q-card>
 
@@ -40,6 +40,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
+import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcGdv',
@@ -57,6 +58,9 @@ export default defineComponent({
     }
   },
   methods: {
+    format_currency (num) {
+      return utils.format_currency(num)
+    },
     helpdevplan () {
       this.$q.dialog({
         title: 'What is the development plan?',
