@@ -1,7 +1,7 @@
 <template>
   <q-card inline class="q-ma-sm card-style maincard">
     <q-card-section>
-      <div class="text-h6">Summary</div>
+      <div class="text-h6">Cashflow Summary</div>
       <div class="text-subtitle2">This section gives a break down of money in and out of the deal. It is broken down twice, for best and worst case figures.</div>
     </q-card-section>
     <q-card-section>

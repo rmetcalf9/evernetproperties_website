@@ -6,12 +6,7 @@
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Total Expenditure</div>
-      {{ format_currency(totalexpenditure.min) }} - {{ format_currency(totalexpenditure.max) }}
-    </q-card-section>
-    <q-card-section>
-      <div class="text-h6">Cash</div>
-      Cash is the money the investors put into the deal. It is free money as there is no interest payments for this money.
-      <div>This calculation will assume that all money not privided for loans or bridges will be provided by investors as cash.</div>
+      {{ format_currency(totalexpenditure.max) }} - {{ format_currency(totalexpenditure.min) }} (Worst - best)
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Loans</div>
@@ -43,9 +38,14 @@
 
     </q-card-section>
     <q-card-section>
-      <div class="text-h6">Money needed</div>
-      {{ format_currency(totalmoneyneeded.min) }} - {{ format_currency(totalmoneyneeded.max) }}
+      <div class="text-h6">Cash</div>
+      Cash is the money the investors put into the deal. It is free money as there is no interest payments for this money.
+      <div>This calculation will assume that all money not privided for loans or bridges will be provided by investors as cash.</div>
+      <div class="text-h6">
+      {{ format_currency(totalmoneyneeded.worst) }} - {{ format_currency(totalmoneyneeded.best) }} (Worst - best)
+      </div>
     </q-card-section>
+
   </q-card>
 
 </template>
@@ -120,12 +120,31 @@ export default defineComponent({
     },
     totalmoneyneeded () {
       // TODO Add finance costs
-      return this.totalexpenditure
+      if (this.bridge.usebridge) {
+        return {
+          worst: this.totalexpenditure.max - this.bridge.amount.worst + this.bridgecost.worst,
+          best: this.totalexpenditure.min - this.bridge.amount.best + this.bridgecost.best
+        }
+      }
+      return {
+        worst: this.totalexpenditure.max,
+        best: this.totalexpenditure.min
+      }
     },
     finance_in_items () {
       // Currently hardcoded for 100% cash
+      if (this.bridge.usebridge) {
+        return [
+          {name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best},
+          {
+            name: 'Bridge Payment',
+            worst: this.bridge.amount.worst - this.bridgecost.worst,
+            best: this.bridge.amount.best - this.bridgecost.best
+          }
+        ]
+      }
       return [
-        {name: 'Finance Cash', worst: this.totalmoneyneeded.max, best: this.totalmoneyneeded.min}
+        {name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best}
       ]
     }
   }
