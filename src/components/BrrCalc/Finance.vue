@@ -168,6 +168,20 @@ export default defineComponent({
       return [
         {name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best}
       ]
+    },
+    finance_out_items () {
+      if (!this.bridge.usebridge) {
+        return []
+      }
+      return [
+        {name: 'Mortgage Refinance', worst: this.refinanceamount.worst, best: this.refinanceamount.best},
+        {name: 'Bridge Payback', worst: this.bridge.amount.worst * -1, best: this.bridge.amount.best * -1},
+        {
+          name: 'Bridge Interest Credit',
+          worst: ((12 - this.refurbmonths.worst) * 0.01 * this.bridgecost.worst).toFixed(2),
+          best: ((12 - this.refurbmonths.best) * 0.01 * this.bridgecost.best).toFixed(2)
+        }
+      ]
     }
   }
 })

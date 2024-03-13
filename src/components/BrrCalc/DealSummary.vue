@@ -94,7 +94,7 @@ function add_item(items, name, worstamt, bestamt) {
 
 export default defineComponent({
   name: 'BrrCalcDealSummary',
-  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths'],
+  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items'],
   components: {
     DealSummaryExitSell
   },
@@ -161,6 +161,15 @@ export default defineComponent({
           add_item(items, x.name, x.worst, x.best)
         })
       }
+      if (typeof (this.finance_out_items) !== 'undefined') {
+        if (this.finance_out_items.length > 0) {
+          add_item_title(items,'Exit finance')
+        }
+        this.finance_out_items.map(function (x) {
+          add_item(items, x.name, x.worst, x.best)
+        })
+      }
+
       // add_item_title(items,'Exit - Sell Property')
       // add_item(items, 'Sell for GDV', this.gdv_total.min, this.gdv_total.max)
       return items
