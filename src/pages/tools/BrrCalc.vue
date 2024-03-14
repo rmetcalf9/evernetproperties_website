@@ -4,6 +4,9 @@
       <h1>Buy Refurbish Refinance Strategy</h1>
       <div>When working with a deal sourcer they will provide you with information about specific deals giving what the expected ROI and other figures for the investment will be. Part of the work the deal sourcer has done is research around each figure to justify how they have arrived at the expected ROI. You can use this page to perform these calculations.</div>
       <div class="row">
+        <Vision
+          ref="Vision"
+        />
         <GdvCard
           ref="GdvCard"
         />
@@ -43,6 +46,7 @@
           :gdv_total="gdv_total"
           :refurbmonths="refurbmonths"
         />
+        DEBUG OUTER {{ gdv_total }}
       </div>
     </div>
   </q-page>
@@ -50,6 +54,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import Vision from '../../components/BrrCalc/Vision.vue'
 import GdvCard from '../../components/BrrCalc/Gdv.vue'
 import PurchasePrice from '../../components/BrrCalc/PurchasePrice.vue'
 import RefurbCost from '../../components/BrrCalc/RefurbCost.vue'
@@ -67,7 +72,8 @@ export default defineComponent({
     StampDuty,
     OtherCosts,
     DealSummary,
-    Finance
+    Finance,
+    Vision
   },
   data () {
     return {

@@ -5,10 +5,6 @@
       <div class="text-subtitle2">This is the estimated final value of the property after works are complete</div>
     </q-card-section>
     <q-card-section>
-      <div class="row">
-        <q-input v-model="devplan" label="What is the development plan?" class="col-grow" />
-        <q-btn round  color="primary" icon="info" @click="helpdevplan" />
-      </div>
       <div class="col" v-for="gdvitem in gdvitems" :key='gdvitem.id'>
         <div class="row">
           <q-input v-model="gdvitem.name" label="Item" />
@@ -46,7 +42,6 @@ export default defineComponent({
   name: 'BrrCalcGdv',
   data () {
     return {
-      devplan: '',
       gdvitems: [{
         id: 1,
         name: '',
@@ -60,14 +55,6 @@ export default defineComponent({
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
-    },
-    helpdevplan () {
-      this.$q.dialog({
-        title: 'What is the development plan?',
-        message: 'Enter the development plan. E.g. Split into two flats'
-      }).onOk(() => {
-        // console.log('OK')
-      })
     },
     addgdvitem () {
       var last_id = Math.max(...this.gdvitems.map(o => o.id))

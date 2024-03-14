@@ -1,13 +1,12 @@
 <template>
   <div>
     <div class="text-h5">Exit - Sell Property</div>
-    <div>This is calculated to compare rather than for acutal sale. For an actual sale captial gains tax will be due.</div> 
+    <div>This is calculated to compare rather than for acutal sale. For an actual sale captial gains tax will be due.</div>
     <div>Money in: {{ format_currency(money_in.worst) }} - {{ format_currency(money_in.best) }}</div>
     <div>Money out: {{ format_currency(money_out.worst) }} - {{ format_currency(money_out.best) }}</div>
     <div class="text-h6">Profit: {{ format_currency(profit.worst) }} - {{ format_currency(profit.best) }}</div>
     <div>ROI: {{ roi.worst }}% - {{ roi.best }}%</div>
     <div>annual ROI: {{ annualroi.worst }}% - {{ annualroi.best }}%</div>
-
   </div>
 </template>
 
