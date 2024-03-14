@@ -45,25 +45,25 @@
           </template>
           <template v-slot:body="props">
              <q-tr v-if="props.row.type === 'ledger'">
-               <q-td>
+               <q-td class="tablerowcell">
                  {{ props.row.name }}
                </q-td>
-               <q-td class="worstcasetablecell valuetablecell">
+               <q-td class="worstcasetablecell valuetablecell tablerowcell">
                  {{ format_currency(props.row.worst.in) }}
                </q-td>
-               <q-td class="worstcasetablecell valuetablecell">
+               <q-td class="worstcasetablecell valuetablecell tablerowcell">
                  {{ format_currency(props.row.worst.out) }}
                </q-td>
-               <q-td class="worstcasetablecell valuetablecell">
+               <q-td class="worstcasetablecell valuetablecell tablerowcell">
                  {{ format_currency(props.row.worst.bal) }}
                </q-td>
-               <q-td class="valuetablecell">
+               <q-td class="valuetablecell tablerowcell">
                  {{ format_currency(props.row.best.in) }}
                </q-td>
-               <q-td class="valuetablecell">
+               <q-td class="valuetablecell tablerowcell">
                  {{ format_currency(props.row.best.out) }}
                </q-td>
-               <q-td class="valuetablecell">
+               <q-td class="valuetablecell tablerowcell">
                  {{ format_currency(props.row.best.bal) }}
                </q-td>
              </q-tr>
@@ -260,5 +260,8 @@ td.worstcasetablecell {
 }
 td.valuetablecell {
   text-align: right;
+}
+td.tablerowcell {
+  height: auto;
 }
 </style>
