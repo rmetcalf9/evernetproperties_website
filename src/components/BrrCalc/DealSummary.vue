@@ -1,30 +1,83 @@
 <template>
-  <q-card inline class="q-ma-sm card-style maincard">
+  <q-card inline class="q-ma-sm card-style maincard col-grow">
     <q-card-section>
       <div class="text-h6">Cashflow Summary</div>
       <div class="text-subtitle2">This section gives a break down of money in and out of the deal. It is broken down twice, for best and worst case figures.</div>
     </q-card-section>
     <q-card-section>
-      <div class="col-grow ">
-        <table border=2>
-        <tr><th></th><th colspan=3>Worst Case</th><th colspan=3>Best Case</th></tr>
-        <tr><th>Item</th><th>In</th><th>Out</th><th>Balance</th><th>In</th><th>Out</th><th>Balance</th></tr>
-        <tr v-for="item in items" :key="item.key">
-          <th v-if="item.type === 'ledger'">{{ item.name }}</th>
-          <td v-if="item.type === 'ledger'">{{ item.worst.in }}</td>
-          <td v-if="item.type === 'ledger'">{{ item.worst.out }}</td>
-          <td v-if="item.type === 'ledger'">{{ item.worst.bal }}</td>
-          <td v-if="item.type === 'ledger'">{{ item.best.in }}</td>
-          <td v-if="item.type === 'ledger'">{{ item.best.out }}</td>
-          <td v-if="item.type === 'ledger'">{{ item.best.bal }}</td>
-          <th v-if="item.type === 'blank'" colspan=7>&nbsp;</th>
-          <th v-if="item.type === 'title'" colspan=7>{{ item.name }}</th>
-        </tr>
-        </table>
-        &nbsp;
+      <div>
+        <q-table
+          :columns="table.columns"
+          :rows="items"
+          hide-bottom
+          v-model:pagination="pagination"
+          :rows-per-page-options="[100]"
+        >
+          <template v-slot:header="props">
+            <q-tr>
+              <q-th></q-th>
+              <q-th colspan=3 class="worstcasetablecell">Worst Case</q-th>
+              <q-th colspan=3>Best Case</q-th>
+            </q-tr>
+            <q-tr :props="props">
+              <q-th>
+                Item
+              </q-th>
+              <q-th class="worstcasetablecell">
+                In
+              </q-th>
+              <q-th class="worstcasetablecell">
+                Out
+              </q-th>
+              <q-th class="worstcasetablecell">
+                Balance
+              </q-th>
+              <q-th>
+                In
+              </q-th>
+              <q-th>
+                Out
+              </q-th>
+              <q-th>
+                Balance
+              </q-th>
+            </q-tr>
+          </template>
+          <template v-slot:body="props">
+             <q-tr v-if="props.row.type === 'ledger'">
+               <q-td>
+                 {{ props.row.name }}
+               </q-td>
+               <q-td class="worstcasetablecell valuetablecell">
+                 {{ format_currency(props.row.worst.in) }}
+               </q-td>
+               <q-td class="worstcasetablecell valuetablecell">
+                 {{ format_currency(props.row.worst.out) }}
+               </q-td>
+               <q-td class="worstcasetablecell valuetablecell">
+                 {{ format_currency(props.row.worst.bal) }}
+               </q-td>
+               <q-td class="valuetablecell">
+                 {{ format_currency(props.row.best.in) }}
+               </q-td>
+               <q-td class="valuetablecell">
+                 {{ format_currency(props.row.best.out) }}
+               </q-td>
+               <q-td class="valuetablecell">
+                 {{ format_currency(props.row.best.bal) }}
+               </q-td>
+             </q-tr>
+             <q-tr v-if="props.row.type === 'blank'">
+              <q-th colspan=7>&nbsp;</q-th>
+             </q-tr>
+             <q-tr v-if="props.row.type === 'title'">
+              <q-th colspan=7>{{ props.row.name }}</q-th>
+             </q-tr>
+          </template>
+        </q-table>
       </div>
       <div>
-
+      &nbsp;
       <DealSummaryExitSell
         :money_in="money_in"
         :final_bal="final_bal"
@@ -100,10 +153,26 @@ export default defineComponent({
   },
   data () {
     return {
+      table: {
+        columns: [
+          { name: "item", label: 'Item', field: 'item'},
+          { name: "win", label: 'In', field: 'win'},
+          { name: "wout", label: 'Out', field: 'wout'},
+          { name: "wbal", label: 'Balance', field: 'wbal'},
+          { name: "bin", label: 'In', field: 'bin'},
+          { name: "bout", label: 'Out', field: 'bout'},
+          { name: "bbal", label: 'Balance', field: 'bbal'},
+        ]
+      }
     }
   },
   methods: {
     format_currency (num) {
+      if (typeof(num) === 'string') {
+        if (num === '') {
+          return ''
+        }
+      }
       return utils.format_currency(num)
     }
   },
@@ -182,5 +251,14 @@ export default defineComponent({
 .maincard {
   color: white;
   background-color: grey;
+}
+th.worstcasetablecell {
+  background-color: lightgrey;
+}
+td.worstcasetablecell {
+  background-color: lightgrey;
+}
+td.valuetablecell {
+  text-align: right;
 }
 </style>

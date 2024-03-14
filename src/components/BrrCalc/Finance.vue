@@ -22,14 +22,14 @@
         <div class="row">
           <div class="bridgeamountdiv">
             <div>Worst bridge amount</div>
-            <q-slider label v-model="bridge.amount.worst" :min="0" :max="purchaserange.max" :step="5000"/>
+            <q-slider label v-model="bridge.amount.worst" :min="0" :max="maxbridge.worst" :step="5000"/>
             <div>Amount: {{ format_currency(bridge.amount.worst) }}</div>
             <div>Cost: {{ format_currency(bridgecost.worst) }}</div>
           </div>
           <div class="bridgeamountdiv">
             <div>max bridging 60/70% value of money</div>
             <div>Best bridge amount</div>
-            <q-slider label v-model="bridge.amount.best" :min="0" :max="purchaserange.min" :step="5000"/>
+            <q-slider label v-model="bridge.amount.best" :min="0" :max="maxbridge.best" :step="5000"/>
             <div>Amount: {{ format_currency(bridge.amount.best) }}</div>
             <div>Cost: {{ format_currency(bridgecost.best) }}</div>
           </div>
@@ -95,6 +95,12 @@ export default defineComponent({
     }
   },
   computed: {
+    maxbridge () {
+      return {
+        best: this.purchaserange.min * 0.70,
+        worst: this.purchaserange.max * 0.70
+      }
+    },
     bridgecost () {
       if (!this.bridge.usebridge) {
         return {
@@ -178,8 +184,8 @@ export default defineComponent({
         {name: 'Bridge Payback', worst: this.bridge.amount.worst * -1, best: this.bridge.amount.best * -1},
         {
           name: 'Bridge Interest Credit',
-          worst: ((12 - this.refurbmonths.worst) * 0.01 * this.bridgecost.worst).toFixed(2),
-          best: ((12 - this.refurbmonths.best) * 0.01 * this.bridgecost.best).toFixed(2)
+          worst: ((12 - this.refurbmonths.worst) * 0.01 * this.bridgecost.worst),
+          best: ((12 - this.refurbmonths.best) * 0.01 * this.bridgecost.best)
         }
       ]
     }
