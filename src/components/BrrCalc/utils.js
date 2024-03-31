@@ -1,4 +1,15 @@
 
+function digits_with_commas_recusrive(numstr) {
+  // assume positive
+  // assume always recieve string
+  if (numstr.length < 4) {
+    return numstr
+  }
+  var high_part = numstr.substring(0, numstr.length - 3)
+  var low_part = numstr.substring(numstr.length - 3)
+  return digits_with_commas_recusrive(high_part)  + ',' + low_part
+}
+
 function format_currency (num) {
   if (typeof(num) === 'undefined') {
     return ''
@@ -8,17 +19,16 @@ function format_currency (num) {
       return '£-.--'
     }
   }
+  if (isNaN(num)) {
+    return ''
+  }
   var isneg = (num < 0)
   var prefix="£"
   if (isneg) {
     prefix="-£"
     num = num * -1
   }
-  if (num<1000) {
-    return '£' + num.toFixed(0)
-  }
-  var ns = num.toFixed(0).toString()
-  return prefix + ns.substring(0, ns.length - 3) + ',' + ns.toString().substring(ns.length - 3)
+  return prefix + digits_with_commas_recusrive(num.toFixed(0).toString())
 }
 
 

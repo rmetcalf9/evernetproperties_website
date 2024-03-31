@@ -79,8 +79,8 @@ export default defineComponent({
     return {
       isMounted: false,
       purchaserange: {
-        min: 400000,
-        max: 600000
+        min: 180000,
+        max: 190000
       }
     }
   },

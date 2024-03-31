@@ -10,7 +10,32 @@
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Loans</div>
-      TODO
+      <p>Loans that will be paid back at the refinance stage. Same loans are used for best and worst calculations</p>
+      <div>
+        <div v-for="loanitem in loans" :key='loanitem.id' class="row">
+          <div> Loan {{ loanitem.id }}</div>
+          <div>&nbsp;</div>
+          <div> Rate: {{ loanitem.rate }}%
+            <q-input
+              v-model.number="loanitem.rate"
+              type="number"
+              filled
+              style="max-width: 70px"
+            />
+          </div>
+          <div class="col-grow"> Amount: {{ format_currency(loanitem.amount) }}<q-slider
+            label
+            :label-value="format_currency(loanitem.amount)"
+            v-model="loanitem.amount"
+            :min="0"
+            :max="maxloan.worst"
+            :step="5000"
+          /></div>
+          <q-btn round icon="delete" @click="delloan(loanitem.id)" />
+        </div>
+      </div>
+      <q-btn round  color="primary" icon="add" @click="addloan" />
+      <p>Loan interest caculated irrespective of duration</p>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Bridge + Refinance</div>
@@ -52,7 +77,7 @@
     <q-card-section>
       <div class="text-h6">Cash</div>
       Cash is the money the investors put into the deal. It is free money as there is no interest payments for this money.
-      <div>This calculation will assume that all money not privided for loans or bridges will be provided by investors as cash.</div>
+      <div>This calculation will assume that all money not provided for loans or bridges will be provided by investors as cash.</div>
       <div class="text-h6">
       {{ format_currency(totalmoneyneeded.worst) }} - {{ format_currency(totalmoneyneeded.best) }} (Worst - best)
       </div>
@@ -86,12 +111,31 @@ export default defineComponent({
           min: 75,
           max: 75
         }
-      }
+      },
+      loans: []
     }
   },
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
+    },
+    addloan () {
+      var last_id = 0
+      if (this.loans.length > 0) {
+        last_id = Math.max(...this.loans.map(o => o.id))
+      }
+      this.loans.push({
+        id: last_id + 1,
+        name: 'Loan ' + (last_id + 1).toString(),
+        amount: 20000,
+        rate: 10
+      })
+    },
+    delloan (id) {
+      if (this.loans.length < 1) {
+        return
+      }
+      this.loans = this.loans.filter(function(el) { return el.id != id; });
     }
   },
   computed: {
@@ -99,6 +143,13 @@ export default defineComponent({
       return {
         best: this.purchaserange.min * 0.70,
         worst: this.purchaserange.max * 0.70
+      }
+    },
+    maxloan () {
+      // Note only worst is used
+      return {
+        best: this.totalexpenditure.min,
+        worst: this.totalexpenditure.max,
       }
     },
     bridgecost () {
@@ -141,16 +192,21 @@ export default defineComponent({
       return retVal
     },
     totalmoneyneeded () {
-      // TODO Add finance costs
+      var total_loans = 0
+      if (this.loans.length > 0) {
+        total_loans = this.loans.reduce(function (acc, current) {
+          return acc + current.amount
+        }, 0)
+      }
       if (this.bridge.usebridge) {
         return {
-          worst: this.totalexpenditure.max - this.bridge.amount.worst + this.bridgecost.worst,
-          best: this.totalexpenditure.min - this.bridge.amount.best + this.bridgecost.best
+          worst: this.totalexpenditure.max - total_loans - this.bridge.amount.worst + this.bridgecost.worst,
+          best: this.totalexpenditure.min - total_loans - this.bridge.amount.best + this.bridgecost.best
         }
       }
       return {
-        worst: this.totalexpenditure.max,
-        best: this.totalexpenditure.min
+        worst: this.totalexpenditure.max - total_loans,
+        best: this.totalexpenditure.min - total_loans
       }
     },
     refinanceamount () {
@@ -161,33 +217,46 @@ export default defineComponent({
     },
     finance_in_items () {
       // Currently hardcoded for 100% cash
+      let ret_val = []
+      ret_val.push({name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best})
+      this.loans.map(function (l) {
+        ret_val.push({
+          name: l.name,
+          worst: l.amount,
+          best: l.amount
+        })
+      })
       if (this.bridge.usebridge) {
-        return [
-          {name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best},
-          {
-            name: 'Bridge Payment',
-            worst: this.bridge.amount.worst - this.bridgecost.worst,
-            best: this.bridge.amount.best - this.bridgecost.best
-          }
-        ]
+        ret_val.push({
+          name: 'Bridge Payment',
+          worst: this.bridge.amount.worst - this.bridgecost.worst,
+          best: this.bridge.amount.best - this.bridgecost.best
+        })
       }
-      return [
-        {name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best}
-      ]
+      return ret_val
     },
     finance_out_items () {
-      if (!this.bridge.usebridge) {
-        return []
+      let ret_val = []
+      this.loans.map(function (l) {
+        var repay_amount = -(l.amount + (l.amount * l.rate / 100))
+        ret_val.push({
+          name: 'Repay ' + l.name,
+          worst: repay_amount,
+          best: repay_amount
+        })
+      })
+      if (this.bridge.usebridge) {
+        ret_val.push({name: 'Mortgage Refinance', worst: this.refinanceamount.worst, best: this.refinanceamount.best})
+        ret_val.push({name: 'Bridge Payback', worst: this.bridge.amount.worst * -1, best: this.bridge.amount.best * -1})
+        ret_val.push(
+          {
+            name: 'Bridge Interest Credit',
+            worst: ((12 - this.refurbmonths.worst) * 0.01 * this.bridgecost.worst),
+            best: ((12 - this.refurbmonths.best) * 0.01 * this.bridgecost.best)
+          }
+        )
       }
-      return [
-        {name: 'Mortgage Refinance', worst: this.refinanceamount.worst, best: this.refinanceamount.best},
-        {name: 'Bridge Payback', worst: this.bridge.amount.worst * -1, best: this.bridge.amount.best * -1},
-        {
-          name: 'Bridge Interest Credit',
-          worst: ((12 - this.refurbmonths.worst) * 0.01 * this.bridgecost.worst),
-          best: ((12 - this.refurbmonths.best) * 0.01 * this.bridgecost.best)
-        }
-      ]
+      return ret_val
     }
   }
 })

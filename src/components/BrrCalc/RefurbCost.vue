@@ -49,8 +49,8 @@ export default defineComponent({
   data () {
     return {
       refurbrange: {
-        min: 40000,
-        max: 60000
+        min: 30000,
+        max: 40000
       },
       refurbtimerange: {
         min: 6,
