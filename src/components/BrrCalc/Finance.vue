@@ -2,7 +2,7 @@
   <q-card inline class="q-ma-sm card-style">
     <q-card-section>
       <div class="text-h6">Finance</div>
-      <div class="text-subtitle2">.</div>
+      <div class="text-subtitle2">This section is to estimate the finance costs of the project.</div>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Total Expenditure</div>

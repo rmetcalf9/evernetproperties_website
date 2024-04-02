@@ -6,6 +6,7 @@
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Fees: {{ format_currency(fees.min) }} - {{ format_currency(fees.max) }}</div>
+      <div>40% of purchase price to cover solicitors fees, surveyor etc.</div>
     </q-card-section>
   </q-card>
 
