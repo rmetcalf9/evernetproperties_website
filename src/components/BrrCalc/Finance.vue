@@ -178,8 +178,8 @@ export default defineComponent({
           worst: 0
         }
       }
-      var best = this.bridge.amount.best * (this.bridge.startcost + this.bridge.endcost + (this.bridge.monthlycost * this.refurbmonths.best))
-      var worst = this.bridge.amount.worst * (this.bridge.startcost + this.bridge.endcost + (this.bridge.monthlycost * this.refurbmonths.worst))
+      var best = this.bridge.amount.best * (this.bridge.startcost + this.bridge.endcost + (this.bridge.monthlycost * this.bridgemontghsupfront.min))
+      var worst = this.bridge.amount.worst * (this.bridge.startcost + this.bridge.endcost + (this.bridge.monthlycost * this.bridgemontghsupfront.max))
       return {
         best: best,
         worst: worst
