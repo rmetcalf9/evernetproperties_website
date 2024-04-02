@@ -46,6 +46,14 @@
           :gdv_total="gdv_total"
           :refurbmonths="refurbmonths"
         />
+        <DealRating
+          ref="DealRating"
+          :finance_totalmoneyneeded="finance_totalmoneyneeded"
+          :deal_summary_final_bal="deal_summary_final_bal"
+          :finance_refinance="finance_refinance"
+          :gdv_total="gdv_total"
+          :refurbmonths="refurbmonths"
+        />
       </div>
     </div>
   </q-page>
@@ -59,8 +67,9 @@ import PurchasePrice from '../../components/BrrCalc/PurchasePrice.vue'
 import RefurbCost from '../../components/BrrCalc/RefurbCost.vue'
 import StampDuty from '../../components/BrrCalc/StampDuty.vue'
 import OtherCosts from '../../components/BrrCalc/OtherCosts.vue'
-import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import Finance from '../../components/BrrCalc/Finance.vue'
+import DealSummary from '../../components/BrrCalc/DealSummary.vue'
+import DealRating from '../../components/BrrCalc/DealRating.vue'
 
 export default defineComponent({
   name: 'CalcBrrToFlip',
@@ -72,7 +81,8 @@ export default defineComponent({
     OtherCosts,
     DealSummary,
     Finance,
-    Vision
+    Vision,
+    DealRating
   },
   data () {
     return {
@@ -84,6 +94,36 @@ export default defineComponent({
     }
   },
   computed: {
+    deal_summary_final_bal () {
+      if (!this.isMounted) {
+        return {
+          best: 0,
+          worst: 0
+        }
+      }
+      return this.$refs.DealSummary.final_bal
+    },
+    finance_refinance () {
+      if (!this.isMounted) {
+        return {
+          userefinance: false,
+          ltv: {
+            min: 75,
+            max: 75
+          }
+        }
+      }
+      return this.$refs.Finance.refinance
+    },
+    finance_totalmoneyneeded () {
+      if (!this.isMounted) {
+        return {
+          best: 0,
+          worst: 0
+        }
+      }
+      return this.$refs.Finance.totalmoneyneeded
+    },
     finance_in_items () {
       if (!this.isMounted) {
         return []
