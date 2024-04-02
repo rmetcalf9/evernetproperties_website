@@ -6,7 +6,19 @@
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Fees: {{ format_currency(fees.min) }} - {{ format_currency(fees.max) }}</div>
-      <div>40% of purchase price to cover solicitors fees, surveyor etc.</div>
+      <div>40% of purchase price to cover solicitors fees, arrangement etc.</div>
+    </q-card-section>
+    <q-card-section>
+      <div class="text-h6">Auction</div>
+      <div><q-checkbox v-model="auction" label="Buying at auction" /></div>
+      <div v-if="auction">
+        <div>£{{ consts.auction_survey }} to get a survey</div>
+        <div>£{{ consts.auction_legal_review }} to get a review of legal pack</div>
+        <div>Note survey and legal pack review costs may greater as they may have been done multiple times for auctions not won</div>
+      </div>
+    </q-card-section>
+    <q-card-section>
+      <div class="text-h6">Total: {{ format_currency(total.min) }} - {{ format_currency(total.max) }}</div>
     </q-card-section>
   </q-card>
 
@@ -22,6 +34,11 @@ export default defineComponent({
   props: ['purchaserange'],
   data () {
     return {
+      auction: false,
+      consts: {
+        auction_survey: 300,
+        auction_legal_review: 150
+      }
     }
   },
   methods: {
@@ -38,16 +55,20 @@ export default defineComponent({
     },
     total () {
       // only one cost so far. In future all costs are added
+      let auction_costs = 0
+      if (this.auction) {
+        auction_costs = this.consts.auction_survey + this.consts.auction_legal_review
+      }
       var total = {
-        min: this.fees.min,
-        max: this.fees.max
+        min: this.fees.min + auction_costs,
+        max: this.fees.max + auction_costs
       }
       return total
     },
     othercosts_items () {
-      return [
-        {name: 'Other Costs', worst: -1 * this.total.max, best: -1 * this.total.min}
-      ]
+      let ret_val = []
+      ret_val.push({name: 'Other Costs', worst: -1 * this.total.max, best: -1 * this.total.min})
+      return ret_val
     }
   }
 })

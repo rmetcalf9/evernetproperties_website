@@ -46,7 +46,6 @@
           :gdv_total="gdv_total"
           :refurbmonths="refurbmonths"
         />
-        DEBUG OUTER {{ gdv_total }}
       </div>
     </div>
   </q-page>
