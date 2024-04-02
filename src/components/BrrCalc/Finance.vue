@@ -38,8 +38,8 @@
       <p>Loan interest caculated irrespective of duration</p>
     </q-card-section>
     <q-card-section>
-      <div class="text-h6">Bridge + Refinance</div>
-      <q-checkbox v-model="bridge.usebridge" label="Use a bridge" />
+      <div class="text-h6">Bridge</div>
+      <q-checkbox v-model="bridge.usebridge" label="Use a bridge"  @update:model-value="updatebridgetoggle" />
       <div v-if="bridge.usebridge">
         <div>Start cost/End Cost: {{ bridge.startcost * 100 }}%/{{ bridge.endcost * 100 }}%</div>
         <div>Monthly cost: {{ bridge.monthlycost * 100 }}%</div>
@@ -59,20 +59,24 @@
             <div>Cost: {{ format_currency(bridgecost.best) }}</div>
           </div>
         </div>
+    </div>
+    </q-card-section>
+    <q-card-section>
+      <div class="text-h6">Refinance</div>
+      <q-checkbox v-model="refinance.userefinance" label="Refinance" />
+        <div v-if="refinance.userefinance">
         Refinance LTV<q-range
-          v-model="bridge.refinanceltv"
+          v-model="refinance.ltv"
           :min="0"
           :max="100"
           :step="5"
           drag-range
           label
-          :left-label-value="bridge.refinanceltv.min + '%'"
-          :right-label-value="bridge.refinanceltv.max+ '%'"
+          :left-label-value="refinance.ltv.min + '%'"
+          :right-label-value="refinance.ltv.max+ '%'"
         />
-        <!--<div>Percentage: {{ bridge.refinanceltv.min }}% - {{ bridge.refinanceltv.max }}%</div>-->
         <div>Refinance amount: {{ format_currency(refinanceamount.worst) }} - {{ format_currency(refinanceamount.best) }}</div>
-    </div>
-
+      </div>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Cash</div>
@@ -92,6 +96,7 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from './utils.js'
+import { Notify } from 'quasar'
 
 export default defineComponent({
   name: 'BrrCalcFinance',
@@ -106,8 +111,11 @@ export default defineComponent({
         amount: {
           worst: 1,
           best: 1
-        },
-        refinanceltv: {
+        }
+      },
+      refinance: {
+        userefinance: false,
+        ltv: {
           min: 75,
           max: 75
         }
@@ -136,6 +144,17 @@ export default defineComponent({
         return
       }
       this.loans = this.loans.filter(function(el) { return el.id != id; });
+    },
+    updatebridgetoggle () {
+      if (this.bridge.usebridge) {
+        if (!this.refinance.userefinance) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'You may also want to configure refinance',
+            timeout: 2
+          })
+        }
+      }
     }
   },
   computed: {
@@ -211,8 +230,8 @@ export default defineComponent({
     },
     refinanceamount () {
       return {
-        worst: this.gdv_total.min * (this.bridge.refinanceltv.min / 100),
-        best: this.gdv_total.max * (this.bridge.refinanceltv.max / 100)
+        worst: this.gdv_total.min * (this.refinance.ltv.min / 100),
+        best: this.gdv_total.max * (this.refinance.ltv.max / 100)
       }
     },
     finance_in_items () {
@@ -237,6 +256,9 @@ export default defineComponent({
     },
     finance_out_items () {
       let ret_val = []
+      if (this.refinance.userefinance) {
+        ret_val.push({name: 'Mortgage Refinance', worst: this.refinanceamount.worst, best: this.refinanceamount.best})
+      }
       this.loans.map(function (l) {
         var repay_amount = -(l.amount + (l.amount * l.rate / 100))
         ret_val.push({
@@ -246,7 +268,6 @@ export default defineComponent({
         })
       })
       if (this.bridge.usebridge) {
-        ret_val.push({name: 'Mortgage Refinance', worst: this.refinanceamount.worst, best: this.refinanceamount.best})
         ret_val.push({name: 'Bridge Payback', worst: this.bridge.amount.worst * -1, best: this.bridge.amount.best * -1})
         ret_val.push(
           {
