@@ -114,7 +114,7 @@ export default defineComponent({
         }
       },
       refinance: {
-        userefinance: false,
+        userefinance: true,
         ltv: {
           min: 75,
           max: 75
