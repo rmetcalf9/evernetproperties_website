@@ -78,13 +78,6 @@
       </div>
       <div>
       &nbsp;
-      <DealSummaryExitSell
-        :money_in="money_in"
-        :final_bal="final_bal"
-        :gdv_total="gdv_total"
-        :refurbmonths="refurbmonths"
-      />
-
       </div>
     </q-card-section>
   </q-card>
@@ -95,8 +88,6 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from './utils.js'
-import DealSummaryExitSell from './DealSummaryExitSell.vue'
-
 
 function add_item_title(items, title) {
   items.push({
@@ -149,7 +140,6 @@ export default defineComponent({
   name: 'BrrCalcDealSummary',
   props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items'],
   components: {
-    DealSummaryExitSell
   },
   data () {
     return {
