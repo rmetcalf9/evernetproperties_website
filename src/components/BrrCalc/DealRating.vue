@@ -23,7 +23,7 @@
             <td class="text-right">{{ format_currency(amount_equity_left_in.best) }} ({{ percent_left_in.best }}%)</td>
           </tr>
           <tr>
-            <td class="text-left">Money out</td>
+            <td class="text-left">Cash at end</td>
             <td class="text-right worstcasetablecell">{{ format_currency(deal_summary_final_bal.worst) }}</td>
             <td class="text-right">{{ format_currency(deal_summary_final_bal.best) }}</td>
           </tr>
@@ -50,23 +50,27 @@
             <th class="text-right totaltablecell">{{ format_currency(profit.best) }}</th>
           </tr>
           <tr>
-            <th class="text-left">ROI</th>
-            <th class="text-right worstcasetablecell totaltablecell">{{ roi.worst.toFixed(0) }}%</th>
-            <th class="text-right totaltablecell">{{ roi.best.toFixed(0) }}%</th>
+            <th class="text-left">ROI<br>(Over project duration)</th>
+            <th class="text-right worstcasetablecell totaltablecell">{{ roi.worst.toFixed(1) }}%</th>
+            <th class="text-right totaltablecell">{{ roi.best.toFixed(1) }}%</th>
           </tr>
           <tr>
-            <th class="text-left">Annual ROI<br>(Based on project duration)</th>
-            <th class="text-right worstcasetablecell totaltablecell">{{ annualroi.worst.toFixed(0) }}%<br>({{this.refurbmonths.worst}} months)</th>
-            <th class="text-right totaltablecell">{{ annualroi.best.toFixed(0) }}%<br>({{this.refurbmonths.best}} months)</th>
+            <th class="text-left">Annual ROI<br>(12 month ROI for comparison)</th>
+            <th class="text-right worstcasetablecell totaltablecell">{{ annualroi.worst.toFixed(1) }}%<br>({{this.refurbmonths.worst}} months)</th>
+            <th class="text-right totaltablecell">{{ annualroi.best.toFixed(1) }}%<br>({{this.refurbmonths.best}} months)</th>
           </tr>
         </tbody>
       </q-markup-table>
-      <div>TODO What is best val {{ finance_refinance }} TODO FIX ANUJAL ROI</div>
     </q-card-section>
     <q-card-section>
-      <div class="text-h6">All money out?</div>
-      A key element of BRRR is getting our money out of each project so we are able to invest in the next one. This section tells us if we are able to ‘snowball’ our investment and build a portfolio.
-      TODO
+      <div class="text-h6">Deal Features</div>
+      <div class="featuretable">
+        <div v-for="feature in features" :key="feature">
+          <q-icon v-if="feature.positive" name="check_box" color="green" size="32px" />
+          <q-icon v-if="!feature.positive" name="cancel" color="red" size="32px" />
+          {{ feature.text }}
+        </div>
+      </div>
     </q-card-section>
 
   </q-card>
@@ -92,6 +96,64 @@ export default defineComponent({
     }
   },
   computed: {
+    features () {
+      let ret_val = []
+
+
+      var min_money_out = Math.min(this.cash_out_of_deal_minus_cash_in.best, this.cash_out_of_deal_minus_cash_in.worst)
+      if (min_money_out > 0) {
+        ret_val.push({
+          positive: true,
+          text: 'All money out deal! - All initial investment returned plus at least ' + this.format_currency(min_money_out)
+        })
+      } else {
+        ret_val.push({
+          positive: false,
+          text: 'Not all money out deal! - Might leave ' + this.format_currency(-1 * min_money_out) + ' in.'
+        })
+      }
+
+      var min_profit = Math.min(this.profit.best, this.profit.worst)
+      if (min_profit < 0) {
+        ret_val.push({
+          positive: false,
+          text: 'Deal makes a loss! - End value might be ' + this.format_currency(-1 * min_profit) + ' less than investment.'
+        })
+      } else {
+        if (min_profit < (this.gdv_total.min * 0.25)) {
+          ret_val.push({
+            positive: false,
+            text: 'Low amount of profit! - Low profit ' + this.format_currency(min_profit) + ' less than 25% of gdv.'
+          })
+        } else {
+          ret_val.push({
+            positive: true,
+            text: 'Profit making deal! - Profit of ' + this.format_currency(min_profit) + '!'
+          })
+        }
+      }
+
+      var min_anual_roi = Math.min(this.annualroi.worst, this.annualroi.best)
+      if (min_anual_roi < 3) {
+        ret_val.push({
+          positive: false,
+          text: 'Very low ROI! ' + min_anual_roi.toFixed(1) + '%'
+        })
+      } else if (min_anual_roi > 10) {
+        ret_val.push({
+          positive: true,
+          text: 'Good ROI! ' + min_anual_roi.toFixed(1) + '%'
+        })
+      }
+
+      return ret_val
+    },
+    cash_out_of_deal_minus_cash_in () {
+      return {
+        best: this.deal_summary_final_bal.best - this.finance_totalmoneyneeded.best,
+        worst: this.deal_summary_final_bal.worst - this.finance_totalmoneyneeded.worst
+      }
+    },
     percent_left_in () {
       if (!this.finance_refinance.userefinance) {
         return {
@@ -130,8 +192,8 @@ export default defineComponent({
     },
     annualroi () {
       return {
-        worst: (this.roi.worst * (this.refurbmonths.worst / 12)),
-        best: (this.roi.best * (this.refurbmonths.best / 12))
+        worst: (this.roi.worst * (12 / this.refurbmonths.worst)),
+        best: (this.roi.best * (12 / this.refurbmonths.best))
       }
     }
   }
@@ -152,6 +214,11 @@ td.worstcasetablecell {
 }
 th.totaltablecell {
   font-size: 15px
+}
+.featuretable {
+  background-color: white;
+  color: black;
+  font-weight: 700;
 }
 
 </style>
