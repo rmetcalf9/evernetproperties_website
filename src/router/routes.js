@@ -10,6 +10,7 @@ const routes = [
       { path: 'faq', component: () => import('pages/Faq.vue') },
       { path: 'contact', component: () => import('pages/ContactPage.vue') },
       { path: 'postsubscribe', component: () => import('pages/Postsubscribe.vue') },
+      { path: 'tools', component: () => import('pages/Tools.vue') },
       { path: 'tools/brrcalc', component: () => import('pages/tools/BrrCalc.vue') }
     ]
   },

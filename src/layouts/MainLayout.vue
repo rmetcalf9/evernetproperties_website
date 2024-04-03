@@ -54,17 +54,13 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { Notify, Cookies } from 'quasar'
+import common from './common.js'
 
 export default defineComponent({
   name: 'MainLayout',
   data () {
     return {
-      menu_items: [
-        {name: 'Home', target: '/'},
-        {name: 'FAQ', target: '/faq'},
-        {name: 'Contact Us', target: '/contact'},
-        {name: 'About', target: '/about'}
-      ]
+      menu_items: common.get_menu_items()
     }
   },
   computed: {
