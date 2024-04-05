@@ -81,7 +81,7 @@ export default {
       this.$refs.addFloorplanDialog.launchDialog()
     },
     onDialogCompleteAddFloorplan (retData) {
-      // retData.floorplan_url = 'https://lh3.googleusercontent.com/pw/ABLVV8715kFOUDZGlx6NcwSx-EGUnYGl_7sLJ5T-QHVLTm0ojxZ04GzAyUnwnCORsc34bM5wOiSNnj1PVVhTlxKE-hb8gUw5hMtFH5-6xUymqPObqtQx6dS-Of8tSnFUNGYrPG_d9TzkJqUce4Gtj7dCeJlFQQ=w987-h755-s-no-gm?authuser=0'
+      retData.floorplan_url = 'https://lh3.googleusercontent.com/pw/ABLVV8715kFOUDZGlx6NcwSx-EGUnYGl_7sLJ5T-QHVLTm0ojxZ04GzAyUnwnCORsc34bM5wOiSNnj1PVVhTlxKE-hb8gUw5hMtFH5-6xUymqPObqtQx6dS-Of8tSnFUNGYrPG_d9TzkJqUce4Gtj7dCeJlFQQ=w987-h755-s-no-gm?authuser=0'
       // retData.floorplan_url = 'https://www.samuelleeds.com/wp-content/uploads/Power-Team-2.png'
       // tried 'embed' with 'src' instead of href
       const added_item = refurbDataModel.addBackgroundItem({
@@ -106,7 +106,7 @@ export default {
       let totalHeight = this.refurbData.background_items.reduce((acc, value) => {
           return (acc = acc + value.item_data.height);
       }, 0);
-      // console.log('updatechartzied', totalHeight, this.refurbData.background_items.length)
+      console.log('updatechartzied', totalHeight, this.refurbData.background_items.length)
       // console.log('xx', this.refurbData.background_items[this.refurbData.background_items.length-1].item_data.height)
       // console.log('yy', this.refurbData.background_items[this.refurbData.background_items.length-1])
       this.boudaryRect

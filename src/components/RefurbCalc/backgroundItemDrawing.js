@@ -97,10 +97,17 @@ function drawSingleItem ({item, allbackgrounditems, allzoomedelements, thencall}
               timeout: 2
             })
         })
-    setTimeout(function () {
-      item.item_data.height=myimage.node().getBBox().height
-      thencall()
-    }, 5)
+    var callwithdelay = function () {
+      setTimeout(function () {
+        if (myimage.node().getBBox().height === 0) {
+          callwithdelay()
+          return
+        }
+        item.item_data.height=myimage.node().getBBox().height
+        thencall()
+      }, 5)
+    }
+    callwithdelay()
     return
   }
   if (item.item_data.type === consts.typeotherarea) {
