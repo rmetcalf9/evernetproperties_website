@@ -11,6 +11,14 @@
           />
         </div>
         <div
+        v-if="refurb_mode === 'viewing'"
+        >
+          <viewingChart
+            ref="viewingChart"
+            :refurbData="refurb_data"
+          />
+        </div>
+        <div
         v-if="refurb_mode === 'json'"
         >
           <jsonView
@@ -28,6 +36,7 @@
 import { defineComponent } from 'vue'
 
 import plansChart from '../../components/RefurbCalc/PlansChart.vue'
+import viewingChart from '../../components/RefurbCalc/ViewingChart.vue'
 import jsonView from '../../components/RefurbCalc/jsonView.vue'
 
 import refurbDataModel from '../../components/RefurbCalc/dataModel.js'
@@ -36,6 +45,7 @@ export default defineComponent({
   name: 'CalcRefurbishment',
   components: {
     plansChart,
+    viewingChart,
     jsonView
   },
   data () {
