@@ -44,7 +44,7 @@ export default {
       chartarea: {
         xmin: -650,
         xmax: 650,
-        ymin: -100,
+        ymin: -150,
         ymax: 800
       }
     }
@@ -147,6 +147,15 @@ export default {
         function zoomed (event, d) {
           viewObj.allzoomedelements.attr('transform', event.transform)
         }
+
+        viewObj.allzoomedelements
+          .append('text')
+          .attr('text-anchor', 'middle')
+          .attr('alignment-baseline', 'central')
+          .attr('x', 0)
+          .attr('y', -70)
+          .attr('style', 'font-size: 40px; font-weight: 800;')
+          .text(d => 'Setup Plans')
 
         backgroundItemDrawing.drawAllBackgroundItems({
           allbackgrounditems: TTT.refurbData.background_items,
