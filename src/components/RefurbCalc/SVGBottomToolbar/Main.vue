@@ -24,10 +24,10 @@ export default {
       selectedPanelItem: 0, // Currently highlighted on toolbar
       clickSelectedItem: 0, // Item that is selected with a click
       cells: [
-        { render: gfxFunctions.getSVGRJMIconPointer, inputMode: 'POINTER', title: 'Pointer mode - use to move and add nodes' },
-        { render: gfxFunctions.getSVGMaterialAddAPhoto, inputMode: 'ADD', title: 'Add mode - use to add nodes to graph' },
+        { render: gfxFunctions.getSVGRJMIconPointer, inputMode: 'POINTER', title: 'Pointer mode - use to add photos to plan' },
+        { render: gfxFunctions.getSVGMaterialAddAPhoto, inputMode: 'ADD', title: 'Add mode - use to add work items to plan' },
         { render: gfxFunctions.getSVGMaterialConstruction, inputMode: 'LINK', title: 'Link mode - use to create relationships between nodes' },
-        { render: gfxFunctions.getSVGMaterialIconDelete, inputMode: 'DELETE', title: 'Delete mode - use to permenantly delete nodes' }
+        { render: gfxFunctions.getSVGMaterialIconDelete, inputMode: 'DELETE', title: 'Delete mode - use to permanently delete items' }
       ]
     }
   },
