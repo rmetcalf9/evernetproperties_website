@@ -2,6 +2,8 @@
   <div>
     <div id="chartInsetionPoint_adsdsa" @click="clickDIV($event)">
     </div>
+    <div id="chartInsetionPointPanel_adsdsa">
+    </div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab
         color="grey"
@@ -15,7 +17,7 @@
     </q-page-sticky>
     <svgBottomToolbar
       ref='svgBottomToolbar'
-    />    
+    />
   </div>
 </template>
 
@@ -33,6 +35,7 @@ import svgBottomToolbar from './SVGBottomToolbar/Main.vue'
 export default {
   name: 'ViewingChartComponent',
   components: {
+    svgBottomToolbar
   },
   props: ['refurbData'],
   data () {
@@ -40,6 +43,7 @@ export default {
       allzoomedelements: undefined,
       boudaryRect: undefined,
       svg: undefined,
+      panelsvg: undefined,
       chartarea: {
         xmin: -650,
         xmax: 650,
@@ -69,6 +73,12 @@ export default {
           .attr('style', 'border: 1px solid black;position:fixed; top:0; left:0; height:100%; width:100%')
           .attr('viewBox', [-width / 2, -height / 2, width, height])
           .attr('oncontextmenu', 'return false;') // Not sure this line does anything
+
+        viewObj.panelsvg = d3.create('svg')
+          .attr('style', 'position:fixed; top:0; left:0; height:100%; width:100%; pointer-events: none;')
+          .attr('viewBox', [-50, 0, 100, 800])
+          .attr('oncontextmenu', 'return false;')
+
 
         viewObj.allzoomedelements = viewObj.svg.append('g')
 
@@ -119,6 +129,17 @@ export default {
       }
       // console.log('nodeData:', this.nodeData)
       xdiv.appendChild(chart(this))
+
+      var xdiv2 = document.getElementById('chartInsetionPointPanel_adsdsa')
+      while (xdiv2.firstChild) {
+        console.log('Removing old SVG2')
+        xdiv2.removeChild(xdiv2.firstChild)
+      }
+      xdiv2.appendChild(this.panelsvg.node())
+
+      var rootGroup = this.panelsvg.append('g').attr('transform', 'translate( 0 780) scale( 0.5 0.5 ) ')
+      // renderAxis({ rootGroup: rootGroup })
+      this.$refs.svgBottomToolbar.render({ rootGroup: rootGroup })
     }
   },
   mounted () {
