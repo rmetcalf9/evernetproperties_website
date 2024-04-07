@@ -32,19 +32,12 @@ export default {
     }
   },
   methods: {
-    setInputMode ({ type }) {
-      var TTT = this
-      TTT.selectedPanelItem = TTT.getInputModeFromType({ type: 'POINTER' })
-      TTT.clickSelectedItem = TTT.getInputModeFromType({ type: 'POINTER' })
-    },
     getCurrentInputMode () {
       return this.cells[this.selectedPanelItem].inputMode
     },
-    emitIntrepetedInputEvent (name, data) {
-      this.$root.$emit(name, data)
-    },
     toolbarClickItem (event) {
-      console.log('toolbarClickItem TODO')
+      console.log('toolbarClickItem TODO', event)
+      this.selectedPanelItem = event
     },
     render (params) {
       var TTT = this
