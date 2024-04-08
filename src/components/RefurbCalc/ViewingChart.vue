@@ -16,6 +16,8 @@ import { Notify } from 'quasar'
 import addFloorplanDialog from './AddFloorplanDialog.vue'
 import refurbDataModel from './dataModel.js'
 import backgroundItemDrawing from './backgroundItemDrawing.js'
+import nodeDrawing from './nodeDrawing.js'
+
 import consts from './consts.js'
 
 import svgBottomToolbar from './SVGBottomToolbar/Main.vue'
@@ -34,6 +36,7 @@ export default {
       svg: undefined,
       panelsvg: undefined,
       background_item_group: undefined,
+      node_group: undefined,
       chartarea: {
         xmin: -650,
         xmax: 650,
@@ -116,6 +119,11 @@ export default {
           allbackgrounditems: TTT.refurbData.background_items,
           allzoomedelements: TTT.background_item_group,
           thencall: TTT.updatechartsize
+        })
+
+        TTT.node_group = viewObj.allzoomedelements.append('g')
+        nodeDrawing.drawAllNodes({
+          rootGroup: TTT.node_group
         })
 
         return viewObj.svg.node()
