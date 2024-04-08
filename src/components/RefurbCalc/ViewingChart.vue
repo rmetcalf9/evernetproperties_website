@@ -4,17 +4,6 @@
     </div>
     <div id="chartInsetionPointPanel_adsdsa">
     </div>
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-fab
-        color="grey"
-        icon="keyboard_arrow_up"
-        direction="up"
-        vertical-actions-align="right"
-      >
-        <q-fab-action color="grey" @click="onClickTODO" icon="add" label="Add photo" />
-        <q-fab-action color="grey" @click="onClickTODO" icon="add" label="Add workitem" />
-      </q-fab>
-    </q-page-sticky>
     <svgBottomToolbar
       ref='svgBottomToolbar'
     />

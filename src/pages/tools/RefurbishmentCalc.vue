@@ -34,6 +34,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { Notify } from 'quasar'
 
 import plansChart from '../../components/RefurbCalc/PlansChart.vue'
 import viewingChart from '../../components/RefurbCalc/ViewingChart.vue'
@@ -56,6 +57,16 @@ export default defineComponent({
   },
   methods: {
     click_refurb_menu (ite) {
+      if (ite === 'viewing') {
+        if (this.refurb_data.background_items.length === 0) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Add floorplans before viewing',
+            timeout: 2
+          })
+          return
+        }
+      }
       this.refurb_mode = ite
     }
   },

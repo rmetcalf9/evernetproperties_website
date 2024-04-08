@@ -36,7 +36,6 @@ export default {
       return this.cells[this.selectedPanelItem].inputMode
     },
     toolbarClickItem (event) {
-      console.log('toolbarClickItem TODO', event)
       this.selectedPanelItem = event
     },
     render (params) {

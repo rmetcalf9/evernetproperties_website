@@ -106,7 +106,7 @@ export default {
       let totalHeight = this.refurbData.background_items.reduce((acc, value) => {
           return (acc = acc + value.item_data.height);
       }, 0);
-      console.log('updatechartzied', totalHeight, this.refurbData.background_items.length)
+      // console.log('updatechartzied', totalHeight, this.refurbData.background_items.length)
       // console.log('xx', this.refurbData.background_items[this.refurbData.background_items.length-1].item_data.height)
       // console.log('yy', this.refurbData.background_items[this.refurbData.background_items.length-1])
       this.boudaryRect
