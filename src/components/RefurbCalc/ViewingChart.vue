@@ -109,6 +109,8 @@ export default {
           .on('click', viewObj.UIInputZoomedBackgroundClick)
 
         TTT.background_item_group = viewObj.allzoomedelements.append('g')
+        TTT.background_item_group
+          .on('click', viewObj.UIInputZoomedBackgroundClick)
 
         backgroundItemDrawing.drawAllBackgroundItems({
           allbackgrounditems: TTT.refurbData.background_items,
