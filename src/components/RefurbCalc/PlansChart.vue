@@ -41,6 +41,7 @@ export default {
       allzoomedelements: undefined,
       boudaryRect: undefined,
       svg: undefined,
+      background_item_group: undefined,
       chartarea: {
         xmin: -650,
         xmax: 650,
@@ -95,7 +96,7 @@ export default {
       backgroundItemDrawing.drawSingleItem({
         item: added_item,
         allbackgrounditems: this.refurbData.background_items,
-        allzoomedelements: this.allzoomedelements,
+        allzoomedelements: this.background_item_group,
         thencall: this.updatechartsize
       })
     },
@@ -157,9 +158,11 @@ export default {
           .attr('style', 'font-size: 40px; font-weight: 800;')
           .text(d => 'Setup Plans')
 
+        TTT.background_item_group = viewObj.allzoomedelements.append('g')
+
         backgroundItemDrawing.drawAllBackgroundItems({
           allbackgrounditems: TTT.refurbData.background_items,
-          allzoomedelements: viewObj.allzoomedelements,
+          allzoomedelements: TTT.background_item_group,
           thencall: TTT.updatechartsize
         })
 

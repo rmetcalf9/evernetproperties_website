@@ -33,6 +33,7 @@ export default {
       boudaryRect: undefined,
       svg: undefined,
       panelsvg: undefined,
+      background_item_group: undefined,
       chartarea: {
         xmin: -650,
         xmax: 650,
@@ -44,6 +45,9 @@ export default {
   methods: {
     clickDIV () {
       // console.log('CLICK')
+    },
+    UIInputZoomedBackgroundClick ({ event }) {
+      console.log('xx UIInputZoomedBackgroundClick', event)
     },
     updatechartsize () {
       let totalHeight = this.refurbData.background_items.reduce((acc, value) => {
@@ -102,10 +106,13 @@ export default {
           .attr('y', -70)
           .attr('style', 'font-size: 40px; font-weight: 800;')
           .text(d => 'Input Viewing Data')
+          .on('click', viewObj.UIInputZoomedBackgroundClick)
+
+        TTT.background_item_group = viewObj.allzoomedelements.append('g')
 
         backgroundItemDrawing.drawAllBackgroundItems({
           allbackgrounditems: TTT.refurbData.background_items,
-          allzoomedelements: viewObj.allzoomedelements,
+          allzoomedelements: TTT.background_item_group,
           thencall: TTT.updatechartsize
         })
 
