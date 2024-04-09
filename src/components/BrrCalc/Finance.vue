@@ -35,7 +35,7 @@
         </div>
       </div>
       <q-btn round  color="primary" icon="add" @click="addloan" />
-      <p>Loan interest caculated irrespective of duration</p>
+      <p>Fixed return loans</p>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Bridge</div>
