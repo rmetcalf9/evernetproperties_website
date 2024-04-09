@@ -32,11 +32,19 @@ function drawWorkNode ({rootGroup, x, y}) {
 }
 
 function drawSingleNode ({node, allbackgroudnitems, rootGroup, thencall}) {
-  drawWorkNode({
-    rootGroup: rootGroup,
-    x: node.x,
-    y: node.y
-  })
+  if (node.type==='PICTURE') {
+    drawPictureNode({
+      rootGroup: rootGroup,
+      x: node.x,
+      y: node.y
+    })
+  } else {
+    drawWorkNode({
+      rootGroup: rootGroup,
+      x: node.x,
+      y: node.y
+    })
+  }
 }
 
 function drawAllNodes ({rootGroup}) {

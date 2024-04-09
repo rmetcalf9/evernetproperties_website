@@ -55,20 +55,39 @@ export default {
       pt.x = event.clientX
       pt.y = event.clientY
       pt = pt.matrixTransform(this.allzoomedelements.node().getCTM().inverse())
-
-      let node = {
-        x: pt.x,
-        y: pt.y
+      const curview = this.$refs.svgBottomToolbar.getCurrentInputMode()
+      if (curview === 'ADDWORKITEM') {
+        this.addWorkItem(pt)
+      } else if (curview === 'ADDPHOTO') {
+        this.addPhoto(pt)
       }
-      console.log('co', pt)
+      event.preventDefault()
+    },
+    addWorkItem (point) {
+      let node = {
+        type: 'WORK',
+        x: point.x,
+        y: point.y
+      }
       nodeDrawing.drawSingleNode ({
         node: node,
         allbackgroudnitems: this.refurbData.background_items,
         rootGroup: this.node_group,
         thencall: undefined
       })
-
-      event.preventDefault()
+    },
+    addPhoto (point) {
+      let node = {
+        type: 'PICTURE',
+        x: point.x,
+        y: point.y
+      }
+      nodeDrawing.drawSingleNode ({
+        node: node,
+        allbackgroudnitems: this.refurbData.background_items,
+        rootGroup: this.node_group,
+        thencall: undefined
+      })
     },
     updatechartsize () {
       let totalHeight = this.refurbData.background_items.reduce((acc, value) => {
