@@ -49,8 +49,26 @@ export default {
     clickDIV () {
       // console.log('CLICK')
     },
-    UIInputZoomedBackgroundClick ({ event }) {
-      console.log('xx UIInputZoomedBackgroundClick', event)
+    UIInputZoomedBackgroundClick (d, i) {
+      var svgEl = this.svg.node()
+      var pt = svgEl.createSVGPoint()
+      pt.x = event.clientX
+      pt.y = event.clientY
+      pt = pt.matrixTransform(this.allzoomedelements.node().getCTM().inverse())
+
+      let node = {
+        x: pt.x,
+        y: pt.y
+      }
+      console.log('co', pt)
+      nodeDrawing.drawSingleNode ({
+        node: node,
+        allbackgroudnitems: this.refurbData.background_items,
+        rootGroup: this.node_group,
+        thencall: undefined
+      })
+
+      event.preventDefault()
     },
     updatechartsize () {
       let totalHeight = this.refurbData.background_items.reduce((acc, value) => {

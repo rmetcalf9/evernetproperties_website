@@ -134,9 +134,9 @@ export default {
           .attr('x', viewObj.chartarea.xmin)
           .attr('y', viewObj.chartarea.ymin)
           .attr('style', 'fill: white;stroke-width:3;stroke:rgb(0,0,0)')
-          .on('contextmenu', viewObj.UIInputZoomedBackgroundContextMenu)
-          .on('dblclick', viewObj.UIInputZoomedBackgroundDoubleClick)
-          .on('click', viewObj.UIInputZoomedBackgroundClick)
+          // .on('contextmenu', viewObj.UIInputZoomedBackgroundContextMenu)
+          // .on('dblclick', viewObj.UIInputZoomedBackgroundDoubleClick)
+          // .on('click', viewObj.UIInputZoomedBackgroundClick)
 
         viewObj.svg.call(d3.zoom()
           .extent([[0, 0], [width, height]])

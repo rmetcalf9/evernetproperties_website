@@ -31,6 +31,14 @@ function drawWorkNode ({rootGroup, x, y}) {
   gfxFunctions.getSVGMaterialConstruction ({ rootGroup:pic_g })
 }
 
+function drawSingleNode ({node, allbackgroudnitems, rootGroup, thencall}) {
+  drawWorkNode({
+    rootGroup: rootGroup,
+    x: node.x,
+    y: node.y
+  })
+}
+
 function drawAllNodes ({rootGroup}) {
   drawPictureNode({
     rootGroup: rootGroup,
@@ -48,5 +56,6 @@ function drawAllNodes ({rootGroup}) {
 
 
 export default {
-  drawAllNodes: drawAllNodes
+  drawAllNodes: drawAllNodes,
+  drawSingleNode: drawSingleNode // used when clicking to add single node
 }
