@@ -65,6 +65,18 @@ function drawAllNodes ({rootGroup}) {
 
 function getSvgCordsFromNodeCords({ nodecords, allbackgroudnitems }) {
   // ASsume all background items is already sorted
+  let running_y_total = 0
+  let i = 0;
+  while (i < allbackgroudnitems.length) {
+    if (nodecords.backgrounditem === allbackgroudnitems[i].id) {
+      return {
+        x: nodecords.x,
+        y: nodecords.y + running_y_total
+      }
+    }
+    running_y_total += allbackgroudnitems[i].item_data.height
+    i++
+  }
   return {
     x: nodecords.x,
     y: nodecords.y
@@ -80,7 +92,7 @@ function getNodeCordsFromSVGCords({ svgcords, allbackgroudnitems }) {
     let i = 0;
     while (i < allbackgroudnitems.length) {
         console.log('Running:-', allbackgroudnitems[i].id, running_y_total)
-        ite_id = allbackgroudnitems[0].id
+        ite_id = allbackgroudnitems[i].id
         running_y_total += allbackgroudnitems[i].item_data.height
         if (svgcords.y < running_y_total) {
           break
@@ -93,7 +105,7 @@ function getNodeCordsFromSVGCords({ svgcords, allbackgroudnitems }) {
     return {
       backgrounditem: ite_id,
       x: svgcords.x,
-      y: svgcords.y
+      y: svgcords.y - last_running_y_total
     }
 }
 
