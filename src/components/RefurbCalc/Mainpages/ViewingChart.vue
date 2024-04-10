@@ -7,9 +7,9 @@
     <svgBottomToolbar
       ref='svgBottomToolbar'
     />
-    <addWorkitemDialog
-      ref='addWorkitemDialog'
-      @ok="onDialogCompleteAddWorkitemDialog"
+    <workitemDialog
+      ref='workitemDialog'
+      @ok="onDialogCompleteWorkitemDialog"
     />
   </div>
 </template>
@@ -17,7 +17,7 @@
 <script>
 import * as d3 from 'd3'
 import { Notify } from 'quasar'
-import addWorkitemDialog from '../AddWorkitemDialog.vue'
+import workitemDialog from '../WorkitemDialog.vue'
 import refurbDataModel from '../dataModel.js'
 import backgroundItemDrawing from '../Drawing/backgroundItemDrawing.js'
 import nodeDrawing from '../Drawing/nodeDrawing.js'
@@ -31,7 +31,7 @@ export default {
   name: 'ViewingChartComponent',
   components: {
     svgBottomToolbar,
-    addWorkitemDialog
+    workitemDialog
   },
   props: ['refurbData'],
   data () {
@@ -78,9 +78,9 @@ export default {
       event.preventDefault()
     },
     addWorkItem (nodeCords) {
-      this.$refs.addWorkitemDialog.launchDialog(nodeCords)
+      this.$refs.workitemDialog.launchDialog(nodeCords)
     },
-    onDialogCompleteAddWorkitemDialog ({ node }) {
+    onDialogCompleteWorkitemDialog ({ node }) {
       refurbDataModel.addNodeItem({data: this.refurbData, item_data: node})
       nodeDrawing.drawSingleNode ({
         node: node,
