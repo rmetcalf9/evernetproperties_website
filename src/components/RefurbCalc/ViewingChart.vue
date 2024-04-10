@@ -55,6 +55,27 @@ export default {
       pt.x = event.clientX
       pt.y = event.clientY
       pt = pt.matrixTransform(this.allzoomedelements.node().getCTM().inverse())
+      const nodeCords = nodeDrawing.getNodeCordsFromSVGCords({
+        svgcords: pt,
+        allbackgroudnitems: this.refurbData.background_items
+      })
+      const svgCords = nodeDrawing.getSvgCordsFromNodeCords({
+        nodecords: nodeCords,
+        allbackgroudnitems: this.refurbData.background_items
+      })
+
+      console.log('--------------------------')
+      console.log('PT=', pt)
+      console.log('nodeCords=', nodeCords)
+      console.log('(check) svgCords=', svgCords)
+      if (svgCords.x !== pt.x) {
+        console.log('MAP BACK ERROR X')
+      }
+      if (svgCords.y !== pt.y) {
+        console.log('MAP BACK ERROR Y')
+      }
+
+
       const curview = this.$refs.svgBottomToolbar.getCurrentInputMode()
       if (curview === 'ADDWORKITEM') {
         this.addWorkItem(pt)
@@ -99,6 +120,11 @@ export default {
     initChart () {
       var TTT = this
       var chart = function (viewObj) {
+
+        // We want all background items to be sorted just once on load
+        TTT.refurbData.background_items.sort((a, b) => a.order - b.order)
+
+
         var width = 800
         var height = 800
 

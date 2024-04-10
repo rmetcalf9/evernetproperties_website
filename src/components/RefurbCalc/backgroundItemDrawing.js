@@ -90,7 +90,8 @@ function drawSingleItem ({item, allbackgrounditems, allzoomedelements, thencall}
         .attr('x', -550)
         .attr('y', totalHeight)
         .on("error", function(d){
-            console.log('load failed', d)
+            console.log('load image ', item.item_data.url, ' failed', d)
+            console.log('allzoomedelements', allzoomedelements)
             Notify.create({
               color: 'bg-grey-2',
               message: 'Failed to load image',
