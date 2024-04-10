@@ -26,7 +26,7 @@ import * as d3 from 'd3'
 import { Notify } from 'quasar'
 import addFloorplanDialog from '../AddFloorplanDialog.vue'
 import refurbDataModel from '../dataModel.js'
-import backgroundItemDrawing from '../backgroundItemDrawing.js'
+import backgroundItemDrawing from '../Drawing/backgroundItemDrawing.js'
 import consts from '../consts.js'
 
 

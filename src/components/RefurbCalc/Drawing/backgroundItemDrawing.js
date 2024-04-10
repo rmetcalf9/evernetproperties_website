@@ -1,6 +1,6 @@
 // This file DRAWS backgroudn items
 import { Notify } from 'quasar'
-import consts from './consts.js'
+import consts from '../consts.js'
 import * as d3 from 'd3'
 
 function drawOtherArea ({ parentele, item, title, x, y, oadata }) {

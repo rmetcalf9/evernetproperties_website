@@ -1,4 +1,4 @@
-import gfxFunctions from './SVGBottomToolbar/GfxFunctions.js'
+import gfxFunctions from '../SVGBottomToolbar/GfxFunctions.js'
 
 
 function drawPictureNode ({rootGroup, x, y}) {
