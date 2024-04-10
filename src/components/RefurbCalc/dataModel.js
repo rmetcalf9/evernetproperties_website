@@ -6,6 +6,8 @@ import consts from './consts.js'
 function getNewlyCreatedDataSet () {
   return {
     background_items: [
+    ],
+    node_items: [
     ]
   }
 }
@@ -29,6 +31,15 @@ function addBackgroundItem ({data, item_data}) {
     order: maxOrder + 1
   }
   data.background_items.push(item)
+  return item
+}
+
+function addNodeItem ({data, item_data}) {
+  const item = {
+    id: uid(),
+    item_data: item_data
+  }
+  data.node_items.push(item)
   return item
 }
 
@@ -72,5 +83,6 @@ export default {
   addBackgroundItem: addBackgroundItem,
   getBackgroudnItemJson_Floorplan: getBackgroudnItemJson_Floorplan,
   getSelectedOtherAreas: getSelectedOtherAreas,
-  setSelectedOtherAreas: setSelectedOtherAreas
+  setSelectedOtherAreas: setSelectedOtherAreas,
+  addNodeItem: addNodeItem
 }

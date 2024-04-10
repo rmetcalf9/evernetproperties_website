@@ -81,6 +81,7 @@ export default {
       this.$refs.addWorkitemDialog.launchDialog(nodeCords)
     },
     onDialogCompleteAddWorkitemDialog ({ node }) {
+      refurbDataModel.addNodeItem({data: this.refurbData, item_data: node})
       nodeDrawing.drawSingleNode ({
         node: node,
         allbackgroudnitems: this.refurbData.background_items,
