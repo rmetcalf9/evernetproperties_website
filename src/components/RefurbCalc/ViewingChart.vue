@@ -7,13 +7,17 @@
     <svgBottomToolbar
       ref='svgBottomToolbar'
     />
+    <addWorkitemDialog
+      ref='addWorkitemDialog'
+      @ok="onDialogCompleteAddWorkitemDialog"
+    />
   </div>
 </template>
 
 <script>
 import * as d3 from 'd3'
 import { Notify } from 'quasar'
-import addFloorplanDialog from './AddFloorplanDialog.vue'
+import addWorkitemDialog from './AddWorkitemDialog.vue'
 import refurbDataModel from './dataModel.js'
 import backgroundItemDrawing from './backgroundItemDrawing.js'
 import nodeDrawing from './nodeDrawing.js'
@@ -26,7 +30,8 @@ import svgBottomToolbar from './SVGBottomToolbar/Main.vue'
 export default {
   name: 'ViewingChartComponent',
   components: {
-    svgBottomToolbar
+    svgBottomToolbar,
+    addWorkitemDialog
   },
   props: ['refurbData'],
   data () {
@@ -73,10 +78,9 @@ export default {
       event.preventDefault()
     },
     addWorkItem (nodeCords) {
-      let node = {
-        type: 'WORK',
-        cords: nodeCords
-      }
+      this.$refs.addWorkitemDialog.launchDialog(nodeCords)
+    },
+    onDialogCompleteAddWorkitemDialog ({ node }) {
       nodeDrawing.drawSingleNode ({
         node: node,
         allbackgroudnitems: this.refurbData.background_items,

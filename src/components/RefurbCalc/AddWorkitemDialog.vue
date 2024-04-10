@@ -1,0 +1,77 @@
+<template>
+<q-dialog v-model="visible">
+  <q-card>
+    <q-toolbar>
+      <q-toolbar-title>Add Work item</q-toolbar-title>
+      <q-btn flat round dense icon="close" v-close-popup />
+    </q-toolbar>
+
+    <q-card-section>
+      Enter description of work
+      <q-input
+        ref="urlInput"
+        filled
+        color="grey"
+        v-model="description"
+        name="Description of work"
+        label="Description"
+        lazy-rules
+        :rules="[ val => val && val.length > 0 || 'Enter description of work to be done']"
+      />
+    </q-card-section>
+
+    <q-card-actions align="right">
+      <q-btn flat label="OK" color="black" @click="ok" />
+      <q-btn flat label="Cancel" color="primary" @click="cancel" />
+    </q-card-actions>
+  </q-card>
+</q-dialog>
+</template>
+
+<script>
+
+export default {
+  name: 'AddWorkitemDialog',
+  data () {
+    return {
+      visible: false,
+      description: '',
+      nodeCords: undefined
+    }
+  },
+  methods: {
+    ok () {
+      if (this.$refs.urlInput.validate()) {
+        this.visible = false
+        let node = {
+          type: 'WORK',
+          cords: this.nodeCords,
+          description: this.description
+        }
+        this.$emit('ok', {
+          node: node
+        })
+      }
+    },
+    cancel () {
+      this.visible = false
+    },
+    launchDialog (nodeCords) {
+      this.nodeCords = nodeCords
+      this.okdisabled = true
+      this.description = ''
+      var TTT = this
+
+      TTT.visible = true // Must be visible for ref to exist
+    }
+  },
+  computed: {
+  }
+}
+</script>
+
+<style>
+.dialog-class {
+
+}
+</style>
