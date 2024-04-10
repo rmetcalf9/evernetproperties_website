@@ -10,6 +10,7 @@
     <workitemDialog
       ref='workitemDialog'
       @ok="onDialogCompleteWorkitemDialog"
+      @deletee="onDialogCompleteWorkitemDialogDeletee"
     />
   </div>
 </template>
@@ -54,6 +55,25 @@ export default {
     clickDIV () {
       // console.log('CLICK')
     },
+    UIInputClickNode (d, i) {
+      // Don't know if I want to restrict option to mode or not
+      // const curview = this.$refs.svgBottomToolbar.getCurrentInputMode()
+      // if (curview !== 'ADDWORKITEM') {
+      //  event.preventDefault()
+      //  return
+      //}
+
+      const nodeitem_id = d3.select(d.srcElement.closest(".nodeitem")).data()[0]
+      const node = refurbDataModel.getNodeFromId({
+        data: this.refurbData,
+        nodeid: nodeitem_id
+      })
+      if (node.item_data.type === 'WORK') {
+        this.editWorkItem(node)
+        event.preventDefault()
+        return
+      }
+    },
     UIInputZoomedBackgroundClick (d, i) {
       var svgEl = this.svg.node()
       var pt = svgEl.createSVGPoint()
@@ -77,18 +97,36 @@ export default {
       }
       event.preventDefault()
     },
-    addWorkItem (nodeCords) {
-      this.$refs.workitemDialog.launchDialog(nodeCords)
+    editWorkItem (node) {
+      this.$refs.workitemDialog.launchDialog(node.item_data.cords, true, node.item_data.description, node.id)
     },
-    onDialogCompleteWorkitemDialog ({ node }) {
-      refurbDataModel.addNodeItem({data: this.refurbData, item_data: node})
-      nodeDrawing.drawSingleNode ({
-        node: node,
-        allbackgroudnitems: this.refurbData.background_items,
-        rootGroup: this.node_group,
-        thencall: undefined
+    addWorkItem (nodeCords) {
+      this.$refs.workitemDialog.launchDialog(nodeCords, false)
+    },
+    onDialogCompleteWorkitemDialogDeletee ({ nodeid }) {
+      Notify.create({
+        color: 'bg-grey-2',
+        message: 'ERROR Edit mode not implemented',
+        timeout: 2
       })
-      this.$refs.svgBottomToolbar.setCurrentInputMode('POINTER')
+    },
+    onDialogCompleteWorkitemDialog ({ editMode, node }) {
+      if (editMode) {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'ERROR Edit mode not implemented',
+          timeout: 2
+        })
+      } else {
+        const added_node_data = refurbDataModel.addNodeItem({data: this.refurbData, item_data: node})
+        nodeDrawing.drawSingleNode ({
+          node: added_node_data,
+          allbackgroudnitems: this.refurbData.background_items,
+          rootGroup: this.node_group,
+          thencall: undefined
+        })
+        this.$refs.svgBottomToolbar.setCurrentInputMode('POINTER')
+      }
     },
     addPhoto (nodeCords) {
       console.log('TODO addPhoto')
@@ -179,6 +217,8 @@ export default {
         })
 
         TTT.node_group = viewObj.allzoomedelements.append('g')
+          .on('click', viewObj.UIInputClickNode)
+
         nodeDrawing.drawAllNodes({
           rootGroup: TTT.node_group,
           allnodes: TTT.refurbData.node_items,

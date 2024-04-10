@@ -1,10 +1,13 @@
 import gfxFunctions from '../SVGBottomToolbar/GfxFunctions.js'
 
-
-function drawPictureNode ({rootGroup, x, y}) {
+function drawAnyNode ({rootGroup, x, y, nodeid, iconFn, transform}) {
+  const nodeData = [nodeid];
   let base = rootGroup
     .append('g')
     .attr('transform', 'translate( ' + x + ' ' + y + ')')
+    .attr('class', 'nodeitem')
+    .data(nodeData)
+    // .attr('data-rjmnodeid', function (d) { return d.id })
 
   base
     .append('circle')
@@ -12,41 +15,50 @@ function drawPictureNode ({rootGroup, x, y}) {
     .attr('style', 'fill: lightblue;')
 
   let pic_g = base.append('g')
-    .attr('transform', 'translate( -4 0) scale(0.5 0.5)')
-  gfxFunctions.getSVGMaterialPhotoCamera ({ rootGroup:pic_g })
+    .attr('transform', transform)
+  iconFn ({ rootGroup:pic_g })
 }
 
-function drawWorkNode ({rootGroup, x, y}) {
-  let base = rootGroup
-    .append('g')
-    .attr('transform', 'translate( ' + x + ' ' + y + ')')
+function drawPictureNode ({rootGroup, x, y, nodeid}) {
+  return drawAnyNode({
+    rootGroup: rootGroup,
+    x: x,
+    y: y,
+    nodeid: nodeid,
+    iconFn: gfxFunctions.getSVGMaterialPhotoCamera,
+    transform: 'translate( -4 0) scale(0.5 0.5)'
+  })
+}
 
-  base
-    .append('circle')
-    .attr('r', 20)
-    .attr('style', 'fill: lightblue;')
-
-  let pic_g = base.append('g')
-    .attr('transform', 'translate( -4 0) scale(0.5 0.5)')
-  gfxFunctions.getSVGMaterialConstruction ({ rootGroup:pic_g })
+function drawWorkNode ({rootGroup, x, y, nodeid}) {
+  return drawAnyNode({
+    rootGroup: rootGroup,
+    x: x,
+    y: y,
+    nodeid: nodeid,
+    iconFn: gfxFunctions.getSVGMaterialConstruction,
+    transform: 'translate( -4 0) scale(0.5 0.5)'
+  })
 }
 
 function drawSingleNode ({node, allbackgroudnitems, rootGroup, thencall}) {
   const svgcords = getSvgCordsFromNodeCords({
-    nodecords: node.cords,
+    nodecords: node.item_data.cords,
     allbackgroudnitems : allbackgroudnitems
   })
   if (node.type==='PICTURE') {
     drawPictureNode({
       rootGroup: rootGroup,
       x: svgcords.x,
-      y: svgcords.y
+      y: svgcords.y,
+      nodeid: node.id
     })
   } else {
     drawWorkNode({
       rootGroup: rootGroup,
       x: svgcords.x,
-      y: svgcords.y
+      y: svgcords.y,
+      nodeid: node.id
     })
   }
 }
@@ -54,9 +66,8 @@ function drawSingleNode ({node, allbackgroudnitems, rootGroup, thencall}) {
 function drawAllNodes ({rootGroup, allnodes, allbackgroudnitems, thencall}) {
   let i = 0;
   while (i < allnodes.length) {
-    console.log('SSS', allnodes[i])
     drawSingleNode ({
-      node: allnodes[i].item_data,
+      node: allnodes[i],
       allbackgroudnitems: allbackgroudnitems,
       rootGroup: rootGroup,
       thencall: thencall

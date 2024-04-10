@@ -78,11 +78,22 @@ function setSelectedOtherAreas ({data, selection}) {
   otherAreaBackgroundItem.item_data.selection = selection
 }
 
+function getNodeFromId({data, nodeid}) {
+  const itearr = data.node_items.filter(function (x) {
+    return x.id === nodeid
+  })
+  if (itearr.length === 1) {
+    return itearr[0]
+  }
+  return undefined
+}
+
 export default {
   getNewlyCreatedDataSet: getNewlyCreatedDataSet,
   addBackgroundItem: addBackgroundItem,
   getBackgroudnItemJson_Floorplan: getBackgroudnItemJson_Floorplan,
   getSelectedOtherAreas: getSelectedOtherAreas,
   setSelectedOtherAreas: setSelectedOtherAreas,
-  addNodeItem: addNodeItem
+  addNodeItem: addNodeItem,
+  getNodeFromId: getNodeFromId
 }
