@@ -34,7 +34,7 @@ function drawWorkNode ({rootGroup, x, y}) {
 function drawSingleNode ({node, allbackgroudnitems, rootGroup, thencall}) {
   const svgcords = getSvgCordsFromNodeCords({
     nodecords: node.cords,
-    allbackgroudnitems : allbackgroudnitems 
+    allbackgroudnitems : allbackgroudnitems
   })
   if (node.type==='PICTURE') {
     drawPictureNode({
@@ -51,19 +51,18 @@ function drawSingleNode ({node, allbackgroudnitems, rootGroup, thencall}) {
   }
 }
 
-function drawAllNodes ({rootGroup}) {
-  drawPictureNode({
-    rootGroup: rootGroup,
-    x: 0,
-    y: 0
-  })
-
-  drawWorkNode({
-    rootGroup: rootGroup,
-    x: -100,
-    y: 100
-  })
-
+function drawAllNodes ({rootGroup, allnodes, allbackgroudnitems, thencall}) {
+  let i = 0;
+  while (i < allnodes.length) {
+    console.log('SSS', allnodes[i])
+    drawSingleNode ({
+      node: allnodes[i].item_data,
+      allbackgroudnitems: allbackgroudnitems,
+      rootGroup: rootGroup,
+      thencall: thencall
+    })
+    i++
+  }
 }
 
 

@@ -179,7 +179,9 @@ export default {
 
         TTT.node_group = viewObj.allzoomedelements.append('g')
         nodeDrawing.drawAllNodes({
-          rootGroup: TTT.node_group
+          rootGroup: TTT.node_group,
+          allnodes: TTT.refurbData.node_items,
+          allbackgroudnitems: TTT.refurbData.background_items
         })
 
         return viewObj.svg.node()
