@@ -33,6 +33,15 @@ export default {
     getCurrentInputMode () {
       return this.cells[this.selectedPanelItem].inputMode
     },
+    setCurrentInputMode (inputMode) {
+      let i = 0;
+      while (i < this.cells.length) {
+        if (this.cells[i].inputMode === inputMode) {
+          this.selectedPanelItem = i
+        }
+        i++
+      }
+    },
     toolbarClickItem (event) {
       this.selectedPanelItem = event
     },

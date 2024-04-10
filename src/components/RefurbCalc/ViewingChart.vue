@@ -88,6 +88,7 @@ export default {
         rootGroup: this.node_group,
         thencall: undefined
       })
+      this.$refs.svgBottomToolbar.setCurrentInputMode('POINTER')
     },
     addPhoto (nodeCords) {
       console.log('TODO addPhoto')
