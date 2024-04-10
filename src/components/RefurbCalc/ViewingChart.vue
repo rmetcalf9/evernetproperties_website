@@ -64,31 +64,18 @@ export default {
         allbackgroudnitems: this.refurbData.background_items
       })
 
-      console.log('--------------------------')
-      console.log('PT=', pt)
-      console.log('nodeCords=', nodeCords)
-      console.log('(check) svgCords=', svgCords)
-      if (svgCords.x !== pt.x) {
-        console.log('MAP BACK ERROR X')
-      }
-      if (svgCords.y !== pt.y) {
-        console.log('MAP BACK ERROR Y')
-      }
-
-
       const curview = this.$refs.svgBottomToolbar.getCurrentInputMode()
       if (curview === 'ADDWORKITEM') {
-        this.addWorkItem(pt)
+        this.addWorkItem(nodeCords)
       } else if (curview === 'ADDPHOTO') {
-        this.addPhoto(pt)
+        this.addPhoto(nodeCords)
       }
       event.preventDefault()
     },
-    addWorkItem (point) {
+    addWorkItem (nodeCords) {
       let node = {
         type: 'WORK',
-        x: point.x,
-        y: point.y
+        cords: nodeCords
       }
       nodeDrawing.drawSingleNode ({
         node: node,
@@ -97,18 +84,19 @@ export default {
         thencall: undefined
       })
     },
-    addPhoto (point) {
-      let node = {
-        type: 'PICTURE',
-        x: point.x,
-        y: point.y
-      }
-      nodeDrawing.drawSingleNode ({
-        node: node,
-        allbackgroudnitems: this.refurbData.background_items,
-        rootGroup: this.node_group,
-        thencall: undefined
-      })
+    addPhoto (nodeCords) {
+      console.log('TODO addPhoto')
+      // let node = {
+      //  type: 'PICTURE',
+      //  x: point.x,
+      //  y: point.y
+      // }
+      // nodeDrawing.drawSingleNode ({
+      //  node: node,
+      //  allbackgroudnitems: this.refurbData.background_items,
+      //  rootGroup: this.node_group,
+      //  thencall: undefined
+      // })
     },
     updatechartsize () {
       let totalHeight = this.refurbData.background_items.reduce((acc, value) => {

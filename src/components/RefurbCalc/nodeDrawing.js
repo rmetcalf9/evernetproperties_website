@@ -32,17 +32,21 @@ function drawWorkNode ({rootGroup, x, y}) {
 }
 
 function drawSingleNode ({node, allbackgroudnitems, rootGroup, thencall}) {
+  const svgcords = getSvgCordsFromNodeCords({
+    nodecords: node.cords,
+    allbackgroudnitems : allbackgroudnitems 
+  })
   if (node.type==='PICTURE') {
     drawPictureNode({
       rootGroup: rootGroup,
-      x: node.x,
-      y: node.y
+      x: svgcords.x,
+      y: svgcords.y
     })
   } else {
     drawWorkNode({
       rootGroup: rootGroup,
-      x: node.x,
-      y: node.y
+      x: svgcords.x,
+      y: svgcords.y
     })
   }
 }
@@ -91,7 +95,6 @@ function getNodeCordsFromSVGCords({ svgcords, allbackgroudnitems }) {
     let last_running_y_total = 0
     let i = 0;
     while (i < allbackgroudnitems.length) {
-        console.log('Running:-', allbackgroudnitems[i].id, running_y_total)
         ite_id = allbackgroudnitems[i].id
         running_y_total += allbackgroudnitems[i].item_data.height
         if (svgcords.y < running_y_total) {
@@ -100,8 +103,6 @@ function getNodeCordsFromSVGCords({ svgcords, allbackgroudnitems }) {
         last_running_y_total = running_y_total
         i++
     }
-
-    console.log('allbackgroudnitems LAST running=', last_running_y_total)
     return {
       backgrounditem: ite_id,
       x: svgcords.x,
