@@ -23,16 +23,16 @@ function drawOtherArea ({ parentele, item, title, x, y, oadata }) {
 
 }
 
-function redrawOtherArea ({allbackgrounditems, allzoomedelements, thencall}) {
+function redrawOtherArea ({backgroudnitem_group, allzoomedelements, thencall}) {
   var otherAreaGroupSelection = d3.select('.backgroudnitemDrawing_otherAreaGroup')
-  var otherdataitems = allbackgrounditems.filter(function (x) {
+  var otherdataitems = backgroudnitem_group.filter(function (x) {
     return (x.item_data.type === consts.typeotherarea)
   })
   if ( otherAreaGroupSelection.size() === 0 ) {
     // need to add other area at bottom as if it was just added
     drawSingleItem ({
       item: otherdataitems[0],
-      allbackgrounditems: allbackgrounditems,
+      backgroudnitem_group: backgroudnitem_group,
       allzoomedelements: allzoomedelements,
       thencall: thencall
     })
@@ -73,9 +73,9 @@ function drawAllOtherAreas({ allzoomedelements, item, ypos }) {
   })
 }
 
-function drawSingleItem ({item, allbackgrounditems, allzoomedelements, thencall}) {
+function drawSingleItem ({item, backgroudnitem_group, allzoomedelements, thencall}) {
   // always draw at the bottom
-  let totalHeight = allbackgrounditems.reduce((acc, value) => {
+  let totalHeight = backgroudnitem_group.reduce((acc, value) => {
       if (value.order < item.order) {
         return (acc = acc + value.item_data.height);
       }
@@ -125,26 +125,26 @@ function drawSingleItem ({item, allbackgrounditems, allzoomedelements, thencall}
   thencall()
 }
 
-function draw_all_items(items_to_draw, allbackgrounditems, allzoomedelements, thencall) {
+function draw_all_items(items_to_draw, backgroudnitem_group, allzoomedelements, thencall) {
   if (items_to_draw.length === 0) {
     thencall()
     return
   }
   var lastimage = drawSingleItem({
     item: items_to_draw[0],
-    allbackgrounditems: allbackgrounditems,
+    backgroudnitem_group: backgroudnitem_group,
     allzoomedelements: allzoomedelements,
     thencall: function () {
       items_to_draw.shift()
-       draw_all_items(items_to_draw, allbackgrounditems, allzoomedelements, thencall)
+       draw_all_items(items_to_draw, backgroudnitem_group, allzoomedelements, thencall)
     }
   })
 }
 
-function drawAllBackgroundItems ({allbackgrounditems, allzoomedelements, thencall}) {
-  allbackgrounditems.sort((a, b) => a.order - b.order)
-  var items_to_draw = allbackgrounditems.map(function (x) {return x})
-  draw_all_items(items_to_draw, allbackgrounditems, allzoomedelements, thencall)
+function drawAllBackgroundItems ({backgroudnitem_group, allzoomedelements, thencall}) {
+  backgroudnitem_group.sort((a, b) => a.order - b.order)
+  var items_to_draw = backgroudnitem_group.map(function (x) {return x})
+  draw_all_items(items_to_draw, backgroudnitem_group, allzoomedelements, thencall)
 }
 
 export default {

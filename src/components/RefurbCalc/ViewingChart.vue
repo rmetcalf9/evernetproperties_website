@@ -179,7 +179,7 @@ export default {
           .on('click', viewObj.UIInputZoomedBackgroundClick)
 
         backgroundItemDrawing.drawAllBackgroundItems({
-          allbackgrounditems: TTT.refurbData.background_items,
+          backgroudnitem_group: TTT.refurbData.background_items,
           allzoomedelements: TTT.background_item_group,
           thencall: TTT.updatechartsize
         })

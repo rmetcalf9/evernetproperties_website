@@ -67,7 +67,7 @@ export default {
       }).onOk(data => {
         refurbDataModel.setSelectedOtherAreas({data: this.refurbData, selection: data})
         backgroundItemDrawing.redrawOtherArea({
-          allbackgrounditems: this.refurbData.background_items,
+          backgroudnitem_group: this.refurbData.background_items,
           allzoomedelements: this.background_item_group,
           thencall: this.updatechartsize
         })
@@ -95,7 +95,7 @@ export default {
       })
       backgroundItemDrawing.drawSingleItem({
         item: added_item,
-        allbackgrounditems: this.refurbData.background_items,
+        backgroudnitem_group: this.refurbData.background_items,
         allzoomedelements: this.background_item_group,
         thencall: this.updatechartsize
       })
@@ -161,7 +161,7 @@ export default {
         TTT.background_item_group = viewObj.allzoomedelements.append('g')
 
         backgroundItemDrawing.drawAllBackgroundItems({
-          allbackgrounditems: TTT.refurbData.background_items,
+          backgroudnitem_group: TTT.refurbData.background_items,
           allzoomedelements: TTT.background_item_group,
           thencall: TTT.updatechartsize
         })
