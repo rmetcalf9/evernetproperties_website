@@ -14,8 +14,8 @@
   </div>
 </template>
 <script>
-import refurbDataModel from './dataModel.js'
-import copytoclipboard from './copyToClipboard.js'
+import refurbDataModel from '../dataModel.js'
+import copytoclipboard from '../copyToClipboard.js'
 import { Notify } from 'quasar'
 
 export default {

@@ -36,9 +36,9 @@
 import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 
-import plansChart from '../../components/RefurbCalc/PlansChart.vue'
-import viewingChart from '../../components/RefurbCalc/ViewingChart.vue'
-import jsonView from '../../components/RefurbCalc/jsonView.vue'
+import plansChart from '../../components/RefurbCalc/Mainpages/PlansChart.vue'
+import viewingChart from '../../components/RefurbCalc/Mainpages/ViewingChart.vue'
+import jsonView from '../../components/RefurbCalc/Mainpages/jsonView.vue'
 
 import refurbDataModel from '../../components/RefurbCalc/dataModel.js'
 
