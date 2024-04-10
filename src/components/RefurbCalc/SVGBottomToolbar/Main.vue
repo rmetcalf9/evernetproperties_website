@@ -22,7 +22,6 @@ export default {
   data () {
     return {
       selectedPanelItem: 0, // Currently highlighted on toolbar
-      clickSelectedItem: 0, // Item that is selected with a click
       cells: [
         { render: gfxFunctions.getSVGRJMIconPointer, inputMode: 'POINTER', title: 'Pointer mode - use to pan around' },
         { render: gfxFunctions.getSVGMaterialAddAPhoto, inputMode: 'ADDPHOTO', title: 'Photo mode - use to add photos to plan' },
