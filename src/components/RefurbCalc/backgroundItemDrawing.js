@@ -91,6 +91,8 @@ function drawSingleItem ({item, backgroudnitem_group, allzoomedelements, thencal
         .attr('y', totalHeight)
         .on("error", function(d){
             console.log('load image ', item.item_data.url, ' failed', d)
+            console.log('error message ', d.message)
+            console.log('error message ', d.target.error.message)
             console.log('allzoomedelements', allzoomedelements)
             Notify.create({
               color: 'bg-grey-2',
