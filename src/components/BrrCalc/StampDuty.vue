@@ -6,6 +6,7 @@
     </q-card-section>
     <q-card-section>
       <q-checkbox v-model="stampdutydata.exempt" label="Stampduty Exempt" />
+      <q-btn round dense flat icon="info" @click="helpexempt" />
       <q-checkbox v-model="stampdutydata.commercial" label="Commercial" />
       <div class="q-pa-lg">
         Property Location
@@ -99,6 +100,15 @@ export default defineComponent({
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
+    },
+    helpexempt () {
+      this.$q.dialog({
+        title: 'Stamp Duty Exempt',
+        message: 'Some purchases are stamp duty exempt. e.g. a freehold property under £40k. See <a href="https://www.gov.uk/stamp-duty-land-tax/reliefs-and-exemptions" target="_new">here</a> for deatils.',
+        html: true
+      }).onOk(() => {
+        // console.log('OK')
+      })
     }
   },
   computed: {
