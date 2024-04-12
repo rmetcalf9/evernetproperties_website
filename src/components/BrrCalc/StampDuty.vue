@@ -104,7 +104,7 @@ export default defineComponent({
     helpexempt () {
       this.$q.dialog({
         title: 'Stamp Duty Exempt',
-        message: 'Some purchases are stamp duty exempt. e.g. a freehold property under £40k. See <a href="https://www.gov.uk/stamp-duty-land-tax/reliefs-and-exemptions" target="_new">here</a> for deatils.',
+        message: 'Some purchases are stamp duty exempt. e.g. a freehold property under £40k. See <a href="https://www.gov.uk/stamp-duty-land-tax/reliefs-and-exemptions" target="_new">here</a> for details.',
         html: true
       }).onOk(() => {
         // console.log('OK')
