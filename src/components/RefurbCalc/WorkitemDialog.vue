@@ -56,7 +56,8 @@ export default {
         let node = {
           type: 'WORK',
           cords: this.nodeCords,
-          description: this.description
+          description: this.description,
+          nodeid: this.nodeid
         }
         this.$emit('ok', {
           editMode: this.editMode,

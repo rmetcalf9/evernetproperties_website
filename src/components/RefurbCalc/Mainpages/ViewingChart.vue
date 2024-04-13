@@ -112,11 +112,11 @@ export default {
     },
     onDialogCompleteWorkitemDialog ({ editMode, node }) {
       if (editMode) {
-        Notify.create({
-          color: 'bg-grey-2',
-          message: 'ERROR Edit mode not implemented',
-          timeout: 2
+        const stored_node = refurbDataModel.getNodeFromId({
+          data: this.refurbData,
+          nodeid: node.nodeid
         })
+        stored_node.item_data.description = node.description
       } else {
         const added_node_data = refurbDataModel.addNodeItem({data: this.refurbData, item_data: node})
         nodeDrawing.drawSingleNode ({
