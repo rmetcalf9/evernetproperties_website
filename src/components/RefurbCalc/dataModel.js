@@ -88,6 +88,12 @@ function getNodeFromId({data, nodeid}) {
   return undefined
 }
 
+function deleteNodeFromId({data, nodeid}) {
+  data.node_items = data.node_items.filter(function (x) {
+    return x.id !== nodeid
+  })
+}
+
 export default {
   getNewlyCreatedDataSet: getNewlyCreatedDataSet,
   addBackgroundItem: addBackgroundItem,
@@ -95,5 +101,6 @@ export default {
   getSelectedOtherAreas: getSelectedOtherAreas,
   setSelectedOtherAreas: setSelectedOtherAreas,
   addNodeItem: addNodeItem,
-  getNodeFromId: getNodeFromId
+  getNodeFromId: getNodeFromId,
+  deleteNodeFromId: deleteNodeFromId
 }

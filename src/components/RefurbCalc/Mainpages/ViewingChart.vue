@@ -104,10 +104,13 @@ export default {
       this.$refs.workitemDialog.launchDialog(nodeCords, false)
     },
     onDialogCompleteWorkitemDialogDeletee ({ nodeid }) {
-      Notify.create({
-        color: 'bg-grey-2',
-        message: 'ERROR Edit mode not implemented',
-        timeout: 2
+      nodeDrawing.removeNodeById({
+        rootGroup: this.node_group,
+        nodeid: nodeid
+      })
+      refurbDataModel.deleteNodeFromId({
+        data: this.refurbData,
+        nodeid: nodeid
       })
     },
     onDialogCompleteWorkitemDialog ({ editMode, node }) {

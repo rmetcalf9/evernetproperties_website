@@ -7,6 +7,7 @@ function drawAnyNode ({rootGroup, x, y, nodeid, iconFn, transform}) {
     .attr('transform', 'translate( ' + x + ' ' + y + ')')
     .attr('class', 'nodeitem')
     .data(nodeData)
+    .attr("id", function(d) { return '_' + d })
     // .attr('data-rjmnodeid', function (d) { return d.id })
 
   base
@@ -17,6 +18,11 @@ function drawAnyNode ({rootGroup, x, y, nodeid, iconFn, transform}) {
   let pic_g = base.append('g')
     .attr('transform', transform)
   iconFn ({ rootGroup:pic_g })
+}
+
+function removeNodeById({ rootGroup, nodeid }) {
+    var svgnode = rootGroup.select('#_' + nodeid)
+    svgnode.remove()
 }
 
 function drawPictureNode ({rootGroup, x, y, nodeid}) {
@@ -124,5 +130,6 @@ export default {
   drawAllNodes: drawAllNodes,
   drawSingleNode: drawSingleNode, // used when clicking to add single node
   getSvgCordsFromNodeCords: getSvgCordsFromNodeCords,
-  getNodeCordsFromSVGCords: getNodeCordsFromSVGCords
+  getNodeCordsFromSVGCords: getNodeCordsFromSVGCords,
+  removeNodeById: removeNodeById
 }
