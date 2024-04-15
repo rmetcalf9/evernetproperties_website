@@ -151,7 +151,7 @@ export default defineComponent({
           Notify.create({
             color: 'bg-grey-2',
             message: 'You may also want to configure refinance',
-            timeout: 2
+            timeout: 5
           })
         }
       }
