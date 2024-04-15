@@ -74,6 +74,7 @@
         :stampduty_total="stampduty_total"
         :othercosts_total="othercosts_total"
         :refurb_cost_total="refurb_cost_total"
+        :gdv_total="gdv_total"
       />
     </q-card-section>
     <q-card-section>

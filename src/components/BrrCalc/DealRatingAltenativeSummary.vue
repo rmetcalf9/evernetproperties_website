@@ -61,18 +61,18 @@
         </tr>
         <tr>
           <td class="text-left alternativetablecell">End Value</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(11) }}</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(gdv_total.min) }}</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(gdv_total.max) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">New Mortgage Amount</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(11) }}</td>
-          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(new_mortgage_amount.worst) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(new_mortgage_amount.best) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Money Pulled Out</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(11) }}</td>
-          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(monay_pulled_out.worst) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(monay_pulled_out.best) }}</td>
         </tr>
         <tr>
           <td>&nbsp;</td>
@@ -81,13 +81,13 @@
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Profit</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(11) }}</td>
-          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(profit.worst) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(profit.best) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Money Left In</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(11) }}</td>
-          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(money_left_in.worst) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(money_left_in.best) }}</td>
         </tr>
       </tbody>
     </table>
@@ -102,7 +102,7 @@ import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcDealRatingAlternativeSummary',
-  props: ['purchaserange', 'finance_refinance', 'stampduty_total', 'othercosts_total', 'refurb_cost_total'],
+  props: ['purchaserange', 'finance_refinance', 'stampduty_total', 'othercosts_total', 'refurb_cost_total', 'gdv_total'],
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
@@ -151,6 +151,30 @@ export default defineComponent({
           + this.stampduty_total.max
           + this.othercosts_total.max
           + this.refurb_cost_total.max
+      }
+    },
+    new_mortgage_amount () {
+      return {
+        best: this.gdv_total.max * (this.finance_refinance.ltv.max / 100),
+        worst: this.gdv_total.min * (this.finance_refinance.ltv.min / 100)
+      }
+    },
+    monay_pulled_out () {
+      return {
+        best: this.gdv_total.max - this.new_mortgage_amount.best,
+        worst: this.gdv_total.min - this.new_mortgage_amount.worst
+      }
+    },
+    profit () {
+      return {
+        best: this.gdv_total.max - this.total_money_in.best,
+        worst: this.gdv_total.min - this.total_money_in.worst
+      }
+    },
+    money_left_in () {
+      return {
+        best: this.monay_pulled_out.best - this.profit.best,
+        worst: this.monay_pulled_out.worst - this.profit.worst
       }
     }
   }
