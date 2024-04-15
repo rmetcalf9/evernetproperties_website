@@ -16,23 +16,23 @@
       <tbody>
         <tr>
           <td class="text-left alternativetablecell">Price offered</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(purchaserange.max) }}</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(purchaserange.min) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Mortgage %</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ mortgage_rate_display.worst }}</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ mortgage_rate_display.best }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Mortgage</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(mortgage.worst) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(mortgage.best) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Deposit</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(deposit.worst) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(deposit.best) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Stamp Duty</td>
@@ -40,7 +40,7 @@
           <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
         </tr>
         <tr>
-          <td class="text-left alternativetablecell">Legals</td>
+          <td class="text-left alternativetablecell">Other costs (Legals, etc)</td>
           <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
           <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
         </tr>
@@ -97,10 +97,47 @@
 
 <script>
 import { defineComponent } from 'vue'
+import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcDealRatingAlternativeSummary',
+  props: ['purchaserange', 'finance_refinance'],
+  methods: {
+    format_currency (num) {
+      return utils.format_currency(num)
+    }
+  },
   computed: {
+    mortgage_rate_display () {
+      if (!this.finance_refinance.userefinance) {
+        return {
+          best: 'N/A',
+          worst: 'N/A'
+        }
+      }
+      return {
+        best: this.finance_refinance.ltv.max + '%',
+        worst: this.finance_refinance.ltv.min + '%'
+      }
+    },
+    mortgage () {
+      if (!this.finance_refinance.userefinance) {
+        return {
+          best: 0,
+          worst: 0
+        }
+      }
+      return {
+        best: (this.finance_refinance.ltv.max/100) * this.purchaserange.min,
+        worst: (this.finance_refinance.ltv.min/100) * this.purchaserange.max
+      }
+    },
+    deposit () {
+      return {
+        best: this.purchaserange.min -  this.mortgage.best,
+        worst: this.purchaserange.max -  this.mortgage.worst
+      }
+    }
   }
 })
 </script>

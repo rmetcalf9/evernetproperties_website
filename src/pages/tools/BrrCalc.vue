@@ -48,6 +48,7 @@
         />
         <DealRating
           ref="DealRating"
+          :purchaserange="purchaserange"
           :finance_totalmoneyneeded="finance_totalmoneyneeded"
           :deal_summary_final_bal="deal_summary_final_bal"
           :finance_refinance="finance_refinance"

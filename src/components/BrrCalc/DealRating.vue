@@ -68,7 +68,10 @@
       </q-markup-table>
     </q-card-section>
     <q-card-section>
-      <dealRatingAlternativeSummary />
+      <dealRatingAlternativeSummary
+        :purchaserange="purchaserange"
+        :finance_refinance="finance_refinance"        
+      />
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Deal Features</div>
@@ -93,7 +96,7 @@ import dealRatingAlternativeSummary from './DealRatingAltenativeSummary.vue'
 
 export default defineComponent({
   name: 'BrrCalcDealRating',
-  props: ['finance_totalmoneyneeded', 'deal_summary_final_bal', 'finance_refinance', 'gdv_total', 'refurbmonths'],
+  props: ['finance_totalmoneyneeded', 'deal_summary_final_bal', 'finance_refinance', 'gdv_total', 'refurbmonths', 'purchaserange'],
   components: {
     dealRatingAlternativeSummary
   },
