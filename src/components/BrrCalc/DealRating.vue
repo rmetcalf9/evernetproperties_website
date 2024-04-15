@@ -68,6 +68,9 @@
       </q-markup-table>
     </q-card-section>
     <q-card-section>
+      <dealRatingAlternativeSummary />
+    </q-card-section>
+    <q-card-section>
       <div class="text-h6">Deal Features</div>
       <div class="featuretable">
         <div v-for="feature in features" :key="feature">
@@ -86,10 +89,13 @@ import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from './utils.js'
 
+import dealRatingAlternativeSummary from './DealRatingAltenativeSummary.vue'
+
 export default defineComponent({
   name: 'BrrCalcDealRating',
   props: ['finance_totalmoneyneeded', 'deal_summary_final_bal', 'finance_refinance', 'gdv_total', 'refurbmonths'],
   components: {
+    dealRatingAlternativeSummary
   },
   data () {
     return {
@@ -211,10 +217,7 @@ export default defineComponent({
   color: white;
   background-color: grey;
 }
-th.worstcasetablecell {
-  background-color: lightgrey;
-}
-td.worstcasetablecell {
+.worstcasetablecell {
   background-color: lightgrey;
 }
 th.totaltablecell {
