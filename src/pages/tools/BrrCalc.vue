@@ -54,6 +54,9 @@
           :finance_refinance="finance_refinance"
           :gdv_total="gdv_total"
           :refurbmonths="refurbmonths"
+          :stampduty_total="stampduty_total"
+          :othercosts_total="othercosts_total"
+          :refurb_cost_total="refurb_cost_total"
         />
       </div>
     </div>

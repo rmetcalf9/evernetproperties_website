@@ -36,23 +36,23 @@
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Stamp Duty</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(stampduty_total.max) }}</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(stampduty_total.min) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Other costs (Legals, etc)</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(othercosts_total.max) }}</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(othercosts_total.min) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Total Refurb Costs</td>
-          <td class="text-right alternativetablecell bluetablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell bluetablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell bluetablecell totaltablecell">{{ format_currency(refurb_cost_total.max) }}</td>
+          <td class="text-right alternativetablecell bluetablecell totaltablecell">{{ format_currency(refurb_cost_total.min) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Total Money In</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell totaltablecell">TODO</td>
+          <th class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(total_money_in.worst) }}</th>
+          <th class="text-right alternativetablecell totaltablecell">{{ format_currency(total_money_in.best) }}</th>
         </tr>
         <tr>
           <td>&nbsp;</td>
@@ -61,18 +61,18 @@
         </tr>
         <tr>
           <td class="text-left alternativetablecell">End Value</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell yellowtablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell yellowtablecell totaltablecell">{{ format_currency(11) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">New Mortgage Amount</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(11) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Money Pulled Out</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(11) }}</td>
         </tr>
         <tr>
           <td>&nbsp;</td>
@@ -81,16 +81,17 @@
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Profit</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(11) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">Money Left In</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">TODO</td>
-          <td class="text-right alternativetablecell totaltablecell">TODO</td>
+          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(11) }}</td>
+          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(11) }}</td>
         </tr>
       </tbody>
     </table>
+    Note: The profit amounts may not match because this method does not take into account finance costs.
   </div>
 </q-expansion-item>
 </template>
@@ -101,7 +102,7 @@ import utils from './utils.js'
 
 export default defineComponent({
   name: 'BrrCalcDealRatingAlternativeSummary',
-  props: ['purchaserange', 'finance_refinance'],
+  props: ['purchaserange', 'finance_refinance', 'stampduty_total', 'othercosts_total', 'refurb_cost_total'],
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
@@ -136,6 +137,20 @@ export default defineComponent({
       return {
         best: this.purchaserange.min -  this.mortgage.best,
         worst: this.purchaserange.max -  this.mortgage.worst
+      }
+    },
+    total_money_in () {
+      return {
+        best: this.mortgage.best
+          + this.deposit.best
+          + this.stampduty_total.min
+          + this.othercosts_total.min
+          + this.refurb_cost_total.min,
+        worst: this.mortgage.worst
+          + this.deposit.worst
+          + this.stampduty_total.max
+          + this.othercosts_total.max
+          + this.refurb_cost_total.max
       }
     }
   }
