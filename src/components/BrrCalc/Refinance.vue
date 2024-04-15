@@ -3,7 +3,7 @@
     <q-card-section>
       <div class="text-h6">Refinance</div>
       This section is for adding refinance details. After the refurbishment is complete the refinance stage can be used to pull money out of the deal.
-      <q-checkbox v-model="refinance.userefinance" label="Refinance" />
+      <q-checkbox v-model="refinance.userefinance" label="Refinance after refurbishment" />
         <div v-if="refinance.userefinance">
         Refinance LTV {{ refinance.ltv.min }}% - {{ refinance.ltv.max }}%
         <q-range
