@@ -138,7 +138,7 @@ function add_item(items, name, worstamt, bestamt) {
 
 export default defineComponent({
   name: 'BrrCalcDealSummary',
-  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items'],
+  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items', 'refinance_out_items'],
   components: {
   },
   data () {
@@ -220,9 +220,21 @@ export default defineComponent({
           add_item(items, x.name, x.worst, x.best)
         })
       }
+      let heading_set = false
+      if (typeof (this.refinance_out_items) !== 'undefined') {
+        if (this.refinance_out_items.length > 0) {
+          heading_set = true
+          add_item_title(items,'Exit finance')
+        }
+        this.refinance_out_items.map(function (x) {
+          add_item(items, x.name, x.worst, x.best)
+        })
+      }
       if (typeof (this.finance_out_items) !== 'undefined') {
         if (this.finance_out_items.length > 0) {
-          add_item_title(items,'Exit finance')
+          if (!heading_set) {
+            add_item_title(items,'Exit finance')
+          }
         }
         this.finance_out_items.map(function (x) {
           add_item(items, x.name, x.worst, x.best)

@@ -62,23 +62,6 @@
     </div>
     </q-card-section>
     <q-card-section>
-      <div class="text-h6">Refinance</div>
-      <q-checkbox v-model="refinance.userefinance" label="Refinance" />
-        <div v-if="refinance.userefinance">
-        Refinance LTV<q-range
-          v-model="refinance.ltv"
-          :min="0"
-          :max="100"
-          :step="5"
-          drag-range
-          label
-          :left-label-value="refinance.ltv.min + '%'"
-          :right-label-value="refinance.ltv.max+ '%'"
-        />
-        <div>Refinance amount: {{ format_currency(refinanceamount.worst) }} - {{ format_currency(refinanceamount.best) }}</div>
-      </div>
-    </q-card-section>
-    <q-card-section>
       <div class="text-h6">Cash</div>
       Cash is the money the investors put into the deal. It is free money as there is no interest payments for this money.
       <div>This calculation will assume that all money not provided for loans or bridges will be provided by investors as cash.</div>
@@ -111,13 +94,6 @@ export default defineComponent({
         amount: {
           worst: 1,
           best: 1
-        }
-      },
-      refinance: {
-        userefinance: true,
-        ltv: {
-          min: 75,
-          max: 75
         }
       },
       loans: []
@@ -228,12 +204,6 @@ export default defineComponent({
         best: this.totalexpenditure.min - total_loans
       }
     },
-    refinanceamount () {
-      return {
-        worst: this.gdv_total.min * (this.refinance.ltv.min / 100),
-        best: this.gdv_total.max * (this.refinance.ltv.max / 100)
-      }
-    },
     finance_in_items () {
       // Currently hardcoded for 100% cash
       let ret_val = []
@@ -256,9 +226,6 @@ export default defineComponent({
     },
     finance_out_items () {
       let ret_val = []
-      if (this.refinance.userefinance) {
-        ret_val.push({name: 'Mortgage Refinance', worst: this.refinanceamount.worst, best: this.refinanceamount.best})
-      }
       this.loans.map(function (l) {
         var repay_amount = -(l.amount + (l.amount * l.rate / 100))
         ret_val.push({

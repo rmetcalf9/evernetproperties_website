@@ -34,11 +34,16 @@
           :refurbmonths="refurbmonths"
           :gdv_total="gdv_total"
         />
+        <Refinance
+          ref="Refinance"
+          :gdv_total="gdv_total"
+        />
         <DealSummary
           ref="DealSummary"
           :purchaserange="purchaserange"
           :finance_in_items="finance_in_items"
           :finance_out_items="finance_out_items"
+          :refinance_out_items="refinance_out_items"
           :purchase_items="purchase_items"
           :stampduty_items="stampduty_items"
           :othercosts_items="othercosts_items"
@@ -72,6 +77,7 @@ import RefurbCost from '../../components/BrrCalc/RefurbCost.vue'
 import StampDuty from '../../components/BrrCalc/StampDuty.vue'
 import OtherCosts from '../../components/BrrCalc/OtherCosts.vue'
 import Finance from '../../components/BrrCalc/Finance.vue'
+import Refinance from '../../components/BrrCalc/Refinance.vue'
 import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import DealRating from '../../components/BrrCalc/DealRating.vue'
 
@@ -86,7 +92,8 @@ export default defineComponent({
     DealSummary,
     Finance,
     Vision,
-    DealRating
+    DealRating,
+    Refinance
   },
   data () {
     return {
@@ -117,7 +124,7 @@ export default defineComponent({
           }
         }
       }
-      return this.$refs.Finance.refinance
+      return this.$refs.Refinance.refinance
     },
     finance_totalmoneyneeded () {
       if (!this.isMounted) {
@@ -139,6 +146,12 @@ export default defineComponent({
         return []
       }
       return this.$refs.Finance.finance_out_items
+    },
+    refinance_out_items () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.Refinance.refinance_out_items
     },
     purchase_items () {
       if (!this.isMounted) {
