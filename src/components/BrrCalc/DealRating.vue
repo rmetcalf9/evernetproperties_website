@@ -59,6 +59,11 @@
             <th class="text-right worstcasetablecell totaltablecell">{{ annualroi.worst.toFixed(1) }}%<br>({{this.refurbmonths.worst}} months)</th>
             <th class="text-right totaltablecell">{{ annualroi.best.toFixed(1) }}%<br>({{this.refurbmonths.best}} months)</th>
           </tr>
+          <tr>
+            <th class="text-left">Money left in (Cash in - total pulled out)</th>
+            <th class="text-right worstcasetablecell totaltablecell">{{ format_currency(-1 * this.cash_out_of_deal_minus_cash_in.worst) }}</th>
+            <th class="text-right totaltablecell">{{ format_currency(-1 * this.cash_out_of_deal_minus_cash_in.best) }}</th>
+          </tr>
         </tbody>
       </q-markup-table>
     </q-card-section>
