@@ -215,6 +215,7 @@ export default defineComponent({
           add_item(items, x.name, x.worst, x.best)
         })
       }
+      add_item_title(items,'During Project')
       if (typeof (this.finance_during_items) !== 'undefined') {
         this.finance_during_items.map(function (x) {
           add_item(items, x.name, x.worst, x.best)
