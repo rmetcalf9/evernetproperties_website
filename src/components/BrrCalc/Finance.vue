@@ -38,8 +38,39 @@
       <p>Fixed return loans</p>
     </q-card-section>
     <q-card-section>
+      <div class="text-h6">Mortgage</div>
+      <q-checkbox v-model="mortgage.usemortgage" label="Buy with Mortgage" @update:model-value="updatemortgagetoggle" />
+      <div v-if="mortgage.usemortgage">
+        Rate: {{ mortgage.rate.min }}% - {{ mortgage.rate.max }}%<q-range
+          v-model="mortgage.rate"
+          :min="0"
+          :max="10"
+          :step="0.1"
+          drag-range
+          label
+          snap
+          :left-label-value="'Best ' + mortgage.rate.min + '%'"
+          :right-label-value="'Worst ' + mortgage.rate.max + '%'"
+        />
+        LTV: {{ mortgage.ltv.min }}% - {{ mortgage.ltv.max }}%<q-range
+          v-model="mortgage.ltv"
+          :min="0"
+          :max="100"
+          :step="1"
+          drag-range
+          label
+          snap
+          :left-label-value="'Best ' + mortgage.ltv.min + '%'"
+          :right-label-value="'Worst ' + mortgage.ltv.max + '%'"
+        />
+        This is based on a repayment mortgage.
+        <div>Amount Borrowed: {{ format_currency(mortgage_amount_borrowed.worst) }} - {{ format_currency(mortgage_amount_borrowed.best) }}</div>
+        <div>Monthly Repayments: {{ format_currency(mortgage_monthly_payment.worst) }} - {{ format_currency(mortgage_monthly_payment.best) }}</div>
+      </div>
+    </q-card-section>
+    <q-card-section>
       <div class="text-h6">Bridge</div>
-      <q-checkbox v-model="bridge.usebridge" label="Use a bridge"  @update:model-value="updatebridgetoggle" />
+      <q-checkbox v-model="bridge.usebridge" label="Use a bridge" @update:model-value="updatebridgetoggle" />
       <div v-if="bridge.usebridge">
         <div>Start cost/End Cost: {{ bridge.startcost * 100 }}%/{{ bridge.endcost * 100 }}%</div>
         <div>Monthly cost: {{ bridge.monthlycost * 100 }}%</div>
@@ -96,6 +127,17 @@ export default defineComponent({
           best: 1
         }
       },
+      mortgage: {
+        usemortgage: false,
+        rate: {
+          min: 5.5,
+          max: 5.5
+        },
+        ltv: {
+          min: 75,
+          max: 75
+        }
+      },
       loans: []
     }
   },
@@ -121,19 +163,44 @@ export default defineComponent({
       }
       this.loans = this.loans.filter(function(el) { return el.id != id; });
     },
-    updatebridgetoggle () {
+    updatemortgagetoggle () {
       if (this.bridge.usebridge) {
-        if (!this.refinance.userefinance) {
+        if (this.mortgage.usemortgage) {
           Notify.create({
             color: 'bg-grey-2',
-            message: 'You may also want to configure refinance',
+            message: 'Use mortgage or bridge but not both',
             timeout: 5
           })
+          this.mortgage.usemortgage = false
+        }
+      }
+    },
+    updatebridgetoggle () {
+      if (this.bridge.usebridge) {
+        if (this.mortgage.usemortgage) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Use mortgage or bridge but not both',
+            timeout: 5
+          })
+          this.bridge.usebridge = false
         }
       }
     }
   },
   computed: {
+    mortgage_amount_borrowed () {
+      return {
+        best: this.purchaserange.min * (this.mortgage.ltv.min / 100),
+        worst: this.purchaserange.max * (this.mortgage.ltv.max / 100)
+      }
+    },
+    mortgage_monthly_payment () {
+      return {
+        best: this.mortgage_amount_borrowed.best * (this.mortgage.rate.min / 100) / 12,
+        worst: this.mortgage_amount_borrowed.worst * (this.mortgage.rate.max / 100) / 12
+      }
+    },
     maxbridge () {
       return {
         best: this.purchaserange.min * 0.70,
