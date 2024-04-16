@@ -43,6 +43,7 @@
           :purchaserange="purchaserange"
           :finance_in_items="finance_in_items"
           :finance_out_items="finance_out_items"
+          :finance_during_items="finance_during_items"
           :refinance_out_items="refinance_out_items"
           :purchase_items="purchase_items"
           :stampduty_items="stampduty_items"
@@ -140,6 +141,12 @@ export default defineComponent({
         return []
       }
       return this.$refs.Finance.finance_in_items
+    },
+    finance_during_items () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.Finance.finance_during_items
     },
     finance_out_items () {
       if (!this.isMounted) {

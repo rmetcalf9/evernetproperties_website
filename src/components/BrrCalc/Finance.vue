@@ -260,6 +260,12 @@ export default defineComponent({
           return acc + current.amount
         }, 0)
       }
+      if (this.mortgage.usemortgage) {
+        return {
+          worst: (this.totalexpenditure.max + this.mortgage_intrest_payment_total.worst) - (this.mortgage_amount_borrowed.worst + total_loans),
+          best: (this.totalexpenditure.min + this.mortgage_intrest_payment_total.worst) - (this.mortgage_amount_borrowed.best + total_loans)
+        }
+      }
       if (this.bridge.usebridge) {
         return {
           worst: this.totalexpenditure.max - total_loans - this.bridge.amount.worst + this.bridgecost.worst,
@@ -282,11 +288,35 @@ export default defineComponent({
           best: l.amount
         })
       })
+      if (this.mortgage.usemortgage) {
+        ret_val.push({
+          name: 'Mortgage Payment',
+          worst: this.mortgage_amount_borrowed.worst,
+          best: this.mortgage_amount_borrowed.best
+        })
+      }
       if (this.bridge.usebridge) {
         ret_val.push({
           name: 'Bridge Payment',
           worst: this.bridge.amount.worst - this.bridgecost.worst,
           best: this.bridge.amount.best - this.bridgecost.best
+        })
+      }
+      return ret_val
+    },
+    mortgage_intrest_payment_total () {
+      return {
+        worst:  this.mortgage_monthly_payment.worst * this.refurbmonths.worst,
+        best:  this.mortgage_monthly_payment.worst * this.refurbmonths.best
+      }
+    },
+    finance_during_items () {
+      let ret_val = []
+      if (this.mortgage.usemortgage) {
+        ret_val.push({
+          name: 'Mortgage Intrest payments (x' + this.refurbmonths.worst + '/' + this.refurbmonths.best + ' months)',
+          worst: -1 * this.mortgage_intrest_payment_total.worst,
+          best: -1 * this.mortgage_intrest_payment_total.best
         })
       }
       return ret_val
@@ -301,6 +331,13 @@ export default defineComponent({
           best: repay_amount
         })
       })
+      if (this.mortgage.usemortgage) {
+        ret_val.push({
+          name: 'Payback Purchase Mortgage Capital',
+          worst: -1 * this.mortgage_amount_borrowed.worst,
+          best: -1 * this.mortgage_amount_borrowed.best
+        })
+      }
       if (this.bridge.usebridge) {
         ret_val.push({name: 'Bridge Payback', worst: this.bridge.amount.worst * -1, best: this.bridge.amount.best * -1})
         ret_val.push(
