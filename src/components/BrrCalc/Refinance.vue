@@ -38,8 +38,7 @@ export default defineComponent({
           min: 75,
           max: 75
         }
-      },
-      loans: []
+      }
     }
   },
   methods: {
@@ -48,6 +47,9 @@ export default defineComponent({
     }
   },
   computed: {
+    get_refinance () {
+      return this.refinance
+    },
     refinanceamount () {
       return {
         worst: this.gdv_total.min * (this.refinance.ltv.min / 100),

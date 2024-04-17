@@ -168,15 +168,18 @@ export default defineComponent({
   },
   computed: {
     final_bal () {
-      if (this.items.length === 0) {
+      let only_ledger_items = this.items.filter(function (x) {
+        return x.type === 'ledger'
+      })
+      if (only_ledger_items.length === 0) {
         return {
           worst: 0,
           best: 0
         }
       }
       return {
-        worst: this.items[this.items.length - 1].worst.bal,
-        best: this.items[this.items.length - 1].best.bal
+        worst: only_ledger_items[only_ledger_items.length - 1].worst.bal,
+        best: only_ledger_items[only_ledger_items.length - 1].best.bal
       }
     },
     money_in () {

@@ -125,7 +125,7 @@ export default defineComponent({
           }
         }
       }
-      return this.$refs.Refinance.refinance
+      return this.$refs.Refinance.get_refinance
     },
     finance_totalmoneyneeded () {
       if (!this.isMounted) {
