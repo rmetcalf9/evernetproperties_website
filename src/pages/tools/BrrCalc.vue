@@ -216,7 +216,10 @@ export default defineComponent({
     }
   },
   mounted (){
-    this.isMounted = true;
+    const TTT = this
+    setTimeout(function () {
+      TTT.isMounted = true;
+    }, 5)
   }
 })
 </script>
