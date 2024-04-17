@@ -46,6 +46,7 @@
           :min="0"
           :max="10"
           :step="0.1"
+          thumb-size="40px"
           drag-range
           label
           snap
@@ -57,6 +58,7 @@
           :min="0"
           :max="100"
           :step="1"
+          thumb-size="40px"
           drag-range
           label
           snap
@@ -78,14 +80,14 @@
         <div class="row">
           <div class="bridgeamountdiv">
             <div>Worst bridge amount</div>
-            <q-slider label v-model="bridge.amount.worst" :min="0" :max="maxbridge.worst" :step="5000"/>
+            <q-slider label v-model="bridge.amount.worst" :min="0" :max="maxbridge.worst" :step="5000" thumb-size="40px"/>
             <div>Amount: {{ format_currency(bridge.amount.worst) }}</div>
             <div>Cost: {{ format_currency(bridgecost.worst) }}</div>
           </div>
           <div class="bridgeamountdiv">
             <div>max bridging 60/70% value of money</div>
             <div>Best bridge amount</div>
-            <q-slider label v-model="bridge.amount.best" :min="0" :max="maxbridge.best" :step="5000"/>
+            <q-slider label v-model="bridge.amount.best" :min="0" :max="maxbridge.best" :step="5000" thumb-size="40px"/>
             <div>Amount: {{ format_currency(bridge.amount.best) }}</div>
             <div>Cost: {{ format_currency(bridgecost.best) }}</div>
           </div>

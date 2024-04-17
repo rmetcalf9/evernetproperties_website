@@ -18,6 +18,7 @@
             :min="0"
             :max="1000000"
             :step="10000"
+            thumb-size="40px"
             drag-range
             label
             :left-label-value="'Worst £' + gdvitem.gdvrange.min / 1000 + 'k'"

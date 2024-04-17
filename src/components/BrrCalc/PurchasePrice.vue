@@ -12,6 +12,7 @@
           :min="0"
           :max="1000000"
           :step="10000"
+          thumb-size="40px"
           drag-range
           label
           snap

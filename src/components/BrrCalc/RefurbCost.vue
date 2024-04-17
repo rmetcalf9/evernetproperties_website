@@ -12,6 +12,7 @@
           :min="0"
           :max="200000"
           :step="1000"
+          thumb-size="40px"
           drag-range
           label
           :left-label-value="'Best £' + refurbrange.min / 1000 + 'k'"
@@ -26,6 +27,7 @@
           :min="0"
           :max="36"
           :step="1"
+          thumb-size="40px"
           drag-range
           label
           :left-label-value="'Best ' + refurbtimerange.min + ' months'"

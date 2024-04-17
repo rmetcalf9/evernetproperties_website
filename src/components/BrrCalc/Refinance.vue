@@ -11,6 +11,7 @@
           :min="0"
           :max="100"
           :step="5"
+          thumb-size="40px"
           drag-range
           label
           :left-label-value="refinance.ltv.min + '%'"
