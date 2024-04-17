@@ -229,6 +229,7 @@ h1 {
 }
 .main-page {
   margin: 10px;
+  padding: 0px;
 }
 .card-style {
   max-width: 500px;
