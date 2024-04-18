@@ -89,6 +89,12 @@ import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from './utils.js'
 
+function get_ledger_items(items) {
+  return items.filter(function (x) {
+    return x.type === 'ledger'
+  })
+}
+
 function add_item_title(items, title) {
   items.push({
     type: 'blank',
@@ -102,11 +108,13 @@ function add_item_title(items, title) {
 }
 
 function add_item(items, name, worstamt, bestamt) {
+  let only_ledger_items = get_ledger_items(items)
+
   var lastitemdetailworst = undefined
   var lastitemdetailbest = undefined
-  if (items.length>0) {
-    lastitemdetailworst = items[items.length - 1].worst
-    lastitemdetailbest = items[items.length - 1].best
+  if (only_ledger_items.length>0) {
+    lastitemdetailworst = only_ledger_items[only_ledger_items.length - 1].worst
+    lastitemdetailbest = only_ledger_items[only_ledger_items.length - 1].best
   }
   function get_item_detail(lastitemdetail, amt) {
     var bal = 0
@@ -168,9 +176,7 @@ export default defineComponent({
   },
   computed: {
     final_bal () {
-      let only_ledger_items = this.items.filter(function (x) {
-        return x.type === 'ledger'
-      })
+      let only_ledger_items = get_ledger_items(this.items)
       if (only_ledger_items.length === 0) {
         return {
           worst: 0,
