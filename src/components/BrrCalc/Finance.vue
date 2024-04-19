@@ -265,7 +265,7 @@ export default defineComponent({
       if (this.mortgage.usemortgage) {
         return {
           worst: (this.totalexpenditure.max + this.mortgage_intrest_payment_total.worst) - (this.mortgage_amount_borrowed.worst + total_loans),
-          best: (this.totalexpenditure.min + this.mortgage_intrest_payment_total.worst) - (this.mortgage_amount_borrowed.best + total_loans)
+          best: (this.totalexpenditure.min + this.mortgage_intrest_payment_total.best) - (this.mortgage_amount_borrowed.best + total_loans)
         }
       }
       if (this.bridge.usebridge) {
