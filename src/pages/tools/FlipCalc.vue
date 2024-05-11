@@ -34,6 +34,19 @@
           :refurbmonths="refurbmonths"
           :gdv_total="gdv_total"
         />
+        <DealSummary
+          ref="DealSummary"
+          :purchaserange="purchaserange"
+          :finance_in_items="finance_in_items"
+          :finance_out_items="finance_out_items"
+          :finance_during_items="finance_during_items"
+          :purchase_items="purchase_items"
+          :stampduty_items="stampduty_items"
+          :othercosts_items="othercosts_items"
+          :refurb_cost_items="refurb_cost_items"
+          :gdv_total="gdv_total"
+          :refurbmonths="refurbmonths"
+        />
       </div>
     </div>
   </q-page>
@@ -48,6 +61,7 @@ import RefurbCost from '../../components/CommonCalcComponents/RefurbCost.vue'
 import StampDuty from '../../components/CommonCalcComponents/StampDuty.vue'
 import OtherCosts from '../../components/CommonCalcComponents/OtherCosts.vue'
 import Finance from '../../components/CommonCalcComponents/Finance.vue'
+import DealSummary from '../../components/FlipCalc/DealSummary.vue'
 
 export default defineComponent({
   name: 'CalcFlip',
@@ -58,7 +72,8 @@ export default defineComponent({
     StampDuty,
     OtherCosts,
     Finance,
-    Vision
+    Vision,
+    DealSummary
   },
   data () {
     return {
