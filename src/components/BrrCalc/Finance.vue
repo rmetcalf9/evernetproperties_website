@@ -29,6 +29,7 @@
             v-model="loanitem.amount"
             :min="0"
             :max="maxloan.worst"
+            thumb-size="40px"
             :step="5000"
           /></div>
           <q-btn round icon="delete" @click="delloan(loanitem.id)" />
