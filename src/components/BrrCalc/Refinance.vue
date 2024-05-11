@@ -25,7 +25,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import utils from './utils.js'
+import utils from '../utils.js'
 
 export default defineComponent({
   name: 'BrrCalcFinance',

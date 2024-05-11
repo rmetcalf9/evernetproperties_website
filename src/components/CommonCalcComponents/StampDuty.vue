@@ -52,7 +52,7 @@
 // TODO https://revenue.scot/taxes/land-buildings-transaction-tax/non-residential-property - scotland comercial
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
-import utils from './utils.js'
+import utils from '../utils.js'
 
 function stampdutyforthisband (band, amount) {
   if (amount < band.from) {

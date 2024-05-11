@@ -94,7 +94,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
-import utils from './utils.js'
+import utils from '../utils.js'
 
 import dealRatingAlternativeSummary from './DealRatingAltenativeSummary.vue'
 

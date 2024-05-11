@@ -34,36 +34,6 @@
           :refurbmonths="refurbmonths"
           :gdv_total="gdv_total"
         />
-        <Refinance
-          ref="Refinance"
-          :gdv_total="gdv_total"
-        />
-        <DealSummary
-          ref="DealSummary"
-          :purchaserange="purchaserange"
-          :finance_in_items="finance_in_items"
-          :finance_out_items="finance_out_items"
-          :finance_during_items="finance_during_items"
-          :refinance_out_items="refinance_out_items"
-          :purchase_items="purchase_items"
-          :stampduty_items="stampduty_items"
-          :othercosts_items="othercosts_items"
-          :refurb_cost_items="refurb_cost_items"
-          :gdv_total="gdv_total"
-          :refurbmonths="refurbmonths"
-        />
-        <DealRating
-          ref="DealRating"
-          :purchaserange="purchaserange"
-          :finance_totalmoneyneeded="finance_totalmoneyneeded"
-          :deal_summary_final_bal="deal_summary_final_bal"
-          :finance_refinance="finance_refinance"
-          :gdv_total="gdv_total"
-          :refurbmonths="refurbmonths"
-          :stampduty_total="stampduty_total"
-          :othercosts_total="othercosts_total"
-          :refurb_cost_total="refurb_cost_total"
-        />
       </div>
     </div>
   </q-page>
@@ -71,16 +41,13 @@
 
 <script>
 import { defineComponent } from 'vue'
-import Vision from '../../components/BrrCalc/Vision.vue'
-import GdvCard from '../../components/BrrCalc/Gdv.vue'
-import PurchasePrice from '../../components/BrrCalc/PurchasePrice.vue'
-import RefurbCost from '../../components/BrrCalc/RefurbCost.vue'
-import StampDuty from '../../components/BrrCalc/StampDuty.vue'
-import OtherCosts from '../../components/BrrCalc/OtherCosts.vue'
-import Finance from '../../components/BrrCalc/Finance.vue'
-import Refinance from '../../components/BrrCalc/Refinance.vue'
-import DealSummary from '../../components/BrrCalc/DealSummary.vue'
-import DealRating from '../../components/BrrCalc/DealRating.vue'
+import Vision from '../../components/FlipCalc/Vision.vue'
+import GdvCard from '../../components/CommonCalcComponents/Gdv.vue'
+import PurchasePrice from '../../components/CommonCalcComponents/PurchasePrice.vue'
+import RefurbCost from '../../components/CommonCalcComponents/RefurbCost.vue'
+import StampDuty from '../../components/CommonCalcComponents/StampDuty.vue'
+import OtherCosts from '../../components/CommonCalcComponents/OtherCosts.vue'
+import Finance from '../../components/CommonCalcComponents/Finance.vue'
 
 export default defineComponent({
   name: 'CalcFlip',
@@ -90,11 +57,8 @@ export default defineComponent({
     RefurbCost,
     StampDuty,
     OtherCosts,
-    DealSummary,
     Finance,
-    Vision,
-    DealRating,
-    Refinance
+    Vision
   },
   data () {
     return {
@@ -106,27 +70,6 @@ export default defineComponent({
     }
   },
   computed: {
-    deal_summary_final_bal () {
-      if (!this.isMounted) {
-        return {
-          best: 0,
-          worst: 0
-        }
-      }
-      return this.$refs.DealSummary.final_bal
-    },
-    finance_refinance () {
-      if (!this.isMounted) {
-        return {
-          userefinance: false,
-          ltv: {
-            min: 75,
-            max: 75
-          }
-        }
-      }
-      return this.$refs.Refinance.get_refinance
-    },
     finance_totalmoneyneeded () {
       if (!this.isMounted) {
         return {

@@ -87,7 +87,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
-import utils from './utils.js'
+import utils from '../utils.js'
 
 function get_ledger_items(items) {
   return items.filter(function (x) {

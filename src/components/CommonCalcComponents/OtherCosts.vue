@@ -50,7 +50,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
-import utils from './utils.js'
+import utils from '../utils.js'
 
 export default defineComponent({
   name: 'BrrCalcOtherCosts',

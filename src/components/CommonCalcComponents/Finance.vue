@@ -112,7 +112,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
-import utils from './utils.js'
+import utils from '../utils.js'
 import { Notify } from 'quasar'
 
 export default defineComponent({
