@@ -41,6 +41,16 @@
       </div>
     </q-card-section>
     <q-card-section>
+      <div class="text-h6">Survey<q-btn round dense flat icon="info" @click="helpsurvey" /></div>
+      <div>If you’re getting a pre-purchase survey report on the building select the type.</div>
+      <q-option-group
+        v-model="survey.type"
+        :options="survey.typeoptions"
+        inline
+      />
+      <div>Survey cost: {{ surveyfeetext }}</div>
+    </q-card-section>
+    <q-card-section>
       <div class="text-h6">Total: {{ format_currency(total.min) }} - {{ format_currency(total.max) }}</div>
     </q-card-section>
   </q-card>
@@ -52,12 +62,90 @@ import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from '../utils.js'
 
+const ricssurveycostranges = {
+  l1: {
+    lt249: {
+      min: 300,
+      max: 500
+    },
+    lt349: {
+      min: 500,
+      max: 600
+    },
+    lt449: {
+      min: 600,
+      max: 700
+    },
+    top: {
+      min: 700,
+      max: 900
+    },
+  },
+  l2: {
+    lt249: {
+      min: 400,
+      max: 600
+    },
+    lt349: {
+      min: 600,
+      max: 700
+    },
+    lt449: {
+      min: 700,
+      max: 800
+    },
+    top: {
+      min: 800,
+      max: 1000
+    },
+  },
+  l3: {
+    lt249: {
+      min: 630,
+      max: 8000
+    },
+    lt349: {
+      min: 800,
+      max: 900
+    },
+    lt449: {
+      min: 900,
+      max: 1100
+    },
+    top: {
+      min: 1000,
+      max: 1500
+    },
+  },
+}
+
 export default defineComponent({
   name: 'BrrCalcOtherCosts',
   props: ['purchaserange'],
   data () {
     return {
       auction: false,
+      survey: {
+        type: 'l3',
+        typeoptions: [
+          {
+            label: 'None',
+            value: 'none'
+          },
+          {
+            label: 'RICS Level 1',
+            value: 'l1'
+          },
+          {
+            label: 'RICS Level 2',
+            value: 'l2'
+          },
+          {
+            label: 'RICS Level 3',
+            value: 'l3'
+          },
+        ]
+      },
       sourcing: {
         usesourcing: false,
         custom: 3000,
@@ -76,7 +164,6 @@ export default defineComponent({
             value: 'custom'
           },
         ]
-
       },
       consts: {
         auction_survey: 300,
@@ -87,9 +174,53 @@ export default defineComponent({
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
+    },
+    helpsurvey () {
+      this.$q.dialog({
+        title: 'RICS Survey',
+        message: 'See <a href="https://hoa.org.uk/advice/guides-for-homeowners/i-am-buying/how-much-does-a-house-survey-cost/" target="_new">this website</a> here for my source info for caculating survey costs. for details.',
+        html: true
+      }).onOk(() => {
+        // console.log('OK')
+      })
     }
+
   },
   computed: {
+    surveyfeetext () {
+      if (this.surveyfee.min === this.surveyfee.max) {
+        return this.format_currency(this.surveyfee.min)
+      }
+      return this.format_currency(this.surveyfee.min) + '-' + this.format_currency(this.surveyfee.max)
+    },
+    surveyfee () {
+      if (this.survey.type === 'none') {
+        return {
+          min: 0,
+          max: 0
+        }
+      }
+      function getrange(num) {
+        if (num < 249000) {
+          return 'lt249'
+        }
+        if (num < 349000) {
+          return 'lt349'
+        }
+        if (num < 449000) {
+          return 'lt449'
+        }
+        return 'top'
+      }
+      var range = {
+        min: getrange(this.purchaserange.min),
+        max: getrange(this.purchaserange.max)
+      }
+      return {
+        min: ricssurveycostranges[this.survey.type][range.min].min,
+        max: ricssurveycostranges[this.survey.type][range.max].max
+      }
+    },
     sourcingfeetext () {
       if (this.sourcingfee.min === this.sourcingfee.max) {
         return this.format_currency(this.sourcingfee.min)
@@ -133,8 +264,8 @@ export default defineComponent({
         auction_costs = this.consts.auction_survey + this.consts.auction_legal_review
       }
       var total = {
-        min: this.fees.min + auction_costs + this.sourcingfee.min,
-        max: this.fees.max + auction_costs + this.sourcingfee.max
+        min: this.fees.min + auction_costs + this.sourcingfee.min + this.surveyfee.min,
+        max: this.fees.max + auction_costs + this.sourcingfee.max + this.surveyfee.max
       }
       return total
     },
