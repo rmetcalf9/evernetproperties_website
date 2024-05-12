@@ -308,7 +308,7 @@ export default defineComponent({
     finance_in_items () {
       let ret_val = []
       ret_val.push({name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best})
-      ret_val += this.finance_in_items_without_cash
+      ret_val = ret_val.concat(this.finance_in_items_without_cash)
       return ret_val
     },
     mortgage_intrest_payment_total () {

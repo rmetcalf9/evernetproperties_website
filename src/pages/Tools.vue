@@ -32,7 +32,7 @@
               <div>
                 <img
                   alt="Profile Picture"
-                  src="~assets/tool_brr_calc.png"
+                  src="~assets/tool_flip_calc.png"
                   class="tool-picture"
                 >
               </div>
