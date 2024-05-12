@@ -102,7 +102,7 @@ const ricssurveycostranges = {
   l3: {
     lt249: {
       min: 630,
-      max: 8000
+      max: 800
     },
     lt349: {
       min: 800,

@@ -34,10 +34,10 @@
           :refurbmonths="refurbmonths"
           :gdv_total="gdv_total"
         />
-        <DealSummary
-          ref="DealSummary"
+        <DealRating
+          ref="DealRating"
           :purchaserange="purchaserange"
-          :finance_in_items="finance_in_items"
+          :finance_in_items_without_cash="finance_in_items_without_cash"
           :finance_out_items="finance_out_items"
           :finance_during_items="finance_during_items"
           :purchase_items="purchase_items"
@@ -61,7 +61,7 @@ import RefurbCost from '../../components/CommonCalcComponents/RefurbCost.vue'
 import StampDuty from '../../components/CommonCalcComponents/StampDuty.vue'
 import OtherCosts from '../../components/CommonCalcComponents/OtherCosts.vue'
 import Finance from '../../components/CommonCalcComponents/Finance.vue'
-import DealSummary from '../../components/FlipCalc/DealSummary.vue'
+import DealRating from '../../components/FlipCalc/DealRating.vue'
 
 export default defineComponent({
   name: 'CalcFlip',
@@ -73,7 +73,7 @@ export default defineComponent({
     OtherCosts,
     Finance,
     Vision,
-    DealSummary
+    DealRating
   },
   data () {
     return {
@@ -93,6 +93,12 @@ export default defineComponent({
         }
       }
       return this.$refs.Finance.totalmoneyneeded
+    },
+    finance_in_items_without_cash () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.Finance.finance_in_items_without_cash
     },
     finance_in_items () {
       if (!this.isMounted) {

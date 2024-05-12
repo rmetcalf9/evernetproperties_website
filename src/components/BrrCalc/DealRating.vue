@@ -79,13 +79,9 @@
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Deal Features</div>
-      <div class="featuretable">
-        <div v-for="feature in features" :key="feature">
-          <q-icon v-if="feature.positive" name="check_box" color="green" size="32px" />
-          <q-icon v-if="!feature.positive" name="cancel" color="red" size="32px" />
-          {{ feature.text }}
-        </div>
-      </div>
+      <FeatureTable
+        v-model:features="features"
+      />
     </q-card-section>
 
   </q-card>
@@ -97,12 +93,14 @@ import { useQuasar } from 'quasar'
 import utils from '../utils.js'
 
 import dealRatingAlternativeSummary from './DealRatingAltenativeSummary.vue'
+import FeatureTable from '../CommonCalcComponents/FeatureTable.vue'
 
 export default defineComponent({
   name: 'BrrCalcDealRating',
   props: ['finance_totalmoneyneeded', 'deal_summary_final_bal', 'finance_refinance', 'gdv_total', 'refurbmonths', 'purchaserange', 'stampduty_total', 'othercosts_total', 'refurb_cost_total'],
   components: {
-    dealRatingAlternativeSummary
+    dealRatingAlternativeSummary,
+    FeatureTable
   },
   data () {
     return {
@@ -121,12 +119,12 @@ export default defineComponent({
       var min_money_out = Math.min(this.cash_out_of_deal_minus_cash_in.best, this.cash_out_of_deal_minus_cash_in.worst)
       if (min_money_out > 0) {
         ret_val.push({
-          positive: true,
+          type: 'positive',
           text: 'All money out deal! - All initial investment returned plus at least ' + this.format_currency(min_money_out)
         })
       } else {
         ret_val.push({
-          positive: false,
+          type: 'negative',
           text: 'Not all money out deal! - Might leave ' + this.format_currency(-1 * min_money_out) + ' in.'
         })
       }
@@ -134,18 +132,18 @@ export default defineComponent({
       var min_profit = Math.min(this.profit.best, this.profit.worst)
       if (min_profit < 0) {
         ret_val.push({
-          positive: false,
+          type: 'negative',
           text: 'Deal makes a loss! - End value might be ' + this.format_currency(-1 * min_profit) + ' less than investment.'
         })
       } else {
         if (min_profit < (this.gdv_total.min * 0.25)) {
           ret_val.push({
-            positive: false,
+            type: 'negative',
             text: 'Low amount of profit! - Low profit ' + this.format_currency(min_profit) + ' less than 25% of gdv.'
           })
         } else {
           ret_val.push({
-            positive: true,
+            type: 'positive',
             text: 'Profit making deal! - Profit of ' + this.format_currency(min_profit) + '!'
           })
         }
@@ -154,12 +152,12 @@ export default defineComponent({
       var min_anual_roi = Math.min(this.annualroi.worst, this.annualroi.best)
       if (min_anual_roi < 3) {
         ret_val.push({
-          positive: false,
+          type: 'negative',
           text: 'Very low ROI! ' + min_anual_roi.toFixed(1) + '%'
         })
       } else if (min_anual_roi > 10) {
         ret_val.push({
-          positive: true,
+          type: 'positive',
           text: 'Good ROI! ' + min_anual_roi.toFixed(1) + '%'
         })
       }
@@ -230,10 +228,4 @@ export default defineComponent({
 th.totaltablecell {
   font-size: 15px
 }
-.featuretable {
-  background-color: white;
-  color: black;
-  font-weight: 700;
-}
-
 </style>

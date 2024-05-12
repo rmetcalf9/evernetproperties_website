@@ -17,7 +17,7 @@
             v-model="gdvitem.gdvrange"
             :min="0"
             :max="1000000"
-            :step="10000"
+            :step="5000"
             thumb-size="40px"
             drag-range
             label

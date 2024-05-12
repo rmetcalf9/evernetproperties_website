@@ -280,10 +280,8 @@ export default defineComponent({
         best: this.totalexpenditure.min - total_loans
       }
     },
-    finance_in_items () {
-      // Currently hardcoded for 100% cash
+    finance_in_items_without_cash () {
       let ret_val = []
-      ret_val.push({name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best})
       this.loans.map(function (l) {
         ret_val.push({
           name: l.name,
@@ -305,6 +303,12 @@ export default defineComponent({
           best: this.bridge.amount.best - this.bridgecost.best
         })
       }
+      return ret_val
+    },
+    finance_in_items () {
+      let ret_val = []
+      ret_val.push({name: 'Finance Cash', worst: this.totalmoneyneeded.worst, best: this.totalmoneyneeded.best})
+      ret_val += this.finance_in_items_without_cash
       return ret_val
     },
     mortgage_intrest_payment_total () {

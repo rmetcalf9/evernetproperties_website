@@ -1,7 +1,7 @@
 <template>
   <q-card inline class="q-ma-sm card-style maincard col-grow">
     <q-card-section>
-      <div class="text-h6">Flip Deal Summary</div>
+      <div class="text-h6">Flip Deal Rating</div>
       <div class="text-subtitle2">This section gives a break down of money in and out of the deal. It is broken down twice, for best and worst case figures.</div>
     </q-card-section>
     <q-card-section>
@@ -15,7 +15,7 @@
             </tr>
           </thead>
           <tbody>
-              <tr v-for="item in items" :key='item.id'>
+              <tr v-for="item in itemized_summary.items" :key='item.id'>
                 <td v-if="item.type=='blank'" class="text-left sumtablecell">&nbsp;</td>
                 <td v-if="item.type=='blank'" class="text-left sumtablecell worstcasetablecell">&nbsp;</td>
                 <td v-if="item.type=='blank'" class="text-left sumtablecell">&nbsp;</td>
@@ -33,7 +33,10 @@
           </tbody>
         </table>
         <div>Note: Corporation tax is assumed at 19%<q-btn round dense flat icon="info" @click="helpcorporation" /></div>
-        <div>TODO GOOD/BAD/RUBBISH</div>
+        <div class="text-h6">Flip Project Features</div>
+        <FeatureTable
+          v-model:features="features"
+        />
       </div>
     </q-card-section>
   </q-card>
@@ -43,6 +46,7 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from '../utils.js'
+import FeatureTable from '../CommonCalcComponents/FeatureTable.vue'
 
 function get_ledger_items(items) {
   return items.filter(function (x) {
@@ -107,23 +111,13 @@ function add_item(items, name, worstamt, bestamt) {
 }
 
 export default defineComponent({
-  name: 'FlipCalcDealSummary',
-  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items', 'finance_during_items'],
+  name: 'FlipCalcDealRating',
+  props: ['purchaserange', 'finance_in_items_without_cash', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items', 'finance_during_items'],
   components: {
+    FeatureTable
   },
   data () {
     return {
-      table: {
-        columns: [
-          { name: "item", label: 'Item', field: 'item'},
-          { name: "win", label: 'In', field: 'win'},
-          { name: "wout", label: 'Out', field: 'wout'},
-          { name: "wbal", label: 'Balance', field: 'wbal'},
-          { name: "bin", label: 'In', field: 'bin'},
-          { name: "bout", label: 'Out', field: 'bout'},
-          { name: "bbal", label: 'Balance', field: 'bbal'},
-        ]
-      }
     }
   },
   methods: {
@@ -146,32 +140,33 @@ export default defineComponent({
     }
   },
   computed: {
-    final_bal () {
-      let only_ledger_items = get_ledger_items(this.items)
-      if (only_ledger_items.length === 0) {
-        return {
-          worst: 0,
-          best: 0
-        }
+    finance_costs () {
+      var total = {worst: 0, best: 0}
+      function add_to_total(total, ite) {
+        total.worst += ite.worst
+        total.best += ite.best
+      }
+      if (typeof (this.finance_in_items_without_cash) !== 'undefined') {
+        this.finance_in_items_without_cash.map(function (x) {
+          add_to_total(total, x)
+        })
+      }
+      if (typeof (this.finance_during_items) !== 'undefined') {
+        this.finance_during_items.map(function (x) {
+          add_to_total(total, x)
+        })
+      }
+      if (typeof (this.finance_out_items) !== 'undefined') {
+        this.finance_out_items.map(function (x) {
+          add_to_total(total, x)
+        })
       }
       return {
-        worst: only_ledger_items[only_ledger_items.length - 1].worst.bal,
-        best: only_ledger_items[only_ledger_items.length - 1].best.bal
+        worst: total.worst,
+        best: total.best
       }
     },
-    money_in () {
-      var worst = this.finance_in_items.reduce((acc, value) => {
-          return acc + value.worst
-      }, 0);
-      var best = this.finance_in_items.reduce((acc, value) => {
-          return acc + value.best
-      }, 0);
-      return {
-        worst: worst,
-        best: best
-      }
-    },
-    items () {
+    itemized_summary () {
       var items = []
       var total = {worst: 0, best: 0}
       function add_to_total(total, ite) {
@@ -203,15 +198,11 @@ export default defineComponent({
         })
       }
 
-      var finance_costs = {
-        worst: 0,
-        best: 0
-      }
-      add_item(items, 'TODO FINANCE COSTS', -finance_costs.worst, -finance_costs.best)
-      add_to_total(total, finance_costs)
+      add_item(items, 'Finance Costs', -this.finance_costs.worst, -this.finance_costs.best)
+      add_to_total(total, this.finance_costs)
 
 
-      add_item_total(items, 'Money In', -total.worst, -total.best)
+      add_item_total(items, 'Total Money In', -total.worst, -total.best)
 
       add_item(items, 'GDV', this.gdv_total.min, this.gdv_total.max)
 
@@ -249,12 +240,37 @@ export default defineComponent({
 
       add_item_headtext(items, 'Percentage', percentage.worst.toFixed(2) + '%', percentage.best.toFixed(2) + '%')
 
-
       // add_item_title(items,'Exit - Sell Property')
       // add_item(items, 'Sell for GDV', this.gdv_total.min, this.gdv_total.max)
-      return items
+      return {
+        items: items,
+        percentage: percentage
+      }
+    },
+    features () {
+      var ret_val = []
+      var min_percentage = Math.min(this.itemized_summary.percentage.best, this.itemized_summary.percentage.worst)
+      if (min_percentage < 20) {
+       ret_val.push({
+         type: 'negative',
+         text: 'Less than 20% uplift. To justify the work in doing the flip we need the deal to make at least 20%'
+       })
+      } else {
+        if (min_percentage < 23) {
+         ret_val.push({
+           type: 'neutral',
+           text: 'Between 20% and 23% uplift. This is borderline. To justify the work and account for risk we would prefer at least 23%'
+         })
+        } else {
+          ret_val.push({
+            type: 'positive',
+            text: 'Above 23% uplift. This project has enough uplift to justify the effort and risk.'
+          })
+        }
+      }
+      return ret_val
     }
-  }
+  },
 })
 </script>
 
