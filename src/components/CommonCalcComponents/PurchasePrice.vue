@@ -5,21 +5,9 @@
       <div class="text-subtitle2">In this section we work out the purchase price. This figure is not just read from the listing we will aim to get a below market value (BMV) price and this will involve finding the right property seller and being able to negotiate the price.</div>
     </q-card-section>
     <q-card-section>
-      <div class="col-grow ">
-        &nbsp;
-        <q-range
-          v-model="purchaserangevalue"
-          :min="0"
-          :max="1000000"
-          :step="5000"
-          thumb-size="40px"
-          drag-range
-          label
-          snap
-          :left-label-value="'Best £' + purchaserangevalue.min / 1000 + 'k'"
-          :right-label-value="'Worst £' + purchaserangevalue.max / 1000 + 'k'"
-        />
-      </div>
+      <SliderWithTextInput
+        v-model:range="purchaserangevalue"
+      />
       <div class="text-h6">Price: {{ format_currency(purchaserangevalue.min) }} - {{ format_currency(purchaserangevalue.max) }}</div>
     </q-card-section>
   </q-card>
@@ -31,11 +19,16 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from '../utils.js'
+import SliderWithTextInput from '../../components/SliderWithTextInput.vue'
+
 
 export default defineComponent({
   name: 'BrrCalcPurchase',
   props: ['purchaserange'],
   emits: ['update:purchaserange'],
+  components: {
+    SliderWithTextInput
+  },
   data () {
     return {
     }
@@ -62,3 +55,10 @@ export default defineComponent({
   }
 })
 </script>
+
+<style>
+.pricetblcell {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+</style>
