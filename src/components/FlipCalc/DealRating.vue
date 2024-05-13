@@ -2,7 +2,7 @@
   <q-card inline class="q-ma-sm card-style maincard col-grow">
     <q-card-section>
       <div class="text-h6">Flip Deal Rating</div>
-      <div class="text-subtitle2">This section gives a break down of money in and out of the deal. It is broken down twice, for best and worst case figures.</div>
+      <div class="text-subtitle2">This section gives a rating for this flip deal.</div>
     </q-card-section>
     <q-card-section>
       <div>
