@@ -17,22 +17,26 @@
   <div class="col-grow row">
     <div class="pricetblcell">
       Best Price: <q-input
+        ref="bestinput"
         v-model.number="rangevalue.min"
         type="number"
         :step="5000"
         filled
         style="max-width: 110px"
         :rules="[ val => val <= rangevalue.max || 'Must be lower than worst']"
+        @update:model-value="validateworst"
       />
     </div>
     <div class="pricetblcell">
       Worst Price: <q-input
+        ref="worstinput"
         v-model.number="rangevalue.max"
         type="number"
         :step="5000"
         filled
         style="max-width: 110px"
         :rules="[ val => val >= rangevalue.min || 'Must be higher than best']"
+        @update:model-value="validatebest"
       />
     </div>
   </div>
@@ -51,13 +55,21 @@ export default defineComponent({
     return {
     }
   },
+  methods: {
+    validateworst () {
+      this.$refs.worstinput.validate()
+    },
+    validatebest () {
+      this.$refs.bestinput.validate()
+    }
+  },
   computed: {
     rangevalue: {
       get() {
-        return this.range;
+        return this.range
       },
       set(value) {
-        this.$emit("update:range", value);
+        this.$emit("update:range", value)
       },
     }
   }
