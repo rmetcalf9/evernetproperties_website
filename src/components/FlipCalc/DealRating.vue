@@ -6,9 +6,9 @@
     </q-card-section>
     <q-card-section>
       <div>
-        <div v-if="!is_valid_input" class="invalidmessage col-grow">
-          <q-icon name="warning" />Warning: Invalid input data!
-        </div>
+        <InvalidMessage
+          :is_valid_input="is_valid_input"
+        />
         <table class="sumtable">
           <thead>
             <tr>
@@ -50,6 +50,7 @@ import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from '../utils.js'
 import FeatureTable from '../CommonCalcComponents/FeatureTable.vue'
+import InvalidMessage from '../InvalidMessage.vue'
 
 function get_ledger_items(items) {
   return items.filter(function (x) {
@@ -117,7 +118,8 @@ export default defineComponent({
   name: 'FlipCalcDealRating',
   props: ['is_valid_input', 'purchaserange', 'finance_in_items_without_cash', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items', 'finance_during_items'],
   components: {
-    FeatureTable
+    FeatureTable,
+    InvalidMessage
   },
   data () {
     return {
@@ -322,12 +324,5 @@ td.bluetablecell {
 }
 th.totaltablecell {
   font-size: 15px
-}
-.invalidmessage {
-  background-color: white;
-  color: red;
-  margin: 15px;
-  padding: 10px;
-  font-size: large;
 }
 </style>
