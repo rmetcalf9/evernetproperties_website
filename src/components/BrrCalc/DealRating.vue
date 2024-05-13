@@ -5,6 +5,9 @@
       <div class="text-subtitle2">How good is this project?</div>
     </q-card-section>
     <q-card-section>
+      <InvalidMessage
+        :is_valid_input="is_valid_input"
+      />
       <div class="text-h5">Profit/Loss</div>
       <div>Compare what we have put into the deal vs what we get out of it. These calculations won't account for time invested or the risk taken on in the project</div>
       <div class="text-h5">Total cash in: {{ format_currency(finance_totalmoneyneeded.worst) }} - {{ format_currency(finance_totalmoneyneeded.best) }} Worst - Best</div>
@@ -94,13 +97,15 @@ import utils from '../utils.js'
 
 import dealRatingAlternativeSummary from './DealRatingAltenativeSummary.vue'
 import FeatureTable from '../CommonCalcComponents/FeatureTable.vue'
+import InvalidMessage from '../InvalidMessage.vue'
 
 export default defineComponent({
   name: 'BrrCalcDealRating',
-  props: ['finance_totalmoneyneeded', 'deal_summary_final_bal', 'finance_refinance', 'gdv_total', 'refurbmonths', 'purchaserange', 'stampduty_total', 'othercosts_total', 'refurb_cost_total'],
+  props: ['is_valid_input', 'finance_totalmoneyneeded', 'deal_summary_final_bal', 'finance_refinance', 'gdv_total', 'refurbmonths', 'purchaserange', 'stampduty_total', 'othercosts_total', 'refurb_cost_total'],
   components: {
     dealRatingAlternativeSummary,
-    FeatureTable
+    FeatureTable,
+    InvalidMessage
   },
   data () {
     return {

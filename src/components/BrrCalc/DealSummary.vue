@@ -5,6 +5,9 @@
       <div class="text-subtitle2">This section gives a break down of money in and out of the deal. It is broken down twice, for best and worst case figures.</div>
     </q-card-section>
     <q-card-section>
+      <InvalidMessage
+        :is_valid_input="is_valid_input"
+      />
       <div>
         <q-table
           :columns="table.columns"
@@ -88,6 +91,7 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from '../utils.js'
+import InvalidMessage from '../InvalidMessage.vue'
 
 function get_ledger_items(items) {
   return items.filter(function (x) {
@@ -146,8 +150,9 @@ function add_item(items, name, worstamt, bestamt) {
 
 export default defineComponent({
   name: 'BrrCalcDealSummary',
-  props: ['purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items', 'refinance_out_items', 'finance_during_items'],
+  props: ['is_valid_input', 'purchaserange', 'finance_in_items', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items', 'refinance_out_items', 'finance_during_items'],
   components: {
+    InvalidMessage
   },
   data () {
     return {

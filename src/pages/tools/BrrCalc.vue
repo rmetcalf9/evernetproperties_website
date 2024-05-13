@@ -51,6 +51,7 @@
           :refurb_cost_items="refurb_cost_items"
           :gdv_total="gdv_total"
           :refurbmonths="refurbmonths"
+          :is_valid_input="is_valid_input"
         />
         <DealRating
           ref="DealRating"
