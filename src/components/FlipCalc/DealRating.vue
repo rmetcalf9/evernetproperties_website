@@ -6,6 +6,9 @@
     </q-card-section>
     <q-card-section>
       <div>
+        <div v-if="!is_valid_input" class="invalidmessage col-grow">
+          <q-icon name="warning" />Warning: Invalid input data!
+        </div>
         <table class="sumtable">
           <thead>
             <tr>
@@ -112,7 +115,7 @@ function add_item(items, name, worstamt, bestamt) {
 
 export default defineComponent({
   name: 'FlipCalcDealRating',
-  props: ['purchaserange', 'finance_in_items_without_cash', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items', 'finance_during_items'],
+  props: ['is_valid_input', 'purchaserange', 'finance_in_items_without_cash', 'purchase_items', 'stampduty_items', 'othercosts_items', 'refurb_cost_items', 'gdv_total', 'refurbmonths', 'finance_out_items', 'finance_during_items'],
   components: {
     FeatureTable
   },
@@ -320,5 +323,11 @@ td.bluetablecell {
 th.totaltablecell {
   font-size: 15px
 }
-
+.invalidmessage {
+  background-color: white;
+  color: red;
+  margin: 15px;
+  padding: 10px;
+  font-size: large;
+}
 </style>

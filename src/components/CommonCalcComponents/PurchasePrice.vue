@@ -6,6 +6,7 @@
     </q-card-section>
     <q-card-section>
       <SliderWithTextInput
+        ref="slider"
         v-model:range="purchaserangevalue"
       />
       <div class="text-h6">Price: {{ format_currency(purchaserangevalue.min) }} - {{ format_currency(purchaserangevalue.max) }}</div>
@@ -39,6 +40,9 @@ export default defineComponent({
     }
   },
   computed: {
+    isValid() {
+      return this.$refs.slider.isValid
+    },
     purchaserangevalue: {
       get() {
         return this.purchaserange;

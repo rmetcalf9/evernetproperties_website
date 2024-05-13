@@ -46,6 +46,7 @@
           :refurb_cost_items="refurb_cost_items"
           :gdv_total="gdv_total"
           :refurbmonths="refurbmonths"
+          :is_valid_input="is_valid_input"
         />
       </div>
     </div>
@@ -85,6 +86,15 @@ export default defineComponent({
     }
   },
   computed: {
+    is_valid_input() {
+      if (!this.isMounted) {
+        return true
+      }
+      if (!this.$refs.PurchasePrice.isValid) {
+        return false
+      }
+      return true
+    },
     finance_totalmoneyneeded () {
       if (!this.isMounted) {
         return {

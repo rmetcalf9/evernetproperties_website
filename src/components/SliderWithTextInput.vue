@@ -64,6 +64,12 @@ export default defineComponent({
     }
   },
   computed: {
+    isValid() {
+      if (!this.$refs.worstinput.validate()) {
+        return false
+      }
+      return this.$refs.bestinput.validate()
+    },
     rangevalue: {
       get() {
         return this.range

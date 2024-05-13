@@ -63,6 +63,7 @@
           :stampduty_total="stampduty_total"
           :othercosts_total="othercosts_total"
           :refurb_cost_total="refurb_cost_total"
+          :is_valid_input="is_valid_input"
         />
       </div>
     </div>
@@ -106,6 +107,15 @@ export default defineComponent({
     }
   },
   computed: {
+    is_valid_input() {
+      if (!this.isMounted) {
+        return true
+      }
+      if (!this.$refs.PurchasePrice.isValid) {
+        return false
+      }
+      return true
+    },
     deal_summary_final_bal () {
       if (!this.isMounted) {
         return {
