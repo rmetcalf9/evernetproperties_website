@@ -93,6 +93,9 @@ export default defineComponent({
       if (!this.$refs.PurchasePrice.isValid) {
         return false
       }
+      if (!this.$refs.GdvCard.isValid) {
+        return false
+      }      
       return true
     },
     finance_totalmoneyneeded () {

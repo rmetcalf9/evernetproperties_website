@@ -12,6 +12,7 @@ export default defineComponent({
   name: 'InvalidMessage',
   props: ['is_valid_input'],
   data () {
+    return {}
   }
 })
 </script>

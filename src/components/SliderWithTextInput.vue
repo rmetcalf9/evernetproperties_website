@@ -10,32 +10,32 @@
       drag-range
       label
       snap
-      :left-label-value="'Best £' + rangevalue.min / 1000 + 'k'"
-      :right-label-value="'Worst £' + rangevalue.max / 1000 + 'k'"
+      :left-label-value="min_prefix + rangevalue.min / 1000 + 'k'"
+      :right-label-value="max_prefix + rangevalue.max / 1000 + 'k'"
     />
   </div>
   <div class="col-grow row">
     <div class="pricetblcell">
-      Best Price: <q-input
+      {{ min_label_text }}: <q-input
         ref="bestinput"
         v-model.number="rangevalue.min"
         type="number"
         :step="5000"
         filled
         style="max-width: 110px"
-        :rules="[ val => val <= rangevalue.max || 'Must be lower than worst']"
+        :rules="[ val => val <= rangevalue.max || 'Must be lower than ' + max_label_text]"
         @update:model-value="validateworst"
       />
     </div>
     <div class="pricetblcell">
-      Worst Price: <q-input
+      {{ max_label_text }}: <q-input
         ref="worstinput"
         v-model.number="rangevalue.max"
         type="number"
         :step="5000"
         filled
         style="max-width: 110px"
-        :rules="[ val => val >= rangevalue.min || 'Must be higher than best']"
+        :rules="[ val => val >= rangevalue.min || 'Must be higher than ' + min_label_text]"
         @update:model-value="validatebest"
       />
     </div>
@@ -49,7 +49,25 @@ import utils from './utils.js'
 
 export default defineComponent({
   name: 'SliderWithTextInput',
-  props: ['range'],
+  props: {
+    range: Object,
+    min_prefix: {
+      type: String,
+      default: 'Best £'
+    },
+    max_prefix: {
+      type: String,
+      default: 'Worst £'
+    },
+    min_label_text: {
+      type: String,
+      default: 'Best Price'
+    },
+    max_label_text: {
+      type: String,
+      default: 'Worst Price'
+    }
+  },
   emits: ['update:range'],
   data () {
     return {
@@ -58,9 +76,11 @@ export default defineComponent({
   methods: {
     validateworst () {
       this.$refs.worstinput.validate()
+      this.$emit("update:range", this.rangevalue)
     },
     validatebest () {
       this.$refs.bestinput.validate()
+      this.$emit("update:range", this.rangevalue)
     }
   },
   computed: {

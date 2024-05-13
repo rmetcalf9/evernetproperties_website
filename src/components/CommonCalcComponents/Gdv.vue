@@ -12,17 +12,14 @@
           <q-btn round icon="delete" @click="delrow(gdvitem.id)" v-if="this.gdvitems.length > 1" />
         </div>
         <div class="col-grow ">
-          &nbsp;
-          <q-range
-            v-model="gdvitem.gdvrange"
-            :min="0"
-            :max="1000000"
-            :step="5000"
-            thumb-size="40px"
-            drag-range
-            label
-            :left-label-value="'Worst £' + gdvitem.gdvrange.min / 1000 + 'k'"
-            :right-label-value="'Best £' + gdvitem.gdvrange.max / 1000 + 'k'"
+          <SliderWithTextInput
+            ref="slider"
+            v-model:range="gdvitem.gdvrange"
+            @update:range="updateisvalid"
+            min_prefix="Worst £"
+            max_prefix="Best £"
+            min_label_text="Worst Price"
+            max_label_text="Best Price"
           />
         </div>
       </div>
@@ -38,9 +35,13 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from '../utils.js'
+import SliderWithTextInput from '../../components/SliderWithTextInput.vue'
 
 export default defineComponent({
   name: 'BrrCalcGdv',
+  components: {
+    SliderWithTextInput
+  },
   data () {
     return {
       gdvitems: [{
@@ -50,7 +51,8 @@ export default defineComponent({
           min: 400000,
           max: 600000
         }
-      }]
+      }],
+      isValid: true
     }
   },
   methods: {
@@ -67,12 +69,28 @@ export default defineComponent({
           max: 600000
         }
       })
+      this.updateisvalid()
     },
     delrow (id) {
       if (this.gdvitems.length < 2) {
         return
       }
       this.gdvitems = this.gdvitems.filter(function(el) { return el.id != id; });
+      this.updateisvalid()
+    },
+    updateisvalid () {
+      const TTT = this
+      setTimeout(function () {
+        let valid = true
+        TTT.$refs.slider.forEach(function (element) {
+          if (!element.isValid) {
+            valid = false
+          }
+        })
+        TTT.isValid = !TTT.isValid
+        TTT.isValid = valid
+        console.log('setting valid to', valid)
+      }, 5)
     }
   },
   computed: {
