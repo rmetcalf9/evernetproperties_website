@@ -30,13 +30,15 @@
               filled
               style="max-width: 110px"
             />
-            Mortgage LTV: <q-input
+            Mortgage LTV: <div class="row"><q-input
               v-model.number="mortgageltv"
               type="number"
               :step="5"
               filled
               style="max-width: 110px"
             />
+            <q-btn round dense flat icon="info" @click="helpmortgageltv" />
+            </div>
             Monthly Rate: <q-input
               v-model.number="mortgagerate"
               type="number"
@@ -109,6 +111,15 @@ export default defineComponent({
     },
     format_percent (num) {
       return utils.format_percent(num)
+    },
+    helpmortgageltv () {
+      this.$q.dialog({
+        title: 'Loan To Value',
+        message: 'Note: To see what it is like buying without a mortgage - Enter 0% as LTV!',
+        html: true
+      }).onOk(() => {
+        // console.log('OK')
+      })
     }
   },
   computed: {
