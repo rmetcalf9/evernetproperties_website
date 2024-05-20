@@ -16,13 +16,15 @@
               filled
               style="max-width: 110px"
             />
-            Extra purchase costs: <q-input
+            Extra purchase costs: <div class="row"><q-input
               v-model.number="extrapurchasecosts"
               type="number"
               :step="1000"
               filled
               style="max-width: 110px"
             />
+            <q-btn round dense flat icon="info" @click="helpextrapurchasecosts" />
+            </div>
             Monthly Rent: <q-input
               v-model.number="monthlyrent"
               type="number"
@@ -120,6 +122,15 @@ export default defineComponent({
     },
     format_percent (num) {
       return utils.format_percent(num)
+    },
+    helpextrapurchasecosts () {
+      this.$q.dialog({
+        title: 'Extra Purchase Costs',
+        message: 'Use this for anything else you want to take into account of.',
+        html: true
+      }).onOk(() => {
+        // console.log('OK')
+      })
     },
     helpmortgageltv () {
       this.$q.dialog({
