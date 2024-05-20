@@ -23,8 +23,8 @@
               filled
               style="max-width: 110px"
             />
-            Flat service charge: <q-input
-              v-model.number="flatservicecharge"
+            Flat annual service charge: <q-input
+              v-model.number="flatannualservicecharge"
               type="number"
               :step="50"
               filled
@@ -65,7 +65,7 @@
             <div>Mortgage: {{ format_currency(monthlymortgage) }}</div>
             <div>Management: {{ format_currency(management) }}</div>
             <div>Maintenance: {{ format_currency(maintenance) }}</div>
-            <div>Service Charge: {{ format_currency(flatservicecharge) }}</div>
+            <div>Service Charge: {{ format_currency(flatmonthlyservicecharge) }}</div>
             <div><b>Total Monthly Costs: {{ format_currency(totalmonthlycosts) }}</b></div>
           </q-card-section>
         </q-card>
@@ -98,7 +98,7 @@ export default defineComponent({
       isMounted: false,
       purchaseprice: 100000,
       monthlyrent: 800,
-      flatservicecharge: 0,
+      flatannualservicecharge: 0,
       mortgageltv: 75,
       mortgagerate: 6,
     }
@@ -133,8 +133,11 @@ export default defineComponent({
     maintenance () {
       return this.monthlyrent * 0.1
     },
+    flatmonthlyservicecharge () {
+      return this.flatannualservicecharge / 12
+    },
     totalmonthlycosts () {
-      return this.monthlymortgage + this.management + this.maintenance + this.flatservicecharge
+      return this.monthlymortgage + this.management + this.maintenance + this.flatmonthlyservicecharge
     },
     monthlyprofit () {
       return this.monthlyrent - this.totalmonthlycosts
