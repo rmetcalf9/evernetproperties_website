@@ -13,6 +13,7 @@ const routes = [
       { path: 'tools', component: () => import('pages/Tools.vue') },
       { path: 'tools/brrcalc', component: () => import('pages/tools/BrrCalc.vue') },
       { path: 'tools/flipcalc', component: () => import('pages/tools/FlipCalc.vue') },
+      { path: 'tools/simpleroicalc', component: () => import('pages/tools/SimpleRoiCalc.vue') },
     ]
   },
   {

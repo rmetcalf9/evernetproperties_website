@@ -4,13 +4,33 @@
       <h3 style="margin: 0px;">Tools</h3>
       Useful tools and calculators for property tasks.
       <div class="row">
+        <q-card inline class="q-ma-sm card-style tool-card" @click="click_simproi_card">
+          <q-card-section>
+            <div class="text-h6">Simple ROI Caculator</div>
+            <div class="row">
+              <div>
+                <img
+                  alt="Item Picture"
+                  src="~assets/tool_simpleroi_calc.png"
+                  class="tool-picture"
+                >
+              </div>
+              <div class="col q-ma-sm">
+                <div style="height: 150px;">This caculator is a quick and simple way of finding the ROI on a property. It doesn't take into account refurbishment.</div>
+                <div align="right">
+                  <q-btn round  color="primary" icon="info" />
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
         <q-card inline class="q-ma-sm card-style tool-card" @click="click_brrr_card">
           <q-card-section>
             <div class="text-h6">Buy Refurbish Rent Refinance Calculator</div>
             <div class="row">
               <div>
                 <img
-                  alt="Profile Picture"
+                  alt="Item Picture"
                   src="~assets/tool_brr_calc.png"
                   class="tool-picture"
                 >
@@ -22,7 +42,6 @@
                 </div>
               </div>
             </div>
-
           </q-card-section>
         </q-card>
         <q-card inline class="q-ma-sm card-style tool-card" @click="click_flip_card">
@@ -31,7 +50,7 @@
             <div class="row">
               <div>
                 <img
-                  alt="Profile Picture"
+                  alt="Item Picture"
                   src="~assets/tool_flip_calc.png"
                   class="tool-picture"
                 >
@@ -61,6 +80,9 @@ export default defineComponent({
     }
   },
   methods: {
+    click_simproi_card () {
+      this.$router.push('/tools/simpleroicalc')
+    },
     click_brrr_card () {
       this.$router.push('/tools/brrcalc')
     },
