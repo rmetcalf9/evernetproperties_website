@@ -16,6 +16,13 @@
               filled
               style="max-width: 110px"
             />
+            Extra purchase costs: <q-input
+              v-model.number="extrapurchasecosts"
+              type="number"
+              :step="1000"
+              filled
+              style="max-width: 110px"
+            />
             Monthly Rent: <q-input
               v-model.number="monthlyrent"
               type="number"
@@ -54,6 +61,7 @@
           </q-card-section>
           <q-card-section>
             <div>Total Mortgage: {{ format_currency(totalmortgage) }}</div>
+            <div v-if="extrapurchasecosts != 0">Extra purchase costs: {{ format_currency(extrapurchasecosts) }}</div>
             <div>Deposit: {{ format_currency(deposit) }}</div>
             <div>Stamp and fees: {{ format_currency(stampandfees) }}</div>
             <div><b>Total Money In: {{ format_currency(totalmoneyin) }}</b></div>
@@ -99,6 +107,7 @@ export default defineComponent({
     return {
       isMounted: false,
       purchaseprice: 100000,
+      extrapurchasecosts: 0,
       monthlyrent: 800,
       flatannualservicecharge: 0,
       mortgageltv: 75,
@@ -133,7 +142,7 @@ export default defineComponent({
       return this.purchaseprice * 0.04
     },
     totalmoneyin () {
-      return this.deposit + this.stampandfees
+      return this.deposit + this.stampandfees + this.extrapurchasecosts
     },
     monthlymortgage () {
       return (this.totalmortgage * this.mortgagerate / (100 * 12))
