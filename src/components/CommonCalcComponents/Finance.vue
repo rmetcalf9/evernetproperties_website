@@ -172,7 +172,7 @@ export default defineComponent({
           Notify.create({
             color: 'bg-grey-2',
             message: 'Use mortgage or bridge but not both',
-            timeout: 5
+            timeout: 2000
           })
           this.mortgage.usemortgage = false
         }
@@ -184,7 +184,7 @@ export default defineComponent({
           Notify.create({
             color: 'bg-grey-2',
             message: 'Use mortgage or bridge but not both',
-            timeout: 5
+            timeout: 2000
           })
           this.bridge.usebridge = false
         }

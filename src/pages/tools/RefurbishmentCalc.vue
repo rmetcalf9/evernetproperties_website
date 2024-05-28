@@ -62,7 +62,7 @@ export default defineComponent({
           Notify.create({
             color: 'bg-grey-2',
             message: 'Add floorplans before viewing',
-            timeout: 2
+            timeout: 2000
           })
           return
         }

@@ -39,14 +39,14 @@ export default {
           Notify.create({
             color: 'bg-grey-2',
             message: 'Copied sucessfully',
-            timeout: 2
+            timeout: 2000
           })
         },
         "error": function (errmsg) {
           Notify.create({
             color: 'bg-grey-2',
             message: errmsg,
-            timeout: 2
+            timeout: 2000
           })
         }
       }
