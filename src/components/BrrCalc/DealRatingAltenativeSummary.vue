@@ -4,7 +4,7 @@
   label="Alternative summary format"
 >
   <div>
-    This is another way of viewing the same numbers that is commonly used. I have included this for comparison.
+    This is another way of viewing the project numbers that is commonly used. I have included this for comparison.
     <table class="alternativetable">
       <thead>
         <tr>

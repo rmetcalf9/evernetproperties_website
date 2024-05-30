@@ -11,64 +11,12 @@
       <div class="text-h5">Profit/Loss</div>
       <div>Compare what we have put into the deal vs what we get out of it. These calculations won't account for time invested or the risk taken on in the project</div>
       <div class="text-h5">Total cash in: {{ format_currency(finance_totalmoneyneeded.worst) }} - {{ format_currency(finance_totalmoneyneeded.best) }} Worst - Best</div>
-      <q-markup-table>
-        <thead>
-          <tr>
-            <th class="text-left">Value after Project</th>
-            <th class="text-center worstcasetablecell">Worst case</th>
-            <th class="text-center">Best case</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="text-left">Equity left in property</td>
-            <td class="text-right worstcasetablecell">{{ format_currency(amount_equity_left_in.worst) }} ({{ percent_left_in.worst }}%)</td>
-            <td class="text-right">{{ format_currency(amount_equity_left_in.best) }} ({{ percent_left_in.best }}%)</td>
-          </tr>
-          <tr>
-            <td class="text-left">Cash at end</td>
-            <td class="text-right worstcasetablecell">{{ format_currency(deal_summary_final_bal.worst) }}</td>
-            <td class="text-right">{{ format_currency(deal_summary_final_bal.best) }}</td>
-          </tr>
-          <tr>
-            <th class="text-left">Total End Value</th>
-            <th class="text-right worstcasetablecell">{{ format_currency(total_end_value.worst) }}</th>
-            <th class="text-right totaltablecell">{{ format_currency(total_end_value.best) }}</th>
-          </tr>
-        </tbody>
-      </q-markup-table>
-      &nbsp;
-      <q-markup-table>
-        <thead>
-          <tr>
-            <th class="text-left"></th>
-            <th class="text-center worstcasetablecell">Worst case</th>
-            <th class="text-center">Best case</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th class="text-left">Profit</th>
-            <th class="text-right worstcasetablecell totaltablecell">{{ format_currency(profit.worst) }}</th>
-            <th class="text-right totaltablecell">{{ format_currency(profit.best) }}</th>
-          </tr>
-          <tr>
-            <th class="text-left">ROI<br>(Over project duration)</th>
-            <th class="text-right worstcasetablecell totaltablecell">{{ roi.worst.toFixed(1) }}%</th>
-            <th class="text-right totaltablecell">{{ roi.best.toFixed(1) }}%</th>
-          </tr>
-          <tr>
-            <th class="text-left">Annual ROI<br>(12 month ROI for comparison)</th>
-            <th class="text-right worstcasetablecell totaltablecell">{{ annualroi.worst.toFixed(1) }}%<br>({{this.refurbmonths.worst}} months)</th>
-            <th class="text-right totaltablecell">{{ annualroi.best.toFixed(1) }}%<br>({{this.refurbmonths.best}} months)</th>
-          </tr>
-          <tr>
-            <th class="text-left">Money left in (Cash in - total pulled out)</th>
-            <th class="text-right worstcasetablecell totaltablecell">{{ format_currency(-1 * this.cash_out_of_deal_minus_cash_in.worst) }}</th>
-            <th class="text-right totaltablecell">{{ format_currency(-1 * this.cash_out_of_deal_minus_cash_in.best) }}</th>
-          </tr>
-        </tbody>
-      </q-markup-table>
+
+      <dealRatingCompareDoneup
+        :purchaserange="purchaserange"
+        :refurb_cost_total="refurb_cost_total"
+        :gdv_total="gdv_total"
+      />
     </q-card-section>
     <q-card-section>
       <dealRatingAlternativeSummary
@@ -96,6 +44,7 @@ import { useQuasar } from 'quasar'
 import utils from '../utils.js'
 
 import dealRatingAlternativeSummary from './DealRatingAltenativeSummary.vue'
+import dealRatingCompareDoneup from './DealRatingCompareDoneup.vue'
 import FeatureTable from '../CommonCalcComponents/FeatureTable.vue'
 import InvalidMessage from '../InvalidMessage.vue'
 
@@ -105,7 +54,8 @@ export default defineComponent({
   components: {
     dealRatingAlternativeSummary,
     FeatureTable,
-    InvalidMessage
+    InvalidMessage,
+    dealRatingCompareDoneup
   },
   data () {
     return {
