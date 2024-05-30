@@ -69,6 +69,7 @@
         This is based on a repayment mortgage.
         <div>Amount Borrowed: {{ format_currency(mortgage_amount_borrowed.worst) }} - {{ format_currency(mortgage_amount_borrowed.best) }}</div>
         <div>Monthly Repayments: {{ format_currency(mortgage_monthly_payment.worst) }} - {{ format_currency(mortgage_monthly_payment.best) }}</div>
+        <div>Arrangement Fee: {{ format_currency(mortgage.arrangementfee) }}</div>
       </div>
     </q-card-section>
     <q-card-section>
@@ -139,7 +140,8 @@ export default defineComponent({
         ltv: {
           min: 75,
           max: 75
-        }
+        },
+        arrangementfee: 1500
       },
       loans: []
     }
@@ -265,8 +267,8 @@ export default defineComponent({
       }
       if (this.mortgage.usemortgage) {
         return {
-          worst: (this.totalexpenditure.max + this.mortgage_intrest_payment_total.worst) - (this.mortgage_amount_borrowed.worst + total_loans),
-          best: (this.totalexpenditure.min + this.mortgage_intrest_payment_total.best) - (this.mortgage_amount_borrowed.best + total_loans)
+          worst: (this.totalexpenditure.max + this.mortgage_intrest_payment_total.worst) - (this.mortgage_amount_borrowed.worst + total_loans + this.mortgage.arrangementfee),
+          best: (this.totalexpenditure.min + this.mortgage_intrest_payment_total.best) - (this.mortgage_amount_borrowed.best + total_loans + this.mortgage.arrangementfee)
         }
       }
       if (this.bridge.usebridge) {
@@ -294,6 +296,11 @@ export default defineComponent({
           name: 'Mortgage Payment',
           worst: this.mortgage_amount_borrowed.worst,
           best: this.mortgage_amount_borrowed.best
+        })
+        ret_val.push({
+          name: 'Mortgage Arrangement Fee',
+          worst: this.mortgage.arrangementfee,
+          best: this.mortgage.arrangementfee
         })
       }
       if (this.bridge.usebridge) {

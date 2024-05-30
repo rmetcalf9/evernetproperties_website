@@ -5,8 +5,7 @@
       <div class="text-subtitle2">Other costs to be considered</div>
     </q-card-section>
     <q-card-section>
-      <div class="text-h6">Fees: {{ format_currency(fees.min) }} - {{ format_currency(fees.max) }}</div>
-      <div>4% of purchase price to cover solicitors fees, arrangement etc.</div>
+      <div class="text-h6">Solicitors Fees: {{ format_currency(fees.min) }} - {{ format_currency(fees.max) }}</div>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Auction</div>
@@ -48,7 +47,7 @@
         :options="survey.typeoptions"
         inline
       />
-      <div>Survey cost: {{ surveyfeetext }}</div>
+      <div>Survey cost: {{ surveyfeetext }} (Based on stored ranges for this purchase cost.)</div>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Total: {{ format_currency(total.min) }} - {{ format_currency(total.max) }}</div>
@@ -253,8 +252,8 @@ export default defineComponent({
     },
     fees () {
       return {
-        min: this.purchaserange.min * 0.04,
-        max: this.purchaserange.max * 0.04
+        min: 2300,
+        max: 2300
       }
     },
     total () {
