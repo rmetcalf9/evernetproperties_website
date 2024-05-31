@@ -45,7 +45,14 @@
     <q-footer elevated class="bg-grey-7 text-white">
       <div class="footer row">
         <div class="left_footer col-grow"><router-link to="/privacy" class="toolbar">Privacy Policy</router-link></div>
-        <div class="right_footer">{{ copyright }}</div>
+        <div class="right_footer">
+          {{ copyright }}
+          <q-tooltip>
+            <table>
+              <tr><td>Connection: {{ connectionState }}</td></tr>
+            </table>
+          </q-tooltip>
+        </div>
       </div>
     </q-footer>
   </q-layout>
@@ -56,8 +63,17 @@ import { defineComponent, ref } from 'vue'
 import { Notify, Cookies } from 'quasar'
 import common from './common.js'
 
+import { useBackendConnectionStore } from 'stores/backend_connection'
+
 export default defineComponent({
   name: 'MainLayout',
+  setup () {
+    const backend_connection_store = useBackendConnectionStore()
+    return {
+      backend_connection_store
+    }
+  },
+
   data () {
     return {
       menu_items: common.get_menu_items()
@@ -66,6 +82,9 @@ export default defineComponent({
   computed: {
     copyright () {
       return '© ' + new Date().getFullYear() + ' All Right Reserved'
+    },
+    connectionState () {
+      return this.backend_connection_store.connectionStateString
     }
   },
   methods: {
@@ -108,6 +127,7 @@ export default defineComponent({
     }
   },
   mounted () {
+    this.backend_connection_store.connect()
     this.cookiePopup()
   }
 })
