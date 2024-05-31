@@ -1,4 +1,6 @@
 import { defineStore } from 'pinia'
+import axios from 'axios'
+
 // This store maanges the connection with the backend
 // It will:
 //   1. decide if this frontend is dev or prod.
@@ -8,6 +10,8 @@ import { defineStore } from 'pinia'
 //         2-> Connected
 //         3-> Failed to connect
 //    TODO Add logged in to this
+
+const backend_endpoint = 'https://api.metcarob.com/property_backend/v0'
 
 // https://www.codecademy.com/resources/docs/javascript/enums
 const ConnectionState = Object.freeze({
@@ -62,8 +66,31 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         // Silently ignore
         return
       }
+      var config = {
+        method: 'GET',
+        url: backend_endpoint + '/public/api/info/serverinfo'
+      }
+      axios(config).then(
+        (response) => {
+          this._connection_complete_success(response)
+        },
+        (response) => {
+          this._connection_complete_fail(response)
+        }
+      )
+
+      // this.connection_state.state = ConnectionState.failed
+      // this.connection_state.error = 'Not Implemented'
+      // this.connection_state.server_info_response = {}
+    },
+    _connection_complete_success (response) {
+      this.connection_state.state = ConnectionState.connected
+      this.connection_state.error = ''
+      this.connection_state.server_info_response = response
+    },
+    _connection_complete_fail (response) {
       this.connection_state.state = ConnectionState.failed
-      this.connection_state.error = 'Not Implemented'
+      this.connection_state.error = JSON.stringify(response)
       this.connection_state.server_info_response = {}
     },
     increment () {
