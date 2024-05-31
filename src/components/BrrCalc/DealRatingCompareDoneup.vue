@@ -12,19 +12,9 @@
       </thead>
       <tbody>
         <tr>
-          <td class="text-left alternativetablecell">Purchase</td>
-          <td class="text-right alternativetablecell worstcasetablecell">{{ format_currency(purchaserange.max) }}</td>
-          <td class="text-right alternativetablecell">{{ format_currency(purchaserange.min) }}</td>
-        </tr>
-        <tr>
-          <td class="text-left alternativetablecell">Refurb</td>
-          <td class="text-right alternativetablecell worstcasetablecell">{{ format_currency(refurb_cost_total.max) }}</td>
-          <td class="text-right alternativetablecell">{{ format_currency(refurb_cost_total.min) }}</td>
-        </tr>
-        <tr>
-          <td class="text-left alternativetablecell totaltablecell">Total</td>
-          <td class="text-right alternativetablecell worstcasetablecell totaltablecell">{{ format_currency(total_spent.worst) }}</td>
-          <td class="text-right alternativetablecell totaltablecell">{{ format_currency(total_spent.best) }}</td>
+          <td class="text-left alternativetablecell">Purchase + Refurb</td>
+          <td class="text-right alternativetablecell worstcasetablecell">{{ format_currency(total_spent.worst) }}</td>
+          <td class="text-right alternativetablecell">{{ format_currency(total_spent.best) }}</td>
         </tr>
         <tr>
           <td class="text-left alternativetablecell">End Value</td>
