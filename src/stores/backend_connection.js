@@ -32,14 +32,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       state: ConnectionState.notconnected,
       error: '',
       server_info_response: {}
-    },
-    counter: 0
+    }
   }),
 
   getters: {
-    doubleCount (state) {
-      return state.counter * 2
-    },
     connectionStateString (state) {
       let stateText = getEnumText(ConnectionState, state.connection_state.state)
       if (state.connection_state.state === ConnectionState.failed) {
@@ -92,9 +88,6 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       this.connection_state.state = ConnectionState.failed
       this.connection_state.error = JSON.stringify(response)
       this.connection_state.server_info_response = {}
-    },
-    increment () {
-      this.counter++
     }
   }
 })
