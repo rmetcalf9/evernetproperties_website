@@ -107,11 +107,18 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       this.connection_state.server_info_response = {}
     },
     login () {
+      // https://developers.google.com/identity/gsi/web/reference/js-reference
       this.connection_state.state = ConnectionState.logininprogress
       const TTT = this
-      setTimeout(function () {
-        TTT.connection_state.state = ConnectionState.loggedin
-      }, 1000)
+
+       window.google.accounts.id.initialize({
+        client_id: '954557855733-9fovnaaj81f4cpbceqfpn72i2e8oksaa.apps.googleusercontent.com',
+        callback: (tokenResponse) => {
+          console.log('SSS', tokenResponse)
+          TTT.connection_state.state = ConnectionState.loggedin
+        }
+      });
+      window.google.accounts.id.prompt();
     },
     logout () {
       this.connection_state.state = ConnectionState.connected
