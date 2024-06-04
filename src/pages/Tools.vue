@@ -1,6 +1,8 @@
 <template>
   <q-page class="flex flex-center">
     <div>
+      <LoginButton
+      />
       <h3 style="margin: 0px;">Tools</h3>
       Useful tools and calculators for property tasks.
       <div class="row">
@@ -72,9 +74,13 @@
 
 <script>
 import { defineComponent } from 'vue'
+import LoginButton from '../components/LoginButton.vue'
 
 export default defineComponent({
   name: 'ToolsPage',
+  components: {
+    LoginButton,
+  },
   data () {
     return {
     }

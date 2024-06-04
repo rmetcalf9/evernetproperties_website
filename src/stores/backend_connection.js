@@ -16,9 +16,11 @@ const backend_endpoint = 'https://api.metcarob.com/property_backend/v0'
 // https://www.codecademy.com/resources/docs/javascript/enums
 const ConnectionState = Object.freeze({
   notconnected: 0,
-  connecting: 2,
-  connected: 3,
-  failed: 4
+  connecting: 1,
+  connected: 2,
+  failed: 3,
+  logininprogress: 4,
+  loggedin: 5
 });
 function getEnumText(enum_name, value) {
   return Object.keys(enum_name).filter(function (x) {
@@ -42,6 +44,21 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         stateText += ' (' + state.connection_state.error + ')'
       }
       return stateText
+    },
+    isConnected (state) {
+      if (state.connection_state.state === ConnectionState.notconnected) {
+        return false
+      }
+      if (state.connection_state.state === ConnectionState.connecting) {
+        return false
+      }
+      return true
+    },
+    isLogininprogress (state) {
+      return state.connection_state.state === ConnectionState.logininprogress
+    },
+    isLoggedin (state) {
+      return state.connection_state.state === ConnectionState.loggedin
     }
   },
 
@@ -88,6 +105,16 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       this.connection_state.state = ConnectionState.failed
       this.connection_state.error = JSON.stringify(response)
       this.connection_state.server_info_response = {}
+    },
+    login () {
+      this.connection_state.state = ConnectionState.logininprogress
+      const TTT = this
+      setTimeout(function () {
+        TTT.connection_state.state = ConnectionState.loggedin
+      }, 1000)
+    },
+    logout () {
+      this.connection_state.state = ConnectionState.connected
     }
   }
 })
