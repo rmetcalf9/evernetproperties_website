@@ -38,12 +38,17 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
   }),
 
   getters: {
+    frontendInstance (state) {
+      let url = new URL(window.location.href)
+      if (url.host === 'evernetproperties.com') return 'prod'
+      return 'dev'
+    },
     connectionStateString (state) {
       let stateText = getEnumText(ConnectionState, state.connection_state.state)
       if (state.connection_state.state === ConnectionState.failed) {
         stateText += ' (' + state.connection_state.error + ')'
       }
-      return stateText
+      return stateText + ' (' + this.frontendInstance + ')'
     },
     isConnected (state) {
       if (state.connection_state.state === ConnectionState.notconnected) {
@@ -109,16 +114,33 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     login () {
       // https://developers.google.com/identity/gsi/web/reference/js-reference
       this.connection_state.state = ConnectionState.logininprogress
-      const TTT = this
-
        window.google.accounts.id.initialize({
         client_id: '954557855733-9fovnaaj81f4cpbceqfpn72i2e8oksaa.apps.googleusercontent.com',
-        callback: (tokenResponse) => {
-          console.log('SSS', tokenResponse)
-          TTT.connection_state.state = ConnectionState.loggedin
-        }
+        callback: this._login_callback_from_google
       });
       window.google.accounts.id.prompt();
+    },
+    _login_callback_from_google (tokenResponse) {
+      const data = {
+          'frontend_instance': this.frontendInstance,
+          'google_response': tokenResponse
+      }
+      var config = {
+        method: 'POST',
+        url: backend_endpoint + '/public/api/login/login',
+        data: data
+      }
+      axios(config).then(
+        (response) => {
+          console.log('XXX', response)
+          this.connection_state.state = ConnectionState.loggedin
+        },
+        (response) => {
+          // error response
+          console.log('Error resposne from login - ', response.response)
+          this.connection_state.state = ConnectionState.connected
+        }
+      )
     },
     logout () {
       this.connection_state.state = ConnectionState.connected
