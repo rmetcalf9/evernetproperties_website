@@ -10,9 +10,9 @@
     </div>
     <div v-if="isLoggedin">
       <q-btn
-        @click="logout"
+        @click="clickProfile"
         color="primary"
-        label="Logout"
+        label="User Profile"
         class = "float-right q-ml-xs"
       ></q-btn>
     </div>
@@ -52,8 +52,8 @@ export default defineComponent({
     autoriseWithGoogle () {
       this.backend_connection_store.login()
     },
-    logout () {
-      this.backend_connection_store.logout()
+    clickProfile () {
+      this.$router.push("/profile")
     }
   }
 })

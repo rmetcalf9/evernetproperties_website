@@ -34,7 +34,8 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       state: ConnectionState.notconnected,
       error: '',
       server_info_response: {}
-    }
+    },
+    user_profile: {}
   }),
 
   getters: {
@@ -122,8 +123,8 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     },
     _login_callback_from_google (tokenResponse) {
       const data = {
-          'frontend_instance': this.frontendInstance,
-          'google_response': tokenResponse
+        'frontend_instance': this.frontendInstance,
+        'google_response': tokenResponse
       }
       var config = {
         method: 'POST',
@@ -132,8 +133,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       }
       axios(config).then(
         (response) => {
-          console.log('XXX', response)
-          this.connection_state.state = ConnectionState.loggedin
+          this._login_complete_success(response)
         },
         (response) => {
           // error response
@@ -141,6 +141,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
           this.connection_state.state = ConnectionState.connected
         }
       )
+    },
+    _login_complete_success (response) {
+      this.connection_state.state = ConnectionState.loggedin
+      this.user_profile = response.data.user_profile
     },
     logout () {
       this.connection_state.state = ConnectionState.connected
