@@ -13,6 +13,15 @@ import axios from 'axios'
 
 const backend_endpoint = 'https://api.metcarob.com/property_backend/v0'
 
+const api_prefixes = {
+  infoAPIPrefix: { url: '/api/public/info', add_token: false },
+  loginAPIPrefix: { url: '/api/public/login', add_token: false },
+  privateUserAPIPrefix: { url: '/api/private/user', add_token: true }
+}
+
+// TODO Process message use this.api_calls_to_make.shift
+
+
 // https://www.codecademy.com/resources/docs/javascript/enums
 const ConnectionState = Object.freeze({
   notconnected: 0,
@@ -35,7 +44,15 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       error: '',
       server_info_response: {}
     },
-    user_profile: {}
+    user_profile: {
+      pims: {
+        state: ''
+      }
+    },
+    api_caller: {
+      api_calls_to_make: [],
+      running: false
+    }
   }),
 
   getters: {
@@ -148,6 +165,34 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     },
     logout () {
       this.connection_state.state = ConnectionState.connected
+    },
+    call_api ({apiprefix, url, method, data, callback}) {
+      this.api_caller.api_calls_to_make.push({apiprefix, url, method, data, callback})
+      if (!this.api_caller.running) {
+        this.api_caller.running = true
+        this.process_all_api_calls()
+      }
+    },
+    process_all_api_calls () {
+      const TTT = this
+      if (this.api_caller.api_calls_to_make.length === 0) {
+        this.api_caller.running = false
+        return
+      }
+      const cur_api_call_to_make = this.api_caller.api_calls_to_make.shift()
+      const callback = {
+        ok: function (response) {
+          cur_api_call_to_make.callback.ok(response)
+          TTT.process_all_api_calls()
+        },
+        error: function (response) {
+          cur_api_call_to_make.callback.error(response)
+          TTT.process_all_api_calls()
+        }
+      }
+      console.log('TODO CALL ', cur_api_call_to_make)
+      callback.ok({})
+
     }
   }
 })
