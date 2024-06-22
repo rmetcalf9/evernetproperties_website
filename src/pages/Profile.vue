@@ -145,7 +145,7 @@ export default defineComponent({
       this.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
         url: '/me/pimsdetails',
-        method: 'post',
+        method: 'POST',
         data: data,
         callback: callback
       })

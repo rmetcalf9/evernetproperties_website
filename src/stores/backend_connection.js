@@ -14,9 +14,9 @@ import axios from 'axios'
 const backend_endpoint = 'https://api.metcarob.com/property_backend/v0'
 
 const api_prefixes = {
-  infoAPIPrefix: { url: '/api/public/info', add_token: false },
-  loginAPIPrefix: { url: '/api/public/login', add_token: false },
-  privateUserAPIPrefix: { url: '/api/private/user', add_token: true }
+  infoAPIPrefix: { url: '/public/api/info', add_token: false },
+  loginAPIPrefix: { url: '/public/api/login', add_token: false },
+  privateUserAPIPrefix: { url: '/private/api/user', add_token: true }
 }
 
 // TODO Process message use this.api_calls_to_make.shift
@@ -48,6 +48,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       pims: {
         state: ''
       }
+    },
+    login_info: {
+      login_token: '',
+      refresh_token: ''
     },
     api_caller: {
       api_calls_to_make: [],
@@ -104,7 +108,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       }
       var config = {
         method: 'GET',
-        url: backend_endpoint + '/public/api/info/serverinfo'
+        url: backend_endpoint + api_prefixes.infoAPIPrefix.url + '/serverinfo'
       }
       axios(config).then(
         (response) => {
@@ -145,7 +149,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       }
       var config = {
         method: 'POST',
-        url: backend_endpoint + '/public/api/login/login',
+        url: backend_endpoint + api_prefixes.loginAPIPrefix.url + '/login',
         data: data
       }
       axios(config).then(
@@ -162,6 +166,8 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     _login_complete_success (response) {
       this.connection_state.state = ConnectionState.loggedin
       this.user_profile = response.data.user_profile
+      this.login_info.login_token = response.data.login_token
+      this.login_info.refresh_token = response.data.refresh_token
     },
     logout () {
       this.connection_state.state = ConnectionState.connected
@@ -187,12 +193,38 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         },
         error: function (response) {
           cur_api_call_to_make.callback.error(response)
+          // TODO Test for 401 response and try refreshing the token
           TTT.process_all_api_calls()
         }
       }
-      console.log('TODO CALL ', cur_api_call_to_make)
-      callback.ok({})
-
+      var config = {
+        method: cur_api_call_to_make.method,
+        url: backend_endpoint + api_prefixes[cur_api_call_to_make.apiprefix].url + cur_api_call_to_make.url,
+        data: cur_api_call_to_make.data,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+      if (api_prefixes[cur_api_call_to_make.apiprefix].add_token) {
+        if (!this.isLoggedin) {
+          callback.error({
+            message: 'Need to be logged in to make this call'
+          })
+          return
+        }
+        // config.headers['jwt-auth-token'] = jwtToken
+        // Kong can only read Authorization header- https://docs.konghq.com/hub/kong-inc/jwt/
+        config.headers.Authorization = 'Bearer ' + this.login_info.login_token
+      }
+      axios(config).then(
+        (response) => {
+          callback.ok(response)
+        },
+        (response) => {
+          // error response
+          callback.error(response)
+        }
+      )
     }
   }
 })
