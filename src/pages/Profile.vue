@@ -17,17 +17,37 @@
          <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'WAITINGVERIFICATION'">
-          <div>First Name: {{ user_profile.email }}</div>
-          <div>Last Name: {{ user_profile.email }}</div>
-          <div>PIMS Number: {{ user_profile.email }}</div>
+          <div>PIMS details entered but not verified. To verify please send a message in the Samuel Leeds Academy chat with the following text:</div>
+          <div>Robert - Please verify my PIMS {{ user_profile.pims.first_name }}/{{ user_profile.pims.last_name }} ({{ user_profile.pims.number }}) <a :href="'https://evernetproperties.com/#/v/' + user_profile.pims.verify_code">https://evernetproperties.com/#/v/{{ user_profile.pims.verify_code }}</a></div>
+          <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
+        </div>
+        <div v-if="user_profile.pims.state === 'VERIFIED'">
+          <div><h5>PIMS member</h5></div>
+          <div>{{ user_profile.pims.first_name }} {{ user_profile.pims.last_name }} - PIMS number {{ user_profile.pims.number }}</div>
           <div>Verified: <q-icon name="check_box" color="green" size="32px" /></div>
         </div>
+        <div v-if="user_profile.pims.state === 'VERIFICATIONFAILED'">
+          <div>Extra site features are available to Academy/PIMS members. PIMS Membership details verification failed</div>
+          <div align="center">
+           <q-btn label="Retry entering PIMS information" color="primary" @click="clickenterpimsinformation" />
+          </div>
+          <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
+        </div>
       </div>
-      <q-btn
-        @click="logout"
-        color="secondary"
-        label="Logout"
-      ></q-btn>
+      <div class="bottom-buttons">
+        <q-btn
+          class="bottom-button"
+          @click="logout"
+          color="secondary"
+          label="Logout"
+        ></q-btn>
+        <q-btn
+          class="bottom-button"
+          @click="deleteaccount"
+          color="red"
+          label="Delete my account"
+        ></q-btn>
+      </div>
     </div>
     <q-dialog v-model="enterpimsdialog.visible" persistent>
       <q-card>
@@ -63,6 +83,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { Notify } from 'quasar'
 
 export default defineComponent({
   name: 'ProfilePage',
@@ -105,13 +126,17 @@ export default defineComponent({
     },
     pimsinfo () {
       const TTT = this
+      let ok_prompt = 'Enter PIMS details'
+      if (this.user_profile.pims.state==='WAITINGVERIFICATION') {
+        ok_prompt = 'Change PIMS details'
+      }
       this.$q.dialog({
         title: 'PIMS Membership Details',
         message: 'Extra site features are available to users who have a verified PIMS membership.',
         html: true,
         ok: {
           push: true,
-          label: 'Enter PIMS details',
+          label: ok_prompt,
           color: 'secondary'
         },
         cancel: {
@@ -120,7 +145,7 @@ export default defineComponent({
           color: 'primary'
         }
       }).onOk(() => {
-        TTT.enterpimsdialog.visible = true
+        TTT.clickenterpimsinformation()
       })
     },
     enterpimsdialogclick () {
@@ -149,12 +174,78 @@ export default defineComponent({
         data: data,
         callback: callback
       })
+      this.enterpimsdialog.visible = false
     },
     submitpimsinfo_success (response) {
-      console.log('TODO success', response)
+      this.backend_connection_store.update_user_profile({user_profile: response.data})
+      Notify.create({
+        color: 'bg-grey-2',
+        message: 'New PIMS details saved - Please request Verification',
+        timeout: 2000
+      })
+
     },
     submitpimsinfo_fail (response) {
-      console.log('TODO fail', response)
+      console.log('ERROR failed to update PIMS information ', response)
+      Notify.create({
+        color: 'bg-grey-2',
+        message: 'Failed to update PIMS information ' + response,
+        timeout: 2000
+      })
+    },
+    deleteaccount () {
+      this.$q.dialog({
+        title: 'Delete Account',
+        message: 'Deleting your account will wipe all your user data from our system. This inclues all saved properties. Are you sure? (Type DELETE below to confirm)',
+        html: false,
+        ok: {
+          push: true,
+          label: 'Delete',
+          color: 'red'
+        },
+        cancel: {
+          push: true,
+          label: 'Cancel',
+          color: 'primary'
+        },
+        prompt: {
+          model: '',
+          type: 'text' // optional
+        },
+      }).onOk((data) => {
+        if (data.trim() !== 'DELETE') {
+          Notify.create({
+            color: 'red',
+            message: 'Failed - You must type DELETE in the text box',
+            timeout: 2000
+          })
+          return
+        }
+        const callback = {
+          ok: function (response) {
+            this.logout()
+            Notify.create({
+              color: 'bg-grey-2',
+              message: 'User account deleted',
+              timeout: 2000
+            })
+          },
+          error: function (response) {
+            Notify.create({
+              color: 'bg-grey-2',
+              message: 'Account deletion failed ' + response,
+              timeout: 2000
+            })
+          }
+        }
+        this.backend_connection_store.call_api({
+          apiprefix: 'privateUserAPIPrefix',
+          url: '/me/pimsdetails',
+          method: 'POST',
+          data: data,
+          callback: callback
+        })
+      })
     }
   },
   mounted () {
@@ -170,7 +261,18 @@ h4 {
   margin-top: 35px;
   margin-bottom: 0px;
 }
+h5 {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
 .section {
   margin-bottom: 20px;
+}
+.bottom-buttons {
+  margin-bottom: 20px;
+}
+.bottom-button {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 </style>

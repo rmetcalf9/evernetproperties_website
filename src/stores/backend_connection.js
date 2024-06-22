@@ -172,6 +172,9 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     logout () {
       this.connection_state.state = ConnectionState.connected
     },
+    update_user_profile ({user_profile}) {
+      this.user_profile = user_profile
+    },
     call_api ({apiprefix, url, method, data, callback}) {
       this.api_caller.api_calls_to_make.push({apiprefix, url, method, data, callback})
       if (!this.api_caller.running) {
@@ -180,20 +183,40 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       }
     },
     process_all_api_calls () {
-      const TTT = this
       if (this.api_caller.api_calls_to_make.length === 0) {
         this.api_caller.running = false
         return
       }
       const cur_api_call_to_make = this.api_caller.api_calls_to_make.shift()
+      this.process_all_api_calls_make_individual_call({cur_api_call_to_make: cur_api_call_to_make, refresh_tried: false})
+    },
+    process_all_api_calls_make_individual_call({cur_api_call_to_make, refresh_tried}) {
+      const TTT = this
       const callback = {
         ok: function (response) {
           cur_api_call_to_make.callback.ok(response)
           TTT.process_all_api_calls()
         },
         error: function (response) {
+          // Test for 401 response and try refreshing the token
+          if (response.response.status === 401) {
+            if (!refresh_tried) {
+              console.log('API Error - got 401 trying to update refresh token')
+              TTT.get_new_token_using_refresh_token({
+                success_fn: function () {
+                  TTT.process_all_api_calls_make_individual_call({
+                    cur_api_call_to_make: cur_api_call_to_make,
+                    refresh_tried: true
+                  })
+                }
+              })
+              // Execution continuing with get_new_token_using_refresh_token
+              // so no need to call process_all_api_calls.
+              return
+            }
+          }
+          console.log('error response', response.response.status)
           cur_api_call_to_make.callback.error(response)
-          // TODO Test for 401 response and try refreshing the token
           TTT.process_all_api_calls()
         }
       }
@@ -225,6 +248,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
           callback.error(response)
         }
       )
+    },
+    get_new_token_using_refresh_token({success_fn}) {
+      console.log('TODO - actual refresh just doing success fn')
+      success_fn()
     }
   }
 })
