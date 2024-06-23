@@ -2,10 +2,15 @@
   <q-page class="flex flex-center">
     <div rows>
       <h3 style="margin: 0px;">User Profile</h3>
-      <h4>Basic</h4>
+      <h4>Details</h4>
       <div class="section">
         <div>User: {{ user_profile.name }}</div>
         <div>Email: {{ user_profile.email }}</div>
+        <div>Roles:
+          <ul>
+          <div v-for="role in user_profile.roles" :key=role><li>{{ role }}</li></div>
+          </ul>
+        </div>
       </div>
       <div class="section">
         <h4>PIMS Membership <q-btn round dense flat icon="info" @click="pimsinfo" /></h4>
