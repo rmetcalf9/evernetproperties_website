@@ -37,6 +37,26 @@ function getEnumText(enum_name, value) {
   })[0]
 }
 
+function getEmptyUserProfile() {
+  return {
+    pims: {
+      state: ''
+    }
+  }
+}
+function getEmptyLoginInfo() {
+  return {
+    login_token: '',
+    refresh_token: ''
+  }
+}
+function getEmptyApiCaller() {
+  return {
+    api_calls_to_make: [],
+    running: false
+  }
+}
+
 export const useBackendConnectionStore = defineStore('backendConnectionStore', {
   state: () => ({
     connection_state: {
@@ -44,19 +64,9 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       error: '',
       server_info_response: {}
     },
-    user_profile: {
-      pims: {
-        state: ''
-      }
-    },
-    login_info: {
-      login_token: '',
-      refresh_token: ''
-    },
-    api_caller: {
-      api_calls_to_make: [],
-      running: false
-    }
+    user_profile: getEmptyUserProfile(),
+    login_info: getEmptyLoginInfo(),
+    api_caller: getEmptyApiCaller()
   }),
 
   getters: {
@@ -171,6 +181,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     },
     logout () {
       this.connection_state.state = ConnectionState.connected
+      this.user_profile = getEmptyUserProfile()
+      this.login_info = getEmptyLoginInfo(),
+      this.api_caller = getEmptyApiCaller()
+
     },
     update_user_profile ({user_profile}) {
       this.user_profile = user_profile
@@ -250,8 +264,32 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       )
     },
     get_new_token_using_refresh_token({success_fn}) {
-      console.log('TODO - actual refresh just doing success fn')
-      success_fn()
+      const data = {
+        'frontend_instance': this.frontendInstance,
+        'user_id': this.user_profile.id,
+        'refresh_token': this.login_info.refresh_token
+      }
+      var config = {
+        method: 'POST',
+        url: backend_endpoint + api_prefixes.loginAPIPrefix.url + '/refresh',
+        data: data
+      }
+      const TTT = this
+      axios(config).then(
+        (response) => {
+          // Write back new tokens
+          TTT.user_profile = response.data.user_profile
+          TTT.login_info.login_token = response.data.login_token
+          TTT.login_info.refresh_token = response.data.refresh_token
+          success_fn()
+        },
+        (response) => {
+          // error response
+          console.log('Refresh token failed - logging out user')
+          TTT.api_caller.running = false
+          TTT.logout()
+        }
+      )
     }
   }
 })

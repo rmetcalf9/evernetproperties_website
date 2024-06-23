@@ -18,7 +18,7 @@
         </div>
         <div v-if="user_profile.pims.state === 'WAITINGVERIFICATION'">
           <div>PIMS details entered but not verified. To verify please send a message in the Samuel Leeds Academy chat with the following text:</div>
-          <div>Robert - Please verify my PIMS {{ user_profile.pims.first_name }}/{{ user_profile.pims.last_name }} ({{ user_profile.pims.number }}) <a :href="'https://evernetproperties.com/#/v/' + user_profile.pims.verify_code">https://evernetproperties.com/#/v/{{ user_profile.pims.verify_code }}</a></div>
+          <div>Robert - Please verify my PIMS {{ user_profile.pims.first_name }}/{{ user_profile.pims.last_name }} ({{ user_profile.pims.number }}) <a :href="'https://evernetproperties.com/#/v/' + user_profile.pims.verify_code" target="_new">https://evernetproperties.com/#/v/{{ user_profile.pims.verify_code }}</a></div>
           <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'VERIFIED'">
