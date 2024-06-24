@@ -16,7 +16,8 @@ const backend_endpoint = 'https://api.metcarob.com/property_backend/v0'
 const api_prefixes = {
   infoAPIPrefix: { url: '/public/api/info', add_token: false },
   loginAPIPrefix: { url: '/public/api/login', add_token: false },
-  privateUserAPIPrefix: { url: '/private/api/user', add_token: true }
+  privateUserAPIPrefix: { url: '/private/api/user', add_token: true },
+  privateAdminAPIPrefix: { url: '/private/api/admin', add_token: true }
 }
 
 // TODO Process message use this.api_calls_to_make.shift
