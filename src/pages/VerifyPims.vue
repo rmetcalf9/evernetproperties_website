@@ -109,7 +109,6 @@ export default defineComponent({
         const TTT = this
         const callback = {
           ok: function (response) {
-            console.log('SSSS OK')
             TTT.show_verify_block = true
             TTT.info_response = response.data
           },

@@ -104,12 +104,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         if (!TTT.isLoggedin) {
           return false
         }
-        console.log(state.user_profile)
-        return true
+        return state.user_profile.roles.includes(role)
       }
     }
   },
-
   actions: {
     connect () {
       if (this.connection_state.state === ConnectionState.connecting) {
