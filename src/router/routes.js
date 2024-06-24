@@ -15,6 +15,7 @@ const routes = [
       { path: 'tools/flipcalc', component: () => import('pages/tools/FlipCalc.vue') },
       { path: 'tools/simpleroicalc', component: () => import('pages/tools/SimpleRoiCalc.vue') },
       { path: 'profile', component: () => import('pages/Profile.vue') },
+      { path: 'v/:verifycode/:pimsnumber', component: () => import('pages/VerifyPims.vue') },
     ]
   },
   {

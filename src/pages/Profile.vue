@@ -17,9 +17,9 @@
         <div v-if="user_profile.pims.state === 'NOTENTERED'">
          <div>PIMS Membership details not entered - Extra site features are available to Academy/PIMS members.</div>
          <div align="center">
-          <q-btn label="Enter PIMS information" color="primary"  />
+          <q-btn label="Enter PIMS information" color="primary" @click="clickenterpimsinformation" />
           </div>
-         <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
+         <div>PIMS Membership verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'WAITINGVERIFICATION'">
           <div>PIMS details entered but not verified. To verify please send a message in the Samuel Leeds Academy chat with the following text:</div>
@@ -27,19 +27,19 @@
           <div class="pimstext" @click="clickcopypimsverfiylink"><div v-html="pimsverfiylink"></div>&nbsp;
           <q-icon class="float-right" name="content_copy" size="16px" />
           </div>
-          <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
+          <div>PIMS Membership verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'VERIFIED'">
           <div><h5>PIMS member</h5></div>
           <div>{{ user_profile.pims.first_name }} {{ user_profile.pims.last_name }} - PIMS number {{ user_profile.pims.number }}</div>
-          <div>Verified: <q-icon name="check_box" color="green" size="32px" /></div>
+          <div>PIMS Membership verified: <q-icon name="check_box" color="green" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'VERIFICATIONFAILED'">
           <div>Extra site features are available to Academy/PIMS members. PIMS Membership details verification failed</div>
           <div align="center">
            <q-btn label="Retry entering PIMS information" color="primary" @click="clickenterpimsinformation" />
           </div>
-          <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
+          <div>PIMS Membership verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
       </div>
       <div class="bottom-buttons">
@@ -123,18 +123,19 @@ export default defineComponent({
       return this.backend_connection_store.user_profile
     },
     pimsverfiylink () {
-      const url = 'https://evernetproperties.com/#/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
+      const url = window.location.origin + '/#/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
 
       return 'Robert - Please verify my PIMS ' + this.user_profile.pims.first_name + '/' + this.user_profile.pims.last_name + ' (' + this.user_profile.pims.number + ') <a href="' + url + '" target="_new">' + url + '</a>'
     }
   },
   methods: {
     clickcopypimsverfiylink () {
+      const TTT = this
       const callback = {
         ok: function (response) {
           Notify.create({
             color: 'bg-grey-2',
-            message: 'Copied text to clipboard' + this.pimsverfiylink,
+            message: 'Copied text to clipboard ' + TTT.pimsverfiylink,
             timeout: 2000
           })
         },
@@ -276,7 +277,7 @@ export default defineComponent({
         this.backend_connection_store.call_api({
           apiprefix: 'privateUserAPIPrefix',
           url: '/me/delete',
-          method: 'POST',
+          method: 'GET',
           data: data,
           callback: callback
         })

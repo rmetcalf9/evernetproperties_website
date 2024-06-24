@@ -96,6 +96,16 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     },
     isLoggedin (state) {
       return state.connection_state.state === ConnectionState.loggedin
+    },
+    hasRole (state) {
+      const TTT = this
+      return function ({role}) {
+        if (!TTT.isLoggedin) {
+          return false
+        }
+        console.log(state.user_profile)
+        return true
+      }
     }
   },
 
