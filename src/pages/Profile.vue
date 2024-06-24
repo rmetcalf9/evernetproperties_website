@@ -199,6 +199,7 @@ export default defineComponent({
       })
     },
     deleteaccount () {
+      const TTT = this
       this.$q.dialog({
         title: 'Delete Account',
         message: 'Deleting your account will wipe all your user data from our system. This inclues all saved properties. Are you sure? (Type DELETE below to confirm)',
@@ -228,7 +229,7 @@ export default defineComponent({
         }
         const callback = {
           ok: function (response) {
-            this.logout()
+            TTT.logout()
             Notify.create({
               color: 'bg-grey-2',
               message: 'User account deleted',
@@ -245,7 +246,7 @@ export default defineComponent({
         }
         this.backend_connection_store.call_api({
           apiprefix: 'privateUserAPIPrefix',
-          url: '/me/pimsdetails',
+          url: '/me/delete',
           method: 'POST',
           data: data,
           callback: callback
