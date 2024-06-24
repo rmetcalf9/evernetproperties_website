@@ -35,7 +35,6 @@ function format_percent (num) {
   return (num * 100).toFixed(2).toString() + '%'
 }
 
-
 export default {
   format_currency: format_currency,
   format_percent: format_percent

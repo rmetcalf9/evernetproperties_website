@@ -17,13 +17,16 @@
         <div v-if="user_profile.pims.state === 'NOTENTERED'">
          <div>PIMS Membership details not entered - Extra site features are available to Academy/PIMS members.</div>
          <div align="center">
-          <q-btn label="Enter PIMS information" color="primary" @click="clickenterpimsinformation" />
+          <q-btn label="Enter PIMS information" color="primary"  />
           </div>
          <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'WAITINGVERIFICATION'">
           <div>PIMS details entered but not verified. To verify please send a message in the Samuel Leeds Academy chat with the following text:</div>
-          <div>Robert - Please verify my PIMS {{ user_profile.pims.first_name }}/{{ user_profile.pims.last_name }} ({{ user_profile.pims.number }}) <a :href="'https://evernetproperties.com/#/v/' + user_profile.pims.verify_code" target="_new">https://evernetproperties.com/#/v/{{ user_profile.pims.verify_code }}</a></div>
+
+          <div class="pimstext" @click="clickcopypimsverfiylink"><div v-html="pimsverfiylink"></div>&nbsp;
+          <q-icon class="float-right" name="content_copy" size="16px" />
+          </div>
           <div>Verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'VERIFIED'">
@@ -89,6 +92,8 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
+import utils from '../utils.js'
+
 
 export default defineComponent({
   name: 'ProfilePage',
@@ -116,9 +121,33 @@ export default defineComponent({
     },
     user_profile () {
       return this.backend_connection_store.user_profile
+    },
+    pimsverfiylink () {
+      const url = 'https://evernetproperties.com/#/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
+
+      return 'Robert - Please verify my PIMS ' + this.user_profile.pims.first_name + '/' + this.user_profile.pims.last_name + ' (' + this.user_profile.pims.number + ') <a href="' + url + '" target="_new">' + url + '</a>'
     }
   },
   methods: {
+    clickcopypimsverfiylink () {
+      const callback = {
+        ok: function (response) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Copied text to clipboard' + this.pimsverfiylink,
+            timeout: 2000
+          })
+        },
+        error: function (response) {
+          Notify.create({
+            color: 'negative',
+            message: 'Copy to clipboard failed',
+            timeout: 2000
+          })
+        }
+      }
+      utils.copyTextToClipboard2(this.pimsverfiylink, callback)
+    },
     logout () {
       this.backend_connection_store.logout()
       this.$router.push("/tools")
@@ -280,5 +309,13 @@ h5 {
 .bottom-button {
   margin-left: 5px;
   margin-right: 5px;
+}
+.pimstext {
+  border: 1px;
+  border-color: black;
+  border-style: dashed;
+  padding: 5px;
+  background: lightgrey;
+  margin: 10px;
 }
 </style>
