@@ -149,7 +149,8 @@ export default defineComponent({
   text-align: center;
 }
 .bottom-sub-toolbar {
-
+  padding-left: 5px;
+  padding-right: 5px;
 }
 .sub-toolbar-item {
   padding-left: 5px;
