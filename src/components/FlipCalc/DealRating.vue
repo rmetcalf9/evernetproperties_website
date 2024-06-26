@@ -280,10 +280,6 @@ export default defineComponent({
 </script>
 
 <style>
-.maincard {
-  color: white;
-  background-color: grey;
-}
 th.worstcasetablecell {
   background-color: lightgrey;
 }

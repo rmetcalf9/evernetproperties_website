@@ -173,10 +173,6 @@ export default defineComponent({
 </script>
 
 <style>
-.maincard {
-  color: white;
-  background-color: grey;
-}
 .worstcasetablecell {
   background-color: lightgrey;
 }

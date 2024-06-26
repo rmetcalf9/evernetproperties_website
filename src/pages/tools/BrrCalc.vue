@@ -4,6 +4,9 @@
       <h1>Buy Refurbish Rent Refinance Calculator</h1>
       <div>This calculator can be used for calculating deal information for a Buy, Refurbish, Rent, Refinance project (BRRR). You can use this page to perform these calculations.</div>
       <div class="row">
+        <DealBasicInfo
+          ref="DealBasicInfo"
+        />
         <Vision
           ref="Vision"
         />
@@ -83,6 +86,7 @@ import Finance from '../../components/CommonCalcComponents/Finance.vue'
 import Refinance from '../../components/BrrCalc/Refinance.vue'
 import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import DealRating from '../../components/BrrCalc/DealRating.vue'
+import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
 
 export default defineComponent({
   name: 'CalcBrrToFlip',
@@ -96,7 +100,8 @@ export default defineComponent({
     Finance,
     Vision,
     DealRating,
-    Refinance
+    Refinance,
+    DealBasicInfo
   },
   data () {
     return {
@@ -251,4 +256,13 @@ h1 {
 .card-style {
   max-width: 500px;
 }
+.maincard {
+  color: white;
+  background-color: grey;
+}
+.featurecard {
+  color: white;
+  background-color: LightCoral;
+}
+
 </style>

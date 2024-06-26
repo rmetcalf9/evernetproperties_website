@@ -13,7 +13,6 @@
           :columns="table.columns"
           :rows="items"
           hide-bottom
-          v-model:pagination="pagination"
           :rows-per-page-options="[100]"
         >
           <template v-slot:header="props">
@@ -270,10 +269,6 @@ export default defineComponent({
 </script>
 
 <style>
-.maincard {
-  color: white;
-  background-color: grey;
-}
 th.worstcasetablecell {
   background-color: lightgrey;
 }
