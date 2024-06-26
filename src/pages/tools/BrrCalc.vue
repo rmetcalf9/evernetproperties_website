@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div class="main-page fit col wrap justify-center items-center content-center">
       <h1>Buy Refurbish Rent Refinance Calculator</h1>
-      <div>When working with a deal sourcer they will provide you with information about specific deals giving what the expected ROI and other figures for the investment will be. Part of the work the deal sourcer has done is research around each figure to justify how they have arrived at the expected ROI. You can use this page to perform these calculations.</div>
+      <div>This calculator can be used for calculating deal information for a Buy, Refurbish, Rent, Refinance project (BRRR). You can use this page to perform these calculations.</div>
       <div class="row">
         <Vision
           ref="Vision"

@@ -26,7 +26,9 @@
     </q-header>
 
     <q-page-container>
-      <router-view />
+      <div class="child_page_class">
+        <router-view />
+      </div>
       <div class="bottom-sub-toolbar bg-grey-5 fit column wrap justify-center items-center content-center text-white">
         <img
           alt="PIMS Logo"
@@ -187,5 +189,11 @@ a.toolbar {
 .right_footer {
   text-align: right;
   padding-right: 5px;
+}
+.child_page_class {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 </style>
