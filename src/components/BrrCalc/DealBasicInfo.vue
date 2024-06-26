@@ -1,10 +1,19 @@
 <template>
-  <q-card inline class="q-ma-sm card-style featurecard col-grow">
+  <q-card v-if="security_role_cansave" inline class="q-ma-sm card-style featurecard col-grow">
     <q-card-section>
       <div class="text-h6">Basic Information</div>
       <div class="text-subtitle2">Basic information about this project</div>
     </q-card-section>
     <q-card-section>
+      <div>
+        <q-select
+          v-model="patch"
+          :options="patch_list"
+          label="Patch"
+          @update:model-value="select_patch"
+          emit-value
+        />{{ patch }}
+      </div>
       <div><q-input filled clearable v-model="address" label="Address" /></div>
       <div>
         <q-input filled clearable v-model="postcode" label="Postcode">
@@ -31,6 +40,7 @@
 import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 import utils from '../../utils.js'
+import { useBackendConnectionStore } from 'stores/backend_connection'
 
 function uuidv4() {
   return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
@@ -40,14 +50,66 @@ function uuidv4() {
 
 export default defineComponent({
   name: 'DealBasicInfo',
+  setup () {
+    const backend_connection_store = useBackendConnectionStore()
+    return {
+      backend_connection_store
+    }
+  },
   data () {
     return {
+      patch: {},
       address: '',
       postcode: '',
       weblinks: []
     }
   },
+  computed: {
+    security_role_cansave () {
+      return this.backend_connection_store.security_role_cansave
+    },
+    patch_list () {
+      return [
+        {
+          id: '1',
+          label: 'Bridlington'
+        },
+        {
+          id: 'create',
+          label: 'Add...'
+        }
+      ]
+    }
+  },
   methods: {
+    select_patch (patch) {
+      if (patch.id==='create') {
+        const TTT = this
+        this.$q.dialog({
+          title: 'Add new patch',
+          message: 'Enter the name for the new patch',
+          html: false,
+          ok: {
+            push: true,
+            label: 'Ok',
+          },
+          cancel: {
+            push: true,
+            label: 'Cancel',
+          },
+          prompt: {
+            model: '',
+            type: 'text' // optional
+          }
+        }).onOk((data) => {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Not Implemented',
+            timeout: 2000
+          })
+        })
+      }
+    },
     delweblink (id) {
       console.log('TODO')
       this.weblinks = this.weblinks.filter(function (weblink) {

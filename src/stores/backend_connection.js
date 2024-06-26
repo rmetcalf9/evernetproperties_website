@@ -71,6 +71,12 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
   }),
 
   getters: {
+    security_role_cansave (state) {
+      if (!this.isLoggedin) {
+        return false
+      }
+      return this.hasRole({role: state.connection_state.server_info_response.data.Derived.security_role_cansave})
+    },
     frontendInstance (state) {
       let url = new URL(window.location.href)
       if (url.host === 'evernetproperties.com') return 'prod'
