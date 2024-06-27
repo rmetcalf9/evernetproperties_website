@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { Cookies } from 'quasar'
 
 // This store maanges the connection with the backend
 // It will:
@@ -56,6 +57,27 @@ function getEmptyApiCaller() {
     api_calls_to_make: [],
     running: false
   }
+}
+
+const SECONDSINDAY = 60 * 60 * 42
+
+function setRefreshTokenCookie({frontend_instance, refresh_token, user_id, server_info_response}) {
+  const days_to_expiry = parseInt(server_info_response.data.Derived.APIAPP_REFRESH_TOKEN_TIMEOUT) / SECONDSINDAY
+  const cookie_value = {
+    frontend_instance: frontend_instance,
+    refresh_token: refresh_token,
+    user_id: user_id
+  }
+  Cookies.set('loginRefreshToken', cookie_value, {
+    secure: !window.location.href.includes('localhost'), // otherwise cookie not set on dev machines
+    expires: days_to_expiry // expire in 180 days
+  })
+}
+function hasRefreshCookie() {
+  return Cookies.has('loginRefreshToken')
+}
+function getRefreshCookie() {
+  return Cookies.get('loginRefreshToken')
 }
 
 export const useBackendConnectionStore = defineStore('backendConnectionStore', {
@@ -152,6 +174,31 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       this.connection_state.state = ConnectionState.connected
       this.connection_state.error = ''
       this.connection_state.server_info_response = response
+
+      if (hasRefreshCookie()) {
+        const cookieData = getRefreshCookie()
+        if (this.frontendInstance !== cookieData.frontend_instance) {
+          console.log('Read a refresh token cookie but frontend instance mismatched', cookieData.frontend_instance)
+          return
+        }
+        var TTT = this
+        // This is called from the connection screen.
+        //  so we don't need to confinue execution with the api_caller
+        this.connection_state.state = ConnectionState.logininprogress
+        TTT.get_new_token_using_refresh_token({
+          user_id: cookieData.user_id,
+          refresh_token: cookieData.refresh_token,
+          success_fn: function () {
+            TTT.connection_state.state = ConnectionState.loggedin
+            console.log('Sucessful login')
+          },
+          fail_fn: function () {
+            TTT.connection_state.state = ConnectionState.connected
+            console.log('Refresh token failed')
+          }
+        })
+      }
+
     },
     _connection_complete_fail (response) {
       this.connection_state.state = ConnectionState.failed
@@ -193,6 +240,12 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       this.user_profile = response.data.user_profile
       this.login_info.login_token = response.data.login_token
       this.login_info.refresh_token = response.data.refresh_token
+      setRefreshTokenCookie({
+        frontend_instance: this.frontendInstance,
+        refresh_token: response.data.refresh_token,
+        user_id: this.user_profile.id,
+        server_info_response: this.connection_state.server_info_response
+      })
     },
     logout () {
       this.connection_state.state = ConnectionState.connected
@@ -235,11 +288,18 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
             if (!refresh_tried) {
               console.log('API Error - got 401 trying to update refresh token')
               TTT.get_new_token_using_refresh_token({
+                user_id: TTT.user_profile.id,
+                refresh_token: TTT.login_info.refresh_token,
                 success_fn: function () {
                   TTT.process_all_api_calls_make_individual_call({
                     cur_api_call_to_make: cur_api_call_to_make,
                     refresh_tried: true
                   })
+                },
+                fail_fn: function () {
+                  console.log('Refresh token failed - logging out user')
+                  TTT.api_caller.running = false
+                  TTT.logout()
                 }
               })
               // Execution continuing with get_new_token_using_refresh_token
@@ -281,11 +341,11 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         }
       )
     },
-    get_new_token_using_refresh_token({success_fn}) {
+    get_new_token_using_refresh_token({user_id, refresh_token, success_fn, fail_fn}) {
       const data = {
         'frontend_instance': this.frontendInstance,
-        'user_id': this.user_profile.id,
-        'refresh_token': this.login_info.refresh_token
+        'user_id': user_id,
+        'refresh_token': refresh_token
       }
       var config = {
         method: 'POST',
@@ -299,13 +359,17 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
           TTT.user_profile = response.data.user_profile
           TTT.login_info.login_token = response.data.login_token
           TTT.login_info.refresh_token = response.data.refresh_token
+          setRefreshTokenCookie({
+            frontend_instance: TTT.frontendInstance,
+            refresh_token: response.data.refresh_token,
+            user_id: TTT.user_profile.id,
+            server_info_response: TTT.connection_state.server_info_response
+          })
           success_fn()
         },
         (response) => {
           // error response
-          console.log('Refresh token failed - logging out user')
-          TTT.api_caller.running = false
-          TTT.logout()
+          fail_fn()
         }
       )
     }
