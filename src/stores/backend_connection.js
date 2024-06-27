@@ -201,8 +201,11 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       this.api_caller = getEmptyApiCaller()
 
     },
-    update_user_profile ({user_profile}) {
+    update_user_profile ({user_profile, then}) {
       this.user_profile = user_profile
+      if (typeof (then) !== 'undefined') {
+        then()
+      }
     },
     call_api ({apiprefix, url, method, data, callback}) {
       this.api_caller.api_calls_to_make.push({apiprefix, url, method, data, callback})

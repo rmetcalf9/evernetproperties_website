@@ -12,7 +12,8 @@
           label="Patch"
           @update:model-value="select_patch"
           emit-value
-        />{{ patch }}
+          option-label="name"
+        />
       </div>
       <div><q-input filled clearable v-model="address" label="Address" /></div>
       <div>
@@ -58,10 +59,11 @@ export default defineComponent({
   },
   data () {
     return {
-      patch: {},
+      patch: {id: 'notset', name: 'Not Set'},
       address: '',
       postcode: '',
-      weblinks: []
+      weblinks: [],
+      new_patch_value: ''
     }
   },
   computed: {
@@ -69,17 +71,13 @@ export default defineComponent({
       return this.backend_connection_store.security_role_cansave
     },
     patch_list () {
-      return [
-        {
-          id: '1',
-          label: 'Bridlington'
-        },
-        {
-          id: 'create',
-          label: 'Add...'
-        }
-      ]
-    }
+      return this.backend_connection_store.user_profile.patches.concat(
+        [{
+            id: 'create',
+            name: 'Add...'
+        }]
+      )
+    },
   },
   methods: {
     select_patch (patch) {
@@ -101,14 +99,44 @@ export default defineComponent({
             model: '',
             type: 'text' // optional
           }
-        }).onOk((data) => {
-          Notify.create({
-            color: 'bg-grey-2',
-            message: 'Not Implemented',
-            timeout: 2000
+        }).onOk((input_data) => {
+          TTT.new_patch_value = input_data
+          const callback = {
+            ok: TTT.createpatchcallback,
+            error: function (response) {
+              console.log('s', response)
+              Notify.create({
+                color: 'negative',
+                message: 'Create patch failed ' + response.response.data.message,
+                timeout: 2000
+              })
+            }
+          }
+          const post_data = {
+            patch_name: input_data
+          }
+          this.backend_connection_store.call_api({
+            apiprefix: 'privateUserAPIPrefix',
+            url: '/me/patches',
+            method: 'POST',
+            data: post_data,
+            callback: callback
           })
         })
       }
+    },
+    createpatchcallback (response) {
+      this.backend_connection_store.update_user_profile ({
+        user_profile: response.data,
+        then: this.createpatchcallback2
+      })
+    },
+    createpatchcallback2 () {
+      const TTT = this
+      this.patch = this.patch_list.filter(function (x) {
+        return x.name === TTT.new_patch_value
+      })[0]
+      this.new_patch_value = ''
     },
     delweblink (id) {
       console.log('TODO')
