@@ -1,4 +1,4 @@
 #!/bin/bash
 
-icongenie generate -i ./orig_assets/main_logo.png
+icongenie generate -m pwa -i ./orig_assets/main_logo.png
 exit 0
