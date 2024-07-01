@@ -127,7 +127,7 @@ export default defineComponent({
     },
     createpatchcallback (response) {
       this.backend_connection_store.update_user_profile ({
-        user_profile: response.data,
+        user_profile: response.data.user_profile,
         then: this.createpatchcallback2
       })
     },
