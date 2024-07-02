@@ -69,6 +69,10 @@
           :refurb_cost_total="refurb_cost_total"
           :is_valid_input="is_valid_input"
         />
+        <ProjectSerializer
+          ref="ProjectSerializer"
+          v-if="security_role_cansave"
+        />
       </div>
     </div>
   </q-page>
@@ -88,6 +92,11 @@ import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import DealRating from '../../components/BrrCalc/DealRating.vue'
 import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
 
+import ProjectSerializer from '../../components/BrrCalc/ProjectSerializer.vue'
+import { useBackendConnectionStore } from 'stores/backend_connection'
+
+
+
 export default defineComponent({
   name: 'CalcBrrToFlip',
   components: {
@@ -101,7 +110,14 @@ export default defineComponent({
     Vision,
     DealRating,
     Refinance,
-    DealBasicInfo
+    DealBasicInfo,
+    ProjectSerializer
+  },
+  setup () {
+    const backend_connection_store = useBackendConnectionStore()
+    return {
+      backend_connection_store
+    }
   },
   data () {
     return {
@@ -113,6 +129,9 @@ export default defineComponent({
     }
   },
   computed: {
+    security_role_cansave () {
+      return this.backend_connection_store.security_role_cansave
+    },
     is_valid_input() {
       if (!this.isMounted) {
         return true

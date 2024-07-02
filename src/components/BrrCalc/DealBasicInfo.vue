@@ -5,7 +5,7 @@
       <div class="text-subtitle2">Basic information about this project</div>
     </q-card-section>
     <q-card-section>
-      <div>
+      <div v-if="!ever_saved">
         <q-select
           v-model="patch"
           :options="patch_list"
@@ -14,6 +14,9 @@
           emit-value
           option-label="name"
         />
+      </div>
+      <div v-if="ever_saved">
+        Patch: {{ patch.name }}
       </div>
       <div><q-input filled clearable v-model="address" label="Address" /></div>
       <div>
@@ -32,6 +35,11 @@
           <q-btn round color="primary" icon="delete" @click="delweblink(weblink.id)" />
         </div>
         <q-btn round color="primary" icon="add" @click="addweblink" />
+      </div>
+    </q-card-section>
+    <q-card-section>
+      <div>
+        <q-btn color="primary" icon="save" :label="save_btn_text" @click="save_now" />
       </div>
     </q-card-section>
   </q-card>
@@ -63,10 +71,52 @@ export default defineComponent({
       address: '',
       postcode: '',
       weblinks: [],
-      new_patch_value: ''
+      new_patch_value: '',
+      changed: false,
+      autosave_seconds_left: 60,
+      ever_saved: false
+    }
+  },
+  watch: {
+    card_data(val) {
+      this.set_changed_true()
     }
   },
   computed: {
+    card_data () {
+      return {
+        patch_id: this.patch.id,
+        address: this.address,
+        postcode: this.postcode,
+        weblinks: this.weblinks,
+      }
+    },
+    no_save_message () {
+      // perform all validations and return message to display on save button
+      // or empty string
+      if (this.patch.id === 'notset') {
+        return 'Select patch'
+      }
+      if (this.address.length < 3) {
+        return 'Enter address'
+      }
+      return ''
+    },
+    can_save () {
+      if (this.changed) {
+        return true
+      }
+      return false
+    },
+    save_btn_text () {
+      if (this.no_save_message !== '') {
+        return 'Not able to save (' + this.no_save_message + ')'
+      }
+      if (!this.changed) {
+        return 'Not able to save (No changes)'
+      }
+      return 'Save now (auto save in ' + this.autosave_seconds_left + ')'
+    },
     security_role_cansave () {
       return this.backend_connection_store.security_role_cansave
     },
@@ -80,6 +130,35 @@ export default defineComponent({
     },
   },
   methods: {
+    set_changed_true() {
+      this.changed = true
+      if (this.no_save_message !== '') {
+        return
+      }
+      this.autosave_seconds_left = 10
+      this.save_monitor_function()
+    },
+    save_monitor_function () {
+      const TTT = this
+      TTT.autosave_seconds_left = TTT.autosave_seconds_left - 1
+      if (TTT.autosave_seconds_left<1) {
+        this.save_now()
+        return
+      }
+      setTimeout(TTT.save_monitor_function, 1000)
+    },
+    save_now () {
+      if (!this.can_save) {
+        return
+      }
+      Notify.create({
+        color: 'positive',
+        message: 'TODO Implement save',
+        timeout: 2000
+      })
+      this.changed = false
+      this.ever_saved = true
+    },
     select_patch (patch) {
       if (patch.id==='create') {
         const TTT = this
@@ -139,10 +218,10 @@ export default defineComponent({
       this.new_patch_value = ''
     },
     delweblink (id) {
-      console.log('TODO')
       this.weblinks = this.weblinks.filter(function (weblink) {
         return id !== weblink.id
       })
+      this.set_changed_true()
     },
     addweblink () {
       const TTT = this
@@ -163,10 +242,22 @@ export default defineComponent({
           type: 'text' // optional
         }
       }).onOk((data) => {
+        data = data.trim()
+        if (!data.startsWith('http')) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Link must start with http',
+            timeout: 2000,
+            color: 'negative'
+          })
+          return
+        }
+
         TTT.weblinks.push({
           id: uuidv4(),
           label: data
         })
+        TTT.set_changed_true()
       })
     },
     isEmpty (val) {
