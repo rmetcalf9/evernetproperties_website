@@ -79,6 +79,9 @@ function hasRefreshCookie() {
 function getRefreshCookie() {
   return Cookies.get('loginRefreshToken')
 }
+function clearRefreshCookie() {
+  return Cookies.remove('loginRefreshToken')
+}
 
 export const useBackendConnectionStore = defineStore('backendConnectionStore', {
   state: () => ({
@@ -248,6 +251,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       })
     },
     logout () {
+      clearRefreshCookie()
       this.connection_state.state = ConnectionState.connected
       this.user_profile = getEmptyUserProfile()
       this.login_info = getEmptyLoginInfo(),
