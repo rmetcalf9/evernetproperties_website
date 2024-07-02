@@ -315,30 +315,32 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         },
         error: function (response) {
           // Test for 401 response and try refreshing the token
-          if (response.response.status === 401) {
-            if (!refresh_tried) {
-              console.log('API Error - got 401 trying to update refresh token')
-              TTT.get_new_token_using_refresh_token({
-                user_id: TTT.user_profile.id,
-                refresh_token: TTT.login_info.refresh_token,
-                success_fn: function () {
-                  TTT.process_all_api_calls_make_individual_call({
-                    cur_api_call_to_make: cur_api_call_to_make,
-                    refresh_tried: true
-                  })
-                },
-                fail_fn: function () {
-                  console.log('Refresh token failed - logging out user')
-                  TTT.api_caller.running = false
-                  TTT.logout()
-                }
-              })
-              // Execution continuing with get_new_token_using_refresh_token
-              // so no need to call process_all_api_calls.
-              return
+          if (typeof (response.response) !== 'undefined') {
+            if (response.response.status === 401) {
+              if (!refresh_tried) {
+                console.log('API Error - got 401 trying to update refresh token')
+                TTT.get_new_token_using_refresh_token({
+                  user_id: TTT.user_profile.id,
+                  refresh_token: TTT.login_info.refresh_token,
+                  success_fn: function () {
+                    TTT.process_all_api_calls_make_individual_call({
+                      cur_api_call_to_make: cur_api_call_to_make,
+                      refresh_tried: true
+                    })
+                  },
+                  fail_fn: function () {
+                    console.log('Refresh token failed - logging out user')
+                    TTT.api_caller.running = false
+                    TTT.logout()
+                  }
+                })
+                // Execution continuing with get_new_token_using_refresh_token
+                // so no need to call process_all_api_calls.
+                return
+              }
             }
           }
-          console.log('error response', response.response.status)
+          console.log('error response', response.response)
           cur_api_call_to_make.callback.error(response)
           TTT.process_all_api_calls()
         }
