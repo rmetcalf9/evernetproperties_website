@@ -260,9 +260,5 @@ h1 {
   color: white;
   background-color: grey;
 }
-.featurecard {
-  color: white;
-  background-color: LightCoral;
-}
 
 </style>

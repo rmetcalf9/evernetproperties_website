@@ -140,7 +140,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     }
   },
   actions: {
-    connect () {
+    connect (callback) {
       if (this.connection_state.state === ConnectionState.connecting) {
         console.log('backend_connection Call to connect while already connecting - ignoring call')
         return
@@ -154,6 +154,9 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       if (this.connection_state.state !== ConnectionState.notconnected) {
         // console.log('backend_connection Call to connect but already connected - ignoring call')
         // Silently ignore
+        if (typeof (callback) !== 'undefined') {
+          callback.ok({})
+        }
         return
       }
       var config = {
@@ -162,10 +165,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       }
       axios(config).then(
         (response) => {
-          this._connection_complete_success(response)
+          this._connection_complete_success(response, callback)
         },
         (response) => {
-          this._connection_complete_fail(response)
+          this._connection_complete_fail(response, callback)
         }
       )
 
@@ -173,7 +176,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       // this.connection_state.error = 'Not Implemented'
       // this.connection_state.server_info_response = {}
     },
-    _connection_complete_success (response) {
+    _connection_complete_success (response, callback) {
       this.connection_state.state = ConnectionState.connected
       this.connection_state.error = ''
       this.connection_state.server_info_response = response
@@ -194,30 +197,47 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
           success_fn: function () {
             TTT.connection_state.state = ConnectionState.loggedin
             console.log('Sucessful login')
+            if (typeof (callback) !== 'undefined') {
+              callback.ok(response)
+            }
           },
           fail_fn: function () {
             TTT.connection_state.state = ConnectionState.connected
             console.log('Refresh token failed')
+            if (typeof (callback) !== 'undefined') {
+              callback.ok(response)
+            }
           }
         })
+      } else {
+        if (typeof (callback) !== 'undefined') {
+          callback.ok(response)
+        }
       }
 
     },
-    _connection_complete_fail (response) {
+    _connection_complete_fail (response, callback) {
       this.connection_state.state = ConnectionState.failed
       this.connection_state.error = JSON.stringify(response)
       this.connection_state.server_info_response = {}
+      if (typeof (callback) !== 'undefined') {
+        callback.error(response)
+      }
     },
-    login () {
+    login (callback) {
       // https://developers.google.com/identity/gsi/web/reference/js-reference
+      const TTT = this
+      const loccallback = function(tokenResponse) {
+        TTT._login_callback_from_google(tokenResponse, callback)
+      }
       this.connection_state.state = ConnectionState.logininprogress
        window.google.accounts.id.initialize({
         client_id: '954557855733-9fovnaaj81f4cpbceqfpn72i2e8oksaa.apps.googleusercontent.com',
-        callback: this._login_callback_from_google
+        callback: loccallback
       });
       window.google.accounts.id.prompt();
     },
-    _login_callback_from_google (tokenResponse) {
+    _login_callback_from_google (tokenResponse, callback) {
       const data = {
         'frontend_instance': this.frontendInstance,
         'google_response': tokenResponse
@@ -229,16 +249,19 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       }
       axios(config).then(
         (response) => {
-          this._login_complete_success(response)
+          this._login_complete_success(response, callback)
         },
         (response) => {
           // error response
           console.log('Error resposne from login - ', response.response)
           this.connection_state.state = ConnectionState.connected
+          if (typeof (callback) !== 'undefined') {
+            callback.error(response)
+          }
         }
       )
     },
-    _login_complete_success (response) {
+    _login_complete_success (response, callback) {
       this.connection_state.state = ConnectionState.loggedin
       this.user_profile = response.data.user_profile
       this.login_info.login_token = response.data.login_token
@@ -249,6 +272,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         user_id: this.user_profile.id,
         server_info_response: this.connection_state.server_info_response
       })
+      if (typeof (callback) !== 'undefined') {
+        callback.ok(response)
+      }
+
     },
     logout () {
       clearRefreshCookie()

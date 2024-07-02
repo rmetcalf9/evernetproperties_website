@@ -67,6 +67,28 @@
 
           </q-card-section>
         </q-card>
+        <q-card v-if="security_role_cansave" inline class="q-ma-sm card-style tool-card featurecard" @click="click_myprojects_card">
+          <q-card-section>
+            <div class="text-h6">My Projects</div>
+            <div class="row">
+              <div>
+                <img
+                  alt="Item Picture"
+                  src="~assets/tool_flip_calc.png"
+                  class="tool-picture"
+                >
+              </div>
+              <div class="col q-ma-sm">
+                <div style="height: 150px;">Use this tool to view and manage your saved projects. Your BRR Calculator projects are arranged into patches and can be reloaded and updated.</div>
+                <div align="right">
+                  <q-btn round  color="primary" icon="info" />
+                </div>
+              </div>
+            </div>
+
+          </q-card-section>
+        </q-card>
+
       </div>
     </div>
   </q-page>
@@ -75,14 +97,26 @@
 <script>
 import { defineComponent } from 'vue'
 import LoginButton from '../components/LoginButton.vue'
+import { useBackendConnectionStore } from 'stores/backend_connection'
 
 export default defineComponent({
   name: 'ToolsPage',
   components: {
     LoginButton,
   },
+  setup () {
+    const backend_connection_store = useBackendConnectionStore()
+    return {
+      backend_connection_store
+    }
+  },
   data () {
     return {
+    }
+  },
+  computed: {
+    security_role_cansave () {
+      return this.backend_connection_store.security_role_cansave
     }
   },
   methods: {
@@ -94,6 +128,9 @@ export default defineComponent({
     },
     click_flip_card () {
       this.$router.push('/tools/flipcalc')
+    },
+    click_myprojects_card () {
+      this.$router.push('/tools/cansave/patches')
     }
   }
 })

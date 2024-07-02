@@ -27,7 +27,24 @@
 
     <q-page-container>
       <div class="child_page_class">
-        <router-view />
+        <div v-if="page_to_show==='waiting'">
+          <q-page class="flex flex-center">
+            <h1>Please wait...</h1>
+          </q-page>
+        </div>
+        <div v-if="page_to_show==='noconnection'">
+          <q-page class="flex flex-center">
+            <h1>No Connection to server</h1>
+          </q-page>
+        </div>
+        <div v-if="page_to_show==='connected'">
+          <q-page class="flex flex-center">
+            <h1>TODO Login button</h1>
+          </q-page>
+        </div>
+        <div v-if="page_to_show==='loggedin'">
+          <router-view />
+        </div>
       </div>
       <div class="bottom-sub-toolbar bg-grey-5 fit column wrap justify-center items-center content-center text-white">
         <img
@@ -78,7 +95,8 @@ export default defineComponent({
 
   data () {
     return {
-      menu_items: common.get_menu_items()
+      menu_items: common.get_menu_items(),
+      page_to_show: 'waiting' // waiting -> noconnection -> connected -> loggedin
     }
   },
   computed: {
@@ -87,6 +105,12 @@ export default defineComponent({
     },
     connectionState () {
       return this.backend_connection_store.connectionStateString
+    },
+    isLoggedin () {
+      return this.backend_connection_store.isLoggedin
+    },
+    security_role_cansave () {
+      return this.backend_connection_store.security_role_cansave
     }
   },
   methods: {
@@ -126,11 +150,33 @@ export default defineComponent({
           { label: 'Accept', color: 'white', handler: TTT.notifyAccept }
         ]
       })
-    }
+    },
   },
   mounted () {
-    this.backend_connection_store.connect()
-    this.cookiePopup()
+    const TTT = this
+    const login_callback = {
+      ok: function (response) {
+        TTT.page_to_show = 'loggedin'
+      },
+      error: function (response) {
+        TTT.page_to_show = 'noconnection'
+      }
+    }
+    const callback = {
+      ok: function (response) {
+        if (TTT.isLoggedin) {
+          TTT.page_to_show = 'loggedin'
+        } else {
+          TTT.backend_connection_store.login(login_callback)
+        }
+      },
+      error: function (response) {
+        TTT.page_to_show = 'noconnection'
+      }
+    }
+    TTT.page_to_show = 'waiting'
+    TTT.backend_connection_store.connect(callback)
+    TTT.cookiePopup()
   }
 })
 </script>

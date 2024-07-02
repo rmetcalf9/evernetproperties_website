@@ -25,6 +25,13 @@ const routes = [
       { path: 'tools/refurbcalc', component: () => import('pages/tools/RefurbishmentCalc.vue') }
     ]
   },
+  {
+    path: '/',
+    component: () => import('layouts/CanSavePagesLayout.vue'),
+    children: [
+      { path: 'tools/cansave/patches', component: () => import('pages/tools/cansave/Patches.vue') },
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it
