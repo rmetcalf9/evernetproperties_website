@@ -6,7 +6,11 @@
     <div v-if="loaded">
       <h1>{{ patch_data.name }}</h1>
       <h2>Projects</h2>
-      <div>{{ patch_data.projects }}</div>
+      <div>
+        <ProjectTable
+          :patch_data_projects="patch_data.projects"
+        />
+      </div>
     </div>
   </q-page>
 </template>
@@ -16,9 +20,13 @@ import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 
+import ProjectTable from '../../../components/ProjectTable.vue'
+
+
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
   components: {
+    ProjectTable
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
