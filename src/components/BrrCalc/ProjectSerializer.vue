@@ -100,7 +100,6 @@ export default defineComponent({
     }
   },
   mounted (){
-    console.log('ProjectSerializer mounted')
   }
 })
 
