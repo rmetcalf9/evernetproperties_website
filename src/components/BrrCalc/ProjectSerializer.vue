@@ -11,6 +11,7 @@ import { Notify } from 'quasar'
 
 export default defineComponent({
   name: 'ProjectSerializer',
+  emits: ['saveprojectcomplete'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -19,12 +20,12 @@ export default defineComponent({
   },
   data () {
     return {
+      loaded_project_id: undefined
     }
   },
   methods: {
     save_project ({dict_of_card_info}) {
 
-      // TODO Load this from cards
       const sub_section_details = {}
       for (const card_name_idx in Object.keys(dict_of_card_info)) {
         const card_name = Object.keys(dict_of_card_info)[card_name_idx]
@@ -34,7 +35,7 @@ export default defineComponent({
       const project_data = {
         user_id: this.backend_connection_store.user_profile.id,
         patch_id: dict_of_card_info.dealbasicinfo.patch_id,
-        timestamp_first_entered: 'TODO',
+        timestamp_first_entered: undefined,
         initial_phase: {
           total_money_in: 0,
           start_value: 0,
@@ -50,12 +51,35 @@ export default defineComponent({
         risks: []
       }
 
-      console.log('data_to_send', project_data)
-
-
+      if (typeof (this.loaded_project_id) !== 'undefined') {
+        project_data.id = this.loaded_project_id
+      }
+      const TTT = this
+      const callback = {
+        ok: TTT.save_api_call_success,
+        error: TTT.save_api_call_fail
+      }
+      this.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/projects',
+        method: 'POST',
+        data: project_data,
+        callback: callback
+      })
+    },
+    save_api_call_success (response) {
+      this.$emit('saveprojectcomplete', {success: true, response: response})
       Notify.create({
         color: 'positive',
-        message: 'Project Serializer - TODO Implement save',
+        message: 'Project Saved',
+        timeout: 2000
+      })
+    },
+    save_api_call_fail (response) {
+      this.$emit('saveprojectcomplete', {success: false, response: response})
+      Notify.create({
+        color: 'negative',
+        message: 'Save failed - ' + response.response.data.message,
         timeout: 2000
       })
     }

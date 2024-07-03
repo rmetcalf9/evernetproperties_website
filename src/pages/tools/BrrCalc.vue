@@ -73,6 +73,7 @@
         <ProjectSerializer
           ref="ProjectSerializer"
           v-if="security_role_cansave"
+          @saveprojectcomplete="save_project_complete"
         />
       </div>
     </div>
@@ -261,6 +262,12 @@ export default defineComponent({
       }
       this.$refs.ProjectSerializer.save_project({
         dict_of_card_info: dict_of_card_info
+      })
+    },
+    save_project_complete ({success, response}) {
+      this.$refs.DealBasicInfo.save_project_complete_notification({
+        success: success,
+        response: response
       })
     }
   },

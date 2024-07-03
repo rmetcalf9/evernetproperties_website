@@ -39,7 +39,7 @@
     </q-card-section>
     <q-card-section>
       <div>
-        <q-btn color="primary" icon="save" :label="save_btn_text" @click="save_now" />
+        <q-btn color="primary" icon="save" :label="save_btn_text" @click="click_save_btn" />
       </div>
     </q-card-section>
   </q-card>
@@ -75,7 +75,9 @@ export default defineComponent({
       new_patch_value: '',
       changed: false,
       autosave_seconds_left: 60,
-      ever_saved: false
+      ever_saved: false,
+      save_in_progress: false,
+      save_monitor_function_running: false
     }
   },
   watch: {
@@ -101,9 +103,15 @@ export default defineComponent({
       if (this.address.length < 3) {
         return 'Enter address'
       }
+      if (this.save_in_progress) {
+        return 'Saving...'
+      }
       return ''
     },
     can_save () {
+      if (this.save_in_progress) {
+        return false
+      }
       if (this.changed) {
         return true
       }
@@ -115,6 +123,9 @@ export default defineComponent({
       }
       if (!this.changed) {
         return 'Not able to save (No changes)'
+      }
+      if (this.autosave_seconds_left === -1) {
+        return 'Save Now'
       }
       return 'Save now (auto save in ' + this.autosave_seconds_left + ')'
     },
@@ -137,24 +148,51 @@ export default defineComponent({
         return
       }
       this.autosave_seconds_left = 10
+      this.start_save_monitor_function()
+    },
+    start_save_monitor_function () {
+      if (this.save_monitor_function_running) return
       this.save_monitor_function()
     },
     save_monitor_function () {
+      this.save_monitor_function_running = true
+      if (this.save_in_progress) {
+        return
+      }
+      if (this.autosave_seconds_left === -1) {
+        return
+      }
       const TTT = this
       TTT.autosave_seconds_left = TTT.autosave_seconds_left - 1
       if (TTT.autosave_seconds_left<1) {
+        this.save_monitor_function_running = false
         this.save_now()
         return
       }
       setTimeout(TTT.save_monitor_function, 1000)
     },
+    click_save_btn () {
+      this.autosave_seconds_left = -1 // This causes save monitor to abort
+      this.save_now()
+    },
     save_now () {
       if (!this.can_save) {
         return
       }
+      this.save_in_progress = true
       this.$emit('saveproject')
-      this.changed = false
-      this.ever_saved = true
+
+    },
+    save_project_complete_notification ({success, response}) {
+      console.log('save complet notif')
+      this.save_in_progress = false
+      if (success) {
+        this.changed = false
+        this.ever_saved = true
+      } else {
+        // Failed save stop any countdown
+        this.autosave_seconds_left = -1
+      }
     },
     select_patch (patch) {
       if (patch.id==='create') {
