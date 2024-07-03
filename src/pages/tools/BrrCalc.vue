@@ -6,6 +6,7 @@
       <div class="row">
         <DealBasicInfo
           ref="DealBasicInfo"
+          @saveproject="save_project"
         />
         <Vision
           ref="Vision"
@@ -251,6 +252,13 @@ export default defineComponent({
         return []
       }
       return this.$refs.GdvCard.total
+    }
+  },
+  methods: {
+    save_project () {
+      this.$refs.ProjectSerializer.save_project({
+        list_of_cards: []
+      })
     }
   },
   mounted (){

@@ -6,6 +6,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { Notify } from 'quasar'
 
 
 export default defineComponent({
@@ -18,6 +19,15 @@ export default defineComponent({
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    save_project ({list_of_cards}) {
+      Notify.create({
+        color: 'positive',
+        message: 'Project Serializer - TODO Implement save',
+        timeout: 2000
+      })
     }
   },
   mounted (){

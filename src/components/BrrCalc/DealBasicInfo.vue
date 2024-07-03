@@ -59,6 +59,7 @@ function uuidv4() {
 
 export default defineComponent({
   name: 'DealBasicInfo',
+  emits: ['saveproject'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -151,11 +152,7 @@ export default defineComponent({
       if (!this.can_save) {
         return
       }
-      Notify.create({
-        color: 'positive',
-        message: 'TODO Implement save',
-        timeout: 2000
-      })
+      this.$emit('saveproject')
       this.changed = false
       this.ever_saved = true
     },
