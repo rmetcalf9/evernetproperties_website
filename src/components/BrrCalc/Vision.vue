@@ -16,9 +16,25 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'BrrCalcVision',
+  emits: ['projectchanged'],
   data () {
     return {
-      devplan: ''
+      devplan: '',
+      emit_project_change_notification: true
+    }
+  },
+  computed: {
+    serializer_card_data () {
+      return {
+        devplan: this.devplan
+      }
+    }
+  },
+  watch: {
+    serializer_card_data(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
     }
   },
   methods: {
@@ -29,6 +45,15 @@ export default defineComponent({
       }).onOk(() => {
         // console.log('OK')
       })
+    },
+    serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+      this.devplan = data_to_load.devplan
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
     }
   }
 })

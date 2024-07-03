@@ -39,6 +39,7 @@ import SliderWithTextInput from '../../components/SliderWithTextInput.vue'
 
 export default defineComponent({
   name: 'BrrCalcGdv',
+  emits: ['projectchanged'],
   components: {
     SliderWithTextInput
   },
@@ -52,7 +53,8 @@ export default defineComponent({
           max: 600000
         }
       }],
-      isValid: true
+      isValid: true,
+      emit_project_change_notification: true
     }
   },
   methods: {
@@ -89,8 +91,16 @@ export default defineComponent({
         })
         TTT.isValid = !TTT.isValid
         TTT.isValid = valid
-        console.log('setting valid to', valid)
       }, 5)
+    },
+    serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+      this.gdvitems = data_to_load.gdvitems
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
     }
   },
   computed: {
@@ -104,6 +114,18 @@ export default defineComponent({
       return {
         min: this.totalmin,
         max: this.totalmax
+      }
+    },
+    serializer_card_data () {
+      return {
+        gdvitems: this.gdvitems
+      }
+    }
+  },
+  watch: {
+    total(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
       }
     }
   }

@@ -10,13 +10,16 @@
         />
         <Vision
           ref="Vision"
+          @projectchanged="projectchanged"
         />
         <GdvCard
           ref="GdvCard"
+          @projectchanged="projectchanged"
         />
         <PurchasePrice
           ref="PurchasePrice"
           v-model:purchaserange="purchaserange"
+          @projectchanged="projectchanged"
         />
         <RefurbCost
           ref="RefurbCost"
@@ -258,9 +261,15 @@ export default defineComponent({
     }
   },
   methods: {
+    projectchanged () {
+      this.$refs.DealBasicInfo.set_changed_true()
+    },
     save_project () {
       const dict_of_card_info = {
-        dealbasicinfo: this.$refs.DealBasicInfo.serializer_card_data
+        dealbasicinfo: this.$refs.DealBasicInfo.serializer_card_data,
+        vision: this.$refs.Vision.serializer_card_data,
+        gdvcard: this.$refs.GdvCard.serializer_card_data,
+        purchaseprice: this.$refs.PurchasePrice.serializer_card_data,
       }
       this.$refs.ProjectSerializer.save_project({
         dict_of_card_info: dict_of_card_info
@@ -269,6 +278,15 @@ export default defineComponent({
     load_project_into_cards (project) {
       this.$refs.ProjectSerializer.serializer_load_data(project)
       this.$refs.DealBasicInfo.serializer_load_data(project.sub_section_details.dealbasicinfo)
+      if (typeof (project.sub_section_details.vision) !== 'undefined') {
+        this.$refs.Vision.serializer_load_data(project.sub_section_details.vision)
+      }
+      if (typeof (project.sub_section_details.gdvcard) !== 'undefined') {
+        this.$refs.GdvCard.serializer_load_data(project.sub_section_details.gdvcard)
+      }
+      if (typeof (project.sub_section_details.purchaseprice) !== 'undefined') {
+        this.$refs.PurchasePrice.serializer_load_data(project.sub_section_details.purchaseprice)
+      }
     },
     save_project_complete ({success, response}) {
       this.$refs.DealBasicInfo.save_project_complete_notification({

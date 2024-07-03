@@ -26,20 +26,42 @@ import SliderWithTextInput from '../../components/SliderWithTextInput.vue'
 export default defineComponent({
   name: 'BrrCalcPurchase',
   props: ['purchaserange'],
-  emits: ['update:purchaserange'],
+  emits: ['update:purchaserange', 'projectchanged'],
   components: {
     SliderWithTextInput
   },
   data () {
     return {
+      emit_project_change_notification: true
     }
   },
   methods: {
+    serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+      this.purchaserangevalue = data_to_load.purchaserangevalue
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
+    },
     format_currency (num) {
       return utils.format_currency(num)
     }
   },
+  watch: {
+    serializer_card_data(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
+    }
+  },
   computed: {
+    serializer_card_data () {
+      return {
+        purchaserangevalue: this.purchaserangevalue
+      }
+    },
     isValid() {
       return this.$refs.slider.isValid
     },
