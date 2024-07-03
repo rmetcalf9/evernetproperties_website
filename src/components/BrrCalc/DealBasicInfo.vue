@@ -79,12 +79,12 @@ export default defineComponent({
     }
   },
   watch: {
-    card_data(val) {
+    serializer_card_data(val) {
       this.set_changed_true()
     }
   },
   computed: {
-    card_data () {
+    serializer_card_data () {
       return {
         patch_id: this.patch.id,
         address: this.address,

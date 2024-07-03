@@ -256,8 +256,11 @@ export default defineComponent({
   },
   methods: {
     save_project () {
+      const dict_of_card_info = {
+        dealbasicinfo: this.$refs.DealBasicInfo.serializer_card_data
+      }
       this.$refs.ProjectSerializer.save_project({
-        list_of_cards: []
+        dict_of_card_info: dict_of_card_info
       })
     }
   },
