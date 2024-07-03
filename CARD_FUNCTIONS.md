@@ -30,9 +30,7 @@ watch: {
 methods: {
   serializer_load_data (data_to_load) {
     this.emit_project_change_notification = false
-    this.address = data_to_load.address
-    this.postcode = data_to_load.postcode
-    this.weblinks = data_to_load.weblinks
+    this.xxx = data_to_load.xxx
 
     const TTT = this
     setTimeout(function () {
@@ -41,6 +39,7 @@ methods: {
   }
 }
 
+RefurbCost StampDuty OtherCosts Finance Refinance
 
 In BrrCalc:
 Add ref like:

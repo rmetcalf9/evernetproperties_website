@@ -23,14 +23,17 @@
         />
         <RefurbCost
           ref="RefurbCost"
+          @projectchanged="projectchanged"
         />
         <StampDuty
           ref="StampDuty"
           :purchaserange="purchaserange"
+          @projectchanged="projectchanged"
         />
         <OtherCosts
           ref="OtherCosts"
           :purchaserange="purchaserange"
+          @projectchanged="projectchanged"
         />
         <Finance
           ref="Finance"
@@ -40,10 +43,12 @@
           :othercosts_total="othercosts_total"
           :refurbmonths="refurbmonths"
           :gdv_total="gdv_total"
+          @projectchanged="projectchanged"
         />
         <Refinance
           ref="Refinance"
           :gdv_total="gdv_total"
+          @projectchanged="projectchanged"
         />
         <DealSummary
           ref="DealSummary"
@@ -270,6 +275,11 @@ export default defineComponent({
         vision: this.$refs.Vision.serializer_card_data,
         gdvcard: this.$refs.GdvCard.serializer_card_data,
         purchaseprice: this.$refs.PurchasePrice.serializer_card_data,
+        refurbcost: this.$refs.RefurbCost.serializer_card_data,
+        stampduty: this.$refs.StampDuty.serializer_card_data,
+        othercosts: this.$refs.OtherCosts.serializer_card_data,
+        finance: this.$refs.Finance.serializer_card_data,
+        refinance: this.$refs.Refinance.serializer_card_data,
       }
       this.$refs.ProjectSerializer.save_project({
         dict_of_card_info: dict_of_card_info
@@ -286,6 +296,21 @@ export default defineComponent({
       }
       if (typeof (project.sub_section_details.purchaseprice) !== 'undefined') {
         this.$refs.PurchasePrice.serializer_load_data(project.sub_section_details.purchaseprice)
+      }
+      if (typeof (project.sub_section_details.refurbcost) !== 'undefined') {
+        this.$refs.RefurbCost.serializer_load_data(project.sub_section_details.refurbcost)
+      }
+      if (typeof (project.sub_section_details.stampduty) !== 'undefined') {
+        this.$refs.StampDuty.serializer_load_data(project.sub_section_details.stampduty)
+      }
+      if (typeof (project.sub_section_details.othercosts) !== 'undefined') {
+        this.$refs.OtherCosts.serializer_load_data(project.sub_section_details.othercosts)
+      }
+      if (typeof (project.sub_section_details.finance) !== 'undefined') {
+        this.$refs.Finance.serializer_load_data(project.sub_section_details.finance)
+      }
+      if (typeof (project.sub_section_details.refinance) !== 'undefined') {
+        this.$refs.Refinance.serializer_load_data(project.sub_section_details.refinance)
       }
     },
     save_project_complete ({success, response}) {

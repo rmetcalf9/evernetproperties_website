@@ -48,6 +48,7 @@ import utils from '../utils.js'
 
 export default defineComponent({
   name: 'BrrCalcRefurbCost',
+  emits: ['projectchanged'],
   data () {
     return {
       refurbrange: {
@@ -57,15 +58,39 @@ export default defineComponent({
       refurbtimerange: {
         min: 6,
         max: 12
-      }
+      },
+      emit_project_change_notification: true
     }
   },
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
+    },
+    serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+      this.refurbrange = data_to_load.refurbrange
+      this.refurbtimerange = data_to_load.refurbtimerange
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
+    }
+  },
+  watch: {
+    serializer_card_data(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
     }
   },
   computed: {
+    serializer_card_data () {
+      return {
+        refurbrange: this.refurbrange,
+        refurbtimerange: this.refurbtimerange,
+      }
+    },
     refurb_cost_total () {
       return this.refurbrange
     },

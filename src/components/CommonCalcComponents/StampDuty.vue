@@ -69,6 +69,7 @@ function stampdutyforthisband (band, amount) {
 
 export default defineComponent({
   name: 'BrrCalcStampduty',
+  emits: ['projectchanged'],
   props: ['purchaserange'],
   data () {
     return {
@@ -94,7 +95,8 @@ export default defineComponent({
             value: 'scotland'
           }
         ]
-      }
+      },
+      emit_project_change_notification: true
     }
   },
   methods: {
@@ -109,9 +111,34 @@ export default defineComponent({
       }).onOk(() => {
         // console.log('OK')
       })
+    },
+    serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+      this.stampdutydata.exempt = data_to_load.stampdutydata_exempt
+      this.stampdutydata.commercial = data_to_load.stampdutydata_commercial
+      this.stampdutydata.location = data_to_load.stampdutydata_location
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
+    }
+  },
+  watch: {
+    serializer_card_data(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
     }
   },
   computed: {
+    serializer_card_data () {
+      return {
+        stampdutydata_exempt: this.stampdutydata.exempt,
+        stampdutydata_commercial: this.stampdutydata.commercial,
+        stampdutydata_location: this.stampdutydata.location,
+      }
+    },
     stampduty () {
       var min = 0
       var max = 0

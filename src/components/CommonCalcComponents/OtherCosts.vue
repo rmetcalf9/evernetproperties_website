@@ -120,9 +120,11 @@ const ricssurveycostranges = {
 
 export default defineComponent({
   name: 'BrrCalcOtherCosts',
+  emits: ['projectchanged'],
   props: ['purchaserange'],
   data () {
     return {
+      emit_project_change_notification: true,
       auction: false,
       survey: {
         type: 'l3',
@@ -182,10 +184,38 @@ export default defineComponent({
       }).onOk(() => {
         // console.log('OK')
       })
-    }
+    },
+    serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+      this.auction = data_to_load.auction
+      this.survey.type = data_to_load.survey_type
+      this.sourcing.usesourcing = data_to_load.sourcing_usesourcing
+      this.sourcing.custom = data_to_load.sourcing_custom
+      this.sourcing.type = data_to_load.sourcing_type
 
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
+    }
+  },
+  watch: {
+    serializer_card_data(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
+    }
   },
   computed: {
+    serializer_card_data () {
+      return {
+        auction: this.auction,
+        survey_type: this.survey.type,
+        sourcing_usesourcing: this.sourcing.usesourcing,
+        sourcing_custom: this.sourcing.custom,
+        sourcing_type: this.sourcing.type,
+      }
+    },
     surveyfeetext () {
       if (this.surveyfee.min === this.surveyfee.max) {
         return this.format_currency(this.surveyfee.min)

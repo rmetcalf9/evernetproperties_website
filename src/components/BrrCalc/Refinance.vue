@@ -29,6 +29,7 @@ import utils from '../utils.js'
 
 export default defineComponent({
   name: 'BrrCalcFinance',
+  emits: ['projectchanged'],
   props: ['gdv_total'],
   data () {
     return {
@@ -37,16 +38,40 @@ export default defineComponent({
         ltv: {
           min: 75,
           max: 75
-        }
-      }
+        },
+      },
+      emit_project_change_notification: true
     }
   },
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
+    },
+    serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+      this.refinance.userefinance = data_to_load.refinance_userefinance
+      this.refinance.ltv = data_to_load.refinance_userefinance_ltv
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
+    }
+  },
+  watch: {
+    serializer_card_data(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
     }
   },
   computed: {
+    serializer_card_data () {
+      return {
+        refinance_userefinance: this.refinance.userefinance,
+        refinance_userefinance_ltv: this.refinance.ltv,
+      }
+    },
     get_refinance () {
       return this.refinance
     },

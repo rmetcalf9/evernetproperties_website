@@ -118,9 +118,11 @@ import { Notify } from 'quasar'
 
 export default defineComponent({
   name: 'BrrCalcFinance',
+  emits: ['projectchanged'],
   props: ['purchaserange', 'refurb_cost_total', 'stampduty_total', 'othercosts_total', 'refurbmonths', 'gdv_total'],
   data () {
     return {
+      emit_project_change_notification: true,
       bridge: {
         usebridge: false,
         startcost: 0.01,
@@ -191,9 +193,44 @@ export default defineComponent({
           this.bridge.usebridge = false
         }
       }
+    },
+    serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+      this.bridge = data_to_load.bridge
+      this.mortgage = data_to_load.mortgage
+      this.loans = data_to_load.loans
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
+    }
+  },
+  watch: {
+    serializer_card_data(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
+    },
+    totalmoneyneeded(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
+    },
+    finance_out_items(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
     }
   },
   computed: {
+    serializer_card_data () {
+      return {
+        bridge: this.bridge,
+        mortgage: this.mortgage,
+        loans: this.loans,
+      }
+    },
     mortgage_amount_borrowed () {
       return {
         best: this.purchaserange.min * (this.mortgage.ltv.min / 100),
