@@ -85,7 +85,6 @@ export default defineComponent({
   },
   methods: {
     onRowClick (table_row) {
-      console.log('ss', table_row.id)
       this.$router.push('/tools/brrcalc?projectid=' + table_row.id)
     },
     recursive_load_project_details () {
