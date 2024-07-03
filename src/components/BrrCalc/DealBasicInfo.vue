@@ -174,6 +174,7 @@ export default defineComponent({
         return
       }
       if (this.autosave_seconds_left === -1) {
+        this.save_monitor_function_running = false
         return
       }
       const TTT = this
