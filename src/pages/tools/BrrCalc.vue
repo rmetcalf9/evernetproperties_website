@@ -297,8 +297,9 @@ export default defineComponent({
       this.load_complete()
     },
     load_complete () {
+      const TTT = this
       setTimeout(function () {
-        this.isMounted = true
+        TTT.isMounted = true
       }, 5)
     },
     call_load_api () {
@@ -318,7 +319,7 @@ export default defineComponent({
   },
   mounted (){
     const TTT = this
-    if (typeof (TTT.$route.query.projectid) === undefined) {
+    if (typeof (TTT.$route.query.projectid) === 'undefined') {
       TTT.load_complete();
       return
     }
