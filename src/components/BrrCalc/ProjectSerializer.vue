@@ -28,6 +28,11 @@ export default defineComponent({
     }
   },
   methods: {
+    serializer_load_data (data_to_load) {
+      this.loaded_project_id  = data_to_load.id
+      this.proj_summary_data.timestamp_first_entered  = data_to_load.timestamp_first_entered
+      this.proj_summary_data.metadata = data_to_load.metadata
+    },
     save_project ({dict_of_card_info}) {
 
       const sub_section_details = {}
@@ -78,9 +83,7 @@ export default defineComponent({
     },
     save_api_call_success (response) {
       this.$emit('saveprojectcomplete', {success: true, response: response})
-      this.loaded_project_id  = response.data.id
-      this.proj_summary_data.timestamp_first_entered  = response.data.timestamp_first_entered
-      this.proj_summary_data.metadata = response.data.metadata
+      this.serializer_load_data(response.data)
       Notify.create({
         color: 'positive',
         message: 'Project Saved',

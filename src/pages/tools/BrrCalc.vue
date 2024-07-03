@@ -97,6 +97,8 @@ import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
 import ProjectSerializer from '../../components/BrrCalc/ProjectSerializer.vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 
+import { Notify } from 'quasar'
+
 
 
 export default defineComponent({
@@ -264,18 +266,70 @@ export default defineComponent({
         dict_of_card_info: dict_of_card_info
       })
     },
+    load_project_into_cards (project) {
+      this.$refs.ProjectSerializer.serializer_load_data(project)
+      this.$refs.DealBasicInfo.serializer_load_data(project.sub_section_details.dealbasicinfo)
+    },
     save_project_complete ({success, response}) {
       this.$refs.DealBasicInfo.save_project_complete_notification({
         success: success,
         response: response
       })
+    },
+    load_project_api_fail (response) {
+      console.log('Failed to load project via API - ', response)
+      Notify.create({
+        color: 'bg-grey-2',
+        message: 'Error loading project ' + response,
+        timeout: 2000,
+        color: 'negative'
+      })
+      this.load_complete()
+    },
+    load_project_api_success (response) {
+      this.load_project_into_cards(response.data)
+      Notify.create({
+        color: 'bg-grey-2',
+        message: 'Project Loaded',
+        timeout: 2000,
+        color: 'positive'
+      })
+      this.load_complete()
+    },
+    load_complete () {
+      setTimeout(function () {
+        this.isMounted = true
+      }, 5)
+    },
+    call_load_api () {
+      const TTT = this
+      const callback = {
+        ok: TTT.load_project_api_success,
+        error: TTT.load_project_api_fail
+      }
+      TTT.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/projects/' + TTT.$route.query.projectid,
+        method: 'GET',
+        data: undefined,
+        callback: callback
+      })
     }
   },
   mounted (){
     const TTT = this
+    if (typeof (TTT.$route.query.projectid) === undefined) {
+      TTT.load_complete();
+      return
+    }
+    if (TTT.security_role_cansave) {
+      TTT.call_load_api()
+      return
+    }
+    // May not have processed autologin from token yet. Give time for this to happen
     setTimeout(function () {
-      TTT.isMounted = true;
-    }, 5)
+      TTT.call_load_api()
+    }, 1000)
   }
 })
 </script>

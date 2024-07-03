@@ -142,6 +142,20 @@ export default defineComponent({
     },
   },
   methods: {
+    serializer_load_data (data_to_load) {
+      this.address = data_to_load.address
+      this.postcode = data_to_load.postcode
+      this.weblinks = data_to_load.weblinks
+      this.patch = this.patch_list.filter(function (x) {
+        return x.id === data_to_load.patch_id
+      })[0]
+      this.ever_saved = true
+      const TTT = this
+      setTimeout(function () {
+        TTT.changed = false
+        TTT.autosave_seconds_left = -1
+      }, 50)
+    },
     set_changed_true() {
       this.changed = true
       if (this.no_save_message !== '') {
