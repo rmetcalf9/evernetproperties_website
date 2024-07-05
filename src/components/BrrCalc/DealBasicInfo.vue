@@ -122,6 +122,9 @@ export default defineComponent({
         return 'Not able to save (' + this.no_save_message + ')'
       }
       if (!this.changed) {
+        if (this.ever_saved) {
+          return 'Saved'
+        }
         return 'Not able to save (No changes)'
       }
       if (this.autosave_seconds_left === -1) {
