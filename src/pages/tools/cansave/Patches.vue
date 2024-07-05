@@ -16,7 +16,7 @@
               </div>
               <div class="col q-ma-sm">
                 <div align="right">
-                  View your porjects in {{ patch.name }}.
+                  View your projects in {{ patch.name }}.
                   <q-btn round  color="primary" icon="info" />
                 </div>
               </div>
