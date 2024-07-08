@@ -30,11 +30,10 @@
     <q-card-section>
       <div>
         <div class="text-h6">Weblinks</div>
-        <div v-for="weblink in weblinks" :key="weblink" >
-          {{ weblink.label }}
-          <q-btn round color="primary" icon="delete" @click="delweblink(weblink.id)" />
-        </div>
-        <q-btn round color="primary" icon="add" @click="addweblink" />
+        <Weblinks
+          :weblinks="weblinks"
+          @updateweblinks="updateweblinks"
+        />
       </div>
     </q-card-section>
     <q-card-section>
@@ -50,16 +49,14 @@ import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 import utils from '../../utils.js'
 import { useBackendConnectionStore } from 'stores/backend_connection'
-
-function uuidv4() {
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
-    (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
-  );
-}
+import Weblinks from '../../components/Weblinks.vue'
 
 export default defineComponent({
   name: 'DealBasicInfo',
   emits: ['saveproject'],
+  components: {
+    Weblinks,
+  },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -145,6 +142,10 @@ export default defineComponent({
     },
   },
   methods: {
+    updateweblinks (newweblinks) {
+      this.weblinks = newweblinks
+      this.set_changed_true()
+    },
     serializer_load_data (data_to_load) {
       this.address = data_to_load.address
       this.postcode = data_to_load.postcode
@@ -269,49 +270,6 @@ export default defineComponent({
         return x.name === TTT.new_patch_value
       })[0]
       this.new_patch_value = ''
-    },
-    delweblink (id) {
-      this.weblinks = this.weblinks.filter(function (weblink) {
-        return id !== weblink.id
-      })
-      this.set_changed_true()
-    },
-    addweblink () {
-      const TTT = this
-      this.$q.dialog({
-        title: 'Add weblink',
-        message: 'Add weblink to information about this property (rightmove, zoopla, etc.)',
-        html: false,
-        ok: {
-          push: true,
-          label: 'Ok',
-        },
-        cancel: {
-          push: true,
-          label: 'Cancel',
-        },
-        prompt: {
-          model: '',
-          type: 'text' // optional
-        }
-      }).onOk((data) => {
-        data = data.trim()
-        if (!data.startsWith('http')) {
-          Notify.create({
-            color: 'bg-grey-2',
-            message: 'Link must start with http',
-            timeout: 2000,
-            color: 'negative'
-          })
-          return
-        }
-
-        TTT.weblinks.push({
-          id: uuidv4(),
-          label: data
-        })
-        TTT.set_changed_true()
-      })
     },
     isEmpty (val) {
       if (val == null) {
