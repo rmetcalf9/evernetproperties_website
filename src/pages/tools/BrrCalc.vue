@@ -364,6 +364,12 @@ export default defineComponent({
     const TTT = this
     if (typeof (TTT.$route.query.projectid) === 'undefined') {
       TTT.load_complete();
+      if (typeof (TTT.$route.query.patchid) !== 'undefined') {
+        if (!TTT.security_role_cansave) {
+          return
+        }
+        this.$refs.DealBasicInfo.select_patch_by_id(TTT.$route.query.patchid)
+      }
       return
     }
     if (TTT.security_role_cansave) {

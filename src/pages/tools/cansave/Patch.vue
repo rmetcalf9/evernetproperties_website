@@ -11,6 +11,7 @@
           :patch_data_projects="patch_data.projects"
         />
       </div>
+      <q-btn color="primary" label="Add Project" @click="clicknewproject" />
     </div>
   </q-page>
 </template>
@@ -46,6 +47,9 @@ export default defineComponent({
     }
   },
   methods: {
+    clicknewproject () {
+      this.$router.push('/tools/brrcalc?patchid=' + this.$route.params.patchid)
+    },
     click_brrr_card () {
       this.$router.push('/tools/brrcalc')
     },

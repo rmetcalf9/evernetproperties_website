@@ -213,6 +213,12 @@ export default defineComponent({
         this.autosave_seconds_left = -1
       }
     },
+    select_patch_by_id (id) {
+      console.log('TODO select_patch_by_id', id)
+      this.patch = this.patch_list.filter(function (x) {
+        return x.id === id
+      })[0]
+    },
     select_patch (patch) {
       if (patch.id==='create') {
         const TTT = this
