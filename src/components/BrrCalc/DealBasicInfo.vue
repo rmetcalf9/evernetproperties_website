@@ -35,6 +35,9 @@
           @updateweblinks="updateweblinks"
         />
       </div>
+      <div><q-input filled clearable v-model="selling_agent" label="Selling Agent" /></div>
+      <div><q-input filled autogrow v-model="notes" label="Notes" /></div>
+
     </q-card-section>
     <q-card-section>
       <div>
@@ -70,6 +73,8 @@ export default defineComponent({
       postcode: '',
       weblinks: [],
       new_patch_value: '',
+      selling_agent: '',
+      notes: '',
       changed: false,
       autosave_seconds_left: 60,
       ever_saved: false,
@@ -89,6 +94,8 @@ export default defineComponent({
         address: this.address,
         postcode: this.postcode,
         weblinks: this.weblinks,
+        selling_agent: this.selling_agent,
+        notes: this.notes
       }
     },
     no_save_message () {
@@ -150,6 +157,9 @@ export default defineComponent({
       this.address = data_to_load.address
       this.postcode = data_to_load.postcode
       this.weblinks = data_to_load.weblinks
+      this.selling_agent = data_to_load.selling_agent
+      this.notes = data_to_load.notes
+
       this.patch = this.patch_list.filter(function (x) {
         return x.id === data_to_load.patch_id
       })[0]
