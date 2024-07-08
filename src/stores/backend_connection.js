@@ -224,7 +224,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         callback.error(response)
       }
     },
-    login (callback) {
+    login (callback, clientid) {
       // https://developers.google.com/identity/gsi/web/reference/js-reference
       const TTT = this
       const loccallback = function(tokenResponse) {
@@ -232,7 +232,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       }
       this.connection_state.state = ConnectionState.logininprogress
        window.google.accounts.id.initialize({
-        client_id: '954557855733-9fovnaaj81f4cpbceqfpn72i2e8oksaa.apps.googleusercontent.com',
+        client_id: clientid,
         callback: loccallback
       });
       window.google.accounts.id.prompt();

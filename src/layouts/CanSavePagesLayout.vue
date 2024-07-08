@@ -167,7 +167,7 @@ export default defineComponent({
         if (TTT.isLoggedin) {
           TTT.page_to_show = 'loggedin'
         } else {
-          TTT.backend_connection_store.login(login_callback)
+          TTT.backend_connection_store.login(login_callback, TTT.$rjmgclientid)
         }
       },
       error: function (response) {

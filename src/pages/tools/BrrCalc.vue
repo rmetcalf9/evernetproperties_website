@@ -83,6 +83,9 @@
           v-if="security_role_cansave"
           @saveprojectcomplete="save_project_complete"
         />
+        <SaveToGoogleSheet
+          ref="SaveToGoogleSheet"
+        />
       </div>
     </div>
   </q-page>
@@ -101,6 +104,7 @@ import Refinance from '../../components/BrrCalc/Refinance.vue'
 import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import DealRating from '../../components/BrrCalc/DealRating.vue'
 import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
+import SaveToGoogleSheet from '../../components/BrrCalc/SaveToGoogleSheet.vue'
 
 import ProjectSerializer from '../../components/BrrCalc/ProjectSerializer.vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
@@ -123,7 +127,8 @@ export default defineComponent({
     DealRating,
     Refinance,
     DealBasicInfo,
-    ProjectSerializer
+    ProjectSerializer,
+    SaveToGoogleSheet
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()

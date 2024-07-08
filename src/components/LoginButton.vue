@@ -50,7 +50,13 @@ export default defineComponent({
   },
   methods: {
     autoriseWithGoogle () {
-      this.backend_connection_store.login()
+      const login_callback = {
+        ok: function (response) {
+        },
+        error: function (response) {
+        }
+      }
+      this.backend_connection_store.login(login_callback, this.$rjmgclientid)
     },
     clickProfile () {
       this.$router.push("/profile")
