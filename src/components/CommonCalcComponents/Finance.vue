@@ -225,7 +225,6 @@ export default defineComponent({
   },
   computed: {
     caculated_loan_details () {
-      console.log('caculated_loan_details', this.loans)
       return this.loans.map(function (loan) {
         return {
           id: loan.id,

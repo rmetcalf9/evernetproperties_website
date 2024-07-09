@@ -1,6 +1,28 @@
 // Utils for outputing sheet
 
 function get_sheet_utils (sheetId) {
+  function formatnumbermisc (r1, r2, c1, c2, pattern) {
+    return {
+      "repeatCell": {
+        "range": {
+          "sheetId": sheetId,
+          "startRowIndex": r1,
+          "endRowIndex": r2,
+          "startColumnIndex": c1,
+          "endColumnIndex": c2
+        },
+        "cell": {
+          "userEnteredFormat": {
+            "numberFormat": {
+              "type": "NUMBER",
+              "pattern": pattern
+            }
+          }
+        },
+        "fields": "userEnteredFormat.numberFormat"
+      }
+    }
+  }
   return {
     makeboldandvaligntop: function (r1, r2, c1, c2) {
       return {
@@ -24,7 +46,7 @@ function get_sheet_utils (sheetId) {
         }
       }
     },
-    formatcurrency: function (r1, r2, c1, c2) {
+    makeitalicandvaligntop: function (r1, r2, c1, c2) {
       return {
         "repeatCell": {
           "range": {
@@ -36,16 +58,19 @@ function get_sheet_utils (sheetId) {
           },
           "cell": {
             "userEnteredFormat": {
-              "numberFormat": {
-                "type": "NUMBER",
-                "pattern": "[$£-809]#,##0.00"
-              }
+              "textFormat": {
+                "italic": true
+              },
+              "verticalAlignment": "TOP"
             }
           },
-          "fields": "userEnteredFormat.numberFormat"
+          "fields": "userEnteredFormat(textFormat, verticalAlignment)"
         }
       }
     },
+    formatnumbermisc: function (r1, r2, c1, c2, pattern) { return formatnumbermisc(r1, r2, c1, c2, pattern) },
+    formatcurrency: function (r1, r2, c1, c2) { return formatnumbermisc(r1, r2, c1, c2, '[$£-809]#,##0.00') },
+    formatpercentage: function (r1, r2, c1, c2) { return formatnumbermisc(r1, r2, c1, c2, '0.00%') },
     adjustcolumnwidth: function (c, value) {
       return {
         "updateDimensionProperties": {
