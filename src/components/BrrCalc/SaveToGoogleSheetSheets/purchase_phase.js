@@ -1,3 +1,5 @@
+import utils from './_utils.js'
+
 const sheet_name = 'Purchase Phase'
 
 // ALways in sequence. 0=Cash, 1=Mortgage, 2=Bridge
@@ -47,13 +49,13 @@ function getType(spreadsheet, vueobj, sheet_id_map) {
 }
 
 function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
+  const su = utils.get_sheet_utils(sheet_id_map[sheet_name])
   let requests = [];
-  requests = requests.concat(get_sheet(spreadsheet, vueobj, sheet_id_map))
-
   const value_requests = [];
   let context = {
     cur_row: 0
   }
+  requests.push(su.adjustcolumnwidth(0,150))
 
   context.cur_row = context.cur_row + 1
   value_requests.push({
@@ -76,6 +78,7 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
     range: sheet_name + '!E' + context.cur_row.toString() + ':E' + context.cur_row.toString(),
     values: [[vueobj.serialized_data.dealbasicinfo.postcode]]
   })
+  requests.push(su.makeboldandvaligntop(0,context.cur_row,0,1))
 
   context.cur_row = context.cur_row + 1
 
@@ -86,6 +89,8 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
     range: sheet_name + '!A' + context.cur_row.toString() + ':A' + context.cur_row.toString(),
     values: [[purchase_type.name]]
   })
+  requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,1))
+
 
   value_requests.push(purchase_type.pre_stage(context))
 
@@ -95,7 +100,9 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
     range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
     values: [['', 'Worst', 'Best']]
   })
+  requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,1,3))
 
+  const row_start_of_details = context.cur_row
   let details = purchase_type.start_details()
   details.push(['Refurbishment', vueobj.refurb_cost_total.max, vueobj.refurb_cost_total.min])
   details.push(['Stamp Duty', vueobj.stampduty_total.max, vueobj.stampduty_total.min])
@@ -110,7 +117,6 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
 
   details.push(purchase_type.end_details())
 
-
   details.forEach(function (detail) {
     context.cur_row = context.cur_row + 1
     value_requests.push({
@@ -118,12 +124,15 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
       values: [[detail[0], detail[1], detail[2]]]
     })
   })
+  requests.push(su.makeboldandvaligntop(row_start_of_details,context.cur_row,0,1))
+  //TODO Mortgage not bold italic if needed
 
   context.cur_row = context.cur_row + 1
   value_requests.push({
     range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
-    values: [['Total', 'TODO', 'TODO']]
+    values: [['Total', '=SUM(B' + (row_start_of_details+1).toString() + ':B' + (context.cur_row-1).toString() + ')', '=SUM(C' + (row_start_of_details+1).toString() + ':C' + (context.cur_row-1).toString() + ')']]
   })
+  requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,3))
 
 
   return {
@@ -132,32 +141,6 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
   }
 }
 
-function get_sheet (spreadsheet, vueobj, sheet_id_map) {
-  const requests = [];
-
-  requests.push({
-    "repeatCell": {
-      "range": {
-        "sheetId": sheet_id_map[sheet_name],
-        "startRowIndex": 0,
-        "endRowIndex": vueobj.serialized_data.dealbasicinfo.weblinks.length + 6 + 1,
-        "startColumnIndex": 0,
-        "endColumnIndex": 1
-      },
-      "cell": {
-        "userEnteredFormat": {
-          "textFormat": {
-            "bold": true
-          },
-          "verticalAlignment": "TOP"
-        }
-      },
-      "fields": "userEnteredFormat(textFormat, verticalAlignment)"
-    }
-  })
-
-  return requests
-}
 
 export default {
   sheet_name: sheet_name,
