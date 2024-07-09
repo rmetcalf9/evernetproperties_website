@@ -85,6 +85,8 @@
         />
         <SaveToGoogleSheet
           ref="SaveToGoogleSheet"
+          :serialized_data="serialized_data"
+          :patch="patch"
         />
       </div>
     </div>
@@ -268,14 +270,12 @@ export default defineComponent({
         return []
       }
       return this.$refs.GdvCard.total
-    }
-  },
-  methods: {
-    projectchanged () {
-      this.$refs.DealBasicInfo.set_changed_true()
     },
-    save_project () {
-      const dict_of_card_info = {
+    serialized_data () {
+      if (!this.isMounted) {
+        return {}
+      }
+      return {
         dealbasicinfo: this.$refs.DealBasicInfo.serializer_card_data,
         vision: this.$refs.Vision.serializer_card_data,
         gdvcard: this.$refs.GdvCard.serializer_card_data,
@@ -286,8 +286,21 @@ export default defineComponent({
         finance: this.$refs.Finance.serializer_card_data,
         refinance: this.$refs.Refinance.serializer_card_data,
       }
+    },
+    patch () {
+      if (!this.isMounted) {
+        return {id: 'notset', name: 'Not Set'}
+      }
+      return this.$refs.DealBasicInfo.patch
+    }
+  },
+  methods: {
+    projectchanged () {
+      this.$refs.DealBasicInfo.set_changed_true()
+    },
+    save_project () {
       this.$refs.ProjectSerializer.save_project({
-        dict_of_card_info: dict_of_card_info
+        dict_of_card_info: this.serialized_data
       })
     },
     load_project_into_cards (project) {

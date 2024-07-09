@@ -49,10 +49,20 @@ Add ref like:
 />
 
 Add to save_project:
-const dict_of_card_info = {
-  dealbasicinfo: this.$refs.DealBasicInfo.serializer_card_data,
-  vision: this.$refs.Vision.serializer_card_data
+serialized_data () {
+  return {
+    dealbasicinfo: this.$refs.DealBasicInfo.serializer_card_data,
+    vision: this.$refs.Vision.serializer_card_data,
+    gdvcard: this.$refs.GdvCard.serializer_card_data,
+    purchaseprice: this.$refs.PurchasePrice.serializer_card_data,
+    refurbcost: this.$refs.RefurbCost.serializer_card_data,
+    stampduty: this.$refs.StampDuty.serializer_card_data,
+    othercosts: this.$refs.OtherCosts.serializer_card_data,
+    finance: this.$refs.Finance.serializer_card_data,
+    refinance: this.$refs.Refinance.serializer_card_data,
+  }
 }
+
 
 Add to load_project_into_cards:
 load_project_into_cards (project) {

@@ -17,6 +17,7 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
+  props: ['serialized_data', 'patch'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -37,7 +38,7 @@ export default defineComponent({
       const tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: this.$rjmgclientid,
         scope: this.$rjmgscopes,
-        callback: this.execute_export, // defined later
+        callback: this.execute_export,
       });
       if (gapi.client.getToken() === null) {
         // Prompt the user to select a Google Account and ask for consent to share their data
@@ -52,15 +53,19 @@ export default defineComponent({
       try {
         gapi.client.sheets.spreadsheets.create({
           properties: {
-            title: 'evernetproperties.com',
+            title: 'evernetproperties.com-' + this.patch.name + '-' + this.serialized_data.dealbasicinfo.address,
           },
         }).then((response) => {
           console.log('Spreadsheet ID: ' + response.result.spreadsheetId);
+          this.open_sheet(response.result.spreadsheetId)
         });
       } catch (err) {
-        document.getElementById('content').innerText = err.message;
+        console.log('Error-' + err.message)
         return;
       }
+    },
+    open_sheet (id) {
+      window.open('https://docs.google.com/spreadsheets/d/' + id, '_blank').focus()
     }
   }
 })
