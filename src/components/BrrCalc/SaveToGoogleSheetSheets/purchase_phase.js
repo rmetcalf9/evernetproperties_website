@@ -133,7 +133,7 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
     values: [['Total', '=SUM(B' + (row_start_of_details+1).toString() + ':B' + (context.cur_row-1).toString() + ')', '=SUM(C' + (row_start_of_details+1).toString() + ':C' + (context.cur_row-1).toString() + ')']]
   })
   requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,3))
-
+  requests.push(su.formatcurrency(row_start_of_details,context.cur_row,1,3))
 
   return {
     value_requests: value_requests,

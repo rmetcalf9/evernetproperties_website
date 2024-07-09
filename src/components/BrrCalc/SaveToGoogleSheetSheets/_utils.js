@@ -24,6 +24,28 @@ function get_sheet_utils (sheetId) {
         }
       }
     },
+    formatcurrency: function (r1, r2, c1, c2) {
+      return {
+        "repeatCell": {
+          "range": {
+            "sheetId": sheetId,
+            "startRowIndex": r1,
+            "endRowIndex": r2,
+            "startColumnIndex": c1,
+            "endColumnIndex": c2
+          },
+          "cell": {
+            "userEnteredFormat": {
+              "numberFormat": {
+                "type": "NUMBER",
+                "pattern": "[$£-809]#,##0.00"
+              }
+            }
+          },
+          "fields": "userEnteredFormat.numberFormat"
+        }
+      }
+    },
     adjustcolumnwidth: function (c, value) {
       return {
         "updateDimensionProperties": {
