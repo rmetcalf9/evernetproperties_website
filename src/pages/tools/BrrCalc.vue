@@ -87,6 +87,10 @@
           ref="SaveToGoogleSheet"
           :serialized_data="serialized_data"
           :patch="patch"
+          :stampduty_total="stampduty_total"
+          :refurb_cost_total="refurb_cost_total"
+          :othercosts_items_detail="othercosts_items_detail"
+          :caculated_loan_details="caculated_loan_details"
         />
       </div>
     </div>
@@ -184,6 +188,12 @@ export default defineComponent({
       }
       return this.$refs.Refinance.get_refinance
     },
+    caculated_loan_details () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.Finance.caculated_loan_details
+    },
     finance_totalmoneyneeded () {
       if (!this.isMounted) {
         return {
@@ -234,6 +244,12 @@ export default defineComponent({
         return []
       }
       return this.$refs.OtherCosts.othercosts_items
+    },
+    othercosts_items_detail () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.OtherCosts.othercosts_items_detail
     },
     refurb_cost_items () {
       if (!this.isMounted) {

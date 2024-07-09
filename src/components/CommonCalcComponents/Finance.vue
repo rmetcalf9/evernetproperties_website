@@ -224,6 +224,18 @@ export default defineComponent({
     }
   },
   computed: {
+    caculated_loan_details () {
+      console.log('caculated_loan_details', this.loans)
+      return this.loans.map(function (loan) {
+        return {
+          id: loan.id,
+          name: loan.name,
+          amount: loan.amount,
+          rate: loan.rate,
+          interest: (loan.amount * loan.rate / 100)
+        }
+      })
+    },
     serializer_card_data () {
       return {
         bridge: this.bridge,

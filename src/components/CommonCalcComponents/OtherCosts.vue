@@ -287,20 +287,34 @@ export default defineComponent({
       }
     },
     total () {
-      // only one cost so far. In future all costs are added
-      let auction_costs = 0
-      if (this.auction) {
-        auction_costs = this.consts.auction_survey + this.consts.auction_legal_review
+      let total = {
+        min: 0,
+        max: 0
       }
-      var total = {
-        min: this.fees.min + auction_costs + this.sourcingfee.min + this.surveyfee.min,
-        max: this.fees.max + auction_costs + this.sourcingfee.max + this.surveyfee.max
-      }
+      this.othercosts_items_detail.forEach(function other_cost (ite) {
+        total.min += -1 * ite.best
+        total.max += -1 * ite.worst
+      })
       return total
     },
     othercosts_items () {
       let ret_val = []
       ret_val.push({name: 'Other Costs', worst: -1 * this.total.max, best: -1 * this.total.min})
+      return ret_val
+    },
+    othercosts_items_detail () {
+      let ret_val = []
+      ret_val.push({name: 'Fees', worst: -1 * this.fees.max, best: -1 * this.fees.min})
+      if (this.auction) {
+        ret_val.push({name: 'Auction Survey', worst: -1 * this.consts.auction_survey, best: -1 * this.consts.auction_survey})
+        ret_val.push({name: 'Auction Legal Review', worst: -1 * this.consts.auction_legal_review, best: -1 * this.consts.auction_legal_review})
+      }
+      if (this.sourcing.usesourcing) {
+        ret_val.push({name: 'Sourcing Fee', worst: -1 * this.sourcingfee.max, best: -1 * this.sourcingfee.min})
+      }
+      if (this.survey.type !== 'none') {
+        ret_val.push({name: 'Survey', worst: -1 * this.surveyfee.max, best: -1 * this.surveyfee.min})
+      }
       return ret_val
     }
   }
