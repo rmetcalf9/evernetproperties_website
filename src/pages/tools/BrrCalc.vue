@@ -91,6 +91,7 @@
           :refurb_cost_total="refurb_cost_total"
           :othercosts_items_detail="othercosts_items_detail"
           :caculated_loan_details="caculated_loan_details"
+          :finance_bridgecost="finance_bridgecost"
         />
       </div>
     </div>
@@ -193,6 +194,15 @@ export default defineComponent({
         return []
       }
       return this.$refs.Finance.caculated_loan_details
+    },
+    finance_bridgecost () {
+      if (!this.isMounted) {
+        return {
+          best: 0,
+          worst: 0
+        }
+      }
+      return this.$refs.Finance.bridgecost
     },
     finance_totalmoneyneeded () {
       if (!this.isMounted) {

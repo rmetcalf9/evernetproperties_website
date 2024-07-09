@@ -47,6 +47,13 @@ function get_sheet_main_values (spreadsheet, vueobj, sheet_id_map) {
     values: [['Vision:', vueobj.serialized_data.vision.devplan]]
   })
 
+  cur_row = cur_row + 1
+  cur_row = cur_row + 1
+  data.push({
+    range: 'Main!A' + cur_row.toString() + ':A' + cur_row.toString(),
+    values: [['Caculations provided here are for reference only and should be manually checked.']]
+  })
+
 
   return data
 }

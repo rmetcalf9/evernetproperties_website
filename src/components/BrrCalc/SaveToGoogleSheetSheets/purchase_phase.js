@@ -107,12 +107,29 @@ function get_mortgage_type(spreadsheet, vueobj, sheet_id_map) {
     },
   }
 }
+function get_bridge_type(spreadsheet, vueobj, sheet_id_map) {
+  return {
+    name: 'Buying with a Bridge',
+    pre_stage: function (context) {return },
+    start_details: function (context) {
+      return [
+        ['Purchase Price', vueobj.serialized_data.purchaseprice.purchaserangevalue.max, vueobj.serialized_data.purchaseprice.purchaserangevalue.min]
+      ]
+    },
+    end_details: function (context) {
+      return [
+        ['Bridge Costs', vueobj.finance_bridgecost.worst, vueobj.finance_bridgecost.best]
+      ]
+    },
+  }
+}
 
 function getType(spreadsheet, vueobj, sheet_id_map) {
   if (vueobj.serialized_data.finance.mortgage.usemortgage) {
     return get_mortgage_type(spreadsheet, vueobj, sheet_id_map)
   }
   if (vueobj.serialized_data.finance.bridge.usebridge) {
+    return get_bridge_type(spreadsheet, vueobj, sheet_id_map)
     //bridge {
     //    "usebridge": false,
     //    "startcost": 0.01,
@@ -123,7 +140,6 @@ function getType(spreadsheet, vueobj, sheet_id_map) {
     //        "best": 1
     //    }
     //}
-    console.log('TODO Bridge')
   }
   return get_cash_type(spreadsheet, vueobj, sheet_id_map)
   //return get_mortgage_type(spreadsheet, vueobj, sheet_id_map)

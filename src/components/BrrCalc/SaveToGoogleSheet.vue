@@ -24,7 +24,7 @@ import sheet_purchase_phase from './SaveToGoogleSheetSheets/purchase_phase.js'
 
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
-  props: ['serialized_data', 'patch', 'refurb_cost_total', 'stampduty_total', 'othercosts_items_detail', 'caculated_loan_details'],
+  props: ['serialized_data', 'patch', 'refurb_cost_total', 'stampduty_total', 'othercosts_items_detail', 'caculated_loan_details', 'finance_bridgecost'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
