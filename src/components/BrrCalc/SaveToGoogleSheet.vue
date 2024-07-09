@@ -5,7 +5,12 @@
       <div class="text-subtitle2">Export figures into a google docs spreadsheet.</div>
     </q-card-section>
     <q-card-section>
-      <q-btn color="primary" icon="save" label="Export to google sheets" @click="click_export" />
+      <div>
+        <q-btn color="primary" icon="save" label="Export to google sheets" @click="click_export" />
+      </div>
+      <div class="textdiv">
+        This feature will generate a spreadsheet containing all the current values for this project and output it to a document in your google drive.
+      </div>
     </q-card-section>
   </q-card>
 </template>
@@ -199,4 +204,8 @@ export default defineComponent({
 </script>
 
 <style>
+.textdiv {
+  padding: 20px;
+  max-width: 300px;
+}
 </style>
