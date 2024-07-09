@@ -17,7 +17,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { Notify } from 'quasar'
+import { Notify, Loading } from 'quasar'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import sheet_main from './SaveToGoogleSheetSheets/main.js'
 import sheet_purchase_phase from './SaveToGoogleSheetSheets/purchase_phase.js'
@@ -42,6 +42,7 @@ export default defineComponent({
   },
   methods: {
     click_export () {
+      Loading.show()
       const tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: this.$rjmgclientid,
         scope: this.$rjmgscopes,
@@ -72,7 +73,7 @@ export default defineComponent({
           this.spreadsheets_batchupdate(response.result)
         });
       } catch (err) {
-      this.sheet_api_error_handler(err)
+        this.sheet_api_error_handler(err)
         return;
       }
     },
@@ -188,6 +189,7 @@ export default defineComponent({
       window.open(spreadsheet.spreadsheetUrl, '_blank').focus()
     },
     sheet_api_error_handler (err) {
+      Loading.hide()
       console.log('Error-' + err.message)
       Notify.create({
         color: 'negative',
@@ -198,6 +200,7 @@ export default defineComponent({
     },
     sheet_final_complete (spreadsheet) {
       this.open_sheet(spreadsheet)
+      Loading.hide()
     }
   }
 })
