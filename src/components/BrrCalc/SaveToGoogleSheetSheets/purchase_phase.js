@@ -122,8 +122,13 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
     values: [['Total', 'TODO', 'TODO']]
   })
 
+  let requests = [];
+  requests = requests.concat(get_sheet(spreadsheet, vueobj, sheet_id_map))
 
-  return data
+  return {
+    value_requests: data,
+    requests: requests
+  }
 }
 
 function get_sheet (spreadsheet, vueobj, sheet_id_map) {
@@ -155,6 +160,5 @@ function get_sheet (spreadsheet, vueobj, sheet_id_map) {
 
 export default {
   sheet_name: sheet_name,
-  get_sheet_values: get_sheet_values,
-  get_sheet: get_sheet
+  get_sheet_values: get_sheet_values
 }

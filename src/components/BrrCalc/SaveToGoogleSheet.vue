@@ -127,8 +127,20 @@ export default defineComponent({
     },
     spreadsheets_batchupdate_after_all_sheets_added (spreadsheet, sheet_id_map) {
       let requests = []
+      let value_requests = []
 
-      requests = requests.concat(sheet_purchase_phase.get_sheet(spreadsheet, this, sheet_id_map))
+      value_requests = value_requests.concat(sheet_main.get_sheet_main_values(spreadsheet, this, sheet_id_map))
+
+      // Repeated for all my subsheets
+      let x = sheet_purchase_phase.get_sheet_values(spreadsheet, this, sheet_id_map)
+      requests = requests.concat(x.requests)
+      value_requests = value_requests.concat(x.value_requests)
+
+      if (requests.length === 0) {
+        console.log('No requests required')
+        this.spreadsheets_values_batchupdate(spreadsheet, sheet_id_map, value_requests)
+        return
+      }
 
       const body = {
           requests: requests
@@ -139,22 +151,17 @@ export default defineComponent({
           resource: body
         }).then((response) => {
           const result = response.result;
-          console.log('spreadsheet Batch Update aftger all sheets added result', response.result.replies)
-          this.spreadsheets_values_batchupdate(spreadsheet, sheet_id_map)
+          console.log('spreadsheet Batch Update after all sheets added result', response.result.replies)
+          this.spreadsheets_values_batchupdate(spreadsheet, sheet_id_map, value_requests)
         });
       } catch (err) {
         this.sheet_api_error_handler(err)
         return;
       }
     },
-    spreadsheets_values_batchupdate (spreadsheet, sheet_id_map) {
-      let data = [];
-
-      data = data.concat(sheet_main.get_sheet_main_values(spreadsheet, this, sheet_id_map))
-      data = data.concat(sheet_purchase_phase.get_sheet_values(spreadsheet, this, sheet_id_map))
-
+    spreadsheets_values_batchupdate (spreadsheet, sheet_id_map, value_requests) {
       const body = {
-        data: data,
+        data: value_requests,
         valueInputOption: 'USER_ENTERED',
       };
       try {
