@@ -136,8 +136,8 @@ export default defineComponent({
       mortgage: {
         usemortgage: false,
         rate: {
-          min: 5.5,
-          max: 5.5
+          min: 6.0,
+          max: 6.0
         },
         ltv: {
           min: 75,
