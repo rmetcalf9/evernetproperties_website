@@ -37,8 +37,17 @@ export default defineComponent({
         let text = url.hostname
         if (url.hostname === 'www.google.com') {
           if (url.pathname.startsWith('/maps/@')) {
-            text = 'Google map'
-            icon = 'map'
+            if (url.pathname.includes('/data=')) {
+              text = 'Google Streetview'
+              icon = 'streetview'
+            } else {
+              text = 'Google Map'
+              icon = 'map'
+            }
+          }
+          if (url.pathname.startsWith('/maps/place')) {
+            text = 'Google Place'
+            icon = 'place'
           }
         }
         return {
