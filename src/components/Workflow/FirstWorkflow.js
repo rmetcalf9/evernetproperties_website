@@ -29,20 +29,22 @@ export default {
           }
         ]
       },
-      "diagram_notes": "Phone Agent<BR>Is peoperty still available<BR>What is sellers situation"
+      "diagram_notes": "Phone Agent<BR>Is property still available<BR>What is sellers situation"
     },
     "2.1": { "name": "Rejected Lead"},
     "3": {
       "name": "Viewing Booked",
       "progression": {
+        "failed": "3.1",
         "success": [
           {
             "next_stage": "4"
           }
         ]
       },
-      "diagram_notes": "Property Condition<BR>Identify Show stoppers<BR>Estimate Refurb cost<BR>Evaluate potential"
+      "diagram_notes": "Market Comparables<BR>Property Condition<BR>Identify Show stoppers<BR>Evaluate potential"
     },
+    "3.1": { "name": "Cancelled Viewing"},
     "4": {
       "name": "Viewed",
       "progression": {
@@ -53,7 +55,7 @@ export default {
           }
         ]
       },
-      "diagram_notes": "Market Comparable<BR>Refurb cost<BR>Identify offer price<BR>Make offer"
+      "diagram_notes": "Refurb cost (Quotes)<BR>Identify offer price<BR>Make offer"
     },
     "4.1": { "name": "Unviable"},
     "5": {
