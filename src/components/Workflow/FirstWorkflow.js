@@ -16,6 +16,7 @@ export default {
           }
         ]
       },
+      "diagram_notes": "Identify profitable strategy<BR>Find on Streetview<BR>Identify full address"
     },
     "1.1": { "name": "Rejected Lead"},
     "2": {
@@ -28,6 +29,7 @@ export default {
           }
         ]
       },
+      "diagram_notes": "Phone Agent<BR>Is peoperty still available<BR>What is sellers situation"
     },
     "2.1": { "name": "Rejected Lead"},
     "3": {
@@ -38,7 +40,8 @@ export default {
             "next_stage": "4"
           }
         ]
-      }
+      },
+      "diagram_notes": "Property Condition<BR>Identify Show stoppers<BR>Estimate Refurb cost<BR>Evaluate potential"
     },
     "4": {
       "name": "Viewed",
@@ -50,6 +53,7 @@ export default {
           }
         ]
       },
+      "diagram_notes": "Market Comparable<BR>Refurb cost<BR>Identify offer price<BR>Make offer"
     },
     "4.1": { "name": "Unviable"},
     "5": {
@@ -64,6 +68,7 @@ export default {
           }
         ]
       },
+      "diagram_notes": "Negotiation"
     },
     "6": {
       "name": "Rejected offer",

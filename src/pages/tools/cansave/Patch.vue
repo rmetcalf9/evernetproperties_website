@@ -16,6 +16,8 @@
       </div>
       <div v-if="!table_view">
         <WrokflowChart
+          :patch_data="patch_data"
+          @onclickstage="onchartclickstage"
         />
       </div>
     </div>
@@ -55,6 +57,10 @@ export default defineComponent({
     }
   },
   methods: {
+    onchartclickstage (stage_id, stage_data) {
+      console.log('clicked onchartclickstage', stage_id, stage_data)
+      this.table_view = true
+    },
     clicknewproject () {
       this.$router.push('/tools/brrcalc?patchid=' + this.$route.params.patchid)
     },
