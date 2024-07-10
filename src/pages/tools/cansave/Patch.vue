@@ -4,14 +4,20 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded">
-      <h1>{{ patch_data.name }}</h1>
-      <h2>Projects</h2>
-      <div>
-        <ProjectTable
-          :patch_data_projects="patch_data.projects"
+      <div v-if="table_view">
+        <h1>{{ patch_data.name }}</h1>
+        <h2>Projects <q-btn color="primary" icon="account_tree" label="Worlflow" @click="table_view = false" /></h2>
+        <div>
+          <ProjectTable
+            :patch_data_projects="patch_data.projects"
+          />
+        </div>
+        <q-btn color="primary" label="Add Project" @click="clicknewproject" />
+      </div>
+      <div v-if="!table_view">
+        <WrokflowChart
         />
       </div>
-      <q-btn color="primary" label="Add Project" @click="clicknewproject" />
     </div>
   </q-page>
 </template>
@@ -22,12 +28,13 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 
 import ProjectTable from '../../../components/ProjectTable.vue'
+import WrokflowChart from '../../../components/Workflow/Chart.vue'
 
 
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
   components: {
-    ProjectTable
+    ProjectTable, WrokflowChart
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -38,7 +45,8 @@ export default defineComponent({
   data () {
     return {
       loaded: false,
-      patch_data: {}
+      patch_data: {},
+      table_view: true
     }
   },
   computed: {
