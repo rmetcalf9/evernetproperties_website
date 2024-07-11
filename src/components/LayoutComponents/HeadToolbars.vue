@@ -9,7 +9,7 @@
             src="~assets/main_logo.svg"
           >
           <div class="column no-wrap justify-start items-center content-start">
-            <q-toolbar-title>
+            <q-toolbar-title @click="clicktoolbartitle">
               Evernet Properties Limited
             </q-toolbar-title>
             <div>
@@ -40,7 +40,30 @@ export default defineComponent({
         {name: 'Tools', target: '/tools'},
         {name: 'Contact Us', target: '/contact'},
         {name: 'About', target: '/about'}
-      ]
+      ],
+      toolbartitlelastclick: Date.now(),
+      toolbartitleclickcount: 0
+    }
+  },
+  methods: {
+    clicktoolbartitle () {
+      // Reset counter if last click was more than 2 seconds ago
+      var curTime = Date.now()
+      if ((curTime - this.toolbartitlelastclick) > 2000) {
+        this.toolbartitlelastclick = curTime
+        this.toolbartitleclickcount = 0
+        return
+      }
+
+      // Not increment following rules
+      this.toolbartitleclickcount = this.toolbartitleclickcount + 1
+      this.toolbartitlelastclick = curTime
+
+      if (this.toolbartitleclickcount > 7) {
+        this.toolbartitleclickcount = 0
+        this.$router.push('/debug')
+      }
+      // console.log('End of clicktoolbartitle')
     }
   }
 })
