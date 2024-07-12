@@ -9,7 +9,7 @@
         <h2>Projects <q-btn color="primary" icon="account_tree" label="Worlflow" @click="table_view = false" /></h2>
         <div>
           <ProjectTable
-            :patch_data_projects="patch_data.projects"
+            :projects="loaded_projects"
           />
         </div>
         <q-btn color="primary" label="Add Project" @click="clicknewproject" />
@@ -48,6 +48,7 @@ export default defineComponent({
     return {
       loaded: false,
       patch_data: {},
+      loaded_projects: [],
       table_view: true
     }
   },
@@ -90,7 +91,45 @@ export default defineComponent({
     },
     refresh_success (response) {
       this.patch_data = response.data
+      this.loaded_projects = this.patch_data.projects.map(function (x) {
+        return {
+          id: x,
+          loaded: false,
+          address: 'loading...'
+        }
+      })
+      this.recursive_load_project_details()
       this.loaded = true
+    },
+    recursive_load_project_details () {
+      const items_to_load = this.loaded_projects.filter(function (x) {
+        return x.loaded === false
+      })
+      if (items_to_load.length === 0) {
+        return
+      }
+      const item_to_load = items_to_load[0]
+
+      const TTT = this
+      const callback = {
+        ok: function (response) {
+          item_to_load.loaded=true
+          item_to_load.address=response.data.sub_section_details.dealbasicinfo.address
+          TTT.recursive_load_project_details()
+        },
+        error: function (response) {
+          item_to_load.loaded=true
+          item_to_load.address='TODO LOAD FAIL'
+          TTT.recursive_load_project_details()
+        }
+      }
+      this.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/projects/' + item_to_load.id,
+        method: 'GET',
+        data: undefined,
+        callback: callback
+      })
     }
   },
   mounted () {

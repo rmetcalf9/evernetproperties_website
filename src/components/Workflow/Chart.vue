@@ -291,8 +291,6 @@ export default defineComponent({
     },
     click_stage_callback (stage_id, stage_data) {
       this.$emit("onclickstage", stage_id, stage_data);
-
-      console.log('clicked on stage', stage_id, stage_data)
     },
     clickDIV () {
       // console.log('CLICK')
