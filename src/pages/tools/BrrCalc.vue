@@ -93,6 +93,10 @@
           :caculated_loan_details="caculated_loan_details"
           :finance_bridgecost="finance_bridgecost"
         />
+        <ActivityLog
+          ref="ActivityLog"
+          v-if="security_role_cansave"
+        />
       </div>
     </div>
   </q-page>
@@ -112,6 +116,7 @@ import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import DealRating from '../../components/BrrCalc/DealRating.vue'
 import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
 import SaveToGoogleSheet from '../../components/BrrCalc/SaveToGoogleSheet.vue'
+import ActivityLog from '../../components/CommonCalcComponents/ActivityLog.vue'
 
 import ProjectSerializer from '../../components/BrrCalc/ProjectSerializer.vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
@@ -135,7 +140,8 @@ export default defineComponent({
     Refinance,
     DealBasicInfo,
     ProjectSerializer,
-    SaveToGoogleSheet
+    SaveToGoogleSheet,
+    ActivityLog
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
