@@ -7,6 +7,7 @@
         :rows="projects"
         :columns="columns"
         :filter="filter"
+        :pagination="initialPagination"
         no-data-label="I didn't find anything for you"
         no-results-label="The filter didn't uncover any results"
         row-key="name"
@@ -97,7 +98,13 @@ export default defineComponent({
           field: 'address',
           sortable: true
         }
-      ]
+      ],
+      initialPagination: {
+        // sortBy: 'desc',
+        // descending: false,
+        // page: 2,
+        rowsPerPage: 50
+      }
     }
   },
   computed: {
