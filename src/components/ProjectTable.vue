@@ -25,7 +25,7 @@
               <div v-if="props.row.loaded">
                 <div class="projecttablehead">{{ props.row.item.vision.devplan }}</div>
                 <div v-if="typeof (props.row.item.dealbasicinfo.notes) !== 'undefined'">
-                  <div v-for="line_item in props.row.item.dealbasicinfo.notes.split(' ')" :key='line_item'>
+                  <div v-for="line_item in props.row.item.dealbasicinfo.notes.split('\n')" :key='line_item'>
                     {{ line_item }}
                   </div>
                 </div>
