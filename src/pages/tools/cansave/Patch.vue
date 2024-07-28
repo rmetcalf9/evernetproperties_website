@@ -95,7 +95,7 @@ export default defineComponent({
         return {
           id: x,
           loaded: false,
-          address: 'loading...'
+          item: undefined
         }
       })
       this.recursive_load_project_details()
@@ -114,7 +114,7 @@ export default defineComponent({
       const callback = {
         ok: function (response) {
           item_to_load.loaded=true
-          item_to_load.address=response.data.sub_section_details.dealbasicinfo.address
+          item_to_load.item=response.data.sub_section_details
           TTT.recursive_load_project_details()
         },
         error: function (response) {

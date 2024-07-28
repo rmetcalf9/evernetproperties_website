@@ -12,9 +12,24 @@
         row-key="name"
       >
         <template v-slot:body="props">
-          <q-tr :props="props" @click="onRowClick(props.row)">
+          <q-tr class="projecttablerow" :props="props" @click="onRowClick(props.row)">
             <q-td key="address" :props="props">
-              {{ props.row.address }}
+              <div v-if="!props.row.loaded">
+                Loading...
+              </div>
+              <div v-if="props.row.loaded">
+                {{ props.row.item.dealbasicinfo.address }}
+              </div>
+            </q-td>
+            <q-td key="visionandnotes" :props="props">
+              <div v-if="props.row.loaded">
+                <div class="projecttablehead">{{ props.row.item.vision.devplan }}</div>
+                <div v-if="typeof (props.row.item.dealbasicinfo.notes) !== 'undefined'">
+                  <div v-for="line_item in props.row.item.dealbasicinfo.notes.split(' ')" :key='line_item'>
+                    {{ line_item }}
+                  </div>
+                </div>
+              </div>
             </q-td>
           </q-tr>
         </template>
@@ -73,6 +88,14 @@ export default defineComponent({
           align: 'left',
           field: 'address',
           sortable: true
+        },
+        {
+          name: 'visionandnotes',
+          required: true,
+          label: 'Vision and Notes',
+          align: 'left',
+          field: 'address',
+          sortable: true
         }
       ]
     }
@@ -93,4 +116,10 @@ export default defineComponent({
 </script>
 
 <style>
+.projecttablehead {
+  font-weight: 800;
+}
+.projecttablerow td {
+  vertical-align: top;
+}
 </style>
