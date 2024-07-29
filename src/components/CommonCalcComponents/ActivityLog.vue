@@ -3,45 +3,21 @@
     <q-card-section>
       <div class="text-h6">Activity Log</div>
       <div style="width: 100%; max-width: 400px">
-        <q-chat-message
-          label="Sunday, 19th"
-        />
-        <q-chat-message
-          name="NAME1"
-          :text="['hey, how are you?']"
-          sent
-          stamp="1 minute ago"
-          avatar="src/assets/main_logo.svg"
-        />
-        <q-chat-message
-          name="NAME2"
-          :text="['doing fine, how r you?']"
-          stamp="2 minutes ago"
-          avatar="src/assets/main_logo.svg"
-        />
-        <q-chat-message
-          label="Sunday, 18th"
-        />
-        <q-chat-message
-          name="NAME1"
-          :text="['hey, how are you?']"
-          sent
-          stamp="1 minute ago"
-          avatar="src/assets/main_logo.svg"
-        />
-        <q-chat-message
-          name="NAME2"
-          :text="['doing fine, how r you?']"
-          stamp="2 minutes ago"
-          avatar="src/assets/main_logo.svg"
-        />
-        <div v-for="test in tests" :key="test.b">
-          <q-chat-message
-            name="NAME2"
-            :text="['well then ' + test.a]"
-            stamp="2 minutes ago"
-            :avatar="'src/assets/activity_log_icon_' + test.t + '.png'"
-          />
+        <div v-for="item in activity_log_display" :key="item.id">
+          <div v-if="typeof (item.label) === 'string'">
+            <q-chat-message
+              :label="item.label"
+            />
+          </div>
+          <div v-if="typeof (item.label) === 'undefined'">
+            <q-chat-message
+              :name=item.name
+              :text="[item.text]"
+              :sent="item.sent"
+              :stamp="item.stamp"
+              :avatar="item.avatar"
+            />
+          </div>
         </div>
       </div>
     </q-card-section>
@@ -71,6 +47,26 @@ export default defineComponent({
       return {
         devplan: this.devplan
       }
+    },
+    activity_log_display () {
+      let ret_var = []
+      ret_var = ret_var.concat([{
+        id: '011234',
+        label: 'LABEL'
+      }])
+      ret_var = ret_var.concat(this.tests.map(function (x) {
+        return {
+          id: x.t,
+          label: undefined,
+          name: 'TODO',
+          text: x.a,
+          sent: true,
+          stamp: '1 minute ago',
+          avatar: 'src/assets/activity_log_icon_' + x.t + '.png'
+        }
+      }))
+      console.log('aaa', ret_var)
+      return ret_var
     }
   },
   watch: {
