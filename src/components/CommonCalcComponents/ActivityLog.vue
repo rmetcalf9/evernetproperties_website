@@ -71,10 +71,6 @@ export default defineComponent({
     activity_log_display () {
       let ret_var = []
       let activity_log = tmp_get_example_activity_log_data()
-      ret_var = ret_var.concat([{
-        id: '011234',
-        label: 'Not done date display'
-      }])
 
       const type_data_map = {
         book_viewing: { sent: true, name: 'Viewing booked' },
@@ -86,14 +82,25 @@ export default defineComponent({
         offer_accepted: {sent: false, name: 'Offer accepted' },
       }
 
+      let prev_data_string = ""
       activity_log.forEach(function (ite) {
+        const timestamp = new Date(ite.timestamp)
+        const date_string = timestamp.toDateString()
+        const time_String = timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+        if (prev_data_string !== date_string) {
+          prev_data_string = date_string
+          ret_var = ret_var.concat([{
+            id: '011234',
+            label: prev_data_string
+          }])
+        }
         ret_var = ret_var.concat({
           id: ite.t,
           label: undefined,
           name: type_data_map[ite.type].name,
           text: ite.text,
           sent: type_data_map[ite.type].sent,
-          stamp: ite.timestamp,
+          stamp: time_String,
           avatar: 'src/assets/activity_log_icon_' + ite.type + '.png'
         })
       })
