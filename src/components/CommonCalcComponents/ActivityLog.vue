@@ -33,12 +33,13 @@ function uuidv4() {
   );
 }
 
-function get_new_activity_item (type, text) {
+function get_new_activity_item (type, text, head_notes) {
   return {
     id: uuidv4(),
     type: type,
     timestamp: (new Date()).toISOString(),
-    text: text
+    text: text,
+    head_notes: head_notes
   }
 }
 
@@ -48,7 +49,7 @@ function tmp_get_example_activity_log_data () {
   ret_var.push(get_new_activity_item('book_viewing', 'This is some text for the book_viewing'))
   ret_var.push(get_new_activity_item('hold_viewing', 'This is some text for the hold_viewing'))
   ret_var.push(get_new_activity_item('call_agent', 'This is some text for the call agent'))
-  ret_var.push(get_new_activity_item('wf_move', 'Moved Stage'))
+  ret_var.push(get_new_activity_item('wf_move', 'Moved Stage notes blah blah', 'Lead -> Rejected'))
   ret_var.push(get_new_activity_item('offer_made', 'Offer made'))
   ret_var.push(get_new_activity_item('offer_rejected', 'Offer rejected'))
   ret_var.push(get_new_activity_item('offer_accepted', 'Offer accepted'))
@@ -90,14 +91,18 @@ export default defineComponent({
         if (prev_data_string !== date_string) {
           prev_data_string = date_string
           ret_var = ret_var.concat([{
-            id: '011234',
+            id: uuidv4(),
             label: prev_data_string
           }])
+        }
+        let name = type_data_map[ite.type].name
+        if (typeof (ite.head_notes) !== 'undefined') {
+          name = name + ' (' + ite.head_notes + ')'
         }
         ret_var = ret_var.concat({
           id: ite.t,
           label: undefined,
-          name: type_data_map[ite.type].name,
+          name: name,
           text: ite.text,
           sent: type_data_map[ite.type].sent,
           stamp: time_String,
