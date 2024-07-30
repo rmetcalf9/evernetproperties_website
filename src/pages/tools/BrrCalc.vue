@@ -4,6 +4,7 @@
       <h1>Buy Refurbish Rent Refinance Calculator</h1>
       <div>This calculator can be used for calculating deal information for a Buy, Refurbish, Rent, Refinance project (BRRR).</div>
       <BrrToolbar
+        v-if="security_role_cansave"
         @activity_log="activity_log"
       />
       <q-tabs
