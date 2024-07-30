@@ -262,6 +262,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       )
     },
     _login_complete_success (response, callback) {
+      console.log('_login_complete_success reached')
       this.connection_state.state = ConnectionState.loggedin
       this.user_profile = response.data.user_profile
       this.login_info.login_token = response.data.login_token

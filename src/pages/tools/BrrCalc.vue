@@ -392,7 +392,6 @@ export default defineComponent({
       if (typeof (project.sub_section_details.refinance) !== 'undefined') {
         this.$refs.Refinance.serializer_load_data(project.sub_section_details.refinance)
       }
-      console.log('BRRCALC Load ', project.activity_log)
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
     },
     save_project_complete ({success, response}) {
