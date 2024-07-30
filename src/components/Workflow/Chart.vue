@@ -8,7 +8,7 @@ import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 import * as d3 from 'd3'
 
-import Workflow from './FirstWorkflow.js'
+import Workflow_main from './Workflow_main.js'
 
 function draw_workflow(parent, workflow_json, click_stage_callback) {
   const context = {
@@ -196,7 +196,7 @@ export default defineComponent({
   },
   computed: {
     workflow () {
-      return Workflow
+      return Workflow_main.workflows[Workflow_main.default_workflow_id]
     }
   },
   methods: {

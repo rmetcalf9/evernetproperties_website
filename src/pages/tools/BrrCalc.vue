@@ -102,6 +102,12 @@
         />
       </div>
       <div class="row" v-show="tab==='project'">
+        <Workflow
+          ref="Workflow"
+          @projectchanged="projectchanged"
+          @activity_log="activity_log"
+          v-if="security_role_cansave"
+        />
         <ActivityLog
           ref="ActivityLog"
           @projectchanged="projectchanged"
@@ -139,8 +145,10 @@ import Refinance from '../../components/BrrCalc/Refinance.vue'
 import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import DealRating from '../../components/BrrCalc/DealRating.vue'
 import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
+
 import SaveToGoogleSheet from '../../components/BrrCalc/SaveToGoogleSheet.vue'
 import ActivityLog from '../../components/CommonCalcComponents/ActivityLog.vue'
+import Workflow from '../../components/BrrCalc/Workflow.vue'
 
 import ProjectSerializer from '../../components/BrrCalc/ProjectSerializer.vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
@@ -166,7 +174,8 @@ export default defineComponent({
     ProjectSerializer,
     SaveToGoogleSheet,
     ActivityLog,
-    BrrToolbar
+    BrrToolbar,
+    Workflow
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -362,7 +371,8 @@ export default defineComponent({
     save_project () {
       this.$refs.ProjectSerializer.save_project({
         dict_of_card_info: this.serialized_data,
-        activity_log: this.$refs.ActivityLog.serializer_card_data
+        activity_log: this.$refs.ActivityLog.serializer_card_data,
+        workflow: this.$refs.Workflow.serializer_card_data
       })
     },
     load_project_into_cards (project) {
@@ -393,6 +403,7 @@ export default defineComponent({
         this.$refs.Refinance.serializer_load_data(project.sub_section_details.refinance)
       }
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
+      this.$refs.Workflow.serializer_load_data(project.workflow)
     },
     save_project_complete ({success, response}) {
       this.$refs.DealBasicInfo.save_project_complete_notification({

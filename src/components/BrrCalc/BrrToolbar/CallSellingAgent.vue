@@ -72,7 +72,6 @@ export default defineComponent({
         text: 'Called selling agent spoke to (' + this.spoke_to + ') - ' + this.notes,
         head_notes: undefined
       }
-      console.log('out', obj)
       this.$emit('activity_log', obj)
       this.dialog_visible = false
     }

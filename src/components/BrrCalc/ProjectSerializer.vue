@@ -33,7 +33,7 @@ export default defineComponent({
       this.proj_summary_data.timestamp_first_entered  = data_to_load.timestamp_first_entered
       this.proj_summary_data.metadata = data_to_load.metadata
     },
-    save_project ({dict_of_card_info, activity_log}) {
+    save_project ({dict_of_card_info, activity_log, workflow}) {
       const sub_section_details = {}
       for (const card_name_idx in Object.keys(dict_of_card_info)) {
         const card_name = Object.keys(dict_of_card_info)[card_name_idx]
@@ -52,7 +52,7 @@ export default defineComponent({
         },
         reoccurring_phase: [],
         location: {},
-        workflow: {},
+        workflow: workflow,
         activity_log: activity_log,
         sub_section_details: sub_section_details,
         tags: [],
