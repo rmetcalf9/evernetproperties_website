@@ -124,7 +124,7 @@
 <script>
 import { defineComponent } from 'vue'
 
-import BrrToolbar from '../../components/BrrCalc/BrrToolbar.vue'
+import BrrToolbar from '../../components/BrrCalc/BrrToolbar/BrrToolbar.vue'
 
 
 import Vision from '../../components/BrrCalc/Vision.vue'

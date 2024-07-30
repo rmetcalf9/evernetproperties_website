@@ -1,28 +1,27 @@
 <template>
   <div class="brrcalctoolbar">
-    <q-btn color="primary" icon="call" label="Selling agent" @click="click_selling_agent_btn" />
+    <CallSellingAgent
+      @activity_log="(obj) => $emit('activity_log',obj)"
+    />
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 
+import CallSellingAgent from './CallSellingAgent.vue'
+
 export default defineComponent({
   name: 'BrrCalcToolbar',
   emits: ['activity_log'],
+  components: {
+    CallSellingAgent
+  },
   data () {
     return {
     }
   },
   methods: {
-    click_selling_agent_btn () {
-      const obj = {
-        type: 'call_agent',
-        text: 'TODO code to allow user to input',
-        head_notes: undefined
-      }
-      this.$emit('activity_log', obj)
-    }
   }
 })
 </script>
