@@ -3,6 +3,9 @@
     <div class="main-page fit col wrap justify-center items-center content-center">
       <h1>Buy Refurbish Rent Refinance Calculator</h1>
       <div>This calculator can be used for calculating deal information for a Buy, Refurbish, Rent, Refinance project (BRRR).</div>
+      <BrrToolbar
+        @activity_log="activity_log"
+      />
       <q-tabs
         v-if="security_role_cansave"
         v-model="tab"
@@ -100,6 +103,7 @@
       <div class="row" v-show="tab==='project'">
         <ActivityLog
           ref="ActivityLog"
+          @projectchanged="projectchanged"
           v-if="security_role_cansave"
         />
         <SaveToGoogleSheet
@@ -119,6 +123,10 @@
 
 <script>
 import { defineComponent } from 'vue'
+
+import BrrToolbar from '../../components/BrrCalc/BrrToolbar.vue'
+
+
 import Vision from '../../components/BrrCalc/Vision.vue'
 import GdvCard from '../../components/CommonCalcComponents/Gdv.vue'
 import PurchasePrice from '../../components/CommonCalcComponents/PurchasePrice.vue'
@@ -156,7 +164,8 @@ export default defineComponent({
     DealBasicInfo,
     ProjectSerializer,
     SaveToGoogleSheet,
-    ActivityLog
+    ActivityLog,
+    BrrToolbar
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -343,12 +352,16 @@ export default defineComponent({
     }
   },
   methods: {
+    activity_log (obj) {
+      this.$refs.ActivityLog.log_activity(obj)
+    },
     projectchanged () {
       this.$refs.DealBasicInfo.set_changed_true()
     },
     save_project () {
       this.$refs.ProjectSerializer.save_project({
-        dict_of_card_info: this.serialized_data
+        dict_of_card_info: this.serialized_data,
+        activity_log: this.$refs.ActivityLog.serializer_card_data
       })
     },
     load_project_into_cards (project) {
@@ -378,6 +391,8 @@ export default defineComponent({
       if (typeof (project.sub_section_details.refinance) !== 'undefined') {
         this.$refs.Refinance.serializer_load_data(project.sub_section_details.refinance)
       }
+      console.log('BRRCALC Load ', project.activity_log)
+      this.$refs.ActivityLog.serializer_load_data(project.activity_log)
     },
     save_project_complete ({success, response}) {
       this.$refs.DealBasicInfo.save_project_complete_notification({
@@ -386,7 +401,6 @@ export default defineComponent({
       })
     },
     load_project_api_fail (response) {
-      console.log('Failed to load project via API - ', response)
       Notify.create({
         color: 'bg-grey-2',
         message: 'Error loading project ' + response,

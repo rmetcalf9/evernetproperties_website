@@ -43,35 +43,22 @@ function get_new_activity_item (type, text, head_notes) {
   }
 }
 
-function tmp_get_example_activity_log_data () {
-  let ret_var = []
-
-  ret_var.push(get_new_activity_item('book_viewing', 'This is some text for the book_viewing'))
-  ret_var.push(get_new_activity_item('hold_viewing', 'This is some text for the hold_viewing'))
-  ret_var.push(get_new_activity_item('call_agent', 'This is some text for the call agent'))
-  ret_var.push(get_new_activity_item('wf_move', 'Moved Stage notes blah blah', 'Lead -> Rejected'))
-  ret_var.push(get_new_activity_item('offer_made', 'Offer made'))
-  ret_var.push(get_new_activity_item('offer_rejected', 'Offer rejected'))
-  ret_var.push(get_new_activity_item('offer_accepted', 'Offer accepted'))
-
-  return ret_var
-}
-
 export default defineComponent({
   name: 'BrrCalcActivityJob',
+  emits: ['projectchanged'],
   data () {
     return {
+      activity_log: [],
+      emit_project_change_notification: true
     }
   },
   computed: {
     serializer_card_data () {
-      return {
-        devplan: this.devplan
-      }
+      // Can only be an array
+      return this.activity_log
     },
     activity_log_display () {
       let ret_var = []
-      let activity_log = tmp_get_example_activity_log_data()
 
       const type_data_map = {
         book_viewing: { sent: true, name: 'Viewing booked' },
@@ -84,7 +71,7 @@ export default defineComponent({
       }
 
       let prev_data_string = ""
-      activity_log.forEach(function (ite) {
+      this.activity_log.forEach(function (ite) {
         const timestamp = new Date(ite.timestamp)
         const date_string = timestamp.toDateString()
         const time_String = timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
@@ -115,10 +102,31 @@ export default defineComponent({
   },
   watch: {
     serializer_card_data(val) {
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
     }
   },
   methods: {
-    serializer_load_data (data_to_load) {
+    log_activity (obj) {
+      this.activity_log.push({
+        id: uuidv4(),
+        type: obj.type,
+        timestamp: (new Date()).toISOString(),
+        text: obj.text,
+        head_notes: obj.head_notes
+      })
+      this.$emit('projectchanged')
+    },
+    serializer_load_data (activity_log) {
+      this.emit_project_change_notification = false
+
+      this.activity_log = activity_log
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
     }
   }
 })
