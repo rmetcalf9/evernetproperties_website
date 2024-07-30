@@ -1,9 +1,22 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="flex ">
     <div class="main-page fit col wrap justify-center items-center content-center">
       <h1>Buy Refurbish Rent Refinance Calculator</h1>
-      <div>This calculator can be used for calculating deal information for a Buy, Refurbish, Rent, Refinance project (BRRR). You can use this page to perform these calculations.</div>
-      <div class="row">
+      <div>This calculator can be used for calculating deal information for a Buy, Refurbish, Rent, Refinance project (BRRR).</div>
+      <q-tabs
+        v-if="security_role_cansave"
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="main" label="Main" />
+        <q-tab name="project" label="Project" />
+      </q-tabs>
+      <div class="row" v-show="tab==='main'">
         <DealBasicInfo
           ref="DealBasicInfo"
           @saveproject="save_project"
@@ -83,6 +96,12 @@
           v-if="security_role_cansave"
           @saveprojectcomplete="save_project_complete"
         />
+      </div>
+      <div class="row" v-show="tab==='project'">
+        <ActivityLog
+          ref="ActivityLog"
+          v-if="security_role_cansave"
+        />
         <SaveToGoogleSheet
           ref="SaveToGoogleSheet"
           :serialized_data="serialized_data"
@@ -92,10 +111,6 @@
           :othercosts_items_detail="othercosts_items_detail"
           :caculated_loan_details="caculated_loan_details"
           :finance_bridgecost="finance_bridgecost"
-        />
-        <ActivityLog
-          ref="ActivityLog"
-          v-if="security_role_cansave"
         />
       </div>
     </div>
@@ -151,6 +166,7 @@ export default defineComponent({
   },
   data () {
     return {
+      tab: 'main',
       isMounted: false,
       purchaserange: {
         min: 180000,
