@@ -16,7 +16,15 @@
               :sent="item.sent"
               :stamp="item.stamp"
               :avatar="item.avatar"
-            />
+            >
+              <template v-slot:avatar>
+                <img
+                  class="q-message-avatar q-message-avatar--sent"
+                  alt="Avatar"
+                  :src="'/' + item.avatar"
+                >
+              </template>
+            </q-chat-message>
           </div>
         </div>
       </div>
@@ -93,7 +101,7 @@ export default defineComponent({
           text: ite.text,
           sent: type_data_map[ite.type].sent,
           stamp: time_String,
-          avatar: '~assets/activity_log_icon_' + ite.type + '.png'
+          avatar: 'activity_log_icon_' + ite.type + '.png'
         })
       })
 
