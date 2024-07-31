@@ -2,7 +2,7 @@
 
 
 export default {
-  "id": 1,
+  "id": "1",
   "name": 'BRR Project Workflow',
   "initial_stage": "1",
   "stages": {
