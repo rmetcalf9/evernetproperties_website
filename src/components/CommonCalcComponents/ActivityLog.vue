@@ -93,7 +93,7 @@ export default defineComponent({
           text: ite.text,
           sent: type_data_map[ite.type].sent,
           stamp: time_String,
-          avatar: '/assets/activity_log_icon_' + ite.type + '.png'
+          avatar: '~assets/activity_log_icon_' + ite.type + '.png'
         })
       })
 
