@@ -114,7 +114,7 @@ export default defineComponent({
       const callback = {
         ok: function (response) {
           item_to_load.loaded=true
-          item_to_load.item=response.data.sub_section_details
+          item_to_load.item=response.data
           TTT.recursive_load_project_details()
         },
         error: function (response) {

@@ -19,14 +19,21 @@
                 Loading...
               </div>
               <div v-if="props.row.loaded">
-                {{ props.row.item.dealbasicinfo.address }}
+                {{ props.row.item.sub_section_details.dealbasicinfo.address }}
+              </div>
+            </q-td>
+            <q-td key="workflowstage" :props="props">
+              <div v-if="props.row.loaded">
+                <div v-if="typeof (props.row.item.workflow) !== 'undefined'">
+                  {{ getWorkflowStage(props.row.item.workflow).name }}
+                </div>
               </div>
             </q-td>
             <q-td key="visionandnotes" :props="props">
               <div v-if="props.row.loaded">
-                <div class="projecttablehead">{{ props.row.item.vision.devplan }}</div>
-                <div v-if="typeof (props.row.item.dealbasicinfo.notes) !== 'undefined'">
-                  <div v-for="line_item in props.row.item.dealbasicinfo.notes.split('\n')" :key='line_item'>
+                <div class="projecttablehead">{{ props.row.item.sub_section_details.vision.devplan }}</div>
+                <div v-if="typeof (props.row.item.sub_section_details.dealbasicinfo.notes) !== 'undefined'">
+                  <div v-for="line_item in props.row.item.sub_section_details.dealbasicinfo.notes.split('\n')" :key='line_item'>
                     {{ line_item }}
                   </div>
                 </div>
@@ -66,6 +73,8 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 import CommonBRRToolLink from '../components/CommonBRRToolLink.vue'
 
+import Workflow_main from '../components/Workflow/Workflow_main.js'
+
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
   props: ['projects'],
@@ -86,6 +95,14 @@ export default defineComponent({
           name: 'address',
           required: true,
           label: 'Address',
+          align: 'left',
+          field: 'address',
+          sortable: true
+        },
+        {
+          name: 'workflowstage',
+          required: true,
+          label: 'Stage',
           align: 'left',
           field: 'address',
           sortable: true
@@ -113,6 +130,9 @@ export default defineComponent({
     }
   },
   methods: {
+    getWorkflowStage ({workflow_used_id, current_stage}) {
+      return Workflow_main.workflows[workflow_used_id].stages[current_stage]
+    },
     onRowClick (table_row) {
       this.$router.push('/tools/brrcalc?projectid=' + table_row.id)
     },
