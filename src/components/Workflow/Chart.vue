@@ -10,7 +10,7 @@ import * as d3 from 'd3'
 
 import Workflow_main from './Workflow_main.js'
 
-function draw_workflow(parent, workflow_json, click_stage_callback) {
+function draw_workflow(parent, workflow_json, click_stage_callback, patch_data) {
   const context = {
     items_drawn: {},
     cols: [-300, 200, 500]
@@ -23,7 +23,8 @@ function draw_workflow(parent, workflow_json, click_stage_callback) {
     workflow_json,
     200,
     false,
-    click_stage_callback
+    click_stage_callback,
+    patch_data
   )
 
 }
@@ -43,7 +44,7 @@ function get_x_for_stage(stage_data, context, is_fail_path) {
   return context.cols[draw_col]
 }
 
-function draw_stage_and_all_children(parent, this_stage_id, stage_data, context, workflow_json, cur_y, is_fail_path, click_stage_callback) {
+function draw_stage_and_all_children(parent, this_stage_id, stage_data, context, workflow_json, cur_y, is_fail_path, click_stage_callback, patch_data) {
   if (Object.keys(context.items_drawn).includes(this_stage_id)) {
     return //alredy drawn
   }
@@ -56,7 +57,7 @@ function draw_stage_and_all_children(parent, this_stage_id, stage_data, context,
     pos_y: cur_y
   }
 
-  draw_stage(group, this_stage_id, stage_data, is_fail_path, click_stage_callback)
+  draw_stage(group, this_stage_id, stage_data, is_fail_path, click_stage_callback, workflow_json, patch_data)
   if (typeof (stage_data.progression) !== 'undefined') {
     if (typeof (stage_data.progression.failed) !== 'undefined') {
       draw_stage_and_all_children(
@@ -67,7 +68,8 @@ function draw_stage_and_all_children(parent, this_stage_id, stage_data, context,
         workflow_json,
         cur_y + 150,
         true,
-        click_stage_callback
+        click_stage_callback,
+        patch_data
       )
       draw_arrow(
         parent,
@@ -87,7 +89,8 @@ function draw_stage_and_all_children(parent, this_stage_id, stage_data, context,
           workflow_json,
           cur_y + 300,
           false,
-          click_stage_callback
+          click_stage_callback,
+          patch_data
         )
         // It has just been drawn so will always be in drawn array
         draw_arrow(
@@ -117,7 +120,7 @@ function draw_arrow(parent, x1, y1, x2, y2) {
 
 }
 
-function draw_stage(parent, this_stage_id, stage_data, is_fail_stage, click_stage_callback) {
+function draw_stage(parent, this_stage_id, stage_data, is_fail_stage, click_stage_callback, workflow_json, patch_data) {
   // 0,0 is centre TOP of the rectangle
   const group = parent.append('g')
 
@@ -128,6 +131,16 @@ function draw_stage(parent, this_stage_id, stage_data, is_fail_stage, click_stag
 
   function click_stage() {
     click_stage_callback(this_stage_id, stage_data)
+  }
+
+
+  let num_of_projects = 0
+  if (typeof (patch_data.workflow_lookup) !== 'undefined') {
+    if (typeof (patch_data.workflow_lookup[workflow_json.id]) !== 'undefined') {
+      if (typeof (patch_data.workflow_lookup[workflow_json.id][this_stage_id]) !== 'undefined') {
+        num_of_projects = patch_data.workflow_lookup[workflow_json.id][this_stage_id].length
+      }
+    }
   }
 
   group
@@ -155,7 +168,7 @@ function draw_stage(parent, this_stage_id, stage_data, is_fail_stage, click_stag
       .attr('text-anchor', 'middle')
       .style("font-size", "56px")
       .style("font-weight", "500")
-      .text('0')
+      .text(num_of_projects.toString())
 
     if (typeof (stage_data.diagram_notes) !== 'undefined') {
       let y = 0
@@ -287,7 +300,7 @@ export default defineComponent({
         .attr('d', 'M 0 0 L 10 5 L 0 10 z')
 
 
-      draw_workflow(this.allzoomedelements, this.workflow, this.click_stage_callback)
+      draw_workflow(this.allzoomedelements, this.workflow, this.click_stage_callback, this.patch_data)
     },
     click_stage_callback (stage_id, stage_data) {
       this.$emit("onclickstage", stage_id, stage_data);
