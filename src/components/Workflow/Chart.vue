@@ -160,6 +160,7 @@ function draw_stage(parent, this_stage_id, stage_data, is_fail_stage, click_stag
     .style("font-size", "28px")
     .style("font-weight", "500")
     .text(stage_data.name)
+    .on('click', click_stage)
 
     group
       .append('text')
@@ -169,6 +170,7 @@ function draw_stage(parent, this_stage_id, stage_data, is_fail_stage, click_stag
       .style("font-size", "56px")
       .style("font-weight", "500")
       .text(num_of_projects.toString())
+      .on('click', click_stage)
 
     if (typeof (stage_data.diagram_notes) !== 'undefined') {
       let y = 0
