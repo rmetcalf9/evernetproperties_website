@@ -303,7 +303,7 @@ export default defineComponent({
       draw_workflow(this.allzoomedelements, this.workflow, this.click_stage_callback, this.patch_data)
     },
     click_stage_callback (stage_id, stage_data) {
-      this.$emit("onclickstage", stage_id, stage_data);
+      this.$emit("onclickstage", this.workflow.id, stage_id, stage_data);
     },
     clickDIV () {
       // console.log('CLICK')

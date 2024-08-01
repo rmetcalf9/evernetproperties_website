@@ -52,7 +52,7 @@
         </template>
 
         <template v-slot:no-data="{}">
-          <div>
+          <div v-if="!prefiltered">
             <div v-if="projects.length === 0">
               No projects in this patch - use the BRR calculator to create one
               <CommonBRRToolLink />
@@ -60,6 +60,9 @@
             <div v-if="projects.length !== 0">
               No projects match the filter
             </div>
+          </div>
+          <div v-if="prefiltered">
+              No projects match the filter
           </div>
         </template>
       </q-table>
@@ -77,7 +80,7 @@ import Workflow_main from '../components/Workflow/Workflow_main.js'
 
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
-  props: ['projects'],
+  props: ['projects', 'prefiltered'],
   components: {
     CommonBRRToolLink
   },

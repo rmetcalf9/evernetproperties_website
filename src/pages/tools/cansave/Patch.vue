@@ -7,9 +7,16 @@
       <div v-if="table_view">
         <h1>{{ patch_data.name }}</h1>
         <h2>Projects <q-btn color="primary" icon="account_tree" label="Worlflow" @click="table_view = false" /></h2>
+        <div
+          v-if="isStageSelected"
+          class="selected_stage"
+        >
+          Stage {{ selectedStageText }} <q-btn color="primary" icon="close" round @click="clearselectesstage" />
+        </div>
         <div>
           <ProjectTable
-            :projects="loaded_projects"
+            :projects="filtered_loaded_projects"
+            :prefiltered="isStageSelected"
           />
         </div>
         <q-btn color="primary" label="Add Project" @click="clicknewproject" />
@@ -32,6 +39,8 @@ import { Notify } from 'quasar'
 import ProjectTable from '../../../components/ProjectTable.vue'
 import WrokflowChart from '../../../components/Workflow/Chart.vue'
 
+import Workflow_main from '../../../components/Workflow/Workflow_main.js'
+
 
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
@@ -49,17 +58,62 @@ export default defineComponent({
       loaded: false,
       patch_data: {},
       loaded_projects: [],
+      filtered_loaded_projects: [],
+      selected_stage: {
+        workflow_id: undefined,
+        stage_id: undefined
+      },
       table_view: true
     }
   },
+  watch: {
+    loaded_projects(val) {
+      // console.log('watch loaded projects', val)
+      this.recompute_filtered_projects()
+    }
+  },
   computed: {
+    isStageSelected () {
+      return typeof (this.selected_stage.workflow_id) !== 'undefined'
+    },
+    selectedStageText () {
+      return Workflow_main.workflows[this.selected_stage.workflow_id].stages[this.selected_stage.stage_id].name
+    },
     user_profile () {
       return this.backend_connection_store.user_profile
     }
   },
   methods: {
-    onchartclickstage (stage_id, stage_data) {
-      console.log('clicked onchartclickstage', stage_id, stage_data)
+    recompute_filtered_projects () {
+      const TTT = this
+      this.filtered_loaded_projects = this.loaded_projects.filter(function (x) {
+        if (!TTT.isStageSelected) {
+          return true
+        }
+        if (typeof ( TTT.patch_data.workflow_lookup[TTT.selected_stage.workflow_id]) === 'undefined') {
+          return false
+        }
+        if (typeof ( TTT.patch_data.workflow_lookup[TTT.selected_stage.workflow_id][TTT.selected_stage.stage_id]) === 'undefined') {
+          return false
+        }
+        return TTT.patch_data.workflow_lookup[TTT.selected_stage.workflow_id][TTT.selected_stage.stage_id].filter(function (y) {
+          return x.id === y
+        }).length > 0
+      })
+    },
+    clearselectesstage () {
+      this.selected_stage = {
+        workflow_id: undefined,
+        stage_id: undefined
+      }
+      this.recompute_filtered_projects()
+    },
+    onchartclickstage (workflow_id, stage_id, stage_data) {
+      this.selected_stage = {
+        workflow_id: workflow_id,
+        stage_id: stage_id
+      }
+      this.recompute_filtered_projects()
       this.table_view = true
     },
     clicknewproject () {
@@ -115,6 +169,7 @@ export default defineComponent({
         ok: function (response) {
           item_to_load.loaded=true
           item_to_load.item=response.data
+          TTT.recompute_filtered_projects()
           TTT.recursive_load_project_details()
         },
         error: function (response) {
@@ -140,5 +195,8 @@ export default defineComponent({
 </script>
 
 <style>
-
+.selected_stage {
+  font-weight: 800;
+  font-size: 26px;
+}
 </style>
