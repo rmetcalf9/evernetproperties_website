@@ -224,7 +224,6 @@ export default defineComponent({
       }
     },
     select_patch_by_id (id) {
-      console.log('TODO select_patch_by_id', id)
       this.patch = this.patch_list.filter(function (x) {
         return x.id === id
       })[0]
@@ -253,7 +252,6 @@ export default defineComponent({
           const callback = {
             ok: TTT.createpatchcallback,
             error: function (response) {
-              console.log('s', response)
               Notify.create({
                 color: 'negative',
                 message: 'Create patch failed ' + response.response.data.message,
