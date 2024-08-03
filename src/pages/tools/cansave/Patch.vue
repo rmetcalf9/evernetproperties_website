@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <q-page class="patchpageclass">
     <div v-if="!loaded">
       <h1>Loading...</h1>
     </div>
@@ -195,6 +195,22 @@ export default defineComponent({
 </script>
 
 <style>
+.patchpageclass {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+.patchpageclass h1 {
+  font-size: 4rem;
+  font-weight: 500;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+.patchpageclass h2 {
+  font-size: 3rem;
+  font-weight: 300;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 .selected_stage {
   font-weight: 800;
   font-size: 26px;

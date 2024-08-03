@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="q-pa-md">
+  <div class="projecttablecontainer">
+    <div class="projecttablestyle">
       <q-table
         flat bordered
         title="Projects"
@@ -12,34 +12,38 @@
         no-results-label="The filter didn't uncover any results"
         row-key="name"
       >
-        <template v-slot:body="props">
-          <q-tr class="projecttablerow" :props="props" @click="onRowClick(props.row)">
-            <q-td key="address" :props="props">
-              <div v-if="!props.row.loaded">
-                Loading...
+        <template v-slot:body-cell-address="props">
+          <q-td>
+            <div v-if="!props.row.loaded">
+              Loading...
+            </div>
+            <div v-if="props.row.loaded">
+              {{ props.row.item.sub_section_details.dealbasicinfo.address }}
+            </div>
+          </q-td>
+        </template>
+
+        <template v-slot:body-cell-workflowstage="props">
+          <q-td>
+            <div v-if="props.row.loaded">
+              <div v-if="typeof (props.row.item.workflow) !== 'undefined'">
+                {{ getWorkflowStage(props.row.item.workflow).name }}
               </div>
-              <div v-if="props.row.loaded">
-                {{ props.row.item.sub_section_details.dealbasicinfo.address }}
-              </div>
-            </q-td>
-            <q-td key="workflowstage" :props="props">
-              <div v-if="props.row.loaded">
-                <div v-if="typeof (props.row.item.workflow) !== 'undefined'">
-                  {{ getWorkflowStage(props.row.item.workflow).name }}
+            </div>
+          </q-td>
+        </template>
+
+        <template v-slot:body-cell-visionandnotes="props">
+          <q-td>
+            <div v-if="props.row.loaded">
+              <div class="projecttablehead">{{ props.row.item.sub_section_details.vision.devplan }}</div>
+              <div v-if="typeof (props.row.item.sub_section_details.dealbasicinfo.notes) !== 'undefined'">
+                <div v-for="line_item in props.row.item.sub_section_details.dealbasicinfo.notes.split('\n')" :key='line_item'>
+                  {{ line_item }}
                 </div>
               </div>
-            </q-td>
-            <q-td key="visionandnotes" :props="props">
-              <div v-if="props.row.loaded">
-                <div class="projecttablehead">{{ props.row.item.sub_section_details.vision.devplan }}</div>
-                <div v-if="typeof (props.row.item.sub_section_details.dealbasicinfo.notes) !== 'undefined'">
-                  <div v-for="line_item in props.row.item.sub_section_details.dealbasicinfo.notes.split('\n')" :key='line_item'>
-                    {{ line_item }}
-                  </div>
-                </div>
-              </div>
-            </q-td>
-          </q-tr>
+            </div>
+          </q-td>
         </template>
 
 
@@ -146,10 +150,14 @@ export default defineComponent({
 </script>
 
 <style>
+.projecttablecontainer {
+  width: 100%;
+  padding-right: 10px;  
+}
 .projecttablehead {
   font-weight: 800;
 }
-.projecttablerow td {
+.projecttablestyle td {
   vertical-align: top;
 }
 </style>
