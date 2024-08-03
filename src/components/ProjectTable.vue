@@ -13,7 +13,7 @@
         row-key="name"
       >
         <template v-slot:body-cell-address="props">
-          <q-td>
+          <q-td @click="onRowClick(props.row)">
             <div v-if="!props.row.loaded">
               Loading...
             </div>
@@ -24,7 +24,7 @@
         </template>
 
         <template v-slot:body-cell-workflowstage="props">
-          <q-td>
+          <q-td @click="onRowClick(props.row)">
             <div v-if="props.row.loaded">
               <div v-if="typeof (props.row.item.workflow) !== 'undefined'">
                 {{ getWorkflowStage(props.row.item.workflow).name }}
@@ -34,7 +34,7 @@
         </template>
 
         <template v-slot:body-cell-visionandnotes="props">
-          <q-td>
+          <q-td @click="onRowClick(props.row)">
             <div v-if="props.row.loaded">
               <div class="projecttablehead">{{ props.row.item.sub_section_details.vision.devplan }}</div>
               <div v-if="typeof (props.row.item.sub_section_details.dealbasicinfo.notes) !== 'undefined'">
@@ -152,7 +152,7 @@ export default defineComponent({
 <style>
 .projecttablecontainer {
   width: 100%;
-  padding-right: 10px;  
+  padding-right: 10px;
 }
 .projecttablehead {
   font-weight: 800;
