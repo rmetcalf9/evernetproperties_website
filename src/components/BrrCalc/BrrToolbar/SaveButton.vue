@@ -60,6 +60,9 @@ export default defineComponent({
     }
   },
   methods: {
+    serializer_load_data (data_to_load) {
+      this.ever_saved = true
+    },
     click_btn () {
       this.autosave_seconds_left = -1 // This causes save monitor to abort
       this.save_now()

@@ -24,10 +24,9 @@
         <q-tab name="project" label="Project" />
       </q-tabs>
       <div class="row" v-show="tab==='main'">
-        <!-- TODO Remove saveproject handler -->
         <DealBasicInfo
           ref="DealBasicInfo"
-          @saveproject="save_project"
+          :ever_saved="ever_saved"
           @projectchanged="projectchanged"
         />
         <Vision
@@ -199,6 +198,12 @@ export default defineComponent({
     }
   },
   computed: {
+    ever_saved () {
+      if (!this.isMounted) {
+        return false
+      }
+      return this.$refs.BrrToolbar.ever_saved
+    },
     reason_project_not_savable () {
       if (!this.isMounted) {
         return ''
@@ -384,10 +389,7 @@ export default defineComponent({
       if (!this.isMounted) {
         return
       }
-      console.log('REEF', this.$refs, this.$refs.BrrToolbar)
       this.$refs.BrrToolbar.set_changed_true()
-      // TODO Remove deal basic info call
-      this.$refs.DealBasicInfo.set_changed_true()
     },
     save_project () {
       this.$refs.ProjectSerializer.save_project({
@@ -425,14 +427,10 @@ export default defineComponent({
       }
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
       this.$refs.Workflow.serializer_load_data(project.workflow)
+      this.$refs.BrrToolbar.serializer_load_data({})
     },
     save_project_complete ({success, response}) {
       this.$refs.BrrToolbar.save_project_complete_notification({
-        success: success,
-        response: response
-      })
-      // TODO remove deal basic info version
-      this.$refs.DealBasicInfo.save_project_complete_notification({
         success: success,
         response: response
       })
@@ -460,7 +458,7 @@ export default defineComponent({
       const TTT = this
       setTimeout(function () {
         TTT.isMounted = true
-      }, 5)
+      }, 105)
     },
     call_load_api () {
       const TTT = this

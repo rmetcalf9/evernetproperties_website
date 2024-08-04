@@ -39,11 +39,6 @@
       <div><q-input filled autogrow v-model="notes" label="Notes" /></div>
 
     </q-card-section>
-    <q-card-section>
-      <div>
-        <q-btn color="primary" icon="save" :label="save_btn_text" @click="click_save_btn" />
-      </div>
-    </q-card-section>
   </q-card>
 </template>
 
@@ -56,8 +51,8 @@ import Weblinks from '../../components/Weblinks.vue'
 
 export default defineComponent({
   name: 'DealBasicInfo',
-  // TODO Remove emit saveproject
-  emits: ['saveproject', 'projectchanged'],
+  emits: ['projectchanged'],
+  props: ['ever_saved'],
   components: {
     Weblinks,
   },
@@ -76,12 +71,7 @@ export default defineComponent({
       new_patch_value: '',
       selling_agent: '',
       notes: '',
-      emit_project_change_notification: true,
-      changed: false, // TODO REMOVE
-      autosave_seconds_left: 60, // TODO REMOVE
-      ever_saved: false, // TODO REMOVE
-      save_in_progress: false, // TODO REMOVE
-      save_monitor_function_running: false // TODO REMOVE
+      emit_project_change_notification: true
     }
   },
   watch: {
@@ -118,44 +108,6 @@ export default defineComponent({
       }
       return ''
     },
-    no_save_message () {
-      // TODO DELETE
-      // perform all validations and return message to display on save button
-      // or empty string
-      if (this.reason_project_not_savable !== '') {
-        return this.reason_project_not_savable
-      }
-      if (this.save_in_progress) {
-        return 'Saving...'
-      }
-      return ''
-    },
-    can_save () {
-      // TODO DELETE
-      if (this.save_in_progress) {
-        return false
-      }
-      if (this.changed) {
-        return true
-      }
-      return false
-    },
-    save_btn_text () {
-      // TODO DEL
-      if (this.no_save_message !== '') {
-        return 'Not able to save (' + this.no_save_message + ')'
-      }
-      if (!this.changed) {
-        if (this.ever_saved) {
-          return 'Saved'
-        }
-        return 'Not able to save (No changes)'
-      }
-      if (this.autosave_seconds_left === -1) {
-        return 'Save Now'
-      }
-      return 'Save now (auto save in ' + this.autosave_seconds_left + ')'
-    },
     security_role_cansave () {
       return this.backend_connection_store.security_role_cansave
     },
@@ -185,7 +137,6 @@ export default defineComponent({
       this.patch = this.patch_list.filter(function (x) {
         return x.id === data_to_load.patch_id
       })[0]
-      this.ever_saved = true
       const TTT = this
       setTimeout(function () {
         TTT.emit_project_change_notification = true
@@ -201,56 +152,6 @@ export default defineComponent({
       }
       this.autosave_seconds_left = 10
       this.start_save_monitor_function()
-    },
-    start_save_monitor_function () {
-      // TODO Delete this
-      if (this.save_monitor_function_running) return
-      this.save_monitor_function()
-    },
-    save_monitor_function () {
-      // TODO Delete this
-      this.save_monitor_function_running = true
-      if (this.save_in_progress) {
-        return
-      }
-      if (this.autosave_seconds_left === -1) {
-        this.save_monitor_function_running = false
-        return
-      }
-      const TTT = this
-      TTT.autosave_seconds_left = TTT.autosave_seconds_left - 1
-      if (TTT.autosave_seconds_left<1) {
-        this.save_monitor_function_running = false
-        this.save_now()
-        return
-      }
-      setTimeout(TTT.save_monitor_function, 1000)
-    },
-    click_save_btn () {
-      // TODO Delete this
-      this.autosave_seconds_left = -1 // This causes save monitor to abort
-      this.save_now()
-    },
-    save_now () {
-      // TODO Delete this
-      if (!this.can_save) {
-        return
-      }
-      this.save_in_progress = true
-      this.$emit('saveproject')
-
-    },
-    save_project_complete_notification ({success, response}) {
-      // TODO Delete this
-      console.log('save complet notif')
-      this.save_in_progress = false
-      if (success) {
-        this.changed = false
-        this.ever_saved = true
-      } else {
-        // Failed save stop any countdown
-        this.autosave_seconds_left = -1
-      }
     },
     select_patch_by_id (id) {
       this.patch = this.patch_list.filter(function (x) {

@@ -29,12 +29,20 @@ export default defineComponent({
     return {
     }
   },
+  computed: {
+    ever_saved () {
+      return this.$refs.SaveToolbar.ever_saved
+    }
+  },
   methods: {
     set_changed_true () {
       this.$refs.SaveToolbar.set_changed_true()
     },
     save_project_complete_notification (params) {
       this.$refs.SaveToolbar.save_project_complete_notification(params)
+    },
+    serializer_load_data (data_to_load) {
+      this.$refs.SaveToolbar.serializer_load_data(data_to_load)
     }
   }
 })
