@@ -1,5 +1,10 @@
 <template>
-  <div class="brrcalctoolbar">
+  <div class="row brrcalctoolbar">
+    <SaveButton
+      ref="SaveToolbar"
+      @saveproject="$emit('saveproject')"
+      :reason_project_not_savable="reason_project_not_savable"
+    />
     <CallSellingAgent
       @activity_log="(obj) => $emit('activity_log',obj)"
     />
@@ -10,18 +15,27 @@
 import { defineComponent } from 'vue'
 
 import CallSellingAgent from './CallSellingAgent.vue'
+import SaveButton from './SaveButton.vue'
 
 export default defineComponent({
   name: 'BrrCalcToolbar',
-  emits: ['activity_log'],
+  props: ['reason_project_not_savable'],
+  emits: ['activity_log', 'saveproject'],
   components: {
-    CallSellingAgent
+    CallSellingAgent,
+    SaveButton
   },
   data () {
     return {
     }
   },
   methods: {
+    set_changed_true () {
+      this.$refs.SaveToolbar.set_changed_true()
+    },
+    save_project_complete_notification (params) {
+      this.$refs.SaveToolbar.save_project_complete_notification(params)
+    }
   }
 })
 </script>

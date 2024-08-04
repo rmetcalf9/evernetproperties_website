@@ -4,8 +4,11 @@
       <h1>Buy Refurbish Rent Refinance Calculator</h1>
       <div>This calculator can be used for calculating deal information for a Buy, Refurbish, Rent, Refinance project (BRRR).</div>
       <BrrToolbar
+        ref="BrrToolbar"
         v-if="security_role_cansave"
+        :reason_project_not_savable="reason_project_not_savable"
         @activity_log="activity_log"
+        @saveproject="save_project"
       />
       <q-tabs
         v-if="security_role_cansave"
@@ -21,9 +24,11 @@
         <q-tab name="project" label="Project" />
       </q-tabs>
       <div class="row" v-show="tab==='main'">
+        <!-- TODO Remove saveproject handler -->
         <DealBasicInfo
           ref="DealBasicInfo"
           @saveproject="save_project"
+          @projectchanged="projectchanged"
         />
         <Vision
           ref="Vision"
@@ -194,6 +199,12 @@ export default defineComponent({
     }
   },
   computed: {
+    reason_project_not_savable () {
+      if (!this.isMounted) {
+        return ''
+      }
+      return this.$refs.DealBasicInfo.reason_project_not_savable
+    },
     security_role_cansave () {
       return this.backend_connection_store.security_role_cansave
     },
@@ -363,9 +374,19 @@ export default defineComponent({
   },
   methods: {
     activity_log (obj) {
+      if (!this.isMounted) {
+        console.log('ERROR - trying to log activity unmounted', obj)
+        return
+      }
       this.$refs.ActivityLog.log_activity(obj)
     },
     projectchanged () {
+      if (!this.isMounted) {
+        return
+      }
+      console.log('REEF', this.$refs, this.$refs.BrrToolbar)
+      this.$refs.BrrToolbar.set_changed_true()
+      // TODO Remove deal basic info call
       this.$refs.DealBasicInfo.set_changed_true()
     },
     save_project () {
@@ -406,6 +427,11 @@ export default defineComponent({
       this.$refs.Workflow.serializer_load_data(project.workflow)
     },
     save_project_complete ({success, response}) {
+      this.$refs.BrrToolbar.save_project_complete_notification({
+        success: success,
+        response: response
+      })
+      // TODO remove deal basic info version
       this.$refs.DealBasicInfo.save_project_complete_notification({
         success: success,
         response: response

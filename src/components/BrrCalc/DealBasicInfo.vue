@@ -56,7 +56,8 @@ import Weblinks from '../../components/Weblinks.vue'
 
 export default defineComponent({
   name: 'DealBasicInfo',
-  emits: ['saveproject'],
+  // TODO Remove emit saveproject
+  emits: ['saveproject', 'projectchanged'],
   components: {
     Weblinks,
   },
@@ -75,16 +76,20 @@ export default defineComponent({
       new_patch_value: '',
       selling_agent: '',
       notes: '',
-      changed: false,
-      autosave_seconds_left: 60,
-      ever_saved: false,
-      save_in_progress: false,
-      save_monitor_function_running: false
+      emit_project_change_notification: true,
+      changed: false, // TODO REMOVE
+      autosave_seconds_left: 60, // TODO REMOVE
+      ever_saved: false, // TODO REMOVE
+      save_in_progress: false, // TODO REMOVE
+      save_monitor_function_running: false // TODO REMOVE
     }
   },
   watch: {
     serializer_card_data(val) {
-      this.set_changed_true()
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
+      // this.set_changed_true()
     }
   },
   computed: {
@@ -98,14 +103,27 @@ export default defineComponent({
         notes: this.notes
       }
     },
-    no_save_message () {
-      // perform all validations and return message to display on save button
-      // or empty string
+    reason_project_not_savable () {
       if (this.patch.id === 'notset') {
         return 'Select patch'
       }
+      if (typeof (this.address) === 'undefeind') {
+        return 'Enter address'
+      }
+      if (this.address === null) {
+        return 'Enter address'
+      }
       if (this.address.length < 3) {
         return 'Enter address'
+      }
+      return ''
+    },
+    no_save_message () {
+      // TODO DELETE
+      // perform all validations and return message to display on save button
+      // or empty string
+      if (this.reason_project_not_savable !== '') {
+        return this.reason_project_not_savable
       }
       if (this.save_in_progress) {
         return 'Saving...'
@@ -113,6 +131,7 @@ export default defineComponent({
       return ''
     },
     can_save () {
+      // TODO DELETE
       if (this.save_in_progress) {
         return false
       }
@@ -122,6 +141,7 @@ export default defineComponent({
       return false
     },
     save_btn_text () {
+      // TODO DEL
       if (this.no_save_message !== '') {
         return 'Not able to save (' + this.no_save_message + ')'
       }
@@ -154,6 +174,8 @@ export default defineComponent({
       this.set_changed_true()
     },
     serializer_load_data (data_to_load) {
+      this.emit_project_change_notification = false
+
       this.address = data_to_load.address
       this.postcode = data_to_load.postcode
       this.weblinks = data_to_load.weblinks
@@ -166,6 +188,8 @@ export default defineComponent({
       this.ever_saved = true
       const TTT = this
       setTimeout(function () {
+        TTT.emit_project_change_notification = true
+
         TTT.changed = false
         TTT.autosave_seconds_left = -1
       }, 50)
@@ -179,10 +203,12 @@ export default defineComponent({
       this.start_save_monitor_function()
     },
     start_save_monitor_function () {
+      // TODO Delete this
       if (this.save_monitor_function_running) return
       this.save_monitor_function()
     },
     save_monitor_function () {
+      // TODO Delete this
       this.save_monitor_function_running = true
       if (this.save_in_progress) {
         return
@@ -201,10 +227,12 @@ export default defineComponent({
       setTimeout(TTT.save_monitor_function, 1000)
     },
     click_save_btn () {
+      // TODO Delete this
       this.autosave_seconds_left = -1 // This causes save monitor to abort
       this.save_now()
     },
     save_now () {
+      // TODO Delete this
       if (!this.can_save) {
         return
       }
@@ -213,6 +241,7 @@ export default defineComponent({
 
     },
     save_project_complete_notification ({success, response}) {
+      // TODO Delete this
       console.log('save complet notif')
       this.save_in_progress = false
       if (success) {
