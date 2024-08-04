@@ -1,6 +1,6 @@
 <template>
   <div class="brrcalctoolbar">
-    <q-btn color="primary" icon="call" :label="save_btn_text" @click="click_btn" />
+    <q-btn color="primary" icon="save" :label="save_btn_text" @click="click_btn" />
   </div>
 </template>
 
