@@ -2,10 +2,10 @@
   <q-page class="flex flex-center">
     <div>
       <h1>Select Patch</h1>
-      <div v-for="patch in user_profile.patches" :key="patch">
-        <q-card inline class="q-ma-sm card-style tool-card" @click="click_patch(patch.id)">
+      <div v-for="patch in patches_data" :key="patch">
+        <q-card inline class="q-ma-sm card-style tool-card" @click="click_patch(patch.from_user_profile.id)">
           <q-card-section>
-            <div class="text-h6">{{ patch.name }}</div>
+            <div class="text-h6">{{ patch.from_user_profile.name }}</div>
             <div class="row">
               <div>
                 <img
@@ -16,7 +16,17 @@
               </div>
               <div class="col q-ma-sm">
                 <div align="right">
-                  View your projects in {{ patch.name }}.
+                  View your projects in {{ patch.from_user_profile.name }}.
+                  <div v-if="patch.loaded">
+                    <div class="workflow_stage_block">
+                      <div v-for="workflow_type_id in Object.keys(patch.detail.workflow_lookup)" :key=workflow_type_id>
+                        <h1>{{ get_workflow_name(workflow_type_id) }}</h1>
+                        <div v-for="stage_id in Object.keys(patch.detail.workflow_lookup[workflow_type_id])" :key=stage_id>
+                          {{ get_workflow_stage_name(workflow_type_id, stage_id) }}: {{ patch.detail.workflow_lookup[workflow_type_id][stage_id].length }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <q-btn round  color="primary" icon="info" />
                 </div>
               </div>
@@ -37,6 +47,8 @@ import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import CommonBRRToolLink from '../../../components/CommonBRRToolLink.vue'
 
+import Workflow_main from '../../../components/Workflow/Workflow_main.js'
+
 export default defineComponent({
   name: 'ToolsCansavePatchesPage',
   components: {
@@ -50,6 +62,7 @@ export default defineComponent({
   },
   data () {
     return {
+      patches_data:{}
     }
   },
   computed: {
@@ -58,14 +71,60 @@ export default defineComponent({
     }
   },
   methods: {
+    get_workflow_name (workflow_type_id) {
+      return Workflow_main.workflows[workflow_type_id].name
+    },
+    get_workflow_stage_name (workflow_type_id, stage_id) {
+      return Workflow_main.workflows[workflow_type_id].stages[stage_id].name
+    },
     click_patch (patch_id) {
       this.$router.push("/tools/cansave/patches/" + patch_id)
     },
     click_brrr_card () {
       this.$router.push('/tools/brrcalc')
+    },
+    recursive_load_project_details () {
+      const items_to_load = this.patches_data.filter(function (x) {
+        return x.loaded === false
+      })
+      if (items_to_load.length === 0) {
+        return
+      }
+      const item_to_load = items_to_load[0]
+
+      const TTT = this
+      const callback = {
+        ok: function (response) {
+          item_to_load.loaded=true
+          item_to_load.loadsuccess=true
+          item_to_load.detail=response.data
+          TTT.recursive_load_project_details()
+        },
+        error: function (response) {
+          item_to_load.loaded=true
+          item_to_load.loadsuccess=false
+          TTT.recursive_load_project_details()
+        }
+      }
+      this.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/patches/' + item_to_load.from_user_profile.id,
+        method: 'GET',
+        data: undefined,
+        callback: callback
+      })
     }
   },
   mounted () {
+    this.patches_data = this.user_profile.patches.map(function (x) {
+      return {
+        from_user_profile: x,
+        loaded: false,
+        loadsuccess: true,
+        detail: {}
+      }
+    })
+    this.recursive_load_project_details()
   }
 })
 </script>
@@ -76,5 +135,16 @@ export default defineComponent({
   height: 200px;
   padding: 20px;
   border-style: solid;
+}
+.workflow_stage_block {
+  padding-top: 10px;
+}
+.workflow_stage_block h1 {
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 0px;
+  border: 0px;
+  margin: 0px;
+  line-height: 1rem;
 }
 </style>
