@@ -103,7 +103,7 @@ export default defineComponent({
           id: uuidv4(),
           label: data
         })
-        this.$emit("updateweblinks", newweblinks)
+        TTT.$emit("updateweblinks", newweblinks)
       })
     },
   }

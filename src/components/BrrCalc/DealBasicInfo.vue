@@ -123,7 +123,9 @@ export default defineComponent({
   methods: {
     updateweblinks (newweblinks) {
       this.weblinks = newweblinks
-      this.set_changed_true()
+      if (this.emit_project_change_notification) {
+        this.$emit('projectchanged')
+      }
     },
     serializer_load_data (data_to_load) {
       this.emit_project_change_notification = false
@@ -144,14 +146,6 @@ export default defineComponent({
         TTT.changed = false
         TTT.autosave_seconds_left = -1
       }, 50)
-    },
-    set_changed_true() {
-      this.changed = true
-      if (this.no_save_message !== '') {
-        return
-      }
-      this.autosave_seconds_left = 10
-      this.start_save_monitor_function()
     },
     select_patch_by_id (id) {
       this.patch = this.patch_list.filter(function (x) {
