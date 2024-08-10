@@ -26,6 +26,7 @@
       <div class="row" v-show="tab==='main'">
         <DealBasicInfo
           ref="DealBasicInfo"
+          v-if="security_role_cansave"
           :ever_saved="ever_saved"
           @projectchanged="projectchanged"
         />
@@ -119,6 +120,7 @@
         />
         <SaveToGoogleSheet
           ref="SaveToGoogleSheet"
+          v-if="security_role_cansave"
           :serialized_data="serialized_data"
           :patch="patch"
           :stampduty_total="stampduty_total"
@@ -200,6 +202,10 @@ export default defineComponent({
   computed: {
     ever_saved () {
       if (!this.isMounted) {
+        return false
+      }
+      if (!this.security_role_cansave) {
+        console.log('WARNING ever_saved checked when cansave is false')
         return false
       }
       return this.$refs.BrrToolbar.ever_saved
@@ -355,6 +361,10 @@ export default defineComponent({
       return this.$refs.GdvCard.total
     },
     serialized_data () {
+      if (!this.security_role_cansave) {
+        console.log('WARNING serialized_data checked when cansave is false')
+        return {}
+      }
       if (!this.isMounted) {
         return {}
       }
@@ -374,6 +384,11 @@ export default defineComponent({
       if (!this.isMounted) {
         return {id: 'notset', name: 'Not Set'}
       }
+      if (!this.security_role_cansave) {
+        console.log('WARNING patch method called when cansave is false')
+        return {id: 'notset', name: 'Not Set'}
+      }
+
       return this.$refs.DealBasicInfo.patch
     }
   },
@@ -386,8 +401,18 @@ export default defineComponent({
       this.$refs.ActivityLog.log_activity(obj)
     },
     projectchanged () {
+      if (!this.security_role_cansave) {
+        // console.log('WARNING projectchanged checked when cansave is false')
+        // warning not needed - this is normal
+        return false
+      }
       if (!this.isMounted) {
+        console.log('WARNING = projectchanged called when mounted is false')
         return
+      }
+      if (typeof (this.$refs.BrrToolbar) === 'undefined') {
+        console.log('WARNING = projectchanged called when BrrToolbar is undefined')
+        return false
       }
       this.$refs.BrrToolbar.set_changed_true()
     },
