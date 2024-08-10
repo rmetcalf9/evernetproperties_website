@@ -111,7 +111,7 @@ export default defineComponent({
   watch: {
     serializer_card_data(val) {
       if (this.emit_project_change_notification) {
-        this.$emit('projectchanged')
+        this.$emit('projectchanged', 'ActivityLog:serializer')
       }
     }
   },
@@ -124,7 +124,7 @@ export default defineComponent({
         text: obj.text,
         head_notes: obj.head_notes
       })
-      this.$emit('projectchanged')
+      this.$emit('projectchanged', 'ActivityLog:log_activity')
     },
     serializer_load_data (activity_log) {
       this.emit_project_change_notification = false

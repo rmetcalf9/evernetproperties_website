@@ -203,23 +203,23 @@ export default defineComponent({
       const TTT = this
       setTimeout(function () {
         TTT.emit_project_change_notification = true
-      }, 50)
+      }, 150)
     }
   },
   watch: {
     serializer_card_data(val) {
       if (this.emit_project_change_notification) {
-        this.$emit('projectchanged')
+        this.$emit('projectchanged', 'Finance:serializer')
       }
     },
     totalmoneyneeded(val) {
       if (this.emit_project_change_notification) {
-        this.$emit('projectchanged')
+        this.$emit('projectchanged', 'Finance:totalmoneyneeded')
       }
     },
     finance_out_items(val) {
       if (this.emit_project_change_notification) {
-        this.$emit('projectchanged')
+        this.$emit('projectchanged', 'Finance:outitems')
       }
     }
   },

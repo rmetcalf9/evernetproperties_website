@@ -125,7 +125,7 @@ export default defineComponent({
   watch: {
     total(val) {
       if (this.emit_project_change_notification) {
-        this.$emit('projectchanged')
+        this.$emit('projectchanged', 'GDV')
       }
     }
   }

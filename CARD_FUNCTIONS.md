@@ -23,7 +23,7 @@ computed: {
 watch: {
   serializer_card_data(val) {
     if (this.emit_project_change_notification) {
-      this.$emit('projectchanged')
+      this.$emit('projectchanged', 'TODOADDSOURCE')
     }
   }
 },

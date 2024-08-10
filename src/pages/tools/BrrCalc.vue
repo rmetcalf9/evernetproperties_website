@@ -400,7 +400,8 @@ export default defineComponent({
       }
       this.$refs.ActivityLog.log_activity(obj)
     },
-    projectchanged () {
+    projectchanged (source) {
+      console.log('BrrCalc page recieved project changed from ', source)
       if (!this.security_role_cansave) {
         // console.log('WARNING projectchanged checked when cansave is false')
         // warning not needed - this is normal
