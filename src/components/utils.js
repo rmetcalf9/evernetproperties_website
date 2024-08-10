@@ -11,6 +11,9 @@ function digits_with_commas_recusrive(numstr) {
 }
 
 function format_currency (num) {
+  if (num === null) {
+    return '£-.--'
+  }
   if (typeof(num) === 'undefined') {
     return ''
   }

@@ -76,11 +76,30 @@ export default defineComponent({
   methods: {
     validateworst () {
       this.$refs.worstinput.validate()
-      this.$emit("update:range", this.rangevalue)
+      this.emitrangevalue(this.rangevalue)
     },
     validatebest () {
       this.$refs.bestinput.validate()
-      this.$emit("update:range", this.rangevalue)
+      this.emitrangevalue(this.rangevalue)
+    },
+    emitrangevalue (value) {
+      const emitObj = {
+        min: this.ensurenumber(value.min),
+        max: this.ensurenumber(value.max)
+      }
+      this.$emit("update:range", emitObj)
+    },
+    ensurenumber(val) {
+      if (val === null) {
+        return 0
+      }
+      if (typeof (val) === 'undefined') {
+        return 0
+      }
+      if (val === '') {
+        return 0
+      }
+      return val
     }
   },
   computed: {
@@ -95,7 +114,7 @@ export default defineComponent({
         return this.range
       },
       set(value) {
-        this.$emit("update:range", value)
+        this.emitrangevalue(value)
       },
     }
   }
