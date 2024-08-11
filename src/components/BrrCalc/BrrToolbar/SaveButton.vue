@@ -72,7 +72,7 @@ export default defineComponent({
       if (this.no_save_message !== '') {
         return
       }
-      this.autosave_seconds_left = 10
+      this.autosave_seconds_left = 5
       this.start_save_monitor_function()
     },
     start_save_monitor_function () {
