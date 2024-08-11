@@ -27,6 +27,7 @@
         </q-input>
       </div>
     </q-card-section>
+    <q-separator class="basic-info-seperator" />
     <q-card-section>
       <div>
         <div class="text-h6">Weblinks</div>
@@ -35,9 +36,14 @@
           @updateweblinks="updateweblinks"
         />
       </div>
+      <q-separator class="basic-info-seperator" />
       <div><q-input filled clearable v-model="selling_agent" label="Selling Agent" /></div>
+      <q-separator class="basic-info-seperator" />
       <div><q-input filled autogrow v-model="notes" label="Notes" /></div>
-
+      <q-separator class="basic-info-seperator" />
+      <div>Deal Source</div>
+      <div><q-checkbox v-model="deal_source_local_only.self_check_box" label="Self sourced" @update:model-value='updatedealsource' /></div>
+      <div><q-input filled autogrow v-model="deal_source_local_only.value" label="Name of source" :disable='deal_source_local_only.self_check_box' @update:model-value='updatedealsource' /></div>
     </q-card-section>
   </q-card>
 </template>
@@ -48,6 +54,13 @@ import { Notify } from 'quasar'
 import utils from '../../utils.js'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import Weblinks from '../../components/Weblinks.vue'
+
+function getDefaultSource() {
+  return {
+    type: 'self',
+    value: ''
+  }
+}
 
 export default defineComponent({
   name: 'DealBasicInfo',
@@ -71,7 +84,12 @@ export default defineComponent({
       new_patch_value: '',
       selling_agent: '',
       notes: '',
-      emit_project_change_notification: true
+      emit_project_change_notification: true,
+      deal_source: getDefaultSource(),
+      deal_source_local_only: {
+        self_check_box: false,
+        value: ''
+      }
     }
   },
   watch: {
@@ -83,6 +101,9 @@ export default defineComponent({
     }
   },
   computed: {
+    deal_source_is_self () {
+      return this.deal_source.type === 'self'
+    },
     serializer_card_data () {
       return {
         patch_id: this.patch.id,
@@ -90,7 +111,8 @@ export default defineComponent({
         postcode: this.postcode,
         weblinks: this.weblinks,
         selling_agent: this.selling_agent,
-        notes: this.notes
+        notes: this.notes,
+        deal_source: this.deal_source
       }
     },
     reason_project_not_savable () {
@@ -121,6 +143,21 @@ export default defineComponent({
     },
   },
   methods: {
+    updatedealsource () {
+      let type = 'self'
+      if (this.deal_source_local_only.self_check_box === false) {
+        type = 'text'
+      }
+      //  Decided not to blank value
+      // if (type==='self') {
+      //  this.deal_source_local_only.value = ''
+      // }
+      let value = this.deal_source_local_only.value
+      this.deal_source = {
+        type: type,
+        value: value
+      }
+    },
     updateweblinks (newweblinks) {
       this.weblinks = newweblinks
       if (this.emit_project_change_notification) {
@@ -139,6 +176,18 @@ export default defineComponent({
       this.patch = this.patch_list.filter(function (x) {
         return x.id === data_to_load.patch_id
       })[0]
+
+      if (typeof (data_to_load.deal_source) === 'undefined') {
+        this.deal_source = getDefaultSource()
+      } else {
+        this.deal_source = data_to_load.deal_source
+      }
+      // Set actual check box and value
+      this.deal_source_local_only.self_check_box = (this.deal_source.type==='self')
+      this.deal_source_local_only.value = this.deal_source.value
+
+      this.updatedealsource()
+
       const TTT = this
       setTimeout(function () {
         TTT.emit_project_change_notification = true
@@ -240,4 +289,8 @@ export default defineComponent({
 </script>
 
 <style>
+.basic-info-seperator {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 </style>

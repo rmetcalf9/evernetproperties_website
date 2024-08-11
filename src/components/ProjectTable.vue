@@ -46,6 +46,14 @@
           </q-td>
         </template>
 
+        <template v-slot:body-cell-source="props">
+          <q-td @click="onRowClick(props.row)">
+            <div v-if="props.row.loaded">
+              <div>{{ get_source_text(props.row) }}</div>
+            </div>
+          </q-td>
+        </template>
+
 
         <template v-slot:top-right>
           <q-input borderless dense debounce="300" v-model="filter" clearable placeholder="Search">
@@ -121,6 +129,14 @@ export default defineComponent({
           align: 'left',
           field: 'address',
           sortable: true
+          },
+          {
+            name: 'source',
+            required: true,
+            label: 'Source',
+            align: 'left',
+            field: 'address',
+            sortable: true
         }
       ],
       initialPagination: {
@@ -137,6 +153,15 @@ export default defineComponent({
     }
   },
   methods: {
+    get_source_text (row) {
+      if (typeof (row.item.sub_section_details.dealbasicinfo.deal_source) === 'undefined') {
+        return 'Self'
+      }
+      if (row.item.sub_section_details.dealbasicinfo.deal_source.type === 'self') {
+        return 'Self'
+      }
+      return row.item.sub_section_details.dealbasicinfo.deal_source.value
+    },
     getWorkflowStage ({workflow_used_id, current_stage}) {
       return Workflow_main.workflows[workflow_used_id].stages[current_stage]
     },
