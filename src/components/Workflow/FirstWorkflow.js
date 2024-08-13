@@ -84,7 +84,7 @@ export default {
         ]
       },
     },
-    "6.1": { "name": "Off market"},
+    "6.1": { "name": "Off Market"},
     "7": { "name": "Accepted offer"},
   }
 }
