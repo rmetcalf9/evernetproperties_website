@@ -13,7 +13,7 @@ import Workflow_main from './Workflow_main.js'
 function draw_workflow(parent, workflow_json, click_stage_callback, patch_data) {
   const context = {
     items_drawn: {},
-    cols: [-300, 200, 500]
+    cols: [-300, 120, 560]
   }
   draw_stage_and_all_children(
     parent,

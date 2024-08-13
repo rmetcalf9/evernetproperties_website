@@ -76,6 +76,7 @@ export default {
       "name": "Rejected offer",
       "draw_col": 1, // Defaults to 0 - unless fail stage defaults to 2
       "progression": {
+        "failed": "6.1",
         "success": [
           {
             "next_stage": "7"
@@ -83,6 +84,7 @@ export default {
         ]
       },
     },
+    "6.1": { "name": "Off market"},
     "7": { "name": "Accepted offer"},
   }
 }
