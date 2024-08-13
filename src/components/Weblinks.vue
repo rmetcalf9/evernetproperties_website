@@ -1,11 +1,30 @@
 <template>
   <div>
     <div v-for="weblink in weblinkdisplay" :key="weblink" >
-      <q-chip clickable @click="clickweblink(weblink)" removable @remove="delweblink(weblink.id)" color="primary" text-color="white" :icon="weblink.icon">
+      <q-chip clickable @click="clickweblink(weblink)" removable @remove="editweblink(weblink.id)" color="primary" text-color="white" :icon="weblink.icon" icon-remove="edit">
         {{ weblink.text }}
       </q-chip>
     </div>
     <q-btn round color="primary" icon="add" @click="addweblink" />
+    <q-dialog v-model="edit_dialog.visible">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Edit Weblink</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <div style="width: 25vw">
+            <q-input v-model="edit_dialog.record.label" label="URL" clearable />
+          </div>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Delete" color="negative" @click="delweblink(edit_dialog.record.id)" />
+          <q-btn flat label="Cancel" color="primary" v-close-popup />
+          <q-btn flat label="OK"  @click="editweblinkok" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -27,6 +46,10 @@ export default defineComponent({
   emits: ['updateweblinks'],
   data () {
     return {
+      edit_dialog: {
+        visible: false,
+        record: {}
+      }
     }
   },
   computed: {
@@ -60,6 +83,24 @@ export default defineComponent({
     }
   },
   methods: {
+    editweblink (id) {
+      this.edit_dialog.record = JSON.parse(JSON.stringify(this.weblinks.filter(function (x) {
+        return x.id===id
+      })[0]))
+      this.edit_dialog.visible = true
+    },
+    editweblinkok () {
+      if (!this.validate_weblink(this.edit_dialog.record)) {
+        return
+      }
+      const TTT = this
+      const newweblinks = this.weblinks.filter(function (weblink) {
+        return TTT.edit_dialog.record.id !== weblink.id
+      })
+      newweblinks.push(this.edit_dialog.record)
+      this.edit_dialog.visible = false
+      TTT.$emit("updateweblinks", newweblinks)
+    },
     clickweblink (weblink) {
       window.open(weblink.label, '_blank').focus()
     },
@@ -67,7 +108,20 @@ export default defineComponent({
       const newweblinks = this.weblinks.filter(function (weblink) {
         return id !== weblink.id
       })
+      this.edit_dialog.visible = false
       this.$emit("updateweblinks", newweblinks)
+    },
+    validate_weblink(record) {
+      if (!record.label.startsWith('http')) {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'Link must start with http',
+          timeout: 2000,
+          color: 'negative'
+        })
+        return false
+      }
+      return true
     },
     addweblink () {
       const TTT = this
@@ -89,20 +143,15 @@ export default defineComponent({
         }
       }).onOk((data) => {
         data = data.trim()
-        if (!data.startsWith('http')) {
-          Notify.create({
-            color: 'bg-grey-2',
-            message: 'Link must start with http',
-            timeout: 2000,
-            color: 'negative'
-          })
+        const weblinkrecord = {
+          id: uuidv4(),
+          label: data
+        }
+        if (!this.validate_weblink(weblinkrecord)) {
           return
         }
         const newweblinks = TTT.weblinks
-        newweblinks.push({
-          id: uuidv4(),
-          label: data
-        })
+        newweblinks.push(weblinkrecord)
         TTT.$emit("updateweblinks", newweblinks)
       })
     },
