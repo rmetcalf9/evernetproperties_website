@@ -9,11 +9,13 @@
     <q-dialog v-model="edit_dialog.visible">
       <q-card>
         <q-card-section>
-          <div class="text-h6">Edit Weblink</div>
+          <div class="text-h6">{{ edit_dialog.title }}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
           <div style="width: 25vw">
+            {{ edit_dialog.message }}
+            <q-input v-model="edit_dialog.record.displaytext" label="Display Text" clearable />
             <q-input v-model="edit_dialog.record.label" label="URL" clearable />
           </div>
         </q-card-section>
@@ -48,13 +50,25 @@ export default defineComponent({
     return {
       edit_dialog: {
         visible: false,
-        record: {}
+        record: {},
+        title: '',
+        message: ''
       }
     }
   },
   computed: {
     weblinkdisplay () {
       return this.weblinks.map(function (x) {
+        if (typeof (x.displaytext) !== 'undefined') {
+          if (x.displaytext.trim().length > 0) {
+            return {
+              id: x.id,
+              label: x.label,
+              text: x.displaytext,
+              icon: 'star'
+            }
+          }
+        }
         const url = new URL(x.label)
         let icon = 'web'
         let text = url.hostname
@@ -87,6 +101,8 @@ export default defineComponent({
       this.edit_dialog.record = JSON.parse(JSON.stringify(this.weblinks.filter(function (x) {
         return x.id===id
       })[0]))
+      this.edit_dialog.title = 'Edit Weblink'
+      this.edit_dialog.message = ''
       this.edit_dialog.visible = true
     },
     editweblinkok () {
@@ -125,35 +141,15 @@ export default defineComponent({
     },
     addweblink () {
       const TTT = this
-      this.$q.dialog({
-        title: 'Add weblink',
-        message: 'Add weblink to information about this property (rightmove, zoopla, etc.)',
-        html: false,
-        ok: {
-          push: true,
-          label: 'Ok',
-        },
-        cancel: {
-          push: true,
-          label: 'Cancel',
-        },
-        prompt: {
-          model: '',
-          type: 'text' // optional
-        }
-      }).onOk((data) => {
-        data = data.trim()
-        const weblinkrecord = {
-          id: uuidv4(),
-          label: data
-        }
-        if (!this.validate_weblink(weblinkrecord)) {
-          return
-        }
-        const newweblinks = TTT.weblinks
-        newweblinks.push(weblinkrecord)
-        TTT.$emit("updateweblinks", newweblinks)
-      })
+
+      this.edit_dialog.title = 'Add Weblink'
+      this.edit_dialog.message = 'Add weblink to information about this property (rightmove, zoopla, etc.)'
+      this.edit_dialog.record = {
+        id: uuidv4(),
+        label: '',
+        displaytext: ''
+      }
+      this.edit_dialog.visible = true
     },
   }
 })
