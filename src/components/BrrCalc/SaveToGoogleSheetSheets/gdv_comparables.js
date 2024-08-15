@@ -79,6 +79,12 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
   //E
   context.requests.push(su.formatcurrency(first_comparable_row-1,last_comparable_row-1,4,5))
 
+  //H
+  context.requests.push(su.formatcurrency(first_comparable_row-1,last_comparable_row-1,7,8))
+
+  //J
+  context.requests.push(su.formatcurrency(first_comparable_row-1,last_comparable_row-1,9,10))
+
   return {
     value_requests: context.value_requests,
     requests: context.requests
