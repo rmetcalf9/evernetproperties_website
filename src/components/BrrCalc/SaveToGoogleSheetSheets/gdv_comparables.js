@@ -10,7 +10,15 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
     value_requests: [],
     misc_data: {}
   }
-  context.requests.push(su.adjustcolumnwidth(0,170))
+  const column_widths = [117,	246,	100,	74,	100,	100,	47,	100,	100,	100,	145,	100,	198]
+  let i = 0;
+  while (i < column_widths.length) {
+    context.requests.push(su.adjustcolumnwidth(i,column_widths[i]))
+    i++;
+  }
+
+
+
 
   context.cur_row = context.cur_row + 1
   context.value_requests.push({
@@ -33,15 +41,48 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
     range: sheet_name + '!E' + context.cur_row.toString() + ':E' + context.cur_row.toString(),
     values: [[vueobj.serialized_data.dealbasicinfo.postcode]]
   })
-  context.requests.push(su.makeboldandvaligntop(0,context.cur_row,0,1))
 
   context.cur_row = context.cur_row + 1
 
+  const blank_headings = ['EPC Floorspace:', 'Type:', 'Condition:', 'Sold History']
+  blank_headings.forEach(function (heading) {
+    context.value_requests.push({
+      range: sheet_name + '!A' + context.cur_row.toString() + ':A' + context.cur_row.toString(),
+      values: [[heading]]
+    })
+    context.cur_row = context.cur_row + 1
+  })
+  context.requests.push(su.makeboldandvaligntop(0,context.cur_row-1,0,1))
+
+  context.cur_row = context.cur_row + 6
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':M' + context.cur_row.toString(),
+    values: [['Source',	'Address',	'Type',	'Price type',	'Amount',	'Date',	'SQM',	'price per sqm',	'Condition',	'Value of ours',	'Distance',	'Place',	'Notes']]
+  })
+  context.cur_row = context.cur_row + 1
+  context.requests.push(su.makeboldandvaligntop(context.cur_row-2,context.cur_row-1,0,13))
+
+  const first_comparable_row = context.cur_row
+
+  // 15 comparable slots
+  let comp_row = 0;
+  while (comp_row < 15) {
+    context.value_requests.push({
+      range: sheet_name + '!A' + context.cur_row.toString() + ':M' + context.cur_row.toString(),
+      values: [['',	'',	'',	'SOLD',	'',	'',	'',	'=E' + (context.cur_row).toString() + '/G' + (context.cur_row).toString(),	'',	'=H' + (context.cur_row).toString() + '*$B$' +'4',	'',	'',	'']]
+    })
+    context.cur_row = context.cur_row + 1
+    comp_row++;
+  }
+  const last_comparable_row = context.cur_row
+
+  //E
+  context.requests.push(su.formatcurrency(first_comparable_row-1,last_comparable_row-1,4,5))
 
   return {
     value_requests: context.value_requests,
     requests: context.requests
-  }  
+  }
 }
 
 
