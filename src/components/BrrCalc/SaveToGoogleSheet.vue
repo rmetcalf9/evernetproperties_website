@@ -21,6 +21,9 @@ import { Notify, Loading } from 'quasar'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import sheet_main from './SaveToGoogleSheetSheets/main.js'
 import sheet_purchase_phase from './SaveToGoogleSheetSheets/purchase_phase.js'
+import sheet_gdv_comparables from './SaveToGoogleSheetSheets/gdv_comparables.js'
+
+const subsheets = [sheet_purchase_phase, sheet_gdv_comparables]
 
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
@@ -91,16 +94,18 @@ export default defineComponent({
               "fields": "title",
           }
       })
-      const sheets_to_add = [sheet_purchase_phase.sheet_name]
-      sheets_to_add.forEach(function (sheet_title) {
+
+      let sheedIdx = 0;
+      while (sheedIdx < subsheets.length) {
         requests.push({
             "addSheet": {
                 "properties": {
-                    "title": sheet_title
+                    "title": subsheets[sheedIdx].sheet_name
                 }
             }
         })
-      })
+        sheedIdx++;
+      }
 
       requests = requests.concat(sheet_main.get_sheet_main(spreadsheet, this, sheet_id_map))
 
@@ -116,11 +121,13 @@ export default defineComponent({
           console.log('spreadsheet Batch Update result', response.result.replies)
           response.result.replies.forEach(function (reply) {
             if (typeof (reply['addSheet']) !== 'undefined') {
-              sheets_to_add.forEach(function (sheet_to_add) {
-                if (reply.addSheet.properties.title === sheet_to_add) {
-                  sheet_id_map[sheet_to_add] = reply.addSheet.properties.sheetId
+              let sheedIdx = 0;
+              while (sheedIdx < subsheets.length) {
+                if (reply.addSheet.properties.title === subsheets[sheedIdx].sheet_name) {
+                  sheet_id_map[subsheets[sheedIdx].sheet_name] = reply.addSheet.properties.sheetId
                 }
-              })
+                sheedIdx++;
+              }
             }
           })
           this.spreadsheets_batchupdate_after_all_sheets_added(spreadsheet, sheet_id_map)
@@ -138,9 +145,13 @@ export default defineComponent({
       value_requests = value_requests.concat(sheet_main.get_sheet_main_values(spreadsheet, this, sheet_id_map))
 
       // Repeated for all my subsheets
-      let x = sheet_purchase_phase.get_sheet_values(spreadsheet, this, sheet_id_map)
-      requests = requests.concat(x.requests)
-      value_requests = value_requests.concat(x.value_requests)
+      let i = 0;
+      while (i < subsheets.length) {
+        let x = subsheets[i].get_sheet_values(spreadsheet, this, sheet_id_map)
+        requests = requests.concat(x.requests)
+        value_requests = value_requests.concat(x.value_requests)
+        i++;
+      }
 
       if (requests.length === 0) {
         console.log('No requests required')
