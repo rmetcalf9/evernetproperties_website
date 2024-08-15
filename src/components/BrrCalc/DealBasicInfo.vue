@@ -87,7 +87,7 @@ export default defineComponent({
       emit_project_change_notification: true,
       deal_source: getDefaultSource(),
       deal_source_local_only: {
-        self_check_box: false,
+        self_check_box: true,
         value: ''
       }
     }
