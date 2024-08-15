@@ -10,7 +10,7 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
     value_requests: [],
     misc_data: {}
   }
-  const column_widths = [117,	246,	100,	74,	100,	100,	47,	100,	100,	100,	145,	100,	198]
+  const column_widths = [120,	246,	100,	74,	100,	100,	47,	100,	100,	100,	145,	100,	198]
   let i = 0;
   while (i < column_widths.length) {
     context.requests.push(su.adjustcolumnwidth(i,column_widths[i]))
