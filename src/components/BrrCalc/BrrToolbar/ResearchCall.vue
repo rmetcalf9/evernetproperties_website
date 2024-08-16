@@ -1,6 +1,6 @@
 <template>
   <div class="brrcalctoolbar">
-    <q-btn color="primary" icon="call" label="Research Call" @click="open_dialog" />
+    <q-btn color="primary" icon="call" label="Research" @click="open_dialog" />
     <q-dialog v-model="dialog_visible">
       <q-card>
         <q-card-section class="row items-center q-pb-none">
