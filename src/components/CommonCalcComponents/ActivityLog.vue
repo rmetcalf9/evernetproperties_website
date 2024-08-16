@@ -72,6 +72,7 @@ export default defineComponent({
         book_viewing: { sent: true, name: 'Viewing booked' },
         hold_viewing: { sent: false, name: 'Viewing' },
         call_agent: { sent: true, name: 'Call to agent' },
+        research_call: { sent: true, name: 'Research Call' },
         wf_move: { sent: false, name: 'Workflow' },
         offer_made: { sent: true, name: 'Offer made' },
         offer_rejected: { sent: false, name: 'Offer rejected' },

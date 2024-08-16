@@ -8,6 +8,9 @@
     <CallSellingAgent
       @activity_log="(obj) => $emit('activity_log',obj)"
     />
+    <ResearchCall
+      @activity_log="(obj) => $emit('activity_log',obj)"
+    />
   </div>
 </template>
 
@@ -15,6 +18,7 @@
 import { defineComponent } from 'vue'
 
 import CallSellingAgent from './CallSellingAgent.vue'
+import ResearchCall from './ResearchCall.vue'
 import SaveButton from './SaveButton.vue'
 
 export default defineComponent({
@@ -23,6 +27,7 @@ export default defineComponent({
   emits: ['activity_log', 'saveproject'],
   components: {
     CallSellingAgent,
+    ResearchCall,
     SaveButton
   },
   data () {
