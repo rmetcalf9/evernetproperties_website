@@ -60,12 +60,14 @@ export default defineComponent({
     weblinkdisplay () {
       return this.weblinks.map(function (x) {
         if (typeof (x.displaytext) !== 'undefined') {
-          if (x.displaytext.trim().length > 0) {
-            return {
-              id: x.id,
-              label: x.label,
-              text: x.displaytext,
-              icon: 'star'
+          if (x.displaytext != null) {
+            if (x.displaytext.trim().length > 0) {
+              return {
+                id: x.id,
+                label: x.label,
+                text: x.displaytext,
+                icon: 'star'
+              }
             }
           }
         }
@@ -128,6 +130,24 @@ export default defineComponent({
       this.$emit("updateweblinks", newweblinks)
     },
     validate_weblink(record) {
+      if (typeof (record.label) === 'undefined') {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'Link must start with http',
+          timeout: 2000,
+          color: 'negative'
+        })
+        return false
+      }
+      if (record.label === null) {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'Link must start with http',
+          timeout: 2000,
+          color: 'negative'
+        })
+        return false
+      }
       if (!record.label.startsWith('http')) {
         Notify.create({
           color: 'bg-grey-2',
