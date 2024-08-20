@@ -128,6 +128,7 @@
           :caculated_loan_details="caculated_loan_details"
           :finance_bridgecost="finance_bridgecost"
           @apiaddweblink="apiaddweblink"
+          @activity_log="activity_log"
         />
       </div>
     </div>

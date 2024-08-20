@@ -74,6 +74,7 @@ export default defineComponent({
         call_agent: { sent: true, name: 'Call to agent' },
         research_call: { sent: true, name: 'Research Call' },
         wf_move: { sent: false, name: 'Workflow' },
+        admin: { sent: false, name: 'Admin action' },
         offer_made: { sent: true, name: 'Offer made' },
         offer_rejected: { sent: false, name: 'Offer rejected' },
         offer_accepted: {sent: false, name: 'Offer accepted' },
@@ -118,13 +119,17 @@ export default defineComponent({
   },
   methods: {
     log_activity (obj) {
-      this.activity_log.push({
+      var new_act_log = this.activity_log.filter(function (x) {
+        return true
+      })
+      new_act_log.push({
         id: uuidv4(),
         type: obj.type,
         timestamp: (new Date()).toISOString(),
         text: obj.text,
         head_notes: obj.head_notes
       })
+      this.activity_log = new_act_log
       this.$emit('projectchanged', 'ActivityLog:log_activity')
     },
     serializer_load_data (activity_log) {

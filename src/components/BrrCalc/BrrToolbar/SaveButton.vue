@@ -8,7 +8,7 @@
 import { defineComponent } from 'vue'
 import { ref } from 'vue'
 
-const default_autosave_Seconds = 0.5
+const default_autosave_Seconds = 0.7
 
 export default defineComponent({
   name: 'BrrCalcToolbarSaveButton',
@@ -73,6 +73,12 @@ export default defineComponent({
       this.save_now()
     },
     set_changed_true() {
+      if (this.save_in_progress) {
+        // if save is in progress, just try again in a second
+        console.log('SaveButton.vue - Delay set changed due to save in progress')
+        setTimeout(this.set_changed_true, 1000)
+        return
+      }
       this.changed = true
       if (this.no_save_message !== '') {
         return
