@@ -79,18 +79,20 @@
         <div>Start cost/End Cost: {{ bridge.startcost * 100 }}%/{{ bridge.endcost * 100 }}%</div>
         <div>Monthly cost: {{ bridge.monthlycost * 100 }}%</div>
         <div>Months cost paid upfront: {{ bridgemontghsupfront.min }} - {{ bridgemontghsupfront.max }}</div>
+        <div>The maximum bridge amount is typically 65% of the purchase price.</div>
         <div class="row">
           <div class="bridgeamountdiv">
             <div>Worst bridge amount</div>
             <q-slider label v-model="bridge.amount.worst" :min="0" :max="maxbridge.worst" :step="5000" thumb-size="40px"/>
             <div>Amount: {{ format_currency(bridge.amount.worst) }}</div>
+            <div>% purchase: {{ format_percent(bridge.amount.worst / purchaserange.max) }}</div>
             <div>Cost: {{ format_currency(bridgecost.worst) }}</div>
           </div>
           <div class="bridgeamountdiv">
-            <div>max bridging 60/70% value of money</div>
             <div>Best bridge amount</div>
             <q-slider label v-model="bridge.amount.best" :min="0" :max="maxbridge.best" :step="5000" thumb-size="40px"/>
             <div>Amount: {{ format_currency(bridge.amount.best) }}</div>
+            <div>% purchase: {{ format_percent(bridge.amount.best / purchaserange.min) }}</div>
             <div>Cost: {{ format_currency(bridgecost.best) }}</div>
           </div>
         </div>
@@ -151,6 +153,9 @@ export default defineComponent({
   methods: {
     format_currency (num) {
       return utils.format_currency(num)
+    },
+    format_percent (num) {
+      return utils.format_percent(num)
     },
     addloan () {
       var last_id = 0
