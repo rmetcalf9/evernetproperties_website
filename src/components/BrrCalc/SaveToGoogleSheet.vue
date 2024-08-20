@@ -22,6 +22,8 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import sheet_main from './SaveToGoogleSheetSheets/main.js'
 import sheet_purchase_phase from './SaveToGoogleSheetSheets/purchase_phase.js'
 import sheet_gdv_comparables from './SaveToGoogleSheetSheets/gdv_comparables.js'
+import sheet_hmo_monthly_profit from './SaveToGoogleSheetSheets/hmo_monthly_profit.js'
+import sheet_hmo_room_sizes from './SaveToGoogleSheetSheets/hmo_room_sizes.js'
 
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
@@ -93,8 +95,13 @@ export default defineComponent({
           }
       })
 
-      const subsheet_javascript_code_files = [sheet_purchase_phase, sheet_gdv_comparables]
-
+      let subsheet_javascript_code_files = [sheet_purchase_phase, sheet_gdv_comparables]
+      if (typeof(this.serialized_data.vision.strategy) !== 'undefined') {
+        if (this.serialized_data.vision.strategy.hmo) {
+          subsheet_javascript_code_files.push(sheet_hmo_monthly_profit)
+          subsheet_javascript_code_files.push(sheet_hmo_room_sizes)
+        }
+      }
 
       let sheedIdx = 0;
       while (sheedIdx < subsheet_javascript_code_files.length) {
