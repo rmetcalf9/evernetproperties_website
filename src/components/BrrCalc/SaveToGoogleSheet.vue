@@ -23,8 +23,6 @@ import sheet_main from './SaveToGoogleSheetSheets/main.js'
 import sheet_purchase_phase from './SaveToGoogleSheetSheets/purchase_phase.js'
 import sheet_gdv_comparables from './SaveToGoogleSheetSheets/gdv_comparables.js'
 
-const subsheets = [sheet_purchase_phase, sheet_gdv_comparables]
-
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
   props: ['serialized_data', 'patch', 'refurb_cost_total', 'stampduty_total', 'othercosts_items_detail', 'caculated_loan_details', 'finance_bridgecost'],
@@ -95,12 +93,15 @@ export default defineComponent({
           }
       })
 
+      const subsheet_javascript_code_files = [sheet_purchase_phase, sheet_gdv_comparables]
+
+
       let sheedIdx = 0;
-      while (sheedIdx < subsheets.length) {
+      while (sheedIdx < subsheet_javascript_code_files.length) {
         requests.push({
             "addSheet": {
                 "properties": {
-                    "title": subsheets[sheedIdx].sheet_name
+                    "title": subsheet_javascript_code_files[sheedIdx].sheet_name
                 }
             }
         })
@@ -122,15 +123,15 @@ export default defineComponent({
           response.result.replies.forEach(function (reply) {
             if (typeof (reply['addSheet']) !== 'undefined') {
               let sheedIdx = 0;
-              while (sheedIdx < subsheets.length) {
-                if (reply.addSheet.properties.title === subsheets[sheedIdx].sheet_name) {
-                  sheet_id_map[subsheets[sheedIdx].sheet_name] = reply.addSheet.properties.sheetId
+              while (sheedIdx < subsheet_javascript_code_files.length) {
+                if (reply.addSheet.properties.title === subsheet_javascript_code_files[sheedIdx].sheet_name) {
+                  sheet_id_map[subsheet_javascript_code_files[sheedIdx].sheet_name] = reply.addSheet.properties.sheetId
                 }
                 sheedIdx++;
               }
             }
           })
-          this.spreadsheets_batchupdate_after_all_sheets_added(spreadsheet, sheet_id_map)
+          this.spreadsheets_batchupdate_after_all_sheets_added(spreadsheet, sheet_id_map, subsheet_javascript_code_files)
         });
       } catch (err) {
         this.sheet_api_error_handler(err)
@@ -138,7 +139,7 @@ export default defineComponent({
       }
 
     },
-    spreadsheets_batchupdate_after_all_sheets_added (spreadsheet, sheet_id_map) {
+    spreadsheets_batchupdate_after_all_sheets_added (spreadsheet, sheet_id_map, subsheet_javascript_code_files) {
       let requests = []
       let value_requests = []
 
@@ -146,8 +147,8 @@ export default defineComponent({
 
       // Repeated for all my subsheets
       let i = 0;
-      while (i < subsheets.length) {
-        let x = subsheets[i].get_sheet_values(spreadsheet, this, sheet_id_map)
+      while (i < subsheet_javascript_code_files.length) {
+        let x = subsheet_javascript_code_files[i].get_sheet_values(spreadsheet, this, sheet_id_map)
         requests = requests.concat(x.requests)
         value_requests = value_requests.concat(x.value_requests)
         i++;
