@@ -8,6 +8,8 @@
 import { defineComponent } from 'vue'
 import { ref } from 'vue'
 
+const default_autosave_Seconds = 0.5
+
 export default defineComponent({
   name: 'BrrCalcToolbarSaveButton',
   props: ['reason_project_not_savable'],
@@ -44,6 +46,9 @@ export default defineComponent({
       return false
     },
     save_btn_text () {
+      if (this.save_in_progress) {
+        return 'Saving...'
+      }
       if (this.no_save_message !== '') {
         return 'Not able to save (' + this.no_save_message + ')'
       }
@@ -72,7 +77,7 @@ export default defineComponent({
       if (this.no_save_message !== '') {
         return
       }
-      this.autosave_seconds_left = 5
+      this.autosave_seconds_left = default_autosave_Seconds
       this.start_save_monitor_function()
     },
     start_save_monitor_function () {
