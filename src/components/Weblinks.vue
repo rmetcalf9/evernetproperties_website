@@ -41,6 +41,14 @@ function uuidv4() {
   );
 }
 
+function new_weblink_record(label, displaytext) {
+  return {
+    id: uuidv4(),
+    label: label, // this is the URL must start http://
+    displaytext: displaytext
+  }
+}
+
 
 export default defineComponent({
   name: 'WebLinksComponent',
@@ -119,6 +127,14 @@ export default defineComponent({
       this.edit_dialog.visible = false
       TTT.$emit("updateweblinks", newweblinks)
     },
+    apiaddweblink({url, displaytext}) {
+      // Called from another part of the app
+      const newweblinks = this.weblinks.filter(function (weblink) {
+        return true
+      })
+      newweblinks.push(new_weblink_record(url, displaytext))
+      this.$emit("updateweblinks", newweblinks)
+    },
     clickweblink (weblink) {
       window.open(weblink.label, '_blank').focus()
     },
@@ -164,11 +180,7 @@ export default defineComponent({
 
       this.edit_dialog.title = 'Add Weblink'
       this.edit_dialog.message = 'Add weblink to information about this property (rightmove, zoopla, etc.)'
-      this.edit_dialog.record = {
-        id: uuidv4(),
-        label: '',
-        displaytext: ''
-      }
+      this.edit_dialog.record = new_weblink_record('', '')
       this.edit_dialog.visible = true
     },
   }

@@ -127,6 +127,7 @@
           :othercosts_items_detail="othercosts_items_detail"
           :caculated_loan_details="caculated_loan_details"
           :finance_bridgecost="finance_bridgecost"
+          @apiaddweblink="apiaddweblink"
         />
       </div>
     </div>
@@ -392,6 +393,9 @@ export default defineComponent({
     }
   },
   methods: {
+    apiaddweblink(params) {
+      return this.$refs.DealBasicInfo.apiaddweblink(params)
+    },
     activity_log (obj) {
       if (!this.isMounted) {
         console.log('ERROR - trying to log activity unmounted', obj)

@@ -32,6 +32,7 @@
       <div>
         <div class="text-h6">Weblinks</div>
         <Weblinks
+          ref="Weblinks"
           :weblinks="weblinks"
           @updateweblinks="updateweblinks"
         />
@@ -143,6 +144,9 @@ export default defineComponent({
     },
   },
   methods: {
+    apiaddweblink(params) {
+      return this.$refs.Weblinks.apiaddweblink(params)
+    },
     updatedealsource () {
       let type = 'self'
       if (this.deal_source_local_only.self_check_box === false) {

@@ -27,6 +27,7 @@ import sheet_hmo_room_sizes from './SaveToGoogleSheetSheets/hmo_room_sizes.js'
 
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
+  emits: ['apiaddweblink'],
   props: ['serialized_data', 'patch', 'refurb_cost_total', 'stampduty_total', 'othercosts_items_detail', 'caculated_loan_details', 'finance_bridgecost'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -218,6 +219,10 @@ export default defineComponent({
       return;
     },
     sheet_final_complete (spreadsheet) {
+      this.$emit('apiaddweblink', {
+        url: spreadsheet.spreadsheetUrl,
+        displaytext: 'My Calc'
+      })
       this.open_sheet(spreadsheet)
       Loading.hide()
     }
