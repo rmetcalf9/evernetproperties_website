@@ -319,7 +319,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
           if (typeof (response.response) !== 'undefined') {
             if (response.response.status === 401) {
               if (!refresh_tried) {
-                console.log('API Error - got 401 trying to update refresh token')
+                console.log('API Error - recieved 401 from server. login_token has timed out. Using refresh token to get a new one')
                 TTT.get_new_token_using_refresh_token({
                   user_id: TTT.user_profile.id,
                   refresh_token: TTT.login_info.refresh_token,
@@ -330,7 +330,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
                     })
                   },
                   fail_fn: function () {
-                    console.log('Refresh token failed - logging out user')
+                    console.log('Failed to use refresh_token to get a new login_token and refresh_token')
                     TTT.api_caller.running = false
                     TTT.logout()
                   }
