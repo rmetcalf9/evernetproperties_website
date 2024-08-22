@@ -1,19 +1,22 @@
 <template>
-  <div>
+  <div class="float-right row">
     <div v-if="isConnected && !isLoggedin && !isLogininprogress">
       <q-btn
         @click="autoriseWithGoogle"
         color="primary"
         label="Login for extra features"
-        class = "float-right q-ml-xs"
+        class = "q-ml-xs"
       ></q-btn>
+    </div>
+    <div v-if="isConnected && !isLoggedin">
+      <q-btn round dense flat icon="question_mark" @click="help" />
     </div>
     <div v-if="isLoggedin">
       <q-btn
         @click="clickProfile"
         color="primary"
         label="User Profile"
-        class = "float-right q-ml-xs"
+        class = "q-ml-xs"
       ></q-btn>
     </div>
   </div>
@@ -21,6 +24,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { Notify } from 'quasar'
 
 import { useBackendConnectionStore } from 'stores/backend_connection'
 
@@ -54,13 +58,28 @@ export default defineComponent({
         ok: function (response) {
         },
         error: function (response) {
+          Notify.create({
+            color: 'negative',
+            message: response,
+            timeout: 2000
+          })
         }
       }
       this.backend_connection_store.login(login_callback, this.$rjmgclientid)
     },
     clickProfile () {
       this.$router.push("/profile")
-    }
+    },
+    help () {
+      this.$q.dialog({
+        title: 'Problems logging in',
+        message: 'If you are having problems logging in check your browser settings to make sure you have got third party sign in enabled.',
+        html: true
+      }).onOk(() => {
+        // console.log('OK')
+      })
+    },
+
   }
 })
 </script>

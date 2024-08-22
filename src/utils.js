@@ -27,6 +27,23 @@ function copyTextToClipboard2 (text, callback, notifyFn) {
   })
 }
 
+function isThirdPartySigninDisabled () {
+  try {
+      // Try to set a cookie
+      document.cookie = "thirdpartysignincheckcookie=1";
+      var cookieEnabled = document.cookie.indexOf("thirdpartysignincheckcookie") !== -1;
+
+      // Try to use localStorage
+      localStorage.setItem("thirdpartysignincheckvalue", "1");
+      var storageEnabled = localStorage.getItem("thirdpartysignincheckvalue") === "1";
+
+  } catch (error) {
+      return true
+  }
+  return false
+}
+
 export default {
-  copyTextToClipboard2: copyTextToClipboard2
+  copyTextToClipboard2: copyTextToClipboard2,
+  isThirdPartySigninDisabled: isThirdPartySigninDisabled
 }

@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { Cookies } from 'quasar'
+import utils from '../utils.js'
 
 // This store maanges the connection with the backend
 // It will:
@@ -226,6 +227,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
     },
     login (callback, clientid) {
       // https://developers.google.com/identity/gsi/web/reference/js-reference
+      if (utils.isThirdPartySigninDisabled()) {
+        callback.error('Please enable third party signin in your browser')
+        return
+      }
       const TTT = this
       const loccallback = function(tokenResponse) {
         TTT._login_callback_from_google(tokenResponse, callback)
@@ -235,9 +240,22 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         client_id: clientid,
         callback: loccallback
       });
-      window.google.accounts.id.prompt();
+      // If the login takes more than x seconds abandon it
+      setTimeout(function () {
+        if (TTT.connection_state.state === ConnectionState.logininprogress) {
+          TTT.connection_state.state = ConnectionState.connected
+          callback.error('Took too long to log in')
+        }
+      }, 10000)
+
+      window.google.accounts.id.prompt()
     },
     _login_callback_from_google (tokenResponse, callback) {
+      if (this.connection_state.state !== ConnectionState.logininprogress) {
+        // took too long - login abanadoned
+        return
+      }
+      console.log('_login_callback_from_google')
       const data = {
         'frontend_instance': this.frontendInstance,
         'google_response': tokenResponse
