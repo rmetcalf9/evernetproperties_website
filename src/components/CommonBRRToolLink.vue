@@ -11,7 +11,7 @@
             class="tool-picture"
           >
         </div>
-        <div class="col q-ma-sm">
+        <div class="col q-ma-sm" style="min-width: 158px;">
           <div v-if="ppbmainpage" style="height: 150px;">Start here - inputting details of new projects.</div>
           <div v-if="!ppbmainpage" style="height: 150px;">This calculator lets you input data from a property you are considering using the BRRR strategy with and will calculate the expected profit, ROI. It also allows you to experiment with different finance options.</div>
           <div align="right">

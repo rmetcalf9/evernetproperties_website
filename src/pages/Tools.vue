@@ -48,7 +48,7 @@
       <div class="row">
         <q-card inline class="q-ma-sm card-style tool-card" @click="click_simproi_card">
           <q-card-section>
-            <div class="text-h6">Simple ROI Caculator</div>
+            <div class="text-h6">Simple ROI Calculator</div>
             <div class="row">
               <div>
                 <img
@@ -57,8 +57,8 @@
                   class="tool-picture"
                 >
               </div>
-              <div class="col q-ma-sm">
-                <div style="height: 150px;">This caculator is a quick and simple way of finding the ROI on a property. It doesn't take into account refurbishment.</div>
+              <div class="col q-ma-sm" style="min-width: 158px;">
+                <div style="height: 150px;">This calculator is a quick and simple way of finding the ROI on a property. It doesn't take into account refurbishment.</div>
                 <div align="right">
                   <q-btn round  color="primary" icon="info" />
                 </div>
@@ -78,7 +78,7 @@
                   class="tool-picture"
                 >
               </div>
-              <div class="col q-ma-sm">
+              <div class="col q-ma-sm" style="min-width: 100px;">
                 <div style="height: 150px;">Use this calculator if you are working on a flip deal; where you buy a property, push the value up then sell it for a profit.</div>
                 <div align="right">
                   <q-btn round  color="primary" icon="info" />
