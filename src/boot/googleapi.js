@@ -19,6 +19,14 @@ export default boot(({ app }) => {
       apiKey: GAPI_KEY,
       discoveryDocs: [DISCOVERY_DOC],
     });
+    function localcallback(token) {
+      console.log('ERROR should not be using this callback')
+    }
+    window.google.accounts.id.initialize({
+      client_id: GAPI_KEY,
+      callback: localcallback
+    });
+
   }
 
   window.gapi.load('client', initializeGapiClient)

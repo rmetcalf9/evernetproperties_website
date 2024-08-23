@@ -123,7 +123,7 @@ export default defineComponent({
       return this.backend_connection_store.user_profile
     },
     pimsverfiylink () {
-      const url = window.location.origin + '/#/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
+      const url = window.location.origin + '/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
 
       return 'Robert - Please verify my PIMS ' + this.user_profile.pims.first_name + '/' + this.user_profile.pims.last_name + ' (' + this.user_profile.pims.number + ') <a href="' + url + '" target="_new">' + url + '</a>'
     }

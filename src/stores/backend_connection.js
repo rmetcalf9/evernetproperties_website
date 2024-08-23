@@ -236,7 +236,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
         TTT._login_callback_from_google(tokenResponse, callback)
       }
       this.connection_state.state = ConnectionState.logininprogress
-       window.google.accounts.id.initialize({
+      window.google.accounts.id.initialize({
         client_id: clientid,
         callback: loccallback
       });
@@ -249,6 +249,10 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
       }, 10000)
 
       window.google.accounts.id.prompt()
+    },
+    login_from_google_provided_button (tokenResponse, callback) {
+      this.connection_state.state = ConnectionState.logininprogress
+      this._login_callback_from_google(tokenResponse, callback)
     },
     _login_callback_from_google (tokenResponse, callback) {
       if (this.connection_state.state !== ConnectionState.logininprogress) {

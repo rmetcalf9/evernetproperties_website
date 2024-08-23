@@ -80,7 +80,7 @@ export default defineComponent({
   computed: {
     postSubscribeUrl () {
       const ele = window.location.href.split('/')
-      return ele[0] + '//' + ele[2] + '/#/postsubscribe'
+      return ele[0] + '//' + ele[2] + '/postsubscribe'
     }
   },
   methods: {

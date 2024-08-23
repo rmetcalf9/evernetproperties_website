@@ -1,10 +1,30 @@
 <template>
   <div class="float-right row">
-    <div v-if="isConnected && !isLoggedin && !isLogininprogress">
+    <div>
+      <div id="g_id_onload"
+           :data-client_id="googleclientid"
+           data-context="signin"
+           data-ux_mode="popup"
+           :data-login_uri="login_url"
+           data-itp_support="true">
+      </div>
+      <div class="g_id_signin"
+        ref="g_id_signin"
+        :style="googlebuttonstyle"
+        data-type="standard"
+        data-shape="rectangular"
+        data-theme="filled_blue"
+        data-text="signin"
+        data-size="large"
+        data-logo_alignment="left"
+      >
+      </div>
+    </div>
+    <div v-if="isConnected && !isLoggedin && !isLogininprogress && showOldStyle">
       <q-btn
         @click="autoriseWithGoogle"
         color="primary"
-        label="Login for extra features"
+        :label="googleloginbuttonlabel"
         class = "q-ml-xs"
       ></q-btn>
     </div>
@@ -42,6 +62,9 @@ export default defineComponent({
     }
   },
   computed: {
+    showOldStyle () {
+      return false
+    },
     isConnected () {
       return this.backend_connection_store.isConnected
     },
@@ -50,6 +73,23 @@ export default defineComponent({
     },
     isLoggedin () {
       return this.backend_connection_store.isLoggedin
+    },
+    googleclientid () {
+      return this.$rjmgclientid
+    },
+    login_url () {
+      const url = window.location.origin + '/googleloginredirect'
+
+      return url
+    },
+    googleloginbuttonlabel () {
+      return 'Login for extra features'
+    },
+    googlebuttonstyle () {
+      if (this.isConnected && !this.isLoggedin && !this.isLogininprogress) {
+        return ''
+      }
+      return "visibility: hidden;"
     }
   },
   methods: {
@@ -79,7 +119,28 @@ export default defineComponent({
         // console.log('OK')
       })
     },
-
+    renderbutton () {
+      var TTT = this
+      function localcallback(tokenResponse) {
+        TTT.backend_connection_store.login_from_google_provided_button(tokenResponse, TTT.login_callback)
+      }
+      window.google.accounts.id.initialize({
+        client_id: this.$rjmgclientid,
+        callback: localcallback
+      });
+      window.google.accounts.id.renderButton(this.$refs.g_id_signin, {
+          theme: 'filled_blue',
+          size: 'large',
+          type: 'standard',
+          text: 'signin',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          width: '120',
+      });
+    }
+  },
+  mounted (){
+    this.renderbutton()
   }
 })
 </script>
