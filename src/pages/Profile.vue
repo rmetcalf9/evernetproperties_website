@@ -2,6 +2,7 @@
   <q-page class="flex flex-center">
     <div rows>
       <h3 style="margin: 0px;">User Profile</h3>
+      <div class="notice" v-if="user_profile.pims.state !== 'VERIFIED'"><q-icon name="info" size="md" color="green"/> Enter and verify your PIMS membership details to activate Property Pipeline Builder early access.</div>
       <h4>Details</h4>
       <div class="section">
         <div>User: {{ user_profile.name }}</div>
@@ -318,5 +319,13 @@ h5 {
   padding: 5px;
   background: lightgrey;
   margin: 10px;
+}
+.notice {
+  border: 2px;
+  border-color: black;
+  border-style: solid;
+  margin: 10px;
+  padding: 5px;
+  background: antiquewhite;
 }
 </style>
