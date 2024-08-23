@@ -19,6 +19,22 @@
       <CrmInvestorSubForm
         ref="CrmInvestorSubForm"
       ></CrmInvestorSubForm>
+      <q-card style="max-width:700px; padding: 30px; margin: 20px;"  @click="click_ppb_card">
+        <h2 style="margin: 0px;">Early Access to Property Pipeline Builder!</h2>
+        <div class="row">
+          <div>
+            <img
+              class="main-logo"
+              alt="Evernet properties logo"
+              src="~assets/workflow_image.png"
+              style="width: 200px;"
+            >
+          </div>
+          <div class="col q-ma-sm">
+            <p>We’re thrilled to introduce <b>Property Pipeline Builder</b>, a game-changing app for deal sourcers to streamline property evaluations and organize due diligence. Exclusive early access is now available for Samuel Leeds Academy members. [<a  href="#" onclick="return false;">Click here</a>] to learn more and secure your spot!</p>
+          </div>
+        </div>
+      </q-card>
     </div>
   </q-page>
 </template>
@@ -46,6 +62,11 @@ export default defineComponent({
   },
   components: {
     CrmInvestorSubForm
+  },
+  methods: {
+    click_ppb_card () {
+    this.$router.push('/v/aaaaa/000000')
+    }
   }
 })
 </script>

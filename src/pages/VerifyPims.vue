@@ -16,6 +16,19 @@
         </div>
       </div>
       <div>
+      Introducing Early Access to the Property Pipeline Builder!
+
+      We're excited to announce the launch of Property Pipeline Builder—an innovative application designed to streamline and optimize the property evaluation process for deal sourcers. Whether you're evaluating a handful or dozens of properties, this tool is essential for organizing your pipeline and compiling due diligence information effortlessly.
+
+      Why Property Pipeline Builder?
+      If you're a property professional who evaluates multiple properties regularly, Property Pipeline Builder is tailored to help you manage your workflow more efficiently. Say goodbye to scattered spreadsheets and hello to a centralized, user-friendly platform.
+
+      Exclusive Early Access for Samuel Leeds Academy Members
+      We’re offering an exclusive early access opportunity to members of the Samuel Leeds Academy. Be among the first to experience the power of Property Pipeline Builder and take your property sourcing to the next level.
+
+      [Click here] to learn more and secure your spot in the early access program!
+
+
         <div>Extra features available to Samuel Leeds academy members</div>
         <p>This site contains free tools for calculating ROI and evaluating property investments:</p>
         <ul>
@@ -105,7 +118,7 @@ export default defineComponent({
       })
     },
     refresh () {
-      if (this.isAdmin) {
+      if (this.isAdmin && this.route.params.verifycode !== 'aaaaa') {
         const TTT = this
         const callback = {
           ok: function (response) {
