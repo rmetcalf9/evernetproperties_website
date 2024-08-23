@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div rows>
+    <div rows style="max-width: 700px;">
       <div class="verify_block" v-if="show_verify_block">
         <h1>Verify PIMS member</h1>
         <div>Name: {{ info_response.user_profile.pims.first_name }} {{ info_response.user_profile.pims.last_name }}</div>
@@ -15,35 +15,24 @@
           <h4>Done {{ complete_message }}</h4>
         </div>
       </div>
-      <div>
-      Introducing Early Access to the Property Pipeline Builder!
+      <div class="ppb_ad">
+        <h2>Introducing Early Access to the Property Pipeline Builder!</h2>
 
-      We're excited to announce the launch of Property Pipeline Builder—an innovative application designed to streamline and optimize the property evaluation process for deal sourcers. Whether you're evaluating a handful or dozens of properties, this tool is essential for organizing your pipeline and compiling due diligence information effortlessly.
+        <p>We're excited to announce the launch of Property Pipeline Builder—an innovative application designed to streamline and optimize the property evaluation process for deal sourcers. Whether you're evaluating a handful or dozens of properties, this tool is essential for organizing your pipeline and compiling due diligence information effortlessly.</p>
 
-      Why Property Pipeline Builder?
-      If you're a property professional who evaluates multiple properties regularly, Property Pipeline Builder is tailored to help you manage your workflow more efficiently. Say goodbye to scattered spreadsheets and hello to a centralized, user-friendly platform.
+        <h3>Why Property Pipeline Builder?</h3>
+        <p>If you're a property professional who evaluates multiple properties regularly, Property Pipeline Builder is tailored to help you manage your workflow more efficiently. Say goodbye to scattered spreadsheets and hello to a centralized, user-friendly platform.</p>
 
-      Exclusive Early Access for Samuel Leeds Academy Members
-      We’re offering an exclusive early access opportunity to members of the Samuel Leeds Academy. Be among the first to experience the power of Property Pipeline Builder and take your property sourcing to the next level.
+        <h3>Exclusive Early Access for Samuel Leeds Academy Members</h3>
+        <p>We’re offering an exclusive early access opportunity to members of the Samuel Leeds Academy. Be among the first to experience the power of Property Pipeline Builder and take your property sourcing to the next level.</p>
 
-      [Click here] to learn more and secure your spot in the early access program!
-
-
-        <div>Extra features available to Samuel Leeds academy members</div>
-        <p>This site contains free tools for calculating ROI and evaluating property investments:</p>
-        <ul>
-        <div><q-icon name="check_box" color="green" size="32px" />Buy Refurbish Refinance</div>
-        <div><q-icon name="check_box" color="green" size="32px" />Flip</div>
-        <div><q-icon name="check_box" color="green" size="32px" />Deal ratings</div>
-        </ul>
-        <p>Extra features for PIMS/Samueel Leeds academy members:</p>
-        <ul>
-        <div><q-icon name="check_box" color="green" size="32px" />Ability to save and compare multiple deals</div>
-        <div><q-icon name="check_box" color="green" size="32px" />Due diligence rating</div>
-        </ul>
-        <div class="inlink" @click="$router.push('/tools')" >Access tools here.
+        <div align="center">
+          <q-btn
+            color="positive"
+            label="Visit the tools section to get started!"
+            @click="click_get_started"
+          />
         </div>
-        <LoginButton />
       </div>
     </div>
   </q-page>
@@ -55,12 +44,9 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import { useRoute } from 'vue-router'
 import { Notify } from 'quasar'
 
-import LoginButton from '../components/LoginButton.vue'
-
 export default defineComponent({
   name: 'VerifyPimsPage',
   components: {
-    LoginButton
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -89,6 +75,9 @@ export default defineComponent({
     }
   },
   methods: {
+    click_get_started () {
+      this.$router.push('/tools')
+    },
     verify (positive) {
       const TTT = this
       const callback = {
@@ -165,5 +154,19 @@ h4 {
 }
 .inlink {
   color: blue;
+}
+.ppb_ad h2 {
+  margin-top: 0px;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: normal;
+  line-height: normal;
+}
+.ppb_ad h3 {
+  margin-top: 0px;
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  line-height: normal;
 }
 </style>

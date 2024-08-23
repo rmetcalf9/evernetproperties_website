@@ -6,7 +6,7 @@
     <div v-if="loaded">
       <div v-if="table_view">
         <h1>{{ patch_data.name }}</h1>
-        <h2>Projects <q-btn color="primary" icon="account_tree" label="Worlflow" @click="table_view = false" /></h2>
+        <h2>Projects <q-btn color="primary" icon="account_tree" label="Workflow" @click="table_view = false" /></h2>
         <div
           v-if="isStageSelected"
           class="selected_stage"
