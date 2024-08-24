@@ -4,8 +4,8 @@
       <LoginButton
       />
       <h3 style="margin: 0px;">Property Pipeline Builder</h3>
-      <div style="margin: 10px;" v-if="!security_role_cansave" class="row">
-        <div>
+      <div v-if="!security_role_cansave" class="row ppb-ad-block">
+        <div class="ppb-ad-block-left-text">
           Use your Property Pipeline Builder to setup your projects for success!
           <div><q-icon name="check_box" color="green" size="32px" />Keep track of properties you are working on</div>
           <div><q-icon name="check_box" color="green" size="32px" />Manage projects through the pipeline</div>
@@ -20,11 +20,13 @@
           </div>
         </div>
         <div class="ppb-embedded-vid-div">
-          <p>Early access sign up tutorial video</p>
-          <q-video
-            src="https://www.youtube.com/embed/TXHtRWG6GlI?rel=0"
-            class="ppb-embedded-vid"
-          />
+          <div>
+            <p>Early access sign up tutorial video</p>
+            <q-video
+              src="https://www.youtube.com/embed/TXHtRWG6GlI?rel=0"
+              class="ppb-embedded-vid"
+            />
+          </div>
         </div>
       </div>
       <div class="row" v-if="security_role_cansave">
@@ -171,11 +173,22 @@ export default defineComponent({
 .ppb-calltoaction h5 {
   margin-top: 5px;
 }
+.ppb-ad-block {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  margin-inline: 5% 10%;
+  writing-mode: horizontal-tb;
+  margin: 0 auto;
+}
+.ppb-ad-block-left-text {
+  margin: 5px;
+}
 .ppb-embedded-vid-div {
-  margin-left: 50px;
+  margin: 5px;
 }
 .ppb-embedded-vid {
-  width: 453px;
+  width: 440px;
   height: 280px
 }
 </style>
