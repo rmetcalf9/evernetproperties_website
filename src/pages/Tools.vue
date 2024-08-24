@@ -4,7 +4,8 @@
       <LoginButton
       />
       <h3 style="margin: 0px;">Property Pipeline Builder</h3>
-      <div style="margin: 10px;" v-if="!security_role_cansave">
+      <div style="margin: 10px;" v-if="!security_role_cansave" class="row">
+        <div>
           Use your Property Pipeline Builder to setup your projects for success!
           <div><q-icon name="check_box" color="green" size="32px" />Keep track of properties you are working on</div>
           <div><q-icon name="check_box" color="green" size="32px" />Manage projects through the pipeline</div>
@@ -17,6 +18,14 @@
           <div v-if="isLoggedinButNotSignedUp" class="ppb-calltoaction">
             <h5>Click User Profile in to register for early access</h5>
           </div>
+        </div>
+        <div class="ppb-embedded-vid-div">
+          <p>Early access sign up tutorial video</p>
+          <q-video
+            src="https://www.youtube.com/embed/TXHtRWG6GlI?rel=0"
+            class="ppb-embedded-vid"
+          />
+        </div>
       </div>
       <div class="row" v-if="security_role_cansave">
         <q-card inline class="q-ma-sm card-style tool-card featurecard" @click="click_myprojects_card">
@@ -161,5 +170,12 @@ export default defineComponent({
 }
 .ppb-calltoaction h5 {
   margin-top: 5px;
+}
+.ppb-embedded-vid-div {
+  margin-left: 50px;
+}
+.ppb-embedded-vid {
+  width: 453px;
+  height: 280px
 }
 </style>
