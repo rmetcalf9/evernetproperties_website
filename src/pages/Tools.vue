@@ -174,12 +174,6 @@ export default defineComponent({
   margin-top: 5px;
 }
 .ppb-ad-block {
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  margin-inline: 5% 10%;
-  writing-mode: horizontal-tb;
-  margin: 0 auto;
 }
 .ppb-ad-block-left-text {
   margin: 5px;
@@ -188,7 +182,7 @@ export default defineComponent({
   margin: 5px;
 }
 .ppb-embedded-vid {
-  width: 440px;
-  height: 280px
+width: 280px;
+height: 200px
 }
 </style>
