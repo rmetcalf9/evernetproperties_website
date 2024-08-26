@@ -3,7 +3,7 @@
     <q-dialog v-model="enterpimsdialog.visible" persistent>
       <q-card>
         <q-card-section>
-          <div class="text-h6">Your PIMS membership detailsXXXX</div>
+          <div class="text-h6">Your PIMS membership details to sign up for Early Access</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -56,6 +56,8 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 import axios from 'axios'
 
+import toc from '../termsandconditions/main.js'
+
 export default defineComponent({
   name: 'ProfilePimsDetailDialogComponent',
   setup () {
@@ -80,10 +82,17 @@ export default defineComponent({
   },
   methods: {
     show_toc () {
-      Notify.create({
-        color: 'negative',
-        message: 'TODO',
-        timeout: 2000
+      this.$q.dialog({
+        title: toc.early_access.title,
+        message: '<div class="toc_dialog">' + toc.early_access.html + '</div>',
+        html: true,
+        fullWidth: true
+      }).onOk(() => {
+        // console.log('OK')
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
       })
     },
     launch_dialog () {
@@ -187,4 +196,19 @@ export default defineComponent({
 </script>
 
 <style>
+.toc_dialog {
+}
+.toc_dialog h1 {
+  padding: 0px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: 600;
+}
+.toc_dialog p {
+  margin: 0px;
+}
 </style>
