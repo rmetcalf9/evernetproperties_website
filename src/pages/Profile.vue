@@ -58,34 +58,9 @@
         ></q-btn>
       </div>
     </div>
-    <q-dialog v-model="enterpimsdialog.visible" persistent>
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Your PIMS membership details</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <div>Details must match what appears on the  <a href="https://www.thepims.co.uk/members/" target="_new">PIMS website</a>.</div>
-          <q-input v-model="enterpimsdialog.number" label="PIMS Number"
-            :rules="[ val => val.trim().length > 4 || 'Minimum 5 characters', val => val.trim().match(/^\d+$/) !== null || 'Numeric characters only']"
-            ref="numberref"
-          />
-          <q-input v-model="enterpimsdialog.first_name" label="First Name"
-            :rules="[ val => val.trim().length > 1 || 'Minimum 2 characters']"
-            ref="first_nameref"
-          />
-          <q-input v-model="enterpimsdialog.last_name" label="Last Name"
-            :rules="[ val => val.trim().length > 1 || 'Minimum 2 characters']"
-            ref="last_nameref"
-          />
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Submit for Verification" color="secondary" @click="enterpimsdialogclick" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
+    <ProfilePimsDetailDialog
+      ref="ProfilePimsDetailDialog"
+    />
   </q-page>
 </template>
 
@@ -94,6 +69,8 @@ import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 import utils from '../utils.js'
+
+import ProfilePimsDetailDialog from '../components/ProfilePimsDetailDialog.vue'
 
 
 export default defineComponent({
@@ -105,15 +82,10 @@ export default defineComponent({
     }
   },
   components: {
+    ProfilePimsDetailDialog
   },
   data () {
     return {
-      enterpimsdialog: {
-        visible: false,
-        number: '',
-        first_name: '',
-        last_name: ''
-      }
     }
   },
   computed: {
@@ -124,6 +96,7 @@ export default defineComponent({
       return this.backend_connection_store.user_profile
     },
     pimsverfiylink () {
+      // duplicated in Profile and ProfilePimsDetailDialog
       const url = window.location.origin + '/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
 
       return 'Robert - Please verify my PIMS ' + this.user_profile.pims.first_name + '/' + this.user_profile.pims.last_name + ' (' + this.user_profile.pims.number + ') <a href="' + url + '" target="_new">' + url + '</a>'
@@ -155,10 +128,7 @@ export default defineComponent({
       this.$router.push("/tools")
     },
     clickenterpimsinformation () {
-      this.enterpimsdialog.number = ''
-      this.enterpimsdialog.first_name = ''
-      this.enterpimsdialog.last_name = ''
-      this.enterpimsdialog.visible = true
+      this.$refs.ProfilePimsDetailDialog.launch_dialog()
     },
     pimsinfo () {
       const TTT = this
@@ -182,51 +152,6 @@ export default defineComponent({
         }
       }).onOk(() => {
         TTT.clickenterpimsinformation()
-      })
-    },
-    enterpimsdialogclick () {
-      const fields = ['numberref', 'first_nameref', 'last_nameref']
-      for (const i of fields) {
-        this.$refs[i].validate()
-      }
-      for (const i of fields) {
-        if (this.$refs[i].hasError) {
-          return
-        }
-      }
-      const data = {
-        number: this.enterpimsdialog.number,
-        first_name: this.enterpimsdialog.first_name,
-        last_name: this.enterpimsdialog.last_name,
-      }
-      const callback = {
-        ok: this.submitpimsinfo_success,
-        error: this.submitpimsinfo_fail
-      }
-      this.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/me/pimsdetails',
-        method: 'POST',
-        data: data,
-        callback: callback
-      })
-      this.enterpimsdialog.visible = false
-    },
-    submitpimsinfo_success (response) {
-      this.backend_connection_store.update_user_profile({user_profile: response.data})
-      Notify.create({
-        color: 'bg-grey-2',
-        message: 'New PIMS details saved - Please request Verification',
-        timeout: 2000
-      })
-
-    },
-    submitpimsinfo_fail (response) {
-      console.log('ERROR failed to update PIMS information ', response)
-      Notify.create({
-        color: 'bg-grey-2',
-        message: 'Failed to update PIMS information ' + response,
-        timeout: 2000
       })
     },
     deleteaccount () {
