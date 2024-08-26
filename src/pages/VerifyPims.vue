@@ -20,6 +20,14 @@
 
         <p>We're excited to announce the launch of Property Pipeline Builder—an innovative application designed to streamline and optimize the property evaluation process for deal sourcers. Whether you're evaluating a handful or dozens of properties, this tool is essential for organizing your pipeline and compiling due diligence information effortlessly.</p>
 
+        <div class="flex flex-center">
+        <q-video
+          src="https://www.youtube.com/embed/sShijAIo18o?rel=0"
+          class="ppb-embedded-vid-main-ad"
+        />
+        </div>
+
+
         <h3>Why Property Pipeline Builder?</h3>
         <p>If you're a property professional who evaluates multiple properties regularly, Property Pipeline Builder is tailored to help you manage your workflow more efficiently. Say goodbye to scattered spreadsheets and hello to a centralized, user-friendly platform.</p>
 
@@ -168,5 +176,11 @@ h4 {
   font-weight: 500;
   letter-spacing: normal;
   line-height: normal;
+}
+
+.ppb-embedded-vid-main-ad {
+  width: 400px;
+  height: 300px;
+  margin-bottom: 100px;
 }
 </style>
