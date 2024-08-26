@@ -20,14 +20,20 @@
             :rules="[ val => val.trim().length > 1 || 'Minimum 2 characters']"
             ref="last_nameref"
           />
-          <q-input v-model="enterpimsdialog.phone" label="Phone"
-            :rules="[ val => val.trim().length > 1 || 'Minimum 6 characters']"
-            ref="phoneref"
-          />
-          <q-input v-model="enterpimsdialog.email" label="Email"
-            :rules="[ val => val.trim().length > 1 || 'Minimum 8 characters']"
-            ref="emailref"
-          />
+          <div class="row">
+            <q-input v-model="enterpimsdialog.phone" label="Phone"
+              :rules="[ val => val.trim().length > 1 || 'Minimum 6 characters']"
+              ref="phoneref" class="col-grow"
+            />
+            <q-btn round dense flat icon="info" @click="notify_why('phone')" />
+          </div>
+          <div class="row">
+            <q-input v-model="enterpimsdialog.email" label="Email"
+              :rules="[ val => val.trim().length > 1 || 'Minimum 8 characters']"
+              ref="emailref" class="col-grow"
+            />
+            <q-btn round dense flat icon="info" @click="notify_why('email')" />
+          </div>
           <q-input v-model="enterpimsdialog.company_name" label="Company Name"
             ref="companyref"
           />
@@ -58,6 +64,11 @@ import axios from 'axios'
 
 import toc from '../termsandconditions/main.js'
 
+const infotext = {
+  email: 'We collect your email address so that we can contact you with updates on the service.',
+  phone: 'We collect your phone number as we may call you to find out how you are getting on.'
+}
+
 export default defineComponent({
   name: 'ProfilePimsDetailDialogComponent',
   setup () {
@@ -81,6 +92,19 @@ export default defineComponent({
     }
   },
   methods: {
+    notify_why (type) {
+      this.$q.dialog({
+        title: undefined,
+        message: infotext[type],
+        html: false,
+      }).onOk(() => {
+        // console.log('OK')
+      }).onCancel(() => {
+        // console.log('Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
     show_toc () {
       this.$q.dialog({
         title: toc.early_access.title,
