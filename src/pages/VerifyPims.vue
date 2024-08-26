@@ -179,8 +179,8 @@ h4 {
 }
 
 .ppb-embedded-vid-main-ad {
-  width: 400px;
-  height: 300px;
-  margin-bottom: 100px;
+  width: 325px;
+  height: 200px;
+  margin-bottom: 50px;
 }
 </style>
