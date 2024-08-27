@@ -26,6 +26,9 @@
                 <td v-if="item.type=='ledger'" class="text-left sumtablecell">{{ item.name }}</td>
                 <td v-if="item.type=='ledger'" class="text-right sumtablecell worstcasetablecell">{{ format_currency(item.worst) }}</td>
                 <td v-if="item.type=='ledger'" class="text-right sumtablecell">{{ format_currency(item.best) }}</td>
+                <td v-if="item.type=='note'" class="text-left sumtablecell">{{ item.name }}</td>
+                <td v-if="item.type=='note'" class="text-right sumtablecell worstcasetablecell">{{ item.worst }}</td>
+                <td v-if="item.type=='note'" class="text-right sumtablecell">{{ item.best }}</td>
                 <th v-if="item.type=='total'" class="text-left sumtablecell">{{ item.name }}</th>
                 <th v-if="item.type=='total'" class="text-right sumtablecell worstcasetablecell">{{ format_currency(item.worst) }}</th>
                 <th v-if="item.type=='total'" class="text-right sumtablecell">{{ format_currency(item.best) }}</th>
@@ -52,12 +55,6 @@ import utils from '../utils.js'
 import FeatureTable from '../CommonCalcComponents/FeatureTable.vue'
 import InvalidMessage from '../InvalidMessage.vue'
 
-function get_ledger_items(items) {
-  return items.filter(function (x) {
-    return x.type === 'ledger'
-  })
-}
-
 function add_item_title(items, title) {
   items.push({
     type: 'blank',
@@ -80,6 +77,13 @@ function add_item_headtext(items, title, worstamt, bestamt) {
   })
 }
 
+function add_item_blank({items}) {
+  items.push({
+    type: 'blank',
+    key: items.length
+  })
+}
+
 function add_item_total(items, title, worstamt, bestamt) {
   items.push({
     type: 'total',
@@ -88,23 +92,10 @@ function add_item_total(items, title, worstamt, bestamt) {
     worst: worstamt,
     best: bestamt
   })
-  items.push({
-    type: 'blank',
-    key: items.length
-  })
 }
 
 
 function add_item(items, name, worstamt, bestamt) {
-  let only_ledger_items = get_ledger_items(items)
-
-  var lastitemdetailworst = undefined
-  var lastitemdetailbest = undefined
-  if (only_ledger_items.length>0) {
-    lastitemdetailworst = only_ledger_items[only_ledger_items.length - 1].worst
-    lastitemdetailbest = only_ledger_items[only_ledger_items.length - 1].best
-  }
-
   items.push({
     type: 'ledger',
     key: items.length,
@@ -113,6 +104,17 @@ function add_item(items, name, worstamt, bestamt) {
     best: bestamt
   })
 }
+
+function add_note(items, name, worstamt, bestamt) {
+  items.push({
+    type: 'note',
+    key: items.length,
+    name: name,
+    worst: worstamt,
+    best: bestamt
+  })
+}
+
 
 export default defineComponent({
   name: 'FlipCalcDealRating',
@@ -208,6 +210,7 @@ export default defineComponent({
 
 
       add_item_total(items, 'Total Money In', -total.worst, -total.best)
+      add_item_blank({items: items})
 
       add_item(items, 'GDV', this.gdv_total.min, this.gdv_total.max)
 
@@ -223,6 +226,12 @@ export default defineComponent({
       }
 
       add_item_total(items, 'Gross Profit', gross_profit.worst, gross_profit.best)
+      var pre_corp_tax_profit_percentage = {
+        worst: gross_profit.worst * 100 / (-total.worst),
+        best: gross_profit.best * 100 / (-total.best)
+      }
+      add_note(items, 'Percentage', pre_corp_tax_profit_percentage.worst.toFixed(2) + '%', pre_corp_tax_profit_percentage.best.toFixed(2) + '%')
+      add_item_blank({items: items})
 
       var corporation_tax = {
         worst: gross_profit.worst * 0.19,
@@ -237,13 +246,13 @@ export default defineComponent({
       }
 
       add_item_total(items, 'Net Profit', net_profit.worst, net_profit.best)
-
       var percentage = {
         worst: net_profit.worst * 100 / (-total.worst),
         best: net_profit.best * 100 / (-total.best)
       }
 
-      add_item_headtext(items, 'Percentage', percentage.worst.toFixed(2) + '%', percentage.best.toFixed(2) + '%')
+      add_note(items, 'Percentage', percentage.worst.toFixed(2) + '%', percentage.best.toFixed(2) + '%')
+      add_item_blank({items: items})
 
       // add_item_title(items,'Exit - Sell Property')
       // add_item(items, 'Sell for GDV', this.gdv_total.min, this.gdv_total.max)
