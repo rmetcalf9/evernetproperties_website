@@ -86,6 +86,20 @@
           :refurbmonths="refurbmonths"
           :is_valid_input="is_valid_input"
         />
+        <FlipDealRating
+          ref="FlipDealRating"
+          :purchaserange="purchaserange"
+          :finance_in_items_without_cash="finance_in_items_without_cash"
+          :finance_out_items="finance_out_items"
+          :finance_during_items="finance_during_items"
+          :purchase_items="purchase_items"
+          :stampduty_items="stampduty_items"
+          :othercosts_items="othercosts_items"
+          :refurb_cost_items="refurb_cost_items"
+          :gdv_total="gdv_total"
+          :refurbmonths="refurbmonths"
+          :is_valid_input="is_valid_input"
+        />
         <DealRating
           ref="DealRating"
           :purchaserange="purchaserange"
@@ -151,6 +165,7 @@ import Finance from '../../components/CommonCalcComponents/Finance.vue'
 import Refinance from '../../components/BrrCalc/Refinance.vue'
 import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import DealRating from '../../components/BrrCalc/DealRating.vue'
+import FlipDealRating from '../../components/FlipCalc/DealRating.vue'
 import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
 
 import SaveToGoogleSheet from '../../components/BrrCalc/SaveToGoogleSheet.vue'
@@ -182,7 +197,8 @@ export default defineComponent({
     SaveToGoogleSheet,
     ActivityLog,
     BrrToolbar,
-    Workflow
+    Workflow,
+    FlipDealRating
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
