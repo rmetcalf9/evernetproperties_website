@@ -69,6 +69,23 @@ const infotext = {
   phone: 'We collect your phone number as we may call you to find out how you are getting on.'
 }
 
+// The different values based on the forms
+const bigin_form_values = {
+  orig: {
+    xnQsjsdp: '89e18b1e88ffaffedbeef0c32091b44516c268788a1971f957ab3e29b6e6e670',
+    xmIwtLD: '5cda33fce5eaeaa7ca374dff23d1501c751fd3395004fbff2c04c9a8e9c4fa2b0672ff88667c9f8e63ae8860514dcb5b',
+    pipeline: 'PPB Early Access Signup Standard',
+    stage: 'Signup Requested'
+  },
+  second_default: {
+    xnQsjsdp: 'bbc11a9d1fe3d3d285778688a13184d602d86b48122e8c9860c08b2a6c55c521',
+    xmIwtLD: 'e3c3402a45569ecc302648f0365d953e3e6e2b7b4cb0a8e557654c22f7da2b3c06dbe76105b211e7803e5207a8f296b8',
+    pipeline: 'Sales Pipeline Standard',
+    stage: 'Signup Requested2'
+  }
+}
+
+
 export default defineComponent({
   name: 'ProfilePimsDetailDialogComponent',
   setup () {
@@ -166,10 +183,13 @@ export default defineComponent({
       // duplicated in Profile and ProfilePimsDetailDialog
       const url = window.location.origin + '/v/' + response.data.pims.verify_code + '/' + response.data.pims.number
 
+      //const form_vals = bigin_form_values.orig
+      const form_vals = bigin_form_values.second_default
+
       var bodyFormData = new FormData()
-      bodyFormData.append('xnQsjsdp', '89e18b1e88ffaffedbeef0c32091b44516c268788a1971f957ab3e29b6e6e670');
+      bodyFormData.append('xnQsjsdp', form_vals.xnQsjsdp);
       bodyFormData.append('zc_gad', '');
-      bodyFormData.append('xmIwtLD', '5cda33fce5eaeaa7ca374dff23d1501c751fd3395004fbff2c04c9a8e9c4fa2b0672ff88667c9f8e63ae8860514dcb5b');
+      bodyFormData.append('xmIwtLD', form_vals.xmIwtLD);
       bodyFormData.append('actionType', 'UG90ZW50aWFscw==');
       bodyFormData.append('returnURL', undefined);
       bodyFormData.append('Potential Name', response.data.frontend_instance + ' Website ' + response.data.pims.last_name);
@@ -182,8 +202,8 @@ export default defineComponent({
       bodyFormData.append('Contacts.CONTACTCF1', response.data.pims.number); // PIMS
       bodyFormData.append('Contacts.CONTACTCF2', response.data.id); // userID
       bodyFormData.append('POTENTIALCF3', url); // verifyURL
-      bodyFormData.append('Pipeline', 'PPB Early Access Signup Standard');
-      bodyFormData.append('Stage', 'Signup Requested');
+      bodyFormData.append('Pipeline', form_vals.pipeline);
+      bodyFormData.append('Stage', form_vals.stage);
 
       axios({
         method: "post",
