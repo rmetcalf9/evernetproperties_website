@@ -14,6 +14,7 @@ const routes = [
       { path: 'tools/brrcalc', component: () => import('pages/tools/BrrCalc.vue') },
       { path: 'tools/flipcalc', component: () => import('pages/tools/FlipCalc.vue') },
       { path: 'tools/simpleroicalc', component: () => import('pages/tools/SimpleRoiCalc.vue') },
+      { path: 'tools/training', component: () => import('pages/tools/training/TrainingHome.vue') },
       { path: 'profile', component: () => import('pages/Profile.vue') },
       { path: 'v/:verifycode/:pimsnumber', component: () => import('pages/VerifyPims.vue') },
       { path: 'debug', component: () => import('pages/DebugInfo.vue') },

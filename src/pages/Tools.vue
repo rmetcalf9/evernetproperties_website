@@ -3,7 +3,8 @@
     <div class="main-div">
       <LoginButton
       />
-      <h3 style="margin: 0px;">Property Pipeline Builder</h3>
+      <h3 style="margin-top: 0px; margin-bottom: 15px;">Property Pipeline Builder</h3>
+      <q-btn color="primary" label="Training Videos, Guides and Tutorials" icon="help" to="/tools/training" />
       <div v-if="!security_role_cansave" class="row ppb-ad-block">
         <div class="ppb-ad-block-left-text">
           Use your Property Pipeline Builder to setup your projects for success!
