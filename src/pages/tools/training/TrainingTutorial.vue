@@ -8,8 +8,21 @@
         <h1>{{tutorials[0].name}}</h1>
         <div>{{tutorials[0].description}}</div>
         <h2>Video</h2>
-        XX
-        <component :is="tutorials[0].component"></component>
+        <div v-if="typeof (tutorials[0].youtubevidref) === 'undefined'">
+          Coming soon...
+        </div>
+        <component
+          :is="tutorials[0].component">
+        </component>
+      </div>
+    </div>
+    <div v-if="typeof (tutorials[0].next) !== 'undefined'">
+      <h1>Next step...</h1>
+      <p>We recommend you watch this tutorial next</p>
+      <div>
+        <TutorialCard
+          :tutorial="next_tutorial"
+        />
       </div>
     </div>
     <div align="center">
@@ -25,9 +38,13 @@
 <script>
 import { defineComponent } from 'vue'
 import glob_tutorials from './_list.js'
+import TutorialCard from '../../../components/TutorialCard.vue'
 
 export default defineComponent({
   name: 'TrainingTutorial',
+  components: {
+    TutorialCard
+  },
   data () {
     return {
     }
@@ -36,9 +53,22 @@ export default defineComponent({
     tutorials () {
       const TTT = this
       const tutorials = glob_tutorials.glob_tutorials.filter(function (x) {
-        return x.id ===TTT.$route.params.tutorial
+        return x.id === TTT.$route.params.tutorial
       })
       return tutorials
+    },
+    next_tutorial () {
+      const TTT = this
+      if (typeof (TTT.tutorials[0].next) === 'undefined') {
+        return undefined
+      }
+      const next_tutorials = glob_tutorials.glob_tutorials.filter(function (x) {
+        return x.id === TTT.tutorials[0].next
+      })
+      if (next_tutorials.length !== 1) {
+        return undefined
+      }
+      return next_tutorials[0]
     }
   },
   methods: {
@@ -59,5 +89,20 @@ export default defineComponent({
   font-size: 15px;
   font-weight: 500;
 }
-
+.tutorial-page h1 {
+  font-size: 4rem;
+  font-weight: 500;
+  margin-bottom: 0px;
+}
+.tutorial-page h2 {
+  font-size: 3rem;
+  font-weight: 500;
+  margin-bottom: 0px;
+}
+.tutorial-page h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
 </style>

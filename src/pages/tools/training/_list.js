@@ -8,7 +8,8 @@ const glob_tutorials = [
     name: 'Your First Property',
     section: 'Getting Started',
     description: 'Learn how to get started. Find your first property and add it to the system. See how you can save links to external materials and keep access to it all using your phone when you\'re out and about.',
-    component: Training_your_first_prop
+    component: Training_your_first_prop,
+    next: 'fill_your_pipeline'
   },
   {
     weight: 1,
