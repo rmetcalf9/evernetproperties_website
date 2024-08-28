@@ -38,6 +38,7 @@ export default defineComponent({
 <style>
 .tutorial-image-outer {
   width: 100%;
+  margin: 10px;
 }
 .tutorial-image-caption {
   width: 100%;

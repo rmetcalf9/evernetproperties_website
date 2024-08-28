@@ -1,6 +1,6 @@
 <template>
   <h2>Covered in this Tutorial</h2>
-    <div v-for="chapter in chapters" :key='chapter' class="tutorial-chapter"><q-icon name="check_box" color="green" size="32px" />{{ chapter }}</div>
+  <div v-for="chapter in chapters" :key='chapter' class="tutorial-chapter"><q-icon name="check_box" color="green" size="32px" />{{ chapter }}</div>
   <h2>Content</h2>
   <h3>{{ chapters[0] }}</h3>
   <p>Starting from the evernetproperites website look for the "tools" option in the menu bar. Click on it. If you are not signed in then do so by clicking the blue sign in button on the right of the screen. If you are signed in and you have been granted access to the Property Pipeline Builder you will see the following items:</p>

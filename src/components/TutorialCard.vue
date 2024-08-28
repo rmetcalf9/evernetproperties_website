@@ -12,7 +12,7 @@
             >
           </div>
           <div class="col q-ma-sm" style="min-width: 158px;">
-            <div style="height: 150px;">{{ tutorial.description }}</div>
+            <div>{{ tutorial.description }}</div>
             <div align="right">
               <q-btn round  color="primary" icon="arrow_forward" />
             </div>
@@ -41,13 +41,14 @@ export default defineComponent({
     click_tutorial (tutorial) {
       this.$router.push('/tools/training/' + tutorial.id)
     }
-  }  
+  }
 })
 </script>
 
 <style>
 .tutorial-tool-card {
   max-width: 500px;
+  font-size: 1rem;
 }
 .tutorial-picture {
   width: 200px;

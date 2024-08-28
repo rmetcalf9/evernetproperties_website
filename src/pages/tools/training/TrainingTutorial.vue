@@ -6,7 +6,18 @@
     <div v-if="tutorials.length === 1">
       <div>
         <h1>{{tutorials[0].name}}</h1>
-        <div>{{tutorials[0].description}}</div>
+        <div class="col">
+          <div>
+            <img
+              alt="Item Picture"
+              :src="'/training/' + tutorials[0].id + '.png'"
+              style="height: 80px;"
+            >
+          </div>
+          <div>
+            {{tutorials[0].description}}
+          </div>
+        </div>
         <h2>Video</h2>
         <div v-if="typeof (tutorials[0].youtubevidref) === 'undefined'">
           Coming soon...
@@ -84,6 +95,7 @@ export default defineComponent({
 .tutorial-page {
   margin: 10%;
   padding: 0px;
+  font-size: 1.1rem;
 }
 .tutorial-chapter {
   font-size: 15px;
