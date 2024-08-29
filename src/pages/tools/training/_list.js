@@ -9,7 +9,8 @@ const glob_tutorials = [
     section: 'Getting Started',
     description: 'Learn how to get started. Find your first property and add it to the system. See how you can save links to external materials and keep access to it all using your phone when you\'re out and about.',
     component: Training_your_first_prop,
-    next: 'fill_your_pipeline'
+    next: 'fill_your_pipeline',
+    youtubevidref: 'lN1htfsbEpY'
   },
   {
     weight: 1,
@@ -17,7 +18,8 @@ const glob_tutorials = [
     name: 'Fill Your Pipeline',
     section: 'Getting Started',
     description: 'Working on properties one at a time is no good. In this tutorial you will learn how to fill your pipeline with multiple leads and go over the process to follow to find the best ones for your investors.',
-    component: Training_fill_your_pipeline
+    component: Training_fill_your_pipeline,
+    youtubevidref: 'UA7XWHDQ2CY'
   }
 ]
 

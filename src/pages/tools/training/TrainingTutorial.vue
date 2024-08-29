@@ -22,6 +22,19 @@
         <div v-if="typeof (tutorials[0].youtubevidref) === 'undefined'">
           Coming soon...
         </div>
+        <div
+          v-if="typeof (tutorials[0].youtubevidref) !== 'undefined'"
+          class="tutorial-ppb-embedded-vid-outer-div"
+        >
+          <div
+            class="tutorial-ppb-embedded-vid-div"
+          >
+            <q-video
+              :src="'https://www.youtube.com/embed/' + tutorials[0].youtubevidref + '?rel=0'"
+              class="tutorial-ppb-embedded-vid"
+            />
+          </div>
+        </div>
         <component
           :is="tutorials[0].component">
         </component>
@@ -116,5 +129,25 @@ export default defineComponent({
   font-weight: 500;
   margin-top: 0px;
   margin-bottom: 0px;
+}
+.tutorial-ppb-embedded-vid-outer-div {
+  max-width: 900px;
+  margin: auto;
+
+}
+.tutorial-ppb-embedded-vid-div {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding-top: 56.25%;
+}
+.tutorial-ppb-embedded-vid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>
