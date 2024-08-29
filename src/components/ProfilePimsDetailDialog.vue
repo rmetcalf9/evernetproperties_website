@@ -181,7 +181,7 @@ export default defineComponent({
       this.backend_connection_store.update_user_profile({user_profile: response.data})
 
       // duplicated in Profile and ProfilePimsDetailDialog
-      const url = window.location.origin + '/v/' + response.data.pims.verify_code + '/' + response.data.pims.number
+      const url = window.location.origin + '/#/v/' + response.data.pims.verify_code + '/' + response.data.pims.number
 
       //const form_vals = bigin_form_values.orig
       const form_vals = bigin_form_values.second_default

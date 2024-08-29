@@ -97,7 +97,7 @@ export default defineComponent({
     },
     pimsverfiylink () {
       // duplicated in Profile and ProfilePimsDetailDialog
-      const url = window.location.origin + '/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
+      const url = window.location.origin + '/#/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
 
       return 'Robert - Please verify my PIMS ' + this.user_profile.pims.first_name + '/' + this.user_profile.pims.last_name + ' (' + this.user_profile.pims.number + ') <a href="' + url + '" target="_new">' + url + '</a>'
     }
