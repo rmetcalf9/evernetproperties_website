@@ -8,6 +8,10 @@ export default {
 
       <p>This is an early access product and features are subject to change. Features may be added, removed or moved. As part of the program we hope to gain your feedback in order to shape future versions of the product.</p>
 
+      <h1>Marketing and Feedback</h1>
+      <p>As part of the program we are gaining as much feedback as possible in order to make Property Pipeline Builder as valuable to you as possible. If you agree we may send you emails or call you to find out about your experience using the system. From time to time we may let you know about products and services that we think you will find valuable.</p>
+
+
       <h1>User account</h1>
       <p>Your user account is verified against your PIMS membership and you may not share access to your account with any third parties. We may at any time withdraw or pause access to your user account. You may delete your user account at any time by using the provided option in your user profile. This will result in loss of access to data stored in the system.</p>
 

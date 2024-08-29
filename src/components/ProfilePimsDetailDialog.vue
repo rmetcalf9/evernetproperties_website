@@ -39,7 +39,7 @@
           />
           <q-toggle
             v-model="enterpimsdialog.agreetoc"
-          />Agree to <a href="#" @click="show_toc">Early Access terms and conditions</a>
+          /><q-btn dense flat label="Agree to Early Access terms and conditions" @click="show_toc" />
         </q-card-section>
 
         <q-card-actions align="right">
