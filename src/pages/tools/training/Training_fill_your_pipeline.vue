@@ -10,7 +10,7 @@
     :src="'/training/' + tutorial.id + '_001.png'"
     caption="Accessing your pipelines using the workflow button"
   />
-  <p>The pipeline is deposited as a flow chart. This shows all the stages that a project can progress to.</p>
+  <p>The pipeline is shown as a flow chart. This shows all the stages that a project can progress to.</p>
 
   <h3>{{ chapters[1] }}</h3>
 
