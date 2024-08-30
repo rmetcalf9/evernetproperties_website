@@ -26,6 +26,11 @@ export default {
       <h1>Data Breaches</h1>
       <p>We commit to using best practices when storing your user data. We accept no liability for consequences for data breaches but will endeavour to notify users when these occur.</p>
 
+      <h1>Feature Changes & Data Loss</h1>
+
+      <p>This is an early access program. Features of the product will change and evolve over time.
+      We don’t accept liability for data loss caused by feature changes or bugs or errors in the system.</p>
     `
+
   }
 }
