@@ -37,7 +37,7 @@
         <div align="center">
           <q-btn
             color="positive"
-            label="Visit the tools section to get started!"
+            label="Click here to sign up for the early access program!"
             @click="click_get_started"
           />
         </div>
@@ -84,7 +84,7 @@ export default defineComponent({
   },
   methods: {
     click_get_started () {
-      this.$router.push('/tools')
+      this.$router.push('/signuptoearlyaccess')
     },
     verify (positive) {
       const TTT = this

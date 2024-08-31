@@ -2,6 +2,7 @@
   <q-page class="flex flex-center">
     <div class="main-div">
       <LoginButton
+        :floating="true"
       />
       <h3 style="margin-top: 0px; margin-bottom: 15px;">Property Pipeline Builder</h3>
       <q-btn color="primary" label="Training Videos, Guides and Tutorials" icon="help" to="/tools/training" />
@@ -52,7 +53,7 @@
           </q-card-section>
         </q-card>
         <CommonBRRToolLink
-          ppbmainpage="true"
+          :ppbmainpage="true"
         />
       </div>
       <h3 style="margin-bottom: 0px;">Tools</h3>

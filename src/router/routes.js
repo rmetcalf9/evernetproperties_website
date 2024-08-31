@@ -9,6 +9,7 @@ const routes = [
       { path: 'faq', component: () => import('pages/Faq.vue') },
       { path: 'contact', component: () => import('pages/ContactPage.vue') },
       { path: 'postsubscribe', component: () => import('pages/Postsubscribe.vue') },
+      { path: 'signuptoearlyaccess', component: () => import('pages/SignUpToEarlyAccess.vue') },
       { path: 'tools', component: () => import('pages/Tools.vue') },
       { path: 'tools/brrcalc', component: () => import('pages/tools/BrrCalc.vue') },
       { path: 'tools/flipcalc', component: () => import('pages/tools/FlipCalc.vue') },

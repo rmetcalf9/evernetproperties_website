@@ -1,5 +1,5 @@
 <template>
-  <div class="float-right row">
+  <div :class="getMainStyle">
     <div>
       <div id="g_id_onload"
            :data-client_id="googleclientid"
@@ -51,6 +51,12 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 
 export default defineComponent({
   name: 'LoginButtonComponent',
+  props: {
+    floating: {
+      type: Boolean,
+      default: true
+    }
+  },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -62,6 +68,12 @@ export default defineComponent({
     }
   },
   computed: {
+    getMainStyle () {
+      if (this.floating) {
+        return 'float-right row'
+      }
+      return 'row'
+    },
     showOldStyle () {
       return false
     },
