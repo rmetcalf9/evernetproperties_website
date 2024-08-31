@@ -42,7 +42,9 @@
       </q-card-section>
 
       <q-card-actions align="right">
-        <q-btn flat
+        <q-btn
+          v-if="!supresscancelbutton"
+          flat
           label="Cancel"
           @click="enterpimsdialogclickcancel"
         />
@@ -89,6 +91,12 @@ const bigin_form_values = {
 
 export default defineComponent({
   name: 'ProfilePimsDetailFormComponent',
+  props: {
+    supresscancelbutton: {
+      type: Boolean,
+      default: false
+    }
+  },
   emits: ['process_done', 'click_cancel'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -182,7 +190,7 @@ export default defineComponent({
     submitpimsinfo_success (response) {
       this.backend_connection_store.update_user_profile({user_profile: response.data})
 
-      // duplicated in Profile and ProfilePimsDetailDialog
+      // next line duplicated in Profile and ProfilePimsDetaiForm and in SignUpToEarlyAccess
       const url = window.location.origin + '/#/v/' + response.data.pims.verify_code + '/' + response.data.pims.number
 
       //const form_vals = bigin_form_values.orig
