@@ -133,12 +133,17 @@ export default defineComponent({
     pimsinfo () {
       const TTT = this
       let ok_prompt = 'Enter PIMS details'
+      let message = 'Extra site features are available to users who have a verified PIMS membership.'
       if (this.user_profile.pims.state==='WAITINGVERIFICATION') {
         ok_prompt = 'Change PIMS details'
       }
+      if (this.user_profile.pims.state==='VERIFIED') {
+        ok_prompt = 'Change PIMS details'
+        message = 'WARNING - you are already a verified PIMS member. Changing the details will result in resetting the verification process. You will <b>temporarily lose access</b> to your projects until you are successfully reverified.'
+      }
       this.$q.dialog({
         title: 'PIMS Membership Details',
-        message: 'Extra site features are available to users who have a verified PIMS membership.',
+        message: message,
         html: true,
         ok: {
           push: true,
@@ -158,8 +163,8 @@ export default defineComponent({
       const TTT = this
       this.$q.dialog({
         title: 'Delete Account',
-        message: 'Deleting your account will wipe all your user data from our system. This inclues all saved properties. Are you sure? (Type DELETE below to confirm)',
-        html: false,
+        message: 'Deleting your account will wipe all your user data from our system. This inclues all saved projects. Are you sure? (Type DELETE below to confirm)<br>Account Username: ' + this.user_profile.name + '<br>Account Email: ' + this.user_profile.email,
+        html: true,
         ok: {
           push: true,
           label: 'Delete',
