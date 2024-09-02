@@ -29,7 +29,7 @@
       ></q-btn>
     </div>
     <div v-if="isConnected && !isLoggedin">
-      <q-btn round dense flat icon="question_mark" @click="help" />
+      <q-btn round dense flat icon="info" @click="help" />
     </div>
     <div v-if="isLoggedin">
       <q-btn
