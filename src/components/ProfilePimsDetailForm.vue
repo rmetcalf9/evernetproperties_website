@@ -8,7 +8,7 @@
       <q-card-section class="q-pt-none">
         <div>Details must match what appears on the  <a href="https://www.thepims.co.uk/members/" target="_new">PIMS website</a>.</div>
         <q-input v-model="enterpimsdialog.number" label="PIMS Number"
-          :rules="[ val => val.trim().length > 4 || 'Minimum 5 characters', val => val.trim().match(/^\d+$/) !== null || 'Numeric characters only']"
+          :rules="[ val => val.trim().length > 0 || 'Minimum 1 character', val => val.trim().match(/^\d+$/) !== null || 'Numeric characters only']"
           ref="numberref"
         />
         <q-input v-model="enterpimsdialog.first_name" label="First Name"
@@ -21,14 +21,14 @@
         />
         <div class="row">
           <q-input v-model="enterpimsdialog.phone" label="Phone"
-            :rules="[ val => val.trim().length > 1 || 'Minimum 6 characters']"
+            :rules="[ val => val.trim().length > 0 || 'Minimum 1 character']"
             ref="phoneref" class="col-grow"
           />
           <q-btn round dense flat icon="info" @click="notify_why('phone')" />
         </div>
         <div class="row">
           <q-input v-model="enterpimsdialog.email" label="Email"
-            :rules="[ val => val.trim().length > 1 || 'Minimum 8 characters']"
+            :rules="[ val => val.trim().length > 7 || 'Minimum 8 characters']"
             ref="emailref" class="col-grow"
           />
           <q-btn round dense flat icon="info" @click="notify_why('email')" />
