@@ -31,7 +31,7 @@
             >
           </div>
           <div class="col q-ma-sm" style="min-width: 200px;">
-            <p>We’re thrilled to introduce <b>Property Pipeline Builder</b>, a game-changing app for deal sourcers to streamline property evaluations and organize due diligence. Exclusive early access is now available for Samuel Leeds Academy members. [<a  href="#" onclick="return false;">Click here</a>] to learn more and secure your spot!</p>
+            <p>We’re thrilled to introduce <b>Property Pipeline Builder</b>, a game-changing app for deal sourcers to streamline property evaluations and organise due diligence. Exclusive early access is now available for Samuel Leeds Academy members. [<a  href="#" onclick="return false;">Click here</a>] to learn more and secure your spot!</p>
           </div>
           <div align="center" style="width: 100%">
             <q-btn
