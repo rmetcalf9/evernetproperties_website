@@ -36,9 +36,13 @@
         <q-input v-model="enterpimsdialog.company_name" label="Company Name"
           ref="companyref"
         />
-        <q-checkbox v-model="enterpimsdialog.agreetoc" label="Agree to Early Access terms and conditions" />
-        <br>
-        <q-btn label="View Terms" @click="show_toc" />
+        <q-checkbox
+          v-model="enterpimsdialog.agreetoc"
+          label="Agree to Early Access terms and conditions"
+        />
+        <br/>
+        <q-btn label="View Terms" @click="show_toc"
+        />
       </q-card-section>
 
       <q-card-actions align="right">
@@ -52,7 +56,6 @@
           label="Submit for Verification"
           color="secondary"
           @click="enterpimsdialogclick"
-          :disabled="!enterpimsdialog.agreetoc"
         />
       </q-card-actions>
     </q-card>
@@ -158,9 +161,7 @@ export default defineComponent({
       this.enterpimsdialog.agreetoc = false
     },
     enterpimsdialogclick () {
-      if (!this.enterpimsdialog.agreetoc) {
-        return
-      }
+      const TTT = this
       const fields = ['numberref', 'first_nameref', 'last_nameref', 'phoneref', 'emailref']
       for (const i of fields) {
         this.$refs[i].validate()
@@ -170,6 +171,29 @@ export default defineComponent({
           return
         }
       }
+
+      if (this.enterpimsdialog.agreetoc) {
+        TTT.enterpimsdialogclick_afteragree()
+      } else {
+        TTT.$q.dialog({
+          title: 'Agree to terms and conditions',
+          message: 'You must agree to the terms and conditions of the early access program to continue.',
+          html: true,
+          ok: {
+            push: true,
+            label: 'Agree',
+            color: 'primary'
+          },
+          cancel: {
+            push: true,
+            label: 'Cancel'
+          },
+        }).onOk((data) => {
+          TTT.enterpimsdialogclick_afteragree()
+        })
+      }
+    },
+    enterpimsdialogclick_afteragree () {
       const data = {
         number: this.enterpimsdialog.number,
         first_name: this.enterpimsdialog.first_name,
