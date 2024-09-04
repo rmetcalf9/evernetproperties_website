@@ -8,6 +8,21 @@
        </q-btn>
        </q-item-section>
      </q-item>
+     <q-item>
+      isConnected: {{ isConnected }}
+      <br/>
+      isLoggedIn: {{ isLoggedin }}
+    </q-item>
+    <div :v-if="isConnected">
+      serverInfo: {{ serverInfo }}
+    </div>
+    <div :v-if="isLoggedin">
+      <q-item>
+       userID: {{ user_profile.id }}
+       <br/>
+       userpofile_frontend_instance: {{ user_profile.frontend_instance }}
+     </q-item>
+    </div>
   </q-page>
 </template>
 
@@ -26,6 +41,20 @@ export default defineComponent({
   },
   data () {
     return {
+    }
+  },
+  computed: {
+    isConnected () {
+      return this.backend_connection_store.isConnected
+    },
+    isLoggedin () {
+      return this.backend_connection_store.isLoggedin
+    },
+    user_profile () {
+      return this.backend_connection_store.user_profile
+    },
+    serverInfo () {
+      return this.backend_connection_store.server_info
     }
   },
   methods: {

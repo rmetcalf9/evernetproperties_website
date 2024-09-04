@@ -97,6 +97,9 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
   }),
 
   getters: {
+    server_info (state) {
+      return state.connection_state.server_info_response.data
+    },
     security_role_cansave (state) {
       if (!this.isLoggedin) {
         return false
