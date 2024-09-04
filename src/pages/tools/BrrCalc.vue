@@ -142,6 +142,7 @@
           :caculated_loan_details="caculated_loan_details"
           :finance_bridgecost="finance_bridgecost"
           :finance_bridgeamount="finance_bridgeamount"
+          :gdv_total="gdv_total"          
           @apiaddweblink="apiaddweblink"
           @activity_log="activity_log"
         />

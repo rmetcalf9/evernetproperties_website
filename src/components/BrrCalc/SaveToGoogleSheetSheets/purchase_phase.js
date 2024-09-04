@@ -2,6 +2,8 @@ import utils from './_utils.js'
 
 const sheet_name = 'Purchase Phase'
 
+const bridge_amount_string = 'Bridge Amount'
+
 // ALways in sequence. 0=Cash, 1=Mortgage, 2=Bridge
 
 function get_cash_type(spreadsheet, vueobj, sheet_id_map) {
@@ -119,7 +121,7 @@ function get_bridge_type(spreadsheet, vueobj, sheet_id_map) {
     end_details: function (context) {
       return [
         ['Bridge Costs', vueobj.finance_bridgecost.worst, vueobj.finance_bridgecost.best],
-        ['Bridge Amount', vueobj.finance_bridgeamount.worst * -1, vueobj.finance_bridgeamount.best * -1]
+        [bridge_amount_string, vueobj.finance_bridgeamount.worst * -1, vueobj.finance_bridgeamount.best * -1]
       ]
     },
   }
@@ -214,9 +216,11 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
   })
 
   details = details.concat(purchase_type.end_details(context))
+  let detail_row_map = {}
 
   details.forEach(function (detail) {
     context.cur_row = context.cur_row + 1
+    detail_row_map[detail[0]] = context.cur_row
     context.value_requests.push({
       range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
       values: [[detail[0], detail[1], detail[2]]]
@@ -231,6 +235,7 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
   context.cur_row = context.cur_row + 1
 
   context.cur_row = context.cur_row + 1
+  const total_money_needed_row = context.cur_row
   context.value_requests.push({
     range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
     values: [['Total Money needed', '=SUM(B' + (row_start_of_details+1).toString() + ':B' + (context.cur_row-1).toString() + ')', '=SUM(C' + (row_start_of_details+1).toString() + ':C' + (context.cur_row-1).toString() + ')']]
@@ -238,10 +243,113 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
   context.requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,3))
   context.requests.push(su.formatcurrency(row_start_of_details,context.cur_row,1,3))
 
+  if (vueobj.serialized_data.finance.bridge.usebridge) {
+    if (vueobj.serialized_data.refinance.refinance_userefinance) {
+      _output_refinance_using_bridge(context, su, vueobj, total_money_needed_row, detail_row_map)
+    }
+  }
+
   return {
     value_requests: context.value_requests,
     requests: context.requests
   }
+}
+
+function _output_refinance_using_bridge(context, su, vueobj, total_money_needed_row, detail_row_map) {
+  const bridge_costs_row = detail_row_map[bridge_amount_string]
+
+  context.cur_row = context.cur_row + 1
+
+  context.cur_row = context.cur_row + 1
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':B' + context.cur_row.toString(),
+    values: [['Refinance to exit bridge']]
+  })
+  context.requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,1))
+
+  context.cur_row = context.cur_row + 1
+  const gdv_row = context.cur_row
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+    values: [['GDV', vueobj.gdv_total.min, vueobj.gdv_total.max]]
+  })
+  context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
+
+  context.cur_row = context.cur_row + 1
+  const refinance_ltv_row = context.cur_row
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+    values: [['Refinance LTV', vueobj.serialized_data.refinance.refinance_userefinance_ltv.min / 100, vueobj.serialized_data.refinance.refinance_userefinance_ltv.max / 100]]
+  })
+  context.requests.push(su.formatpercentage(context.cur_row-1,context.cur_row,1,3))
+
+  context.cur_row = context.cur_row + 1
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+    values: [['Refinance Rate', vueobj.serialized_data.refinance.refinance_userefinance_rate.min / 100, vueobj.serialized_data.refinance.refinance_userefinance_rate.max / 100]]
+  })
+  context.requests.push(su.formatpercentage(context.cur_row-1,context.cur_row,1,3))
+
+  context.cur_row = context.cur_row + 1
+  const mortgage_total_row = context.cur_row
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+    values: [[
+      'Refinance mortgage total',
+      '=B' + (gdv_row).toString() + '*B' + (refinance_ltv_row).toString(),
+      '=C' + (gdv_row).toString() + '*C' + (refinance_ltv_row).toString(),
+    ]]
+  })
+  context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
+
+  context.cur_row = context.cur_row + 1
+  const payback_bridge_row = context.cur_row
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+    values: [[
+      'Pay back bridge', '=B' + (bridge_costs_row).toString() + ' * -1',
+      '=C' + (bridge_costs_row).toString() + ' * -1'
+    ]]
+  })
+  context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
+
+  context.cur_row = context.cur_row + 1
+  const remaining_row = context.cur_row
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+    values: [[
+      'Remaining',
+      '=B' + (mortgage_total_row).toString() + '-B' + (payback_bridge_row).toString(),
+      '=C' + (mortgage_total_row).toString() + '-C' + (payback_bridge_row).toString(),
+    ]]
+  })
+  context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
+
+  context.cur_row = context.cur_row + 1
+  const orogional_row = context.cur_row
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+    values: [[
+      'Original Money in',
+      '=B' + (total_money_needed_row).toString(),
+      '=C' + (total_money_needed_row).toString()
+    ]]
+  })
+  context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
+  context.requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,3))
+
+  context.cur_row = context.cur_row + 1
+  context.value_requests.push({
+    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+    values: [[
+      'Left in',
+      '=B' + (remaining_row).toString() + '-B' + (orogional_row).toString(),
+      '=C' + (remaining_row).toString() + '-C' + (orogional_row).toString()
+    ]]
+  })
+  context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
+  context.requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,3))
+
 }
 
 
