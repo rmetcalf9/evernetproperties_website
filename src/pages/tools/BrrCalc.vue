@@ -299,6 +299,12 @@ export default defineComponent({
       }
       return this.$refs.Finance.finance_in_items
     },
+    finance_in_items_without_cash () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.Finance.finance_in_items_without_cash
+    },    
     finance_during_items () {
       if (!this.isMounted) {
         return []
