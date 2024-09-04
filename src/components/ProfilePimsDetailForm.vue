@@ -116,7 +116,8 @@ export default defineComponent({
         phone: '',
         email: '',
         company_name: '',
-        agreetoc: false
+        agreetoc: false,
+        submitted: false
       }
     }
   },
@@ -178,7 +179,7 @@ export default defineComponent({
         TTT.$q.dialog({
           title: 'Agree to terms and conditions',
           message: 'You must agree to the terms and conditions of the early access program to continue.',
-          html: true,
+          html: false,
           ok: {
             push: true,
             label: 'Agree',
@@ -189,11 +190,21 @@ export default defineComponent({
             label: 'Cancel'
           },
         }).onOk((data) => {
+          TTT.enterpimsdialog.agreetoc = true
           TTT.enterpimsdialogclick_afteragree()
         })
       }
     },
     enterpimsdialogclick_afteragree () {
+      const TTT = this
+      if (this.submitted) {
+        TTT.$q.dialog({
+          title: 'Pressed button twice',
+          message: 'Trying to submit twice. If you try multiple times please retry from the homepage'
+        })
+        return
+      }
+      this.submitted = true
       const data = {
         number: this.enterpimsdialog.number,
         first_name: this.enterpimsdialog.first_name,
