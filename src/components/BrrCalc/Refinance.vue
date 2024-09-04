@@ -17,7 +17,22 @@
           min_label_text="Worst LTV %"
           max_label_text="Best LTV %"
         />
+        <hr/>
+        Intrest rate {{ refinance.rate.min }}% - {{ refinance.rate.max }}%
+        <SliderWithTextInput
+          ref="slider"
+          v-model:range="refinance.rate"
+          :min="0"
+          :max="50"
+          :step="0.1"
+          :left_label_value="refinance.rate.min + '%'"
+          :right_label_value="refinance.rate.max+ '%'"
+          min_label_text="Worst %"
+          max_label_text="Best %"
+        />
+        <hr/>
         <div>Refinance amount: {{ format_currency(refinanceamount.worst) }} - {{ format_currency(refinanceamount.best) }}</div>
+        <div>Monthly Payments: {{ format_currency(monthly_payments.worst) }} - {{ format_currency(monthly_payments.best) }}</div>
       </div>
     </q-card-section>
   </q-card>
@@ -27,6 +42,13 @@
 import { defineComponent } from 'vue'
 import utils from '../utils.js'
 import SliderWithTextInput from '../../components/SliderWithTextInput.vue'
+
+function default_rate () {
+  return {
+    min: 6.0,
+    max: 6.0
+  }
+}
 
 export default defineComponent({
   name: 'BrrCalcFinance',
@@ -43,6 +65,7 @@ export default defineComponent({
           min: 75,
           max: 75
         },
+        rate: default_rate()
       },
       emit_project_change_notification: true
     }
@@ -55,6 +78,11 @@ export default defineComponent({
       this.emit_project_change_notification = false
       this.refinance.userefinance = data_to_load.refinance_userefinance
       this.refinance.ltv = data_to_load.refinance_userefinance_ltv
+      if (typeof ( data_to_load.refinance_userefinance_rate) === 'undefined') {
+        this.refinance.rate = default_rate()
+      } else {
+        this.refinance.rate = data_to_load.refinance_userefinance_rate
+      }
 
       const TTT = this
       setTimeout(function () {
@@ -70,10 +98,17 @@ export default defineComponent({
     }
   },
   computed: {
+    monthly_payments () {
+      return {
+        worst: this.refinanceamount.worst * (this.refinance.rate.min / (100 * 12)),
+        best: this.refinanceamount.best * (this.refinance.rate.max / (100 * 12))
+      }
+    },
     serializer_card_data () {
       return {
         refinance_userefinance: this.refinance.userefinance,
         refinance_userefinance_ltv: this.refinance.ltv,
+        refinance_userefinance_rate: this.refinance.rate,
       }
     },
     get_refinance () {
