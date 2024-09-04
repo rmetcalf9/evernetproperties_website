@@ -141,6 +141,7 @@
           :othercosts_items_detail="othercosts_items_detail"
           :caculated_loan_details="caculated_loan_details"
           :finance_bridgecost="finance_bridgecost"
+          :finance_bridgeamount="finance_bridgeamount"
           @apiaddweblink="apiaddweblink"
           @activity_log="activity_log"
         />
@@ -284,6 +285,15 @@ export default defineComponent({
       }
       return this.$refs.Finance.bridgecost
     },
+    finance_bridgeamount () {
+      if (!this.isMounted) {
+        return {
+          best: 0,
+          worst: 0
+        }
+      }
+      return this.$refs.Finance.bridgeamount
+    },
     finance_totalmoneyneeded () {
       if (!this.isMounted) {
         return {
@@ -304,7 +314,7 @@ export default defineComponent({
         return []
       }
       return this.$refs.Finance.finance_in_items_without_cash
-    },    
+    },
     finance_during_items () {
       if (!this.isMounted) {
         return []

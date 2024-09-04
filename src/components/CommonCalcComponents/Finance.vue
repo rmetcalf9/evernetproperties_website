@@ -286,6 +286,18 @@ export default defineComponent({
         worst: worst
       }
     },
+    bridgeamount () {
+      if (!this.bridge.usebridge) {
+        return {
+          best: 0,
+          worst: 0
+        }
+      }
+      return {
+        best: this.bridge.amount.best,
+        worst: this.bridge.amount.worst
+      }
+    },
     bridgemontghsupfront () {
       var min = 12
       if (this.refurbmonths.best > 12) {

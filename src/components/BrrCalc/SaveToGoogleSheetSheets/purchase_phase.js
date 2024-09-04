@@ -118,7 +118,8 @@ function get_bridge_type(spreadsheet, vueobj, sheet_id_map) {
     },
     end_details: function (context) {
       return [
-        ['Bridge Costs', vueobj.finance_bridgecost.worst, vueobj.finance_bridgecost.best]
+        ['Bridge Costs', vueobj.finance_bridgecost.worst, vueobj.finance_bridgecost.best],
+        ['Bridge Amount', vueobj.finance_bridgeamount.worst * -1, vueobj.finance_bridgeamount.best * -1]
       ]
     },
   }
