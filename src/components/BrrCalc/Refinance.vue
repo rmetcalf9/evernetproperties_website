@@ -6,16 +6,16 @@
       <q-checkbox v-model="refinance.userefinance" label="Refinance after refurbishment" />
         <div v-if="refinance.userefinance">
         Refinance LTV {{ refinance.ltv.min }}% - {{ refinance.ltv.max }}%
-        <q-range
-          v-model="refinance.ltv"
+        <SliderWithTextInput
+          ref="slider"
+          v-model:range="refinance.ltv"
           :min="0"
           :max="100"
           :step="5"
-          thumb-size="40px"
-          drag-range
-          label
-          :left-label-value="refinance.ltv.min + '%'"
-          :right-label-value="refinance.ltv.max+ '%'"
+          :left_label_value="refinance.ltv.min + '%'"
+          :right_label_value="refinance.ltv.max+ '%'"
+          min_label_text="Worst LTV %"
+          max_label_text="Best LTV %"
         />
         <div>Refinance amount: {{ format_currency(refinanceamount.worst) }} - {{ format_currency(refinanceamount.best) }}</div>
       </div>
@@ -26,11 +26,15 @@
 <script>
 import { defineComponent } from 'vue'
 import utils from '../utils.js'
+import SliderWithTextInput from '../../components/SliderWithTextInput.vue'
 
 export default defineComponent({
   name: 'BrrCalcFinance',
   emits: ['projectchanged'],
   props: ['gdv_total'],
+  components: {
+    SliderWithTextInput
+  },
   data () {
     return {
       refinance: {

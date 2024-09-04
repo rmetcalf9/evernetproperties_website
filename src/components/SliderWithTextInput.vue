@@ -3,15 +3,15 @@
     &nbsp;
     <q-range
       v-model="rangevalue"
-      :min="0"
-      :max="1000000"
-      :step="5000"
+      :min="min"
+      :max="max"
+      :step="step"
       thumb-size="40px"
       drag-range
       label
       snap
-      :left-label-value="min_prefix + rangevalue.min / 1000 + 'k'"
-      :right-label-value="max_prefix + rangevalue.max / 1000 + 'k'"
+      :left-label-value="left_label_value_used"
+      :right-label-value="right_label_value_used"
     />
   </div>
   <div class="col-grow row">
@@ -20,7 +20,7 @@
         ref="bestinput"
         v-model.number="rangevalue.min"
         type="number"
-        :step="5000"
+        :step="step"
         filled
         style="max-width: 110px"
         :rules="[ val => val <= rangevalue.max || 'Must be lower than ' + max_label_text]"
@@ -32,7 +32,7 @@
         ref="worstinput"
         v-model.number="rangevalue.max"
         type="number"
-        :step="5000"
+        :step="step"
         filled
         style="max-width: 110px"
         :rules="[ val => val >= rangevalue.min || 'Must be higher than ' + min_label_text]"
@@ -59,6 +59,14 @@ export default defineComponent({
       type: String,
       default: 'Worst £'
     },
+    left_label_value: {
+      type: String,
+      default: ''
+    },
+    right_label_value: {
+      type: String,
+      default: ''
+    },
     min_label_text: {
       type: String,
       default: 'Best Price'
@@ -66,6 +74,18 @@ export default defineComponent({
     max_label_text: {
       type: String,
       default: 'Worst Price'
+    },
+    min: {
+      type: Number,
+      default: 0
+    },
+    max: {
+      type: Number,
+      default: 1000000
+    },
+    step: {
+      type: Number,
+      default: 5000
     }
   },
   emits: ['update:range'],
@@ -103,6 +123,18 @@ export default defineComponent({
     }
   },
   computed: {
+    left_label_value_used() {
+      if (this.left_label_value == '') {
+        return this.min_prefix + this.rangevalue.min / 1000 + 'k'
+      }
+      return this.left_label_value
+    },
+    right_label_value_used() {
+      if (this.right_label_value == '') {
+        return this.max_prefix + this.rangevalue.max / 1000 + 'k'
+      }
+      return this.right_label_value
+    },
     isValid() {
       if (!this.$refs.worstinput.validate()) {
         return false
