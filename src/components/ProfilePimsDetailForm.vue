@@ -36,9 +36,9 @@
         <q-input v-model="enterpimsdialog.company_name" label="Company Name"
           ref="companyref"
         />
-        <q-toggle
-          v-model="enterpimsdialog.agreetoc"
-        /><q-btn dense flat label="Agree to Early Access terms and conditions" @click="show_toc" />
+        <q-checkbox v-model="enterpimsdialog.agreetoc" label="Agree to Early Access terms and conditions" />
+        <br>
+        <q-btn label="View Terms" @click="show_toc" />
       </q-card-section>
 
       <q-card-actions align="right">
