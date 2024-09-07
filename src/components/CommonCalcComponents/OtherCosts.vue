@@ -6,6 +6,7 @@
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Solicitors Fees: {{ format_currency(fees.min) }} - {{ format_currency(fees.max) }}</div>
+      <div>Likely value - fees may vary depending on project</div>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Auction</div>

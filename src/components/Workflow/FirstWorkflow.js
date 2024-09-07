@@ -42,7 +42,7 @@ export default {
           }
         ]
       },
-      "diagram_notes": "Market Comparables<BR>Property Condition<BR>Identify Show stoppers<BR>Evaluate potential"
+      "diagram_notes": "Market Comparables<BR>Property Condition<BR>Identify Deal Breakers<BR>Evaluate potential"
     },
     "3.1": { "name": "Cancelled Viewing"},
     "4": {
