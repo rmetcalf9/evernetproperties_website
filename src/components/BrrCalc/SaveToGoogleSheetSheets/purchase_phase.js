@@ -326,7 +326,7 @@ function _output_refinance_using_bridge(context, su, vueobj, total_money_needed_
   context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
 
   context.cur_row = context.cur_row + 1
-  const orogional_row = context.cur_row
+  const original_row = context.cur_row
   context.value_requests.push({
     range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
     values: [[
@@ -343,8 +343,8 @@ function _output_refinance_using_bridge(context, su, vueobj, total_money_needed_
     range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
     values: [[
       'Left in',
-      '=B' + (remaining_row).toString() + '-B' + (orogional_row).toString(),
-      '=C' + (remaining_row).toString() + '-C' + (orogional_row).toString()
+      '=B' + (original_row).toString() + '-B' + (remaining_row).toString(),
+      '=C' + (original_row).toString() + '-C' + (remaining_row).toString()
     ]]
   })
   context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
