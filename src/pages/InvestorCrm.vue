@@ -1,7 +1,7 @@
 <template>
 <q-page class="flex flex-center">
   <div class="main-page fit row wrap justify-center items-center content-center">
-    <h2>How do you manage your investor list?</h2>
+    <h2>Calling all Deal Sourcers!</h2>
     <div class="investorcrm-flex-break"></div>
     <div class="flex row first-section">
       <div>
@@ -12,16 +12,15 @@
         >
       </div>
       <div class="flex column" style="max-width: 500px;">
-        <div class="investorcrm-para">I have met many deals sourcers and told them my investment requirements. I never hear from them and then a few months later they appear on the mastermind telling everyone <b>“They can’t sell a deal”</b>. Is this you? Do you have an investor list? Do you follow up on new leads? Are you simply running a mailing list or are you actually <b>managing the relationship</b> you have with investors?</div>
+        <div class="investorcrm-para">Are you simply running a mailing list or are you actually <b>managing the relationship</b> you have with investors?</div>
 
-        <div class="investorcrm-para">It’s hard work doing it properly but it doesn’t have to be. I have years of experience working on CRM systems for large businesses with million pound price tags. Since getting into property I have finally found a system appropriate for Deal Sourcers which makes managing your investor workflow easy and won’t break the bank.
-        I host regular webinars to show you how this CRM can take the stress out of managing your deal pipeline, so you can focus on your investors—not on the admin.</div>
+        <div class="investorcrm-para">I have years of experience working on CRM systems and I would like to share this with you. I am running webinar sessions to show you how to use a CRM system to supercharge  your business.</div>
 
         <div v-for="feature in features" :key="feature" class="investorcrm-list-item"><q-icon name="check_box" color="green" size="32px" />{{ feature }}</div>
       </div>
     </div>
     <div class="investorcrm-flex-break"></div>
-    <div class="investorcrm-para-title">Interested?</div>
+    <div class="investorcrm-para-title">Sign up for our Deal Sourcer CRM webinar</div>
     <div class="investorcrm-flex-break"></div>
     <div class="investorcrm-para">Fill out the form below to secure your spot in the next session!</div>
     <div class="investorcrm-flex-break"></div>
@@ -82,12 +81,12 @@ export default defineComponent({
     return {
       submitted: false,
       features: [
-        'Add new investors you meet at events',
-        'Follow up the next day',
-        'Build process to train investors how to buy the deal',
-        'Suceed by design, not by accident',
-        'Easy to use',
-        'Doesn\’t break the bank'
+        'Collect investor contacts in person',
+        'Follow up!',
+        'Build process to train investors how to buy a deal',
+        'Do this again and again',
+        'Avoid drowning in admin',
+        'Succeed by design, not by accident'
       ],
       form_data: {
         first_name: '',
