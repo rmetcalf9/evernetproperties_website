@@ -68,6 +68,29 @@ function get_sheet_utils (sheetId) {
         }
       }
     },
+    makeboldandvaligntopandsetfontsize: function (r1, r2, c1, c2, fontsize) {
+      return {
+        "repeatCell": {
+          "range": {
+            "sheetId": sheetId,
+            "startRowIndex": r1,
+            "endRowIndex": r2,
+            "startColumnIndex": c1,
+            "endColumnIndex": c2
+          },
+          "cell": {
+            "userEnteredFormat": {
+              "textFormat": {
+                "fontSize": fontsize,
+                "bold": true
+              },
+              "verticalAlignment": "TOP"
+            }
+          },
+          "fields": "userEnteredFormat(textFormat, verticalAlignment)"
+        }
+      }
+    },
     formatnumbermisc: function (r1, r2, c1, c2, pattern) { return formatnumbermisc(r1, r2, c1, c2, pattern) },
     formatcurrency: function (r1, r2, c1, c2) { return formatnumbermisc(r1, r2, c1, c2, '[$£-809]#,##0.00') },
     formatpercentage: function (r1, r2, c1, c2) { return formatnumbermisc(r1, r2, c1, c2, '0.00%') },

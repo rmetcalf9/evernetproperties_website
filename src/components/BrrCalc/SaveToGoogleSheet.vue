@@ -24,6 +24,7 @@ import sheet_purchase_phase from './SaveToGoogleSheetSheets/purchase_phase.js'
 import sheet_gdv_comparables from './SaveToGoogleSheetSheets/gdv_comparables.js'
 import sheet_hmo_monthly_profit from './SaveToGoogleSheetSheets/hmo_monthly_profit.js'
 import sheet_hmo_room_sizes from './SaveToGoogleSheetSheets/hmo_room_sizes.js'
+import sheet_refurb_cost from './SaveToGoogleSheetSheets/refurb_cost.js'
 
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
@@ -103,6 +104,7 @@ export default defineComponent({
           subsheet_javascript_code_files.push(sheet_hmo_room_sizes)
         }
       }
+      subsheet_javascript_code_files.push(sheet_refurb_cost)      
 
       let sheedIdx = 0;
       while (sheedIdx < subsheet_javascript_code_files.length) {
