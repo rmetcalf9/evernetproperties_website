@@ -48,53 +48,52 @@
                 <tr>
                   <th class="">Price</th>
                   <th class=""># Rooms</th>
-                  <th class="">Calculation</th>
                   <th class="">Use?</th>
                   <th class=""></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in comps" :key='item.id'>
-                  <td>
-                    <q-input
-                      v-model.number="item.price"
-                      type="number"
-                      :step="5000"
-                      filled
-                      style="max-width: 110px"
-                    />
-                  </td>
-                  <td>
-                    <q-input
-                      v-model.number="item.rooms"
-                      type="number"
-                      :step="1"
-                      :min="1"
-                      :max="50"
-                      filled
-                      style="max-width: 70px"
-                    />
-                  </td>
-                  <td>
-                    <div>
-                      <div>Annual Rent:  {{ format_currency(getannualrent(item)) }}</div>
-                      <div>Yield: {{ format_percent(getannualyield(item)) }}</div>
-                    </div>
-                  </td>
-                  <td>
-                    <div>
-                      <q-checkbox
-                        v-model="item.use"
-                        label=""
-                        @update:model-value="updateitemuse(item)"/>
-                    </div>
-                  </td>
-                  <td>
-                    <div v-if="comps.length > 1">
-                      <q-btn round color="primary" icon="delete" @click="delcomp(item)" />
-                    </div>
-                  </td>
-                </tr>
+                  <tr v-for="item in comps_tbl" :key='item.id'>
+                    <td v-if="item.row_type==='row'">
+                      <q-input
+                        v-model.number="item.item.price"
+                        type="number"
+                        :step="5000"
+                        filled
+                        style="max-width: 110px"
+                      />
+                    </td>
+                    <td v-if="item.row_type==='row'">
+                      <q-input
+                        v-model.number="item.item.rooms"
+                        type="number"
+                        :step="1"
+                        :min="1"
+                        :max="50"
+                        filled
+                        style="max-width: 70px"
+                      />
+                    </td>
+                    <td v-if="item.row_type==='row'">
+                      <div>
+                        <q-checkbox
+                          v-model="item.item.use"
+                          label=""
+                          @update:model-value="updateitemuse(item)"/>
+                      </div>
+                    </td>
+                    <td v-if="item.row_type==='row'">
+                      <div v-if="comps.length > 1">
+                        <q-btn round color="primary" icon="delete" @click="delcomp(item.item)" />
+                      </div>
+                    </td>
+                    <td colspan="4" v-if="item.row_type==='subrow'">
+                      <div>
+                        <div>Annual Rent:  {{ format_currency(getannualrent(item.item)) }}</div>
+                        <div>Yield: {{ format_percent(getannualyield(item.item)) }}</div>
+                      </div>
+                    </td>
+                  </tr>
               </tbody>
             </table>
             <q-btn round  color="primary" icon="add" @click="addcomp" />
@@ -233,7 +232,7 @@ export default defineComponent({
     updateitemuse (item) {
       if (!item.use) {
         if (this.used_comps.length < 1) {
-          item.use = true
+          this._forceuseditem(item.id)
           Notify.create({
             color: 'bg-grey-2',
             message: 'Must use at least one comparable',
@@ -241,9 +240,35 @@ export default defineComponent({
           })
         }
       }
+    },
+    _forceuseditem(itemid) {
+      let items = this.comps.filter(function (i) {
+        return i.id===itemid
+      })
+      if (items.length !== 1) {
+        console.log('Error item id not found')
+        return
+      }
+      items[0].use = true
     }
   },
   computed: {
+    comps_tbl () {
+      let ret = []
+      this.comps.forEach(function (item) {
+        ret.push({
+          id: item.id,
+          item: item,
+          row_type: 'row'
+        })
+        ret.push({
+          id: item.id,
+          item: item,
+          row_type: 'subrow'
+        })
+      })
+      return ret
+    },
     hmo_annual_rent () {
       return this.curhmo.rooms * 12 * this.general_area.room_rate
     },
