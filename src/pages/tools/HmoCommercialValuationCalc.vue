@@ -40,6 +40,7 @@
           <li>Speaking to agents in the area and asking about HMO prices</li>
           <li>Speaking to HMO letting agents and finding out about HMO prices in the area</li>
           <li>Go to the council website for the HMO register; going through the addresses and looking at sold prices on rightmove for those addresses</li>
+          <li>Go through Dealsourcr deals for this area (e.g. for Middlesbrough the link is <a href="https://dealsourcr.com/deal-search/hmos-in-middlesbrough" target="_blank">https://dealsourcr.com/deal-search/hmos-in-middlesbrough</a>)</li>
           </ul>
           <div>Once you have a few examples, enter them here. The most relevant prices are the ones with a similar size to the one you are looking at.</div>
             <table class="HmoCommercialValuationCalc-comptable">
