@@ -98,7 +98,28 @@
                 </div>
               </div>
             </div>
+          </q-card-section>
+        </q-card>
 
+        <!-- HMO HmoCommercialValuationCalc -->
+        <q-card inline class="q-ma-sm card-style tool-card" @click="click_hmocommercialvaluecalc_card">
+          <q-card-section>
+            <div class="text-h6">HMO Commercial Valuation Calculator</div>
+            <div class="row">
+              <div>
+                <img
+                  alt="Item Picture"
+                  src="~assets/tool_hmo_commercial_val_calc.png"
+                  class="tool-picture"
+                >
+              </div>
+              <div class="col q-ma-sm" style="min-width: 100px;">
+                <div style="height: 150px;">Use this tool to calculate an estimate on what a commercial valuation would be for a HMO based on HMO’s in the area.</div>
+                <div align="right">
+                  <q-btn round dense color="primary" icon="info" />
+                </div>
+              </div>
+            </div>
           </q-card-section>
         </q-card>
       </div>
@@ -154,6 +175,9 @@ export default defineComponent({
     },
     click_myprojects_card () {
       this.$router.push('/tools/cansave/patches')
+    },
+    click_hmocommercialvaluecalc_card () {
+      this.$router.push('/tools/hmocommercialvaluecalc')
     }
   }
 })
