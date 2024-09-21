@@ -26,7 +26,7 @@
             />
           </div>
           <q-card-actions align="right" class="text-primary">
-          <q-btn icon="call" label="Cancel" @click="this.dialog_visible = false" />
+          <q-btn label="Cancel" @click="this.dialog_visible = false" />
             <q-btn color="primary" icon="call" label="Save" @click="click_selling_agent_btn" :disable="isDisabled" />
           </q-card-actions>
         </q-card-section>

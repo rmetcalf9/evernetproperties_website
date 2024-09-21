@@ -11,6 +11,8 @@
     <ResearchCall
       @activity_log="(obj) => $emit('activity_log',obj)"
     />
+    <TodoButton
+    />
   </div>
 </template>
 
@@ -20,6 +22,7 @@ import { defineComponent } from 'vue'
 import CallSellingAgent from './CallSellingAgent.vue'
 import ResearchCall from './ResearchCall.vue'
 import SaveButton from './SaveButton.vue'
+import TodoButton from './TodoButton.vue'
 
 export default defineComponent({
   name: 'BrrCalcToolbar',
@@ -28,7 +31,8 @@ export default defineComponent({
   components: {
     CallSellingAgent,
     ResearchCall,
-    SaveButton
+    SaveButton,
+    TodoButton
   },
   data () {
     return {
