@@ -12,7 +12,6 @@
         <q-card-section>
           <div>
             <div class="brrcalctoolbar-field">
-              Type of task:
               <q-select
                 v-model="dialog_data.type"
                 :options="type_options"

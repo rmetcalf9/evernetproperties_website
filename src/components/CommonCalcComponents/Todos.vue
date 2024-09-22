@@ -1,45 +1,96 @@
 <template>
-  <q-card inline class="q-ma-sm card-style featurecard col-grow">
-    <q-card-section>
-      <div class="text-h6">Todo Items</div>
-      <div style="width: 100%; max-width: 400px">
-        <div v-for="group in Object.keys(todo_groups)" :key='group'>
-          <div v-if="group !== ''" class="todos-grouptitle">{{ group }}</div>
+  <div>
+    <q-card inline class="q-ma-sm card-style featurecard col-grow">
+      <q-card-section>
+        <div class="text-h6">Todo Items</div>
+        <div style="width: 100%; max-width: 400px">
+          <div v-for="group in Object.keys(todo_groups)" :key='group'>
+            <div v-if="group !== ''" class="todos-grouptitle">{{ group }}</div>
+            <div>
+              <div v-for="todo in due_todos(group)" :key='todo.id' class="todos-duetodoitem flex col">
+                <div class="col-grow">
+                  <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                  <div>{{ todo.description }}</div>
+                  <div>Due by: NOW!</div>
+                </div>
+                <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
+              </div>
+              <div v-for="todo in notdone_todos(group)" :key='todo.id' class="todos-todoitem flex col">
+                <div class="col-grow">
+                  <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                  <div>{{ todo.description }}</div>
+                  <div>Due in: {{ due_date_text(todo.due_date) }}</div>
+                </div>
+                <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
+                <div class="todos-btn"><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
+              </div>
+            </div>
+          </div>
           <div>
-            <div v-for="todo in due_todos(group)" :key='todo.id' class="todos-duetodoitem flex col">
+            <div>Completed Items</div>
+            <div v-for="todo in done_todos" :key='todo.id' class="todos-tododoneitem flex col">
               <div class="col-grow">
                 <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
                 <div>{{ todo.description }}</div>
-                <div>Due by: NOW!</div>
+                <div>Completion Notes: {{ todo.done_text }}</div>
+                <div>Date Completed: {{ done_date_text(todo.done_date) }}</div>
               </div>
-              <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo, true)" /></div>
-            </div>
-            <div v-for="todo in notdone_todos(group)" :key='todo.id' class="todos-todoitem flex col">
-              <div class="col-grow">
-                <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-                <div>{{ todo.description }}</div>
-                <div>Due in: {{ due_date_text(todo.due_date) }}</div>
-              </div>
-              <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo, true)" /></div>
+              <div><q-btn label="Mark Undone" color="secondary" @click="btn_mark_undone(todo)" /></div>
             </div>
           </div>
         </div>
-        <div>
-          <div>Completed Items</div>
-          <div v-for="todo in done_todos" :key='todo.id' class="todos-tododoneitem flex col">
-            <div class="col-grow">
-              <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-              <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
-              <div>{{ todo.description }}</div>
-              <div>Completion Notes: {{ todo.done_text }}</div>
-              <div>Date Completed: {{ done_date_text(todo.done_date) }}</div>
+      </q-card-section>
+    </q-card>
+    <q-dialog v-model="dialog_visible">
+      <q-card class="todos-dialogcard">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Edit Todo ITem</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+          <div>
+            <div class="brrcalctoolbar-field">
+              <q-select
+                v-model="dialog_data.type"
+                :options="type_options"
+                label="Type of Task"
+                emit-value
+                map-options
+              />
             </div>
-            <div><q-btn label="Mark Undone" color="secondary" @click="btn_mark_undone(todo, false)" /></div>
+            <div class="brrcalctoolbar-field col flex" v-if="dialog_data.type === 'other'">
+              <q-input v-model="dialog_data.group" label="Grouping" class="col-grow" />
+              <q-btn round dense flat icon="info" @click="helpgrouping" />
+            </div>
+            <div class="brrcalctoolbar-field">
+              <q-input
+                v-model="dialog_data.description"
+                label="Description"
+                autogrow
+                :rules="[ val => val.trim().length > 3 || 'Minimum 4 characters']"
+                ref="field_description"
+              />
+            </div>
+            <div class="brrcalctoolbar-field">Due:
+                <q-option-group
+                  v-model="dialog_data.due"
+                  :options="due_options"
+                  color="primary"
+                  inline
+                />
+            </div>
           </div>
-        </div>
-      </div>
-    </q-card-section>
-  </q-card>
+          <q-card-actions align="right" class="text-primary">
+          <q-btn label="Cancel" @click="this.dialog_visible = false" />
+            <q-btn color="primary" icon="rule" label="Ok" @click="click_dialog_ok" />
+          </q-card-actions>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+  </div>
 </template>
 
 <script>
@@ -69,11 +120,27 @@ export default defineComponent({
   data () {
     return {
       todos: [],
+      dialog_visible: false,
+      type_options: common_constants.todo_item_types,
+      dialog_data: {
+        description: '',
+        type: 'other',
+        group: '',
+        due: 'UNCHANGED',
+        loaded_todo: undefined
+      },
+      due_options: [
+        {label: 'Unchanged', value: 'UNCHANGED'},
+        {label: '1 Day', value: '1'},
+        {label: '3 Days', value: '3'},
+        {label: '5 Days', value: '5'}
+      ]
     }
   },
   computed: {
     todo_groups () {
-      let groups = {}
+      // Make sure blank group is FIRST
+      let groups = { '': true }
       this.todos.forEach(function (x) {
         groups[x.group] = true
       })
@@ -87,6 +154,37 @@ export default defineComponent({
     }
   },
   methods: {
+    click_dialog_ok () {
+      this.dialog_data.loaded_todo.description = this.dialog_data.description
+      this.dialog_data.loaded_todo.type = this.dialog_data.type
+      this.dialog_data.loaded_todo.group = this.dialog_data.group
+      if (this.dialog_data.due !== 'UNCHANGED') {
+        const days_until_due = parseInt(this.dialog_data.due)
+        const due_date = new Date(new Date().getTime()+(days_until_due*24*60*60*1000))
+        this.dialog_data.loaded_todo.due_date = due_date.toISOString()
+      }
+      this.exec_update_todo_item(this.dialog_data.loaded_todo)
+
+      this.dialog_visible = false
+    },
+    helpgrouping () {
+      this.$q.dialog({
+        title: 'Todo Item Grouping',
+        message: 'The grouping field can be left blank. It can be used to group todo items together in displays.',
+        html: false
+      }).onOk(() => {
+        // console.log('OK')
+      })
+    },
+    btn_edit(todo) {
+      this.dialog_data.description = todo.description
+      this.dialog_data.type = todo.type
+      this.dialog_data.group = todo.group
+      this.dialog_data.due = 'UNCHANGED'
+      this.dialog_data.loaded_todo = todo
+
+      this.dialog_visible = true
+    },
     due_todos (group) {
       return this.todos.filter(function (x) {
         return (x.group === group) && (x.done === false) && (x.due === true)
@@ -126,7 +224,7 @@ export default defineComponent({
       // Called when user manually adds
       this.todos.push(item)
     },
-    btn_mark_done (todo, isdone) {
+    btn_mark_done (todo) {
       const TTT = this
       this.$q.dialog({
         title: 'Completion Notes',
@@ -148,13 +246,15 @@ export default defineComponent({
         },
       }).onOk((data) => {
         todo.done_text = data
-        TTT.exec_mark_done(todo, true)
+        todo.done = true
+        TTT.exec_update_todo_item(todo)
       })
     },
-    btn_mark_undone (todo, isdone) {
-      this.exec_mark_done(todo, false)
+    btn_mark_undone (todo) {
+      todo.done = false
+      this.exec_update_todo_item(todo)
     },
-    exec_mark_done (todo, isdone) {
+    exec_update_todo_item (todo) {
       const TTT = this
       const callback = {
         ok: function (response) {
@@ -172,7 +272,6 @@ export default defineComponent({
           })
         }
       }
-      todo.done = isdone
       TTT.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
         url: '/projects/' + TTT.$route.query.projectid + '/todos',
@@ -213,5 +312,11 @@ export default defineComponent({
   border-color: lightgrey;
   background-color: lightgrey;
   color: black;
+}
+.todos-btn {
+  padding: 5px;
+}
+.todos-dialogcard {
+  min-width:50%;
 }
 </style>
