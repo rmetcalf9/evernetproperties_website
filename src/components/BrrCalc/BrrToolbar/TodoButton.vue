@@ -56,6 +56,7 @@
 <script>
 import { defineComponent } from 'vue'
 import utils from '../../../components/utils.js'
+import common_constants from '../../../components/common_constants.js'
 
 function default_dialog_data () {
   return {
@@ -73,11 +74,7 @@ export default defineComponent({
     return {
       dialog_visible: false,
       dialog_data: default_dialog_data(),
-      type_options: [
-        {label: 'Call Agent', value: 'agent'},
-        {label: 'Call Sourcer', value: 'sourcer'},
-        {label: 'Other', value: 'other'}
-      ],
+      type_options: common_constants.todo_item_types,
       due_options: [
         {label: '1 Day', value: '1'},
         {label: '3 Days', value: '3'},

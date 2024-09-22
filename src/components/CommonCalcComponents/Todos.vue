@@ -3,26 +3,33 @@
     <q-card-section>
       <div class="text-h6">Todo Items</div>
       <div style="width: 100%; max-width: 400px">
-        <div>
-          <div v-for="todo in due_todos" :key='todo' class="todos-duetodoitem flex col">
-            <div class="col-grow">
-              <div>{{ todo.description }}</div>
-              <div>Due by: NOW!</div>
+        <div v-for="group in Object.keys(todo_groups)" :key='group'>
+          <div v-if="group !== ''" class="todos-grouptitle">{{ group }}</div>
+          <div>
+            <div v-for="todo in due_todos(group)" :key='todo.id' class="todos-duetodoitem flex col">
+              <div class="col-grow">
+                <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                <div>{{ todo.description }}</div>
+                <div>Due by: NOW!</div>
+              </div>
+              <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo, true)" /></div>
             </div>
-            <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo, true)" /></div>
-          </div>
-          <div v-for="todo in notdone_todos" :key='todo' class="todos-todoitem flex col">
-            <div class="col-grow">
-              <div>{{ todo.description }}</div>
-              <div>Due in: {{ due_date_text(todo.due_date) }}</div>
+            <div v-for="todo in notdone_todos(group)" :key='todo.id' class="todos-todoitem flex col">
+              <div class="col-grow">
+                <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                <div>{{ todo.description }}</div>
+                <div>Due in: {{ due_date_text(todo.due_date) }}</div>
+              </div>
+              <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo, true)" /></div>
             </div>
-            <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo, true)" /></div>
           </div>
         </div>
         <div>
           <div>Completed Items</div>
-          <div v-for="todo in done_todos" :key='todo' class="todos-tododoneitem flex col">
+          <div v-for="todo in done_todos" :key='todo.id' class="todos-tododoneitem flex col">
             <div class="col-grow">
+              <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+              <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
               <div>{{ todo.description }}</div>
               <div>Completion Notes: {{ todo.done_text }}</div>
               <div>Date Completed: {{ done_date_text(todo.done_date) }}</div>
@@ -38,6 +45,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import common_constants from '../../components/common_constants.js'
 
 function days_between(date1, date2) {
     // The number of milliseconds in one day
@@ -64,16 +72,14 @@ export default defineComponent({
     }
   },
   computed: {
-    due_todos () {
-      return this.todos.filter(function (x) {
-        return (x.done === false) && (x.due === true)
+    todo_groups () {
+      let groups = {}
+      this.todos.forEach(function (x) {
+        groups[x.group] = true
       })
+      return groups
     },
-    notdone_todos () {
-      return this.todos.filter(function (x) {
-        return (x.done === false) && (x.due === false)
-      })
-    },
+
     done_todos () {
       return this.todos.filter(function (x) {
         return x.done === true
@@ -81,6 +87,21 @@ export default defineComponent({
     }
   },
   methods: {
+    due_todos (group) {
+      return this.todos.filter(function (x) {
+        return (x.group === group) && (x.done === false) && (x.due === true)
+      })
+    },
+    notdone_todos (group) {
+      return this.todos.filter(function (x) {
+        return (x.group === group) && (x.done === false) && (x.due === false)
+      })
+    },
+    get_todo_item_type (type) {
+      return common_constants.todo_item_types.filter(function (x) {
+        return x.value===type
+      })[0].label
+    },
     due_date_text (due_date) {
       const num_days_between = days_between(new Date(), new Date(due_date))
       if (num_days_between === 1) {
@@ -165,6 +186,9 @@ export default defineComponent({
 </script>
 
 <style>
+.todos-grouptitle {
+  font-weight: 600;
+}
 .todos-duetodoitem {
   margin: 10px;
   padding: 10px;
