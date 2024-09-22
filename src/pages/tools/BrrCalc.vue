@@ -8,6 +8,7 @@
         :reason_project_not_savable="reason_project_not_savable"
         @activity_log="activity_log"
         @saveproject="save_project"
+        @createtodo="createtodo"
       />
       <q-tabs
         v-if="security_role_cansave"
@@ -126,6 +127,10 @@
           @activity_log="activity_log"
           v-if="security_role_cansave"
         />
+        <Todos
+          ref="todos"
+          v-if="security_role_cansave"
+        />
         <ActivityLog
           ref="ActivityLog"
           @projectchanged="projectchanged"
@@ -142,7 +147,7 @@
           :caculated_loan_details="caculated_loan_details"
           :finance_bridgecost="finance_bridgecost"
           :finance_bridgeamount="finance_bridgeamount"
-          :gdv_total="gdv_total"          
+          :gdv_total="gdv_total"
           @apiaddweblink="apiaddweblink"
           @activity_log="activity_log"
         />
@@ -172,6 +177,7 @@ import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
 
 import SaveToGoogleSheet from '../../components/BrrCalc/SaveToGoogleSheet.vue'
 import ActivityLog from '../../components/CommonCalcComponents/ActivityLog.vue'
+import Todos from '../../components/CommonCalcComponents/Todos.vue'
 import Workflow from '../../components/BrrCalc/Workflow.vue'
 
 import ProjectSerializer from '../../components/BrrCalc/ProjectSerializer.vue'
@@ -200,7 +206,8 @@ export default defineComponent({
     ActivityLog,
     BrrToolbar,
     Workflow,
-    FlipDealRating
+    FlipDealRating,
+    Todos
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -427,6 +434,35 @@ export default defineComponent({
     }
   },
   methods: {
+    createtodo(params) {
+      const TTT = this
+      const callback = {
+        ok: function (response) {
+          TTT.$refs.todos.add_single_todo(response.data.todo)
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Todo added',
+            timeout: 2000,
+            color: 'positive'
+          })
+        },
+        error: function (response) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: response.message,
+            timeout: 2000,
+            color: 'negative'
+          })
+        }
+      }
+      TTT.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/projects/' + TTT.$route.query.projectid + '/todos',
+        method: 'POST',
+        data: params,
+        callback: callback
+      })
+    },
     apiaddweblink(params) {
       return this.$refs.DealBasicInfo.apiaddweblink(params)
     },
@@ -491,6 +527,9 @@ export default defineComponent({
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
       this.$refs.Workflow.serializer_load_data(project.workflow)
       this.$refs.BrrToolbar.serializer_load_data({})
+
+      // todos only loaded. Never saved
+      this.$refs.todos.serializer_load_data(project.todos)
     },
     save_project_complete ({success, response}) {
       this.$refs.BrrToolbar.save_project_complete_notification({

@@ -12,6 +12,7 @@
       @activity_log="(obj) => $emit('activity_log',obj)"
     />
     <TodoButton
+      @createtodo="(obj) => $emit('createtodo', obj)"
     />
   </div>
 </template>
@@ -27,7 +28,7 @@ import TodoButton from './TodoButton.vue'
 export default defineComponent({
   name: 'BrrCalcToolbar',
   props: ['reason_project_not_savable'],
-  emits: ['activity_log', 'saveproject'],
+  emits: ['activity_log', 'saveproject', 'createtodo'],
   components: {
     CallSellingAgent,
     ResearchCall,

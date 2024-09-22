@@ -68,6 +68,7 @@ function default_dialog_data () {
 
 export default defineComponent({
   name: 'BrrCalcToolbarTodoButton',
+  emits: ['createtodo'],
   data () {
     return {
       dialog_visible: false,
@@ -102,16 +103,19 @@ export default defineComponent({
 
       let group = this.dialog_data.group
       if (this.dialog_data.type === 'agent') {
-        group = 'agent:TODO'
+        group = '' // autocaculated by backend
       }
       if (this.dialog_data.type === 'sourcer') {
-        group = 'sourcer:TODO'
+        group = '' // autocaculated by backend
       }
+
+      const days_until_due = parseInt(this.dialog_data.due)
+      const due_date = new Date(new Date().getTime()+(days_until_due*24*60*60*1000))
 
       const post_data = {
           'id': utils.uuidv4(),
           'weight': '100',
-          'due_date': 'TODO',
+          'due_date': due_date.toISOString(),
           'description': this.dialog_data.description,
           'done': false,
           'done_date': '',
@@ -119,10 +123,8 @@ export default defineComponent({
           'type': this.dialog_data.type,
           'done_text': ''
       }
-
-      // POST TO /projects/" + project_id + "/todos"
-
-      console.log('TODO post', post_data)
+      this.$emit('createtodo', post_data)
+      this.dialog_visible = false
     },
     helpgrouping () {
       this.$q.dialog({
