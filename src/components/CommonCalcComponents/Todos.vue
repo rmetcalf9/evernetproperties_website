@@ -10,7 +10,7 @@
               <div v-for="todo in due_todos(group)" :key='todo.id' class="todos-duetodoitem flex col">
                 <div class="col-grow">
                   <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-                  <div>{{ todo.description }}</div>
+                  <div v-html="get_multiline_html(todo.description)"></div>
                   <div>Due by: NOW!</div>
                 </div>
                 <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
@@ -18,7 +18,7 @@
               <div v-for="todo in notdone_todos(group)" :key='todo.id' class="todos-todoitem flex col">
                 <div class="col-grow">
                   <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-                  <div>{{ todo.description }}</div>
+                  <div v-html="get_multiline_html(todo.description)"></div>
                   <div>Due in: {{ due_date_text(todo.due_date) }}</div>
                 </div>
                 <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
@@ -32,7 +32,7 @@
               <div class="col-grow">
                 <div>Type: {{ get_todo_item_type(todo.type) }}</div>
                 <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
-                <div>{{ todo.description }}</div>
+                <div v-html="get_multiline_html(todo.description)"></div>
                 <div>Completion Notes: {{ todo.done_text }}</div>
                 <div>Date Completed: {{ done_date_text(todo.done_date) }}</div>
               </div>
@@ -154,6 +154,9 @@ export default defineComponent({
     }
   },
   methods: {
+    get_multiline_html (text) {
+      return text.replaceAll('\n', '<br/>')
+    },
     click_dialog_ok () {
       this.dialog_data.loaded_todo.description = this.dialog_data.description
       this.dialog_data.loaded_todo.type = this.dialog_data.type
