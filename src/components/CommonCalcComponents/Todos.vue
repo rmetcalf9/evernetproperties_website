@@ -13,6 +13,7 @@
                   <div v-html="get_multiline_html(todo.description)"></div>
                   <div>Due by: NOW!</div>
                 </div>
+                <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
                 <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
               </div>
               <div v-for="todo in notdone_todos(group)" :key='todo.id' class="todos-todoitem flex col">
@@ -296,8 +297,8 @@ export default defineComponent({
   padding: 10px;
   border-style: solid;
   border-width: 5px;
-  border-color: darkred;
-  background-color: grey;
+  border-color: lightgrey;
+  background-color: darkred;
 }
 .todos-todoitem {
   margin: 10px;
