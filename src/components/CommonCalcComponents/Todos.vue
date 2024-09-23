@@ -2,7 +2,7 @@
   <div>
     <q-card inline class="q-ma-sm card-style featurecard col-grow">
       <q-card-section>
-        <div class="text-h6">Todo Items</div>
+        <div class="text-h6 todos-card-head"><q-icon name="rule" size="30px" /> Todo Items</div>
         <div style="width: 100%; max-width: 400px">
           <div v-for="group in Object.keys(todo_groups)" :key='group'>
             <div v-if="group !== ''" class="todos-grouptitle">{{ group }}</div>
@@ -289,6 +289,9 @@ export default defineComponent({
 </script>
 
 <style>
+.todos-card-head {
+  padding-bottom: 10px;
+}
 .todos-grouptitle {
   font-weight: 600;
 }
