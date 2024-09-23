@@ -12,6 +12,7 @@
       @activity_log="(obj) => $emit('activity_log',obj)"
     />
     <TodoButton
+      v-if="is_saved_project_with_id"
       @createtodo="(obj) => $emit('createtodo', obj)"
     />
   </div>
@@ -27,7 +28,7 @@ import TodoButton from './TodoButton.vue'
 
 export default defineComponent({
   name: 'BrrCalcToolbar',
-  props: ['reason_project_not_savable'],
+  props: ['reason_project_not_savable', 'is_saved_project_with_id'],
   emits: ['activity_log', 'saveproject', 'createtodo'],
   components: {
     CallSellingAgent,

@@ -6,6 +6,7 @@
         ref="BrrToolbar"
         v-if="security_role_cansave"
         :reason_project_not_savable="reason_project_not_savable"
+        :is_saved_project_with_id="is_saved_project_with_id"
         @activity_log="activity_log"
         @saveproject="save_project"
         @createtodo="createtodo"
@@ -222,10 +223,14 @@ export default defineComponent({
       purchaserange: {
         min: 180000,
         max: 190000
-      }
+      },
+      loaded_project_id: ''
     }
   },
   computed: {
+    is_saved_project_with_id () {
+      return this.loaded_project_id !== ''
+    },
     ever_saved () {
       if (!this.isMounted) {
         return false
@@ -457,7 +462,7 @@ export default defineComponent({
       }
       TTT.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + TTT.$route.query.projectid + '/todos',
+        url: '/projects/' + TTT.loaded_project_id + '/todos',
         method: 'POST',
         data: params,
         callback: callback
@@ -532,6 +537,7 @@ export default defineComponent({
       this.$refs.todos.serializer_load_data(project.todos)
     },
     save_project_complete ({success, response}) {
+      this.loaded_project_id = response.data.id
       this.$refs.BrrToolbar.save_project_complete_notification({
         success: success,
         response: response
@@ -547,6 +553,7 @@ export default defineComponent({
       this.load_complete()
     },
     load_project_api_success (response) {
+      this.loaded_project_id = response.data.id
       this.load_project_into_cards(response.data)
       Notify.create({
         color: 'bg-grey-2',
