@@ -270,15 +270,15 @@ export default defineComponent({
          text: 'Less than 20% uplift. To justify the work in doing the flip we need the deal to make at least 20%'
        })
       } else {
-        if (min_percentage < 23) {
+        if (min_percentage < 25) {
          ret_val.push({
            type: 'neutral',
-           text: 'Between 20% and 23% uplift. This is borderline. To justify the work and account for risk we would prefer at least 23%'
+           text: 'Between 20% and 25% uplift. This is borderline. To justify the work and account for risk we would prefer at least 23%'
          })
         } else {
           ret_val.push({
             type: 'positive',
-            text: 'Above 23% uplift. This project has enough uplift to justify the effort and risk.'
+            text: 'Above 25% uplift. This project has enough uplift to justify the effort and risk.'
           })
         }
       }
