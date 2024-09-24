@@ -30,6 +30,7 @@
           v-if="security_role_cansave"
           :ever_saved="ever_saved"
           @projectchanged="projectchanged"
+          @navigate_away="navigate_away"
         />
         <Vision
           ref="Vision"
@@ -439,6 +440,17 @@ export default defineComponent({
     }
   },
   methods: {
+    navigate_away(params) {
+      const TTT = this
+      if (!this.$refs.BrrToolbar.is_project_changed) {
+        this.$router.push(params.dest)
+        return
+      }
+      this.$refs.BrrToolbar.click_save_btn()
+      setTimeout(function () {
+        TTT.navigate_away(params)
+      }, 100)
+    },
     createtodo(params) {
       const TTT = this
       const callback = {

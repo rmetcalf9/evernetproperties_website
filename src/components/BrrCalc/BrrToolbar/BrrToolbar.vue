@@ -43,9 +43,15 @@ export default defineComponent({
   computed: {
     ever_saved () {
       return this.$refs.SaveToolbar.ever_saved
+    },
+    is_project_changed () {
+      return this.$refs.SaveToolbar.is_project_changed
     }
   },
   methods: {
+    click_save_btn () {
+      this.$refs.SaveToolbar.click_btn()      
+    },
     set_changed_true () {
       this.$refs.SaveToolbar.set_changed_true()
     },

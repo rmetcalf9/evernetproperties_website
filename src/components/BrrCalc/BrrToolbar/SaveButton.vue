@@ -63,6 +63,9 @@ export default defineComponent({
         return 'Save Now'
       }
       return 'Save now (auto save in ' + this.autosave_seconds_left + ')'
+    },
+    is_project_changed () {
+      return this.changed
     }
   },
   methods: {

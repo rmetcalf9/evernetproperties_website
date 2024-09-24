@@ -15,8 +15,8 @@
           option-label="name"
         />
       </div>
-      <div v-if="ever_saved">
-        Patch: {{ patch.name }}
+      <div v-if="ever_saved" class="brrcalc-dealbasicinfo-patch">
+        Patch: <q-btn flat @click="(obj) => $emit('navigate_away',{ 'dest': '/tools/cansave/patches/' + patch.id})">{{ patch.name }}</q-btn>
       </div>
       <div><q-input filled clearable v-model="address" label="Address" /></div>
       <div>
@@ -65,7 +65,7 @@ function getDefaultSource() {
 
 export default defineComponent({
   name: 'DealBasicInfo',
-  emits: ['projectchanged'],
+  emits: ['projectchanged', 'navigate_away'],
   props: ['ever_saved'],
   components: {
     Weblinks,
@@ -296,5 +296,8 @@ export default defineComponent({
 .basic-info-seperator {
   margin-top: 10px;
   margin-bottom: 10px;
+}
+.brrcalc-dealbasicinfo-patch {
+  padding-bottom: 10px;
 }
 </style>
