@@ -11,19 +11,7 @@
         no-data-label="I didn't find anything for you"
         no-results-label="The filter didn't uncover any results"
         row-key="name"
-      ><!--
-        <template v-slot:body-cell-address="props">
-          <q-td @click="onRowClick(props.row)">
-            <div v-if="!props.row.loaded">
-              Loading...
-            </div>
-            <div v-if="props.row.loaded">
-              {{ props.row.item.sub_section_details.dealbasicinfo.address }}
-            </div>
-          </q-td>
-        </template>
--->
-
+      >
         <template v-slot:body-cell-visionandnotes="props">
           <q-td @click="onRowClick(props.row)">
             <div v-if="props.row.loaded">
