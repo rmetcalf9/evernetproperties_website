@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="row" v-if="security_role_cansave">
-        <q-card inline class="q-ma-sm card-style tool-card featurecard" @click="click_myprojects_card">
+        <q-card inline class="q-ma-sm card-style tool-card featurecard" @click="$router.push('/tools/cansave/patches')">
           <q-card-section>
             <div class="text-h6">My Projects</div>
             <div class="row">
@@ -55,11 +55,27 @@
         <CommonBRRToolLink
           :ppbmainpage="true"
         />
+        <q-card inline class="q-ma-sm card-style tool-card featurecard" @click="$router.push('/tools/cansave/todo')">
+          <q-card-section>
+            <div class="text-h6">My Todo List</div>
+            <div class="row">
+              <div>
+                <q-icon name="rule" size="150px" class="tool-picture" />
+              </div>
+              <div class="col q-ma-sm">
+                <div style="height: 150px;">View your saved actions across all your projects</div>
+                <div align="right">
+                  <q-btn round  color="primary" icon="info" />
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
       </div>
       <h3 style="margin-bottom: 0px;">Tools</h3>
       Useful tools and calculators for property tasks.
       <div class="row">
-        <q-card inline class="q-ma-sm card-style tool-card" @click="click_simproi_card">
+        <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('/tools/simpleroicalc')">
           <q-card-section>
             <div class="text-h6">Simple ROI Calculator</div>
             <div class="row">
@@ -80,7 +96,7 @@
           </q-card-section>
         </q-card>
         <CommonBRRToolLink />
-        <q-card inline class="q-ma-sm card-style tool-card" @click="click_flip_card">
+        <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('/tools/flipcalc')">
           <q-card-section>
             <div class="text-h6">Flip Calculator</div>
             <div class="row">
@@ -102,7 +118,7 @@
         </q-card>
 
         <!-- HMO HmoCommercialValuationCalc -->
-        <q-card inline class="q-ma-sm card-style tool-card" @click="click_hmocommercialvaluecalc_card">
+        <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('/tools/hmocommercialvaluecalc')">
           <q-card-section>
             <div class="text-h6">HMO Commercial Valuation Calculator</div>
             <div class="row">
@@ -164,21 +180,6 @@ export default defineComponent({
     }
   },
   methods: {
-    click_simproi_card () {
-      this.$router.push('/tools/simpleroicalc')
-    },
-    click_brrr_card () {
-      this.$router.push('/tools/brrcalc')
-    },
-    click_flip_card () {
-      this.$router.push('/tools/flipcalc')
-    },
-    click_myprojects_card () {
-      this.$router.push('/tools/cansave/patches')
-    },
-    click_hmocommercialvaluecalc_card () {
-      this.$router.push('/tools/hmocommercialvaluecalc')
-    }
   }
 })
 </script>

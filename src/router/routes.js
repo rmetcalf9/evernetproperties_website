@@ -36,6 +36,7 @@ const routes = [
     children: [
       { path: 'tools/cansave/patches', component: () => import('pages/tools/cansave/Patches.vue') },
       { path: 'tools/cansave/patches/:patchid', component: () => import('pages/tools/cansave/Patch.vue') },
+      { path: 'tools/cansave/todo', component: () => import('pages/tools/cansave/Todo.vue') },
     ]
   },
 
