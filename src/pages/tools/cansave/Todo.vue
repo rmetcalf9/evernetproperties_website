@@ -4,7 +4,20 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded">
-      <div>TODO</div>
+      <h1>My Todos</h1>
+      <q-table
+        flat bordered
+        title="Todo Items"
+        :rows="loaded_todo_data"
+        :columns="columns"
+        :filter="filter"
+        :pagination="initialPagination"
+        no-data-label="No todos foudn"
+        no-results-label="No results matching this filter"
+        row-key="name"
+      >
+      </q-table>
+      <div>TODO {{ loaded_todo_data }}</div>
     </div>
   </q-page>
 </template>
@@ -26,7 +39,73 @@ export default defineComponent({
   },
   data () {
     return {
-      loaded: false
+      loaded: false,
+      loaded_todo_data: undefined,
+      filter: '',
+      columns: [
+        {
+          name: 'project',
+          required: true,
+          label: 'Project',
+          align: 'left',
+          field: 'project_name',
+          sortable: true
+        },
+        {
+          name: 'group',
+          required: true,
+          label: 'Group',
+          align: 'left',
+          field: 'group',
+          sortable: true
+        },
+        {
+          name: 'description',
+          required: true,
+          label: 'Description',
+          align: 'left',
+          field: 'description',
+          sortable: true
+        },
+        {
+          name: 'due',
+          required: true,
+          label: 'Due',
+          align: 'left',
+          field: 'due',
+          sortable: true
+        },
+        {
+          name: 'due_date',
+          required: true,
+          label: 'Due Date',
+          align: 'left',
+          field: 'due_date',
+          sortable: true
+        },
+        {
+          name: 'done',
+          required: true,
+          label: 'Done',
+          align: 'left',
+          field: 'done',
+          sortable: true
+        },
+        {
+          name: 'done_date',
+          required: true,
+          label: 'Done Date',
+          align: 'left',
+          field: 'done_date',
+          sortable: true
+        }
+      ],
+      initialPagination: {
+        // sortBy: 'desc',
+        // descending: false,
+        // page: 2,
+        rowsPerPage: 50
+      }
     }
   },
   computed: {
@@ -47,13 +126,14 @@ export default defineComponent({
       }
       this.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/patchesxxx/' + TTT.$route.params.patchid,
+        url: '/me/todos',
         method: 'GET',
         data: undefined,
         callback: callback
       })
     },
     refresh_success (response) {
+      this.loaded_todo_data = response.data.todos
       Notify.create({
         color: 'negative',
         message: 'Not implemented',
