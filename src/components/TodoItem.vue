@@ -1,7 +1,7 @@
 <template>
   <div v-if="typeof (todo) !== 'undefined'" :class="get_item_class">
     <div class="col-grow">
-      <div v-if="include_project">Project: {{ todo.project_name }}</div>
+      <div v-if="include_project">Project: <RouterLink style="color: white;" :to="'/tools/brrcalc?projectid=' + todo.project_id">{{ todo.project_name }}</RouterLink></div>
       <div>Type: {{ get_todo_item_type(todo.type) }}</div>
       <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
       <div v-html="get_multiline_html(todo.description)"></div>
@@ -17,7 +17,7 @@
     <q-dialog v-model="dialog_visible">
       <q-card class="todoitem-dialogcard">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">Edit Todo ITem</div>
+          <div class="text-h6">Edit Todo Item</div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>

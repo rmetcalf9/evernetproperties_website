@@ -7,7 +7,7 @@
       <h1>My Todos</h1>
       <div v-if="!table_mode">
         <div>
-          <div class="flex">Due:
+          <div class="flex">Group:
               <q-option-group
                 v-model="group_by"
                 :options="group_by_options"
@@ -17,7 +17,12 @@
           </div>
         </div>
         <div v-for="group in display_groups" :key="group.name">
-          <h2>{{ group.name }}</h2>
+          <div v-if="typeof (group.link_url) === 'undefined'">
+            <h2>{{ group.name }}</h2>
+          </div>
+          <div v-if="typeof (group.link_url) !== 'undefined'">
+            <h2>{{ group.name }} <q-btn color="primary" icon="arrow_forward" @click="$router.push(group.link_url)" /></h2>
+          </div>
           <div class="row">
             <div v-for="todo_item in group.due_items" :key="todo_item.id">
               <TodoItem
@@ -155,6 +160,7 @@ export default defineComponent({
       let groups = {
         '': {
           name: '',
+          link_url: undefined,
           filter: undefined
         }
       }
@@ -170,6 +176,7 @@ export default defineComponent({
           if (TTT.group_by === 'group') {
             groups[item.group] = {
               name: item.group,
+              link_url: undefined,
               filter: function (x) {
                 return x.group === item.group
               }
@@ -178,8 +185,9 @@ export default defineComponent({
           if (TTT.group_by === 'project') {
             groups[item.project_name] = {
               name: item.project_name,
+              link_url: '/tools/brrcalc?projectid=' + item.project_id,
               filter: function (x) {
-                return true
+                return x.project_id === item.project_id
               }
             }
           }
@@ -189,12 +197,13 @@ export default defineComponent({
         if (typeof (groups[x].filter) !== 'undefined') {
           let name = groups[x].name
           if (name === '') {
-            name = 'No Group'
+            name = 'Ungrouped'
           }
           ret_val.push({
-            'name': name,
-            'due_items': TTT.loaded_todo_data.filter(groups[x].filter).filter(function (x) { return x.due }),
-            'nondue_items': TTT.loaded_todo_data.filter(groups[x].filter).filter(function (x) { return !x.due })
+            name: name,
+            link_url: groups[x].link_url,
+            due_items: TTT.loaded_todo_data.filter(groups[x].filter).filter(function (x) { return x.due }),
+            nondue_items: TTT.loaded_todo_data.filter(groups[x].filter).filter(function (x) { return !x.due })
           })
         }
       })
