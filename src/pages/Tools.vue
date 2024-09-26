@@ -55,7 +55,7 @@
         <CommonBRRToolLink
           :ppbmainpage="true"
         />
-        <!-- <q-card inline class="q-ma-sm card-style tool-card featurecard" @click="$router.push('/tools/cansave/todo')">
+        <q-card inline class="q-ma-sm card-style tool-card featurecard" @click="$router.push('/tools/cansave/todo')">
           <q-card-section>
             <div class="text-h6">My Todo List</div>
             <div class="row">
@@ -70,7 +70,7 @@
               </div>
             </div>
           </q-card-section>
-        </q-card> -->
+        </q-card>
       </div>
       <h3 style="margin-bottom: 0px;">Tools</h3>
       Useful tools and calculators for property tasks.
