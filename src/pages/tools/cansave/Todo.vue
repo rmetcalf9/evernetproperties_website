@@ -198,7 +198,7 @@ export default defineComponent({
       }
       this.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/me/todos',
+        url: '/me/todos?done=false',
         method: 'GET',
         data: undefined,
         callback: callback
