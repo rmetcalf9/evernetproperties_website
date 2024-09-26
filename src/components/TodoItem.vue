@@ -1,6 +1,7 @@
 <template>
   <div v-if="typeof (todo) !== 'undefined'" :class="get_item_class">
     <div class="col-grow">
+      <div v-if="include_project">Project: {{ todo.project_name }}</div>
       <div>Type: {{ get_todo_item_type(todo.type) }}</div>
       <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
       <div v-html="get_multiline_html(todo.description)"></div>
@@ -83,7 +84,16 @@ function days_between(date1, date2) {
 
 export default defineComponent({
   name: 'BrrCalcTodoItem',
-  props: ['todo'],
+  props: {
+    todo: {
+      type: Object,
+      default: undefined
+    },
+    include_project: {
+      type: Boolean,
+      default: false
+    }
+  },
   emits: ['update_todo_item'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()

@@ -22,12 +22,14 @@
             <div v-for="todo_item in group.due_items" :key="todo_item.id">
               <TodoItem
                 :todo="todo_item"
+                :include_project="group_by != 'project'"
                 @update_todo_item='refresh'
               />
             </div>
             <div v-for="todo_item in group.nondue_items" :key="todo_item.id">
               <TodoItem
                 :todo="todo_item"
+                :include_project="group_by != 'project'"
                 @update_todo_item='refresh'
               />
             </div>
@@ -149,12 +151,6 @@ export default defineComponent({
   computed: {
     display_groups () {
       const TTT = this
-      if (this.group_by === 'none') {
-        return [{
-          name: '',
-          items: this.loaded_todo_data
-        }]
-      }
       let ret_val = []
       let groups = {
         '': {
@@ -162,24 +158,33 @@ export default defineComponent({
           filter: undefined
         }
       }
-      this.loaded_todo_data.forEach( function (item) {
-        if (TTT.group_by === 'group') {
-          groups[item.group] = {
-            name: item.group,
-            filter: function (x) {
-              return x.group === item.group
-            }
+      if (this.group_by === 'none') {
+        groups[''] = {
+          name: '',
+          filter: function (x) {
+            return true
           }
         }
-        if (TTT.group_by === 'project') {
-          groups[item.project_name] = {
-            name: item.project_name,
-            filter: function (x) {
-              return true
+      } else {
+        this.loaded_todo_data.forEach( function (item) {
+          if (TTT.group_by === 'group') {
+            groups[item.group] = {
+              name: item.group,
+              filter: function (x) {
+                return x.group === item.group
+              }
             }
           }
-        }
-      })
+          if (TTT.group_by === 'project') {
+            groups[item.project_name] = {
+              name: item.project_name,
+              filter: function (x) {
+                return true
+              }
+            }
+          }
+        })
+      }
       Object.keys(groups).map(function (x) {
         if (typeof (groups[x].filter) !== 'undefined') {
           let name = groups[x].name
