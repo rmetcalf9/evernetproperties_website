@@ -5,25 +5,27 @@
         <div class="text-h6 todos-card-head"><q-icon name="rule" size="30px" /> Todo Items</div>
         <div style="width: 100%; max-width: 400px">
           <div v-for="group in Object.keys(todo_groups)" :key='group'>
-            <div v-if="group !== ''" class="todos-grouptitle">{{ group }}</div>
-            <div>
-              <div v-for="todo in due_todos(group)" :key='todo.id' class="todos-duetodoitem flex col">
-                <div class="col-grow">
-                  <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-                  <div v-html="get_multiline_html(todo.description)"></div>
-                  <div>Due by: NOW!</div>
+            <div v-if="due_todos(group).length > 0">
+              <div v-if="group !== ''" class="todos-grouptitle">{{ group }}</div>
+              <div>
+                <div v-for="todo in due_todos(group)" :key='todo.id' class="todos-duetodoitem flex col">
+                  <div class="col-grow">
+                    <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                    <div v-html="get_multiline_html(todo.description)"></div>
+                    <div>Due by: NOW!</div>
+                  </div>
+                  <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
+                  <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
                 </div>
-                <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
-                <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
-              </div>
-              <div v-for="todo in notdone_todos(group)" :key='todo.id' class="todos-todoitem flex col">
-                <div class="col-grow">
-                  <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-                  <div v-html="get_multiline_html(todo.description)"></div>
-                  <div>Due in: {{ due_date_text(todo.due_date) }}</div>
+                <div v-for="todo in notdone_todos(group)" :key='todo.id' class="todos-todoitem flex col">
+                  <div class="col-grow">
+                    <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                    <div v-html="get_multiline_html(todo.description)"></div>
+                    <div>Due in: {{ due_date_text(todo.due_date) }}</div>
+                  </div>
+                  <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
+                  <div class="todos-btn"><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
                 </div>
-                <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
-                <div class="todos-btn"><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
               </div>
             </div>
           </div>
