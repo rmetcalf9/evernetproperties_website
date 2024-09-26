@@ -180,7 +180,7 @@ export default defineComponent({
       this.exec_update_todo_item(this.dialog_data.loaded_todo)
 
       this.dialog_visible = false
-    },    
+    },
     btn_mark_done (todo) {
       const TTT = this
       this.$q.dialog({
@@ -203,6 +203,7 @@ export default defineComponent({
         },
       }).onOk((data) => {
         todo.done_text = data
+        todo.done_date = new Date().toISOString() // This may mismatch what the backend did
         todo.done = true
         TTT.exec_update_todo_item(todo)
       })
