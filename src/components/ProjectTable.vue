@@ -11,9 +11,10 @@
         no-data-label="I didn't find anything for you"
         no-results-label="The filter didn't uncover any results"
         row-key="name"
+        @row-click="(evt, row, index) => onRowClick(row)"
       >
         <template v-slot:body-cell-visionandnotes="props">
-          <q-td @click="onRowClick(props.row)">
+          <q-td>
             <div v-if="props.row.loaded">
               <div class="projecttablehead">{{ props.row.devplan }}</div>
               <div v-if="typeof (props.row.notes) !== 'undefined'">
@@ -134,6 +135,7 @@ export default defineComponent({
       return this.projects.map(function (project) {
         if (!project.loaded) {
           return {
+            id: project.id,
             loaded: false,
             address: 'Loading...',
             source: '',
@@ -144,8 +146,8 @@ export default defineComponent({
             stage: ''
           }
         }
-        console.log('p', project.item.sub_section_details)
         return {
+          id: project.id,
           loaded: project.loaded,
           address: project.item.sub_section_details.dealbasicinfo.address,
           source: TTT.get_source_text(project),
