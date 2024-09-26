@@ -68,6 +68,7 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import common_constants from '../components/common_constants.js'
+import { Notify } from 'quasar'
 
 function days_between(date1, date2) {
     // The number of milliseconds in one day
@@ -112,12 +113,12 @@ export default defineComponent({
   computed: {
     get_item_class () {
       if (this.todo.done) {
-        return 'todoitem-tododoneitem'
+        return 'todoitem-tododoneitem todoitem-all'
       }
       if (this.todo.due) {
-        return 'todoitem-duetodoitem flex col'
+        return 'todoitem-duetodoitem todoitem-all flex col'
       }
-      return 'todoitem-todoitem flex col'
+      return 'todoitem-todoitem todoitem-all flex col'
     }
   },
   methods: {
@@ -229,7 +230,7 @@ export default defineComponent({
       }
       TTT.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + TTT.$route.query.projectid + '/todos',
+        url: '/projects/' + todo.project_id + '/todos',
         method: 'POST',
         data: todo,
         callback: callback
@@ -240,27 +241,25 @@ export default defineComponent({
 </script>
 
 <style>
-.todoitem-duetodoitem {
+.todoitem-all {
   margin: 10px;
   padding: 10px;
   border-style: solid;
   border-width: 5px;
+  max-width: 300px;
+  min-width: 250px;
+}
+.todoitem-duetodoitem {
   border-color: lightgrey;
   background-color: darkred;
+  color: white;
 }
 .todoitem-todoitem {
-  margin: 10px;
-  padding: 10px;
-  border-style: solid;
-  border-width: 5px;
   border-color: lightgrey;
   background-color: grey;
+  color: white;
 }
 .todoitem-tododoneitem {
-  margin: 10px;
-  padding: 10px;
-  border-style: solid;
-  border-width: 5px;
   border-color: lightgrey;
   background-color: lightgrey;
   color: black;

@@ -18,8 +18,19 @@
         </div>
         <div v-for="group in display_groups" :key="group.name">
           <h2>{{ group.name }}</h2>
-          <div v-for="todo_item in group.items" :key="todo_item.id">
-            {{ todo_item }}
+          <div class="row">
+            <div v-for="todo_item in group.due_items" :key="todo_item.id">
+              <TodoItem
+                :todo="todo_item"
+                @update_todo_item='refresh'
+              />
+            </div>
+            <div v-for="todo_item in group.nondue_items" :key="todo_item.id">
+              <TodoItem
+                :todo="todo_item"
+                @update_todo_item='refresh'
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -44,10 +55,12 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
+import TodoItem from '../../../components/TodoItem.vue'
 
 export default defineComponent({
   name: 'ToolsCansaveTodoPage',
   components: {
+    TodoItem
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -175,7 +188,8 @@ export default defineComponent({
           }
           ret_val.push({
             'name': name,
-            'items': TTT.loaded_todo_data.filter(groups[x].filter)
+            'due_items': TTT.loaded_todo_data.filter(groups[x].filter).filter(function (x) { return x.due }),
+            'nondue_items': TTT.loaded_todo_data.filter(groups[x].filter).filter(function (x) { return !x.due })
           })
         }
       })
