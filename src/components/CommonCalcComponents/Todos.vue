@@ -8,38 +8,56 @@
             <div v-if="due_todos(group).length > 0">
               <div v-if="group !== ''" class="todos-grouptitle">{{ group }}</div>
               <div>
-                <div v-for="todo in due_todos(group)" :key='todo.id' class="todos-duetodoitem flex col">
-                  <div class="col-grow">
-                    <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-                    <div v-html="get_multiline_html(todo.description)"></div>
-                    <div>Due by: NOW!</div>
+                <div v-for="todo in due_todos(group)" :key='todo.id'>
+                  <TodoItem
+                    :todo="todo"
+                    @update_todo_item='update_todo_item'
+                  />
+                  <div  class="todos-duetodoitem">
+                    <div class="col-grow">
+                      <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                      <div v-html="get_multiline_html(todo.description)"></div>
+                      <div>Due by: NOW!</div>
+                    </div>
+                    <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
+                    <div class="todos-btn"><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
                   </div>
-                  <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
-                  <div><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
                 </div>
-                <div v-for="todo in notdone_todos(group)" :key='todo.id' class="todos-todoitem flex col">
-                  <div class="col-grow">
-                    <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-                    <div v-html="get_multiline_html(todo.description)"></div>
-                    <div>Due in: {{ due_date_text(todo.due_date) }}</div>
+                <div v-for="todo in notdone_todos(group)" :key='todo.id'>
+                  <TodoItem
+                    :todo="todo"
+                    @update_todo_item='update_todo_item'
+                  />
+                  <div  class="todos-todoitem">
+                    <div class="col-grow">
+                      <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                      <div v-html="get_multiline_html(todo.description)"></div>
+                      <div>Due in: {{ due_date_text(todo.due_date) }}</div>
+                    </div>
+                    <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
+                    <div class="todos-btn"><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
                   </div>
-                  <div class="todos-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
-                  <div class="todos-btn"><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
                 </div>
               </div>
             </div>
           </div>
           <div>
             <div>Completed Items</div>
-            <div v-for="todo in done_todos" :key='todo.id' class="todos-tododoneitem flex col">
-              <div class="col-grow">
-                <div>Type: {{ get_todo_item_type(todo.type) }}</div>
-                <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
-                <div v-html="get_multiline_html(todo.description)"></div>
-                <div>Completion Notes: {{ todo.done_text }}</div>
-                <div>Date Completed: {{ done_date_text(todo.done_date) }}</div>
+            <div v-for="todo in done_todos" :key='todo.id'>
+              <TodoItem
+                :todo="todo"
+                @update_todo_item='update_todo_item'
+              />
+              <div  class="todos-tododoneitem">
+                <div class="col-grow">
+                  <div>Type: {{ get_todo_item_type(todo.type) }}</div>
+                  <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
+                  <div v-html="get_multiline_html(todo.description)"></div>
+                  <div>Completion Notes: {{ todo.done_text }}</div>
+                  <div>Date Completed: {{ done_date_text(todo.done_date) }}</div>
+                </div>
+                <div><q-btn label="Mark Undone" color="secondary" @click="btn_mark_undone(todo)" /></div>
               </div>
-              <div><q-btn label="Mark Undone" color="secondary" @click="btn_mark_undone(todo)" /></div>
             </div>
           </div>
         </div>
@@ -100,8 +118,10 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import common_constants from '../../components/common_constants.js'
+import TodoItem from '../../components/TodoItem.vue'
 
 function days_between(date1, date2) {
+    // needs to be removed
     // The number of milliseconds in one day
     const ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -114,6 +134,9 @@ function days_between(date1, date2) {
 
 export default defineComponent({
   name: 'BrrCalcTodos',
+  components: {
+    TodoItem
+  },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -158,9 +181,11 @@ export default defineComponent({
   },
   methods: {
     get_multiline_html (text) {
+      // This needs to be removed
       return text.replaceAll('\n', '<br/>')
     },
     click_dialog_ok () {
+      // This needs to be removed
       this.dialog_data.loaded_todo.description = this.dialog_data.description
       this.dialog_data.loaded_todo.type = this.dialog_data.type
       this.dialog_data.loaded_todo.group = this.dialog_data.group
@@ -174,6 +199,7 @@ export default defineComponent({
       this.dialog_visible = false
     },
     helpgrouping () {
+      // needs to be removed
       this.$q.dialog({
         title: 'Todo Item Grouping',
         message: 'The grouping field can be left blank. It can be used to group todo items together in displays.',
@@ -183,6 +209,7 @@ export default defineComponent({
       })
     },
     btn_edit(todo) {
+      // needs to be removed
       this.dialog_data.description = todo.description
       this.dialog_data.type = todo.type
       this.dialog_data.group = todo.group
@@ -202,11 +229,13 @@ export default defineComponent({
       })
     },
     get_todo_item_type (type) {
+      // This needs tobe moved deleted
       return common_constants.todo_item_types.filter(function (x) {
         return x.value===type
       })[0].label
     },
     due_date_text (due_date) {
+      // this needs to be removed
       const num_days_between = days_between(new Date(), new Date(due_date))
       if (num_days_between === 1) {
         return num_days_between + ' day'
@@ -214,6 +243,7 @@ export default defineComponent({
       return num_days_between + ' days'
     },
     done_date_text (done_date) {
+      // this needs to be removed
       const js_date_obj = new Date(done_date)
       const options = {
         weekday: "short",
@@ -231,6 +261,7 @@ export default defineComponent({
       this.todos.push(item)
     },
     btn_mark_done (todo) {
+      // needs to be removed
       const TTT = this
       this.$q.dialog({
         title: 'Completion Notes',
@@ -257,10 +288,12 @@ export default defineComponent({
       })
     },
     btn_mark_undone (todo) {
+      // needs to be removed
       todo.done = false
       this.exec_update_todo_item(todo)
     },
     exec_update_todo_item (todo) {
+      // needs to be removed
       const TTT = this
       const callback = {
         ok: function (response) {
@@ -284,6 +317,12 @@ export default defineComponent({
         method: 'POST',
         data: todo,
         callback: callback
+      })
+    },
+    update_todo_item (todo) {
+      TTT.todos = TTT.todos.map(function(x) {
+        if (x.id == todo.id) {x = response.data.todo}
+        return x
       })
     }
   }
