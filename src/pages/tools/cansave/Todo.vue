@@ -5,7 +5,26 @@
     </div>
     <div v-if="loaded">
       <h1>My Todos</h1>
+      <div v-if="!table_mode">
+        <div>
+          <div class="flex">Due:
+              <q-option-group
+                v-model="group_by"
+                :options="group_by_options"
+                color="primary"
+                inline
+              />
+          </div>
+        </div>
+        <div v-for="group in display_groups" :key="group.name">
+          <div>{{ group.name }}</div>
+          <div v-for="todo_item in group.items" :key="todo_item.id">
+            {{ todo_item }}
+          </div>
+        </div>
+      </div>
       <q-table
+        v-if="table_mode"
         flat bordered
         title="Todo Items"
         :rows="loaded_todo_data"
@@ -17,7 +36,6 @@
         row-key="name"
       >
       </q-table>
-      <div>TODO {{ loaded_todo_data }}</div>
     </div>
   </q-page>
 </template>
@@ -40,7 +58,14 @@ export default defineComponent({
   data () {
     return {
       loaded: false,
+      table_mode: false,
       loaded_todo_data: undefined,
+      group_by: 'group',
+      group_by_options: [
+        {label: 'None', value: 'none'},
+        {label: 'Group', value: 'group'},
+        {label: 'Project', value: 'project'}
+      ],
       filter: '',
       columns: [
         {
@@ -109,6 +134,42 @@ export default defineComponent({
     }
   },
   computed: {
+    display_groups () {
+      const TTT = this
+      if (this.group_by === 'none') {
+        return [{
+          name: '',
+          items: this.loaded_todo_data
+        }]
+      }
+      let ret_val = []
+      let groups = {}
+      this.loaded_todo_data.forEach( function (item) {
+        if (TTT.group_by === 'group') {
+          groups[item.group] = {
+            name: item.group,
+            filter: function (x) {
+              return x.group === item.group
+            }
+          }
+        }
+        if (TTT.group_by === 'project') {
+          groups[item.project_name] = {
+            name: item.project_name,
+            filter: function (x) {
+              return true
+            }
+          }
+        }
+      })
+      Object.keys(groups).map(function (x) {
+        ret_val.push({
+          'name': groups[x].name,
+          'items': TTT.loaded_todo_data.filter(groups[x].filter)
+        })
+      })
+      return ret_val
+    }
   },
   methods: {
     refresh () {
@@ -134,11 +195,6 @@ export default defineComponent({
     },
     refresh_success (response) {
       this.loaded_todo_data = response.data.todos
-      Notify.create({
-        color: 'negative',
-        message: 'Not implemented',
-        timeout: 2000
-      })
       this.loaded = true
     }
   },
