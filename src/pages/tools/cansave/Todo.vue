@@ -17,7 +17,7 @@
           </div>
         </div>
         <div v-for="group in display_groups" :key="group.name">
-          <div>{{ group.name }}</div>
+          <h2>{{ group.name }}</h2>
           <div v-for="todo_item in group.items" :key="todo_item.id">
             {{ todo_item }}
           </div>
@@ -143,7 +143,12 @@ export default defineComponent({
         }]
       }
       let ret_val = []
-      let groups = {}
+      let groups = {
+        '': {
+          name: '',
+          filter: undefined
+        }
+      }
       this.loaded_todo_data.forEach( function (item) {
         if (TTT.group_by === 'group') {
           groups[item.group] = {
@@ -163,10 +168,16 @@ export default defineComponent({
         }
       })
       Object.keys(groups).map(function (x) {
-        ret_val.push({
-          'name': groups[x].name,
-          'items': TTT.loaded_todo_data.filter(groups[x].filter)
-        })
+        if (typeof (groups[x].filter) !== 'undefined') {
+          let name = groups[x].name
+          if (name === '') {
+            name = 'No Group'
+          }
+          ret_val.push({
+            'name': name,
+            'items': TTT.loaded_todo_data.filter(groups[x].filter)
+          })
+        }
       })
       return ret_val
     }
@@ -217,9 +228,9 @@ export default defineComponent({
   margin-bottom: 10px;
 }
 .todopageclass h2 {
-  font-size: 3rem;
-  font-weight: 300;
+  font-size: 2rem;
+  font-weight: 600;
   margin-top: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 </style>
