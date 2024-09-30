@@ -5,8 +5,22 @@
       <div class="text-subtitle2">Other costs to be considered</div>
     </q-card-section>
     <q-card-section>
-      <div class="text-h6">Solicitors Fees: {{ format_currency(fees.min) }} - {{ format_currency(fees.max) }}</div>
-      <div>Likely value - fees may vary depending on project</div>
+      <div class="text-h6">Solicitors Fees: {{ format_currency(solicitors_fees.min) }} - {{ format_currency(solicitors_fees.max) }}</div>
+      <div><q-checkbox v-model="this.solicitors_fees_manual" label="Enter Manually" @click="click_manual_solicitors_fees" /></div>
+      <div v-if="this.solicitors_fees_manual">
+        <SliderWithTextInput
+          ref="slider"
+          v-model:range="solicitors_fees"
+          min_prefix="Min £"
+          max_prefix="Max £"
+          min_label_text="Min Fees"
+          max_label_text="Max Fees"
+          :min="0"
+          :max="10000"
+          :step="500"
+        />
+      </div>
+      <div v-if="!this.solicitors_fees_manual">Likely value - fees may vary depending on project</div>
     </q-card-section>
     <q-card-section>
       <div class="text-h6">Auction</div>
@@ -61,6 +75,7 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from '../utils.js'
+import SliderWithTextInput from '../../components/SliderWithTextInput.vue'
 
 const ricssurveycostranges = {
   l1: {
@@ -119,13 +134,23 @@ const ricssurveycostranges = {
   },
 }
 
+function get_default_solicitors_fees() {
+  return {
+    min: 2300,
+    max: 2300
+  }
+}
+
 export default defineComponent({
   name: 'BrrCalcOtherCosts',
   emits: ['projectchanged'],
   props: ['purchaserange'],
+  components: {SliderWithTextInput},
   data () {
     return {
       emit_project_change_notification: true,
+      solicitors_fees: get_default_solicitors_fees(),
+      solicitors_fees_manual: false,
       auction: false,
       survey: {
         type: 'l3',
@@ -174,6 +199,36 @@ export default defineComponent({
     }
   },
   methods: {
+    click_manual_solicitors_fees () {
+      const TTT = this
+      let ok = false
+      if (!this.solicitors_fees_manual) {
+        this.$q.dialog({
+          title: 'Remove Solicitor Fee Manual Entey',
+          message: 'This will revert to the default value. Are you sure?',
+          html: false,
+          ok: {
+            push: true,
+            label: 'Yes',
+            color: 'primary'
+          },
+          cancel: {
+            push: true,
+            label: 'Cancel',
+            color: 'primary'
+          }
+        }).onOk((data) => {
+          ok = true
+          this.solicitors_fees = get_default_solicitors_fees()
+        }).onCancel(() => {
+          this.solicitors_fees_manual = true
+        }).onDismiss(() => {
+          if (!ok) {
+            this.solicitors_fees_manual = true
+          }
+        })
+      }
+    },
     format_currency (num) {
       return utils.format_currency(num)
     },
@@ -193,6 +248,13 @@ export default defineComponent({
       this.sourcing.usesourcing = data_to_load.sourcing_usesourcing
       this.sourcing.custom = data_to_load.sourcing_custom
       this.sourcing.type = data_to_load.sourcing_type
+      if (typeof (data_to_load.solicitors_fees_manual) === 'undefined') {
+        this.solicitors_fees_manual = false
+        this.solicitors_fees = get_default_solicitors_fees()
+      } else {
+        this.solicitors_fees_manual = data_to_load.solicitors_fees_manual
+        this.solicitors_fees = data_to_load.solicitors_fees
+      }
 
       const TTT = this
       setTimeout(function () {
@@ -215,6 +277,8 @@ export default defineComponent({
         sourcing_usesourcing: this.sourcing.usesourcing,
         sourcing_custom: this.sourcing.custom,
         sourcing_type: this.sourcing.type,
+        solicitors_fees_manual: this.solicitors_fees_manual,
+        solicitors_fees: this.solicitors_fees
       }
     },
     surveyfeetext () {
@@ -281,12 +345,6 @@ export default defineComponent({
         max: this.purchaserange.max * 0.02
       }
     },
-    fees () {
-      return {
-        min: 2300,
-        max: 2300
-      }
-    },
     total () {
       let total = {
         min: 0,
@@ -305,7 +363,7 @@ export default defineComponent({
     },
     othercosts_items_detail () {
       let ret_val = []
-      ret_val.push({name: 'Fees', worst: -1 * this.fees.max, best: -1 * this.fees.min})
+      ret_val.push({name: 'Fees', worst: -1 * this.solicitors_fees.max, best: -1 * this.solicitors_fees.min})
       if (this.auction) {
         ret_val.push({name: 'Auction Survey', worst: -1 * this.consts.auction_survey, best: -1 * this.consts.auction_survey})
         ret_val.push({name: 'Auction Legal Review', worst: -1 * this.consts.auction_legal_review, best: -1 * this.consts.auction_legal_review})
