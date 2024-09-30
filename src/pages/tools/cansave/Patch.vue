@@ -4,8 +4,22 @@
       <h1>Loading...</h1>
     </div>
     <div v-if="loaded">
-      <div v-if="table_view">
-        <h1>{{ patch_data.name }}</h1>
+      <h1 v-if="tab !== 'workflow'">{{ patch_data.name }}</h1>
+      <q-tabs
+        v-if="tab !== 'workflow'"
+        v-model="tab"
+        dense
+        class="text-grey"
+        active-color="primary"
+        indicator-color="primary"
+        align="justify"
+        narrow-indicator
+      >
+        <q-tab name="projects" label="Projects" />
+        <q-tab name="todos" label="Todos" />
+        <q-tab name="workflow" label="Workflow" />
+      </q-tabs>
+      <div v-if="tab === 'projects'">
         <h2>Projects <q-btn color="primary" icon="account_tree" label="Workflow" @click="table_view = false" /></h2>
         <div
           v-if="isStageSelected"
@@ -21,7 +35,7 @@
         </div>
         <q-btn color="primary" label="Add Project" @click="clicknewproject" />
       </div>
-      <div v-if="!table_view">
+      <div v-if="tab === 'workflow'">
         <WrokflowChart
           :patch_data="patch_data"
           @onclickstage="onchartclickstage"
@@ -63,7 +77,7 @@ export default defineComponent({
         workflow_id: undefined,
         stage_id: undefined
       },
-      table_view: true
+      tab: 'projects'
     }
   },
   watch: {
@@ -114,7 +128,7 @@ export default defineComponent({
         stage_id: stage_id
       }
       this.recompute_filtered_projects()
-      this.table_view = true
+      this.tab = 'projects'
     },
     clicknewproject () {
       this.$router.push('/tools/brrcalc?patchid=' + this.$route.params.patchid)
