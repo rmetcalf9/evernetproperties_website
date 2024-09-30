@@ -52,6 +52,12 @@ import TodoItem from './TodoItem.vue'
 
 export default defineComponent({
   name: 'TodoDisplayComponent',
+  props: {
+    patch_id: {
+      type: String,
+      default: undefined
+    }
+  },
   components: {
     TodoItem
   },
@@ -133,6 +139,10 @@ export default defineComponent({
   methods: {
     refresh () {
       const TTT = this
+      let url = '/me/todos?done=false'
+      if (typeof (this.patch_id) !== 'undefined') {
+        url = '/me/todos?done=false&patch_id=' + this.patch_id
+      }
       const callback = {
         ok: TTT.refresh_success,
         error: function (response) {
@@ -146,7 +156,7 @@ export default defineComponent({
       }
       this.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/me/todos?done=false',
+        url: url,
         method: 'GET',
         data: undefined,
         callback: callback

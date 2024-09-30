@@ -35,6 +35,11 @@
         </div>
         <q-btn color="primary" label="Add Project" @click="clicknewproject" />
       </div>
+      <div v-if="tab === 'todos'">
+        <TodoDisplay
+          :patch_id="patch_data.id"
+        />
+      </div>
       <div v-if="tab === 'workflow'">
         <WrokflowChart
           :patch_data="patch_data"
@@ -54,12 +59,13 @@ import ProjectTable from '../../../components/ProjectTable.vue'
 import WrokflowChart from '../../../components/Workflow/Chart.vue'
 
 import Workflow_main from '../../../components/Workflow/Workflow_main.js'
+import TodoDisplay from '../../../components/TodoDisplay.vue'
 
 
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
   components: {
-    ProjectTable, WrokflowChart
+    ProjectTable, WrokflowChart, TodoDisplay
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
