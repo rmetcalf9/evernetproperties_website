@@ -5,7 +5,7 @@
       <div>Type: {{ get_todo_item_type(todo.type) }}</div>
       <div v-if="todo.group !== ''">Group: {{ todo.group }}</div>
       <div v-html="get_multiline_html(todo.description)"></div>
-      <div>{{ due_date_text(todo) }}</div>
+      <div v-if="!todo.done">{{ due_date_text(todo) }}</div>
       <div v-if="todo.done">Completion Notes: {{ todo.done_text }}</div>
       <div v-if="todo.done">Date Completed: {{ done_date_text(todo.done_date) }}</div>
     </div>
