@@ -26,6 +26,10 @@
                         </div>
                       </div>
                     </div>
+                    <div class="todo_stage_block" v-if="num_todos(patch)>0">
+                      <h1>Todos</h1>
+                      <div>Due: {{ todo_text(patch) }}</div>
+                    </div>
                   </div>
                   <q-btn round  color="primary" icon="info" />
                 </div>
@@ -71,6 +75,30 @@ export default defineComponent({
     }
   },
   methods: {
+    todo_text (patch) {
+      let due = 0
+      let notdue = 0
+      let done = 0
+
+      Object.keys(patch.detail.todogroups).forEach(function (x) {
+        due = due + patch.detail.todogroups[x].due
+        notdue = notdue + patch.detail.todogroups[x].not_due.length
+        done = done + patch.detail.todogroups[x].done
+      })
+      return due.toString() + '/' + (notdue + due).toString() + ' (' + done.toString() + ')'
+    },
+    num_todos (patch) {
+      let due = 0
+      let notdue = 0
+      let done = 0
+
+      Object.keys(patch.detail.todogroups).forEach(function (x) {
+        due = due + patch.detail.todogroups[x].due
+        notdue = notdue + patch.detail.todogroups[x].not_due.length
+        done = done + patch.detail.todogroups[x].done
+      })
+      return due + notdue + done
+    },
     get_workflow_name (workflow_type_id) {
       return Workflow_main.workflows[workflow_type_id].name
     },
@@ -145,6 +173,16 @@ export default defineComponent({
   padding: 0px;
   border: 0px;
   margin: 0px;
+  line-height: 1rem;
+}
+
+.todo_stage_block h1 {
+  font-size: 1rem;
+  font-weight: 800;
+  padding: 0px;
+  border: 0px;
+  margin-top: 5px;
+  margin-bottom: 0px;
   line-height: 1rem;
 }
 </style>

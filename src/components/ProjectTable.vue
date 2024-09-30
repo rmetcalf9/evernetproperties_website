@@ -13,6 +13,10 @@
         row-key="name"
         @row-click="(evt, row, index) => onRowClick(row)"
       >
+        <template v-slot:header-cell-todo="">
+          <th align="left">Todo<br>due/total (done)</th>
+        </template>
+
         <template v-slot:body-cell-visionandnotes="props">
           <q-td>
             <div v-if="props.row.loaded">
@@ -116,6 +120,14 @@ export default defineComponent({
           align: 'left',
           field: 'selling_agent',
           sortable: true
+        },
+        {
+          name: 'todo',
+          required: true,
+          label: 'Todos',
+          align: 'left',
+          field: 'todo',
+          sortable: false
         }
       ],
       initialPagination: {
@@ -143,7 +155,8 @@ export default defineComponent({
             vandnotes: '',
             devplan: '',
             notes: '',
-            stage: ''
+            stage: '',
+            todo: ''
           }
         }
         return {
@@ -155,12 +168,30 @@ export default defineComponent({
           vandnotes: 'NOT DISPLAYED',
           devplan: project.item.sub_section_details.vision.devplan,
           notes: project.item.sub_section_details.dealbasicinfo.notes,
-          stage: TTT.getWorkflowStage(project.item.workflow).name
+          stage: TTT.getWorkflowStage(project.item.workflow).name,
+          todo: TTT.get_todo_text(project)
         }
       })
     }
   },
   methods: {
+    get_todo_text (project) {
+      let notdue = 0
+      let due = 0
+      let done = 0
+      if (typeof (project.item.todos) !== 'undefined') {
+        notdue = project.item.todos.filter(function (x) {
+          return !x.done && !x.due
+        }).length
+        due = project.item.todos.filter(function (x) {
+          return !x.done && x.due
+        }).length
+        done = project.item.todos.filter(function (x) {
+          return x.done
+        }).length
+      }
+      return due.toString() + '/' + (notdue + due).toString() + ' (' + done.toString() + ')'
+    },
     get_source_text (row) {
       if (typeof (row.item.sub_section_details.dealbasicinfo.deal_source) === 'undefined') {
         return 'Self'
