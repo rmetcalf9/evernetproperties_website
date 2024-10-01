@@ -95,7 +95,7 @@ export default defineComponent({
           label: 'Stage',
           align: 'left',
           field: 'stage',
-          sortable: false
+          sortable: true
         },
         {
           name: 'visionandnotes',
