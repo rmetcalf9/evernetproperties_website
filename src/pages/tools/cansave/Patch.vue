@@ -20,7 +20,7 @@
         <q-tab name="workflow" label="Workflow" />
       </q-tabs>
       <div v-if="tab === 'projects'">
-        <h2>Projects <q-btn color="primary" icon="account_tree" label="Workflow" @click="table_view = false" /></h2>
+        <h2>Projects</h2>
         <div
           v-if="isStageSelected"
           class="selected_stage"
