@@ -8,6 +8,6 @@ function get_workflows () {
 }
 
 export default {
-  default_workflow_id: 1, // ID of workflow to give a project that has no workflow
+  default_workflow_id: '1', // ID of workflow to give a project that has no workflow
   workflows: get_workflows()
 }
