@@ -43,8 +43,9 @@
           <div>PIMS Membership verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <ProfileApiKeys
+          v-if="security_role_cansave"
         />
-        
+
       </div>
       <div class="bottom-buttons">
         <q-btn
@@ -104,6 +105,9 @@ export default defineComponent({
       const url = window.location.origin + '/#/v/' + this.user_profile.pims.verify_code + '/' + this.user_profile.pims.number
 
       return 'Robert - Please verify my PIMS ' + this.user_profile.pims.first_name + '/' + this.user_profile.pims.last_name + ' (' + this.user_profile.pims.number + ') <a href="' + url + '" target="_new">' + url + '</a>'
+    },
+    security_role_cansave () {
+      return this.backend_connection_store.security_role_cansave
     }
   },
   methods: {
