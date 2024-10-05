@@ -44,7 +44,8 @@ function getEmptyUserProfile() {
   return {
     pims: {
       state: ''
-    }
+    },
+    apikeys: []
   }
 }
 function getEmptyLoginInfo() {

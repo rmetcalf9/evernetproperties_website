@@ -42,6 +42,9 @@
           </div>
           <div>PIMS Membership verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
+        <ProfileApiKeys
+        />
+        
       </div>
       <div class="bottom-buttons">
         <q-btn
@@ -71,6 +74,7 @@ import { Notify } from 'quasar'
 import utils from '../utils.js'
 
 import ProfilePimsDetailDialog from '../components/ProfilePimsDetailDialog.vue'
+import ProfileApiKeys from '../components/ProfileApiKeys.vue'
 
 
 export default defineComponent({
@@ -82,7 +86,7 @@ export default defineComponent({
     }
   },
   components: {
-    ProfilePimsDetailDialog
+    ProfilePimsDetailDialog, ProfileApiKeys
   },
   data () {
     return {
