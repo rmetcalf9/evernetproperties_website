@@ -32,6 +32,21 @@
       <q-btn color="primary" label="Select none" @click="click_agents_select_none" />
     </div>
   </div>
+  <div class="row project_table_filters_any_filter">
+    <div>Source:</div>
+    <div v-for="source in sources" :key="source.name">
+      <q-checkbox
+        v-model="source.selected" :label="source.name"
+        @click="emit_filter_changed_signal"
+      />
+    </div>
+    <div class="project_table_filters_any_filter_button">
+      <q-btn color="primary" label="Select all" @click="click_sources_select_all" />
+    </div>
+    <div class="project_table_filters_any_filter_button">
+      <q-btn color="primary" label="Select none" @click="click_sources_select_none" />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -73,6 +88,14 @@ export default defineComponent({
       })
       return retval
     },
+    sources () {
+      const TTT = this
+      let retval = []
+      Object.keys(TTT.cumulatively_loaded_sources).forEach(function (x) {
+        retval.push(TTT.cumulatively_loaded_sources[x])
+      })
+      return retval
+    },
     filter_stages_options () {
       return [
         {label: 'Call Agent', value: 'agent'},
@@ -108,10 +131,16 @@ export default defineComponent({
           selected_agents.push(x.name)
         }
       })
-
+      let selected_sources = []
+      this.sources.forEach(function (x) {
+        if (x.selected) {
+          selected_sources.push(x.name)
+        }
+      })
       this.$emit('filterchanged', {
         selected_stages: selected_stages,
-        selected_agents: selected_agents
+        selected_agents: selected_agents,
+        selected_sources: selected_sources
       })
     },
     click_stages_select_none () {
@@ -134,6 +163,18 @@ export default defineComponent({
     },
     click_agents_select_all () {
       this.agents.forEach(function (x) {
+        x.selected = true
+      })
+      this.emit_filter_changed_signal()
+    },
+    click_sources_select_none () {
+      this.sources.forEach(function (x) {
+        x.selected = false
+      })
+      this.emit_filter_changed_signal()
+    },
+    click_sources_select_all () {
+      this.sources.forEach(function (x) {
         x.selected = true
       })
       this.emit_filter_changed_signal()

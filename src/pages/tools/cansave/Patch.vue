@@ -151,6 +151,17 @@ export default defineComponent({
       }
       return true
     },
+    _recompute_filtered_projects_source_filter (x) {
+      if (!this.project_filter.filter_sources) {
+        return true
+      }
+      const source = utils.get_source_text(x.item.sub_section_details.dealbasicinfo.deal_source)
+      console.log('SSS', this.project_filter)
+      if (!this.project_filter.selected_sources.includes(source)) {
+        return false
+      }
+      return true
+    },
     recompute_filtered_projects () {
       const TTT = this
       this.filtered_loaded_projects = this.loaded_projects.filter(function (x) {
@@ -158,6 +169,9 @@ export default defineComponent({
           return false
         }
         if (!TTT._recompute_filtered_projects_agent_filter(x)) {
+          return false
+        }
+        if (!TTT._recompute_filtered_projects_source_filter(x)) {
           return false
         }
         return true
