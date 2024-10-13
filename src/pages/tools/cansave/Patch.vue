@@ -20,7 +20,7 @@
         <q-tab name="workflow" label="Workflow" />
       </q-tabs>
       <div v-if="tab === 'projects'">
-        <h2>Projects</h2>Source:{{ cumulatively_loaded_sources }}
+        <h2>Projects</h2>
         <div
           v-if="isStageSelected"
           class="selected_stage"
