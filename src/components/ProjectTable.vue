@@ -2,7 +2,12 @@
   <div class="projecttablecontainer">
     <div class="projecttablestyle">
       <ProjectTableFilters
+        ref="ProjectTableFilters"
         :projects="projects"
+        :cumulatively_loaded_stages="cumulatively_loaded_stages"
+        :cumulatively_loaded_agents="cumulatively_loaded_agents"
+        :cumulatively_loaded_sources="cumulatively_loaded_sources"
+        @filterchanged="(obj) => $emit('filterchanged',obj)"
       />
       <q-table
         flat bordered
@@ -66,12 +71,14 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 import CommonBRRToolLink from '../components/CommonBRRToolLink.vue'
 import ProjectTableFilters from '../components/ProjectTableFilters.vue'
+import utils from './utils.js'
 
 import Workflow_main from '../components/Workflow/Workflow_main.js'
 
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
-  props: ['projects', 'prefiltered'],
+  props: ['projects', 'prefiltered', 'cumulatively_loaded_stages', 'cumulatively_loaded_agents', 'cumulatively_loaded_sources'],
+  emits: ['filterchanged'],
   components: {
     CommonBRRToolLink,
     ProjectTableFilters
@@ -176,7 +183,7 @@ export default defineComponent({
           loaded: project.loaded,
           address: project.item.sub_section_details.dealbasicinfo.address,
           source: TTT.get_source_text(project),
-          selling_agent: project.item.sub_section_details.dealbasicinfo.selling_agent,
+          selling_agent: utils.get_agent_text(project.item.sub_section_details.dealbasicinfo.selling_agent),
           vandnotes: 'NOT DISPLAYED',
           devplan: project.item.sub_section_details.vision.devplan,
           notes: project.item.sub_section_details.dealbasicinfo.notes,
@@ -187,6 +194,9 @@ export default defineComponent({
     }
   },
   methods: {
+    set_selected_stages (stages) {
+      this.$refs.ProjectTableFilters.set_selected_stages(stages)
+    },
     get_todo_text (project) {
       let notdue = 0
       let due = 0
@@ -205,13 +215,7 @@ export default defineComponent({
       return due.toString() + '/' + (notdue + due).toString() + ' (' + done.toString() + ')'
     },
     get_source_text (row) {
-      if (typeof (row.item.sub_section_details.dealbasicinfo.deal_source) === 'undefined') {
-        return 'Self'
-      }
-      if (row.item.sub_section_details.dealbasicinfo.deal_source.type === 'self') {
-        return 'Self'
-      }
-      return row.item.sub_section_details.dealbasicinfo.deal_source.value
+      return utils.get_source_text(row.item.sub_section_details.dealbasicinfo.deal_source)
     },
     getWorkflowStage ({workflow_used_id, current_stage}) {
       return Workflow_main.workflows[workflow_used_id].stages[current_stage]

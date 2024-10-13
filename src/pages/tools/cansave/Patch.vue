@@ -20,7 +20,7 @@
         <q-tab name="workflow" label="Workflow" />
       </q-tabs>
       <div v-if="tab === 'projects'">
-        <h2>Projects</h2>
+        <h2>Projects</h2>Source:{{ cumulatively_loaded_sources }}
         <div
           v-if="isStageSelected"
           class="selected_stage"
@@ -29,8 +29,13 @@
         </div>
         <div>
           <ProjectTable
+            ref="ProjectTableRef"
             :projects="filtered_loaded_projects"
             :prefiltered="isStageSelected"
+            :cumulatively_loaded_stages="cumulatively_loaded_stages"
+            :cumulatively_loaded_agents="cumulatively_loaded_agents"
+            :cumulatively_loaded_sources="cumulatively_loaded_sources"
+            @filterchanged="projecttablefilterchanged"
           />
         </div>
         <q-btn color="primary" label="Add Project" @click="clicknewproject" />
@@ -60,6 +65,7 @@ import WrokflowChart from '../../../components/Workflow/Chart.vue'
 
 import Workflow_main from '../../../components/Workflow/Workflow_main.js'
 import TodoDisplay from '../../../components/TodoDisplay.vue'
+import utils from '../../../components/utils.js'
 
 
 export default defineComponent({
@@ -79,9 +85,20 @@ export default defineComponent({
       patch_data: {},
       loaded_projects: [],
       filtered_loaded_projects: [],
-      selected_stage: {
+      selected_stage: { // TODO REMOVE
         workflow_id: undefined,
         stage_id: undefined
+      },
+      cumulatively_loaded_stages: {}, // We never delete from this
+      cumulatively_loaded_sources: {}, // We never delete from this
+      cumulatively_loaded_agents: {}, // We never delete from this
+      project_filter: {
+        filter_stages: false,
+        selected_stages: [],
+        filter_agents: false,
+        selected_agents: [],
+        filter_sources: false,
+        selected_sources: []
       },
       tab: 'projects'
     }
@@ -94,6 +111,7 @@ export default defineComponent({
   },
   computed: {
     isStageSelected () {
+      // TODO remove this function
       return typeof (this.selected_stage.workflow_id) !== 'undefined'
     },
     selectedStageText () {
@@ -104,21 +122,45 @@ export default defineComponent({
     }
   },
   methods: {
+    projecttablefilterchanged (newfilter) {
+      this.project_filter.filter_stages = true
+      this.project_filter.selected_stages = newfilter.selected_stages
+      this.project_filter.filter_agents = true
+      this.project_filter.selected_agents = newfilter.selected_agents
+      this.project_filter.filter_sources = true
+      this.project_filter.selected_sources = newfilter.selected_sources
+      this.recompute_filtered_projects()
+    },
+    _recompute_filtered_projects_stage_filter (x) {
+      if (!this.project_filter.filter_stages) {
+        return true
+      }
+      const curproject_stagekey = Workflow_main.get_workflow_stage_key(x.item.workflow.workflow_used_id, x.item.workflow.current_stage)
+      if (!this.project_filter.selected_stages.includes(curproject_stagekey)) {
+        return false
+      }
+      return true
+    },
+    _recompute_filtered_projects_agent_filter (x) {
+      if (!this.project_filter.filter_agents) {
+        return true
+      }
+      const agent = utils.get_agent_text(x.item.sub_section_details.dealbasicinfo.selling_agent)
+      if (!this.project_filter.selected_agents.includes(agent)) {
+        return false
+      }
+      return true
+    },
     recompute_filtered_projects () {
       const TTT = this
       this.filtered_loaded_projects = this.loaded_projects.filter(function (x) {
-        if (!TTT.isStageSelected) {
-          return true
-        }
-        if (typeof ( TTT.patch_data.workflow_lookup[TTT.selected_stage.workflow_id]) === 'undefined') {
+        if (!TTT._recompute_filtered_projects_stage_filter(x)) {
           return false
         }
-        if (typeof ( TTT.patch_data.workflow_lookup[TTT.selected_stage.workflow_id][TTT.selected_stage.stage_id]) === 'undefined') {
+        if (!TTT._recompute_filtered_projects_agent_filter(x)) {
           return false
         }
-        return TTT.patch_data.workflow_lookup[TTT.selected_stage.workflow_id][TTT.selected_stage.stage_id].filter(function (y) {
-          return x.id === y
-        }).length > 0
+        return true
       })
     },
     clearselectesstage () {
@@ -129,12 +171,12 @@ export default defineComponent({
       this.recompute_filtered_projects()
     },
     onchartclickstage (workflow_id, stage_id, stage_data) {
-      this.selected_stage = {
-        workflow_id: workflow_id,
-        stage_id: stage_id
-      }
-      this.recompute_filtered_projects()
+      const TTT=this
       this.tab = 'projects'
+      setTimeout(function () {
+        const stagekey = Workflow_main.get_workflow_stage_key(workflow_id, stage_id)
+        TTT.$refs.ProjectTableRef.set_selected_stages([stagekey])
+      }, 5)
     },
     clicknewproject () {
       this.$router.push('/tools/brrcalc?patchid=' + this.$route.params.patchid)
@@ -189,6 +231,7 @@ export default defineComponent({
         ok: function (response) {
           item_to_load.loaded=true
           item_to_load.item=response.data
+          TTT.add_to_cumulatively_loaded(response.data)
           TTT.recompute_filtered_projects()
           TTT.recursive_load_project_details()
         },
@@ -205,6 +248,35 @@ export default defineComponent({
         data: undefined,
         callback: callback
       })
+    },
+    add_to_cumulatively_loaded (project) {
+      // called from load project - so always loaded at this point
+      const workflow_stage_id = Workflow_main.get_workflow_stage_key(project.workflow.workflow_used_id, project.workflow.current_stage)
+      if (!(workflow_stage_id in this.cumulatively_loaded_stages)) {
+        this.cumulatively_loaded_stages[workflow_stage_id] = {
+          workflow_stage_id: workflow_stage_id,
+          workflow_id: project.workflow.workflow_used_id,
+          stage_id: project.workflow.current_stage,
+          stage: Workflow_main.getWorkflowStage(project.workflow.workflow_used_id, project.workflow.current_stage),
+          selected: true
+        }
+      }
+      const source = utils.get_source_text(project.sub_section_details.dealbasicinfo.deal_source)
+      if (!(source in this.cumulatively_loaded_sources)) {
+        this.cumulatively_loaded_sources[source] = {
+          name: source,
+          selected: true
+        }
+      }
+
+      const agent = utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
+      if (!(agent in this.cumulatively_loaded_agents)) {
+        this.cumulatively_loaded_agents[agent] = {
+          name: agent,
+          selected: true
+        }
+      }
+
     }
   },
   mounted () {

@@ -44,8 +44,36 @@ function uuidv4() {
   );
 }
 
+function get_source_text(source_obj) {
+  if (typeof (source_obj) === 'undefined') {
+    return 'Self'
+  }
+  if (source_obj.type === 'self') {
+    return 'Self'
+  }
+  if (typeof (source_obj.value) === 'undefined') {
+    return '<Blank>'
+  }
+  if (source_obj.value === '') {
+    return '<Blank>'
+  }
+  return source_obj.value
+}
+
+function get_agent_text(agent_text) {
+  if (typeof (agent_text) === 'undefined') {
+    return '<Blank>'
+  }
+  if (agent_text === '') {
+    return '<Blank>'
+  }
+  return agent_text
+}
+
 export default {
   format_currency: format_currency,
   format_percent: format_percent,
-  uuidv4: uuidv4
+  uuidv4: uuidv4,
+  get_source_text: get_source_text,
+  get_agent_text: get_agent_text
 }

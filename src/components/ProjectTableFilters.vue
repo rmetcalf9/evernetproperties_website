@@ -1,20 +1,35 @@
 <template>
-  <div class="row project_table_filters_stages_filter">
+  <div class="row project_table_filters_any_filter">
     <div>Stage:</div>
     <div v-for="stage in stages" :key="stage.workflow_stage_id">
       <q-checkbox
-        v-model="stage.selected" :label="stage.stage.name + ' (' + stage.num_usages + ')'"
-        @click="click_stage_checkbox(stage)"
+        v-model="stage.selected" :label="stage.stage.name"
+        @click="emit_filter_changed_signal"
       />
     </div>
-    <div class="project_table_filters_stages_filter_button">
+    <div class="project_table_filters_any_filter_button">
       <q-btn color="primary" label="Select all" @click="click_stages_select_all" />
     </div>
-    <div class="project_table_filters_stages_filter_button">
+    <div class="project_table_filters_any_filter_button">
       <q-btn color="primary" label="Select none" @click="click_stages_select_none" />
     </div>
-    <div class="project_table_filters_stages_filter_button">
+    <div class="project_table_filters_any_filter_button">
       <q-btn color="primary" label="Select active" @click="click_stages_select_active" />
+    </div>
+  </div>
+  <div class="row project_table_filters_any_filter">
+    <div>Agent:</div>
+    <div v-for="agent in agents" :key="agent.name">
+      <q-checkbox
+        v-model="agent.selected" :label="agent.name"
+        @click="emit_filter_changed_signal"
+      />
+    </div>
+    <div class="project_table_filters_any_filter_button">
+      <q-btn color="primary" label="Select all" @click="click_agents_select_all" />
+    </div>
+    <div class="project_table_filters_any_filter_button">
+      <q-btn color="primary" label="Select none" @click="click_agents_select_none" />
     </div>
   </div>
 </template>
@@ -27,7 +42,8 @@ import Workflow_main from './Workflow/Workflow_main.js'
 
 export default defineComponent({
   name: 'ProjectTableFilterComponent',
-  props: ['projects'],
+  props: ['projects', 'cumulatively_loaded_stages', 'cumulatively_loaded_agents', 'cumulatively_loaded_sources'],
+  emits: ['filterchanged'],
   components: {
   },
   setup () {
@@ -38,34 +54,22 @@ export default defineComponent({
   },
   data () {
     return {
-      selected_stages: []
     }
   },
   computed: {
     stages () {
       const TTT = this
-      let persentStages = {}
-      this.projects.forEach(function (x) {
-        if (x.loaded) {
-          const workflow_stage_id = Workflow_main.get_workflow_stage_key(x.item.workflow.workflow_used_id, x.item.workflow.current_stage)
-          // console.log('persentStages', persentStages, persentStages[workflow_stage_id])
-          if (workflow_stage_id in persentStages) {
-            persentStages[workflow_stage_id].num_usages += 1
-          } else {
-            persentStages[workflow_stage_id] = {
-              workflow_stage_id: workflow_stage_id,
-              workflow_id: x.item.workflow.workflow_used_id,
-              stage_id: x.item.workflow.current_stage,
-              num_usages: 1,
-              stage: Workflow_main.getWorkflowStage(x.item.workflow.workflow_used_id, x.item.workflow.current_stage),
-              selected: TTT.selected_stages.includes(workflow_stage_id)
-            }
-          }
-        }
-      })
       let retval = []
-      Object.keys(persentStages).forEach(function (x) {
-        retval.push(persentStages[x])
+      Object.keys(TTT.cumulatively_loaded_stages).forEach(function (x) {
+        retval.push(TTT.cumulatively_loaded_stages[x])
+      })
+      return retval
+    },
+    agents () {
+      const TTT = this
+      let retval = []
+      Object.keys(TTT.cumulatively_loaded_agents).forEach(function (x) {
+        retval.push(TTT.cumulatively_loaded_agents[x])
       })
       return retval
     },
@@ -75,36 +79,74 @@ export default defineComponent({
         {label: 'Call Sourcer', value: 'sourcer'},
         {label: 'Other', value: 'other'}
       ]
+    },
+    isStageSelected (stage) {
+      return true
     }
   },
   methods: {
-    click_stage_checkbox (stage) {
-      if (this.selected_stages.includes(stage.workflow_stage_id)) {
-        this.selected_stages = this.selected_stages.filter(e => e !== stage.workflow_stage_id)
-      } else {
-        this.selected_stages.push(stage.workflow_stage_id)
-      }
-    },
-    click_stages_select_none () {
-      this.selected_stages = []
-    },
-    click_stages_select_all () {
-      let all_stages = []
+    set_selected_stages (new_stages) {
       this.stages.forEach(function (x) {
-        all_stages.push(x.workflow_stage_id)
-      })
-      this.selected_stages = all_stages
-    },
-    click_stages_select_active () {
-      let all_stages = []
-      this.stages.forEach(function (x) {
-        if (typeof (x.stage.active) !== 'undefined') {
-          if (x.stage.active) {
-            all_stages.push(x.workflow_stage_id)
-          }
+        if (new_stages.includes(x.workflow_stage_id)) {
+          x.selected = true
+        } else {
+          x.selected = false
         }
       })
-      this.selected_stages = all_stages
+      this.emit_filter_changed_signal()
+    },
+    emit_filter_changed_signal () {
+      let selected_stages = []
+      this.stages.forEach(function (x) {
+        if (x.selected) {
+          selected_stages.push(x.workflow_stage_id)
+        }
+      })
+      let selected_agents = []
+      this.agents.forEach(function (x) {
+        if (x.selected) {
+          selected_agents.push(x.name)
+        }
+      })
+
+      this.$emit('filterchanged', {
+        selected_stages: selected_stages,
+        selected_agents: selected_agents
+      })
+    },
+    click_stages_select_none () {
+      this.stages.forEach(function (x) {
+        x.selected = false
+      })
+      this.emit_filter_changed_signal()
+    },
+    click_stages_select_all () {
+      this.stages.forEach(function (x) {
+        x.selected = true
+      })
+      this.emit_filter_changed_signal()
+    },
+    click_agents_select_none () {
+      this.agents.forEach(function (x) {
+        x.selected = false
+      })
+      this.emit_filter_changed_signal()
+    },
+    click_agents_select_all () {
+      this.agents.forEach(function (x) {
+        x.selected = true
+      })
+      this.emit_filter_changed_signal()
+    },
+    click_stages_select_active () {
+      this.stages.forEach(function (x) {
+        let sel = false
+        if (typeof (x.stage.active) !== 'undefined') {
+          sel=x.stage.active
+        }
+        x.selected = sel
+      })
+      this.emit_filter_changed_signal()
     }
   },
   mounted () {
@@ -113,13 +155,13 @@ export default defineComponent({
 </script>
 
 <style>
-.project_table_filters_stages_filter {
+.project_table_filters_any_filter {
   border-style: solid;
   border-width: 1px;
   border-color: black;
   padding: 5px;
 }
-.project_table_filters_stages_filter_button {
+.project_table_filters_any_filter_button {
   padding: 5px;
 }
 </style>
