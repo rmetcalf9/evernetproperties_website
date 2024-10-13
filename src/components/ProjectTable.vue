@@ -1,6 +1,9 @@
 <template>
   <div class="projecttablecontainer">
     <div class="projecttablestyle">
+      <ProjectTableFilters
+        :projects="projects"
+      />
       <q-table
         flat bordered
         title="Projects"
@@ -62,6 +65,7 @@ import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 import CommonBRRToolLink from '../components/CommonBRRToolLink.vue'
+import ProjectTableFilters from '../components/ProjectTableFilters.vue'
 
 import Workflow_main from '../components/Workflow/Workflow_main.js'
 
@@ -69,7 +73,8 @@ export default defineComponent({
   name: 'ToolsCansavePatchePage',
   props: ['projects', 'prefiltered'],
   components: {
-    CommonBRRToolLink
+    CommonBRRToolLink,
+    ProjectTableFilters
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -139,6 +144,13 @@ export default defineComponent({
     }
   },
   computed: {
+    filter_stages_options () {
+      return [
+        {label: 'Call Agent', value: 'agent'},
+        {label: 'Call Sourcer', value: 'sourcer'},
+        {label: 'Other', value: 'other'}
+      ]
+    },
     user_profile () {
       return this.backend_connection_store.user_profile
     },

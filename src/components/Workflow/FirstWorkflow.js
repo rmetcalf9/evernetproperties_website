@@ -1,5 +1,6 @@
 // This is the first workflow I created
 
+// For a stage is active is MISSING it is assumed false
 
 export default {
   "id": "1",
@@ -8,6 +9,7 @@ export default {
   "stages": {
     "1": {
       "name": "Lead",
+      "active": true,
       "progression": {
         "failed": "1.1",
         "success": [
@@ -21,6 +23,7 @@ export default {
     "1.1": { "name": "Rejected Lead"},
     "2": {
       "name": "Potential",
+      "active": true,
       "progression": {
         "failed": "2.1",
         "success": [
@@ -34,6 +37,7 @@ export default {
     "2.1": { "name": "Rejected Lead"},
     "3": {
       "name": "Viewing Booked",
+      "active": true,
       "progression": {
         "failed": "3.1",
         "success": [
@@ -47,6 +51,7 @@ export default {
     "3.1": { "name": "Cancelled Viewing"},
     "4": {
       "name": "Viewed",
+      "active": true,
       "progression": {
         "failed": "4.1",
         "success": [
@@ -60,6 +65,7 @@ export default {
     "4.1": { "name": "Unviable"},
     "5": {
       "name": "Offer made",
+      "active": true,
       "progression": {
         "success": [
           {
@@ -74,6 +80,7 @@ export default {
     },
     "6": {
       "name": "Rejected offer",
+      "active": true,
       "draw_col": 1, // Defaults to 0 - unless fail stage defaults to 2
       "progression": {
         "failed": "6.1",
@@ -85,6 +92,9 @@ export default {
       },
     },
     "6.1": { "name": "Off Market"},
-    "7": { "name": "Accepted offer"},
+    "7": {
+      "name": "Accepted offer",
+      "active": true
+    },
   }
 }
