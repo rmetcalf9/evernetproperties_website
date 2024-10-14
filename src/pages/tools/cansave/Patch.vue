@@ -156,7 +156,6 @@ export default defineComponent({
         return true
       }
       const source = utils.get_source_text(x.item.sub_section_details.dealbasicinfo.deal_source)
-      console.log('SSS', this.project_filter)
       if (!this.project_filter.selected_sources.includes(source)) {
         return false
       }
