@@ -17,10 +17,11 @@
       >
         <q-tab name="projects" label="Projects" />
         <q-tab name="todos" label="Todos" />
-        <q-tab name="workflow" label="Workflow" />
       </q-tabs>
       <div v-if="tab === 'projects'">
-        <h2>Projects</h2>
+        <h2>
+          Projects <q-btn label="Pick from workflow" color="primary" @click="btn_click_workflow" class="float-right" />
+        </h2>
         <div
           v-if="isStageSelected"
           class="selected_stage"
@@ -122,6 +123,9 @@ export default defineComponent({
     }
   },
   methods: {
+    btn_click_workflow () {
+      this.tab = 'workflow'
+    },
     projecttablefilterchanged (newfilter) {
       this.project_filter.filter_stages = true
       this.project_filter.selected_stages = newfilter.selected_stages
