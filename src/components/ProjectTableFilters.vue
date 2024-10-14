@@ -246,42 +246,42 @@ export default defineComponent({
         x.selected = false
       })
       this.emit_filter_changed_signal()
-      this.close_all_dialogs()
+      // this.close_all_dialogs()
     },
     click_stages_select_all () {
       this.stages.forEach(function (x) {
         x.selected = true
       })
       this.emit_filter_changed_signal()
-      this.close_all_dialogs()
+      // this.close_all_dialogs()
     },
     click_agents_select_none () {
       this.agents.forEach(function (x) {
         x.selected = false
       })
       this.emit_filter_changed_signal()
-      this.close_all_dialogs()
+      // this.close_all_dialogs()
     },
     click_agents_select_all () {
       this.agents.forEach(function (x) {
         x.selected = true
       })
       this.emit_filter_changed_signal()
-      this.close_all_dialogs()
+      // this.close_all_dialogs()
     },
     click_sources_select_none () {
       this.sources.forEach(function (x) {
         x.selected = false
       })
       this.emit_filter_changed_signal()
-      this.close_all_dialogs()
+      // this.close_all_dialogs()
     },
     click_sources_select_all () {
       this.sources.forEach(function (x) {
         x.selected = true
       })
       this.emit_filter_changed_signal()
-      this.close_all_dialogs()
+      // this.close_all_dialogs()
     },
     click_stages_select_active () {
       this.stages.forEach(function (x) {
@@ -292,7 +292,7 @@ export default defineComponent({
         x.selected = sel
       })
       this.emit_filter_changed_signal()
-      this.close_all_dialogs()
+      // this.close_all_dialogs()
     }
   },
   mounted () {
