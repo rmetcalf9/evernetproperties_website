@@ -214,6 +214,12 @@ export default defineComponent({
           x.selected = false
         }
       })
+      this.agents.forEach(function (x) {
+        x.selected = true
+      })
+      this.sources.forEach(function (x) {
+        x.selected = true
+      })
       this.emit_filter_changed_signal()
     },
     emit_filter_changed_signal () {
