@@ -25,6 +25,12 @@
           <th align="left">Todo<br>due/total (done)</th>
         </template>
 
+        <template v-slot:body-cell-address="props">
+          <q-td>
+            <router-link :to="'/#/tools/brrcalc?projectid=' + props.row.id">{{ props.row.address }}</router-link>
+          </q-td>
+        </template>
+
         <template v-slot:body-cell-visionandnotes="props">
           <q-td>
             <div v-if="props.row.loaded">
