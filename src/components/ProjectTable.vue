@@ -19,7 +19,7 @@
         no-data-label="I didn't find anything for you"
         no-results-label="The filter didn't uncover any results"
         row-key="name"
-        @row-click="(evt, row, index) => onRowClick(row)"
+        @row-click="(evt, row, index) => onRowClick(row, false)"
       >
         <template v-slot:header-cell-todo="">
           <th align="left">Todo<br>due/total (done)</th>
@@ -27,7 +27,20 @@
 
         <template v-slot:body-cell-address="props">
           <q-td>
-            <router-link :to="'/#/tools/brrcalc?projectid=' + props.row.id">{{ props.row.address }}</router-link>
+            <q-popup-proxy context-menu>
+              <q-banner>
+                <q-list style="min-width: 100px">
+                  <q-item clickable v-close-popup @click="onRowClick(props.row, true)">
+                    <q-item-section>Open in new tab...</q-item-section>
+                  </q-item>
+                  <q-separator />
+                  <q-item clickable v-close-popup>
+                    <q-item-section>Cancel</q-item-section>
+                  </q-item>
+                </q-list>
+              </q-banner>
+            </q-popup-proxy>
+            {{ props.row.address }}
           </q-td>
         </template>
 
@@ -226,7 +239,14 @@ export default defineComponent({
     getWorkflowStage ({workflow_used_id, current_stage}) {
       return Workflow_main.workflows[workflow_used_id].stages[current_stage]
     },
-    onRowClick (table_row) {
+    onRowClick (table_row, new_tab) {
+      if (new_tab) {
+        const route = this.$router.resolve('/tools/brrcalc');
+        const absoluteURL = new URL(route.href, window.location.origin + window.location.pathname).href + '?projectid=' + table_row.id;
+        var handle = window.open(absoluteURL);
+        window.focus();
+        return
+      }
       this.$router.push('/tools/brrcalc?projectid=' + table_row.id)
     },
   },
