@@ -200,7 +200,29 @@ export default defineComponent({
       }
       return this._isFiltered(this.agents)
     },
+    onlyActiveShowing () {
+      let retVal = true
+      this.stages.forEach(function (x) {
+        if (x.stage.active) {
+          if (!x.selected) {
+            retVal = false
+          }
+        } else {
+          // not an active stage
+          if (x.selected) {
+            retVal = false
+          }
+        }
+      })
+
+      return retVal
+    },
     filter_text (filter_type) {
+      if (filter_type === 'Stages') {
+        if (this.onlyActiveShowing()) {
+          return 'Filter: Active Stages'
+        }
+      }
       if (!this.isFiltered(filter_type)) {
         return 'Filter: ' + filter_type + ' - not filtered'
       }

@@ -275,7 +275,7 @@ export default defineComponent({
           workflow_id: project.workflow.workflow_used_id,
           stage_id: project.workflow.current_stage,
           stage: Workflow_main.getWorkflowStage(project.workflow.workflow_used_id, project.workflow.current_stage),
-          selected: true
+          selected: utils.boolean_undefined_to_false(Workflow_main.workflows[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active)
         }
       }
       const source = utils.get_source_text(project.sub_section_details.dealbasicinfo.deal_source)

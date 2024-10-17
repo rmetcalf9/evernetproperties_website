@@ -70,10 +70,18 @@ function get_agent_text(agent_text) {
   return agent_text
 }
 
+function boolean_undefined_to_false(value) {
+  if (typeof (value) === 'boolean') {
+    return value
+  }
+  return false
+}
+
 export default {
   format_currency: format_currency,
   format_percent: format_percent,
   uuidv4: uuidv4,
   get_source_text: get_source_text,
-  get_agent_text: get_agent_text
+  get_agent_text: get_agent_text,
+  boolean_undefined_to_false: boolean_undefined_to_false
 }
