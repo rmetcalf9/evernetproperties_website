@@ -12,12 +12,14 @@
                   <TodoItem
                     :todo="todo"
                     @update_todo_item='update_todo_item'
+                    @delete_todo_item='delete_todo_item'
                   />
                 </div>
                 <div v-for="todo in notdone_todos(group)" :key='todo.id'>
                   <TodoItem
                     :todo="todo"
                     @update_todo_item='update_todo_item'
+                    @delete_todo_item='delete_todo_item'
                   />
                 </div>
               </div>
@@ -29,6 +31,7 @@
               <TodoItem
                 :todo="todo"
                 @update_todo_item='update_todo_item'
+                @delete_todo_item='delete_todo_item'
               />
             </div>
           </div>
@@ -99,6 +102,12 @@ export default defineComponent({
       TTT.todos = TTT.todos.map(function(x) {
         if (x.id == todo.id) {x = todo}
         return x
+      })
+    },
+    delete_todo_item (todo_id) {
+      const TTT=this
+      TTT.todos = TTT.todos.filter(function (x) {
+        return (x.id !== todo_id)
       })
     }
   }

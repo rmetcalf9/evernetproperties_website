@@ -10,9 +10,12 @@
       <div v-if="todo.done">Date Completed: {{ done_date_text(todo.done_date) }}</div>
     </div>
     <div>
-      <div v-if="!todo.done" class="todoitem-btn"><q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" /></div>
+      <div v-if="!todo.done" class="todoitem-btn">
+        <q-btn icon="edit" round color="secondary" @click="btn_edit(todo)" />
+      </div>
       <div v-if="!todo.done" class="todoitem-btn"><q-btn icon="check" round color="secondary" @click="btn_mark_done(todo)" /></div>
       <div v-if="todo.done"><q-btn label="Mark Undone" color="secondary" @click="btn_mark_undone(todo)" /></div>
+      <div class="todoitem-btn"><q-btn icon="delete" round color="negative" @click="btn_delete(todo)" /></div>
     </div>
     <q-dialog v-model="dialog_visible">
       <q-card class="todoitem-dialogcard">
@@ -94,7 +97,7 @@ export default defineComponent({
       default: false
     }
   },
-  emits: ['update_todo_item'],
+  emits: ['update_todo_item', 'delete_todo_item'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -243,6 +246,49 @@ export default defineComponent({
         url: '/projects/' + todo.project_id + '/todos',
         method: 'POST',
         data: todo,
+        callback: callback
+      })
+    },
+    btn_delete (todo) {
+      const TTT = this
+      this.$q.dialog({
+        title: 'Delete Todo',
+        message: 'Are you sure you want to delete "' + todo.description + '"?',
+        html: false,
+        ok: {
+          push: true,
+          label: 'Delete',
+          color: 'red'
+        },
+        cancel: {
+          push: true,
+          label: 'Cancel',
+          color: 'primary'
+        },
+      }).onOk((data) => {
+        TTT.exec_delete(todo)
+      })
+    },
+    exec_delete (todo) {
+      const TTT = this
+      const todo_id = todo.id
+      const callback = {
+        ok: function (response) {
+          TTT.$emit('delete_todo_item', todo_id)
+        },
+        error: function (response) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: response.message,
+            timeout: 2000,
+            color: 'negative'
+          })
+        }
+      }
+      TTT.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/projects/' + todo.project_id + '/todos/' + todo.id,
+        method: 'DELETE',
         callback: callback
       })
     }

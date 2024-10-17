@@ -28,6 +28,7 @@
                 :todo="todo_item"
                 :include_project="group_by != 'project'"
                 @update_todo_item='refresh'
+                @delete_todo_item='refresh'
               />
             </div>
             <div v-for="todo_item in group.nondue_items" :key="todo_item.id">
@@ -35,6 +36,7 @@
                 :todo="todo_item"
                 :include_project="group_by != 'project'"
                 @update_todo_item='refresh'
+                @delete_todo_item='refresh'
               />
             </div>
           </div>
