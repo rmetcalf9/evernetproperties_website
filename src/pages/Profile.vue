@@ -23,11 +23,12 @@
          <div>PIMS Membership verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'WAITINGVERIFICATION'">
-          <div>PIMS details entered but not verified. To verify please send a message in the Samuel Leeds Academy chat with the following text:</div>
+          <div>PIMS details entered but not verified. To verify please send a message in the Samuel Social. Search for me (Robert Metcalf) or click <a href="https://groupchat.samuelleeds.com/members/d185549c/" target="_new">here to open my profile</a>. <br/>Send me a message with the following text:</div>
 
           <div class="pimstext" @click="clickcopypimsverfiylink"><div v-html="pimsverfiylink"></div>&nbsp;
           <q-icon class="float-right" name="content_copy" size="16px" />
           </div>
+          <p>While you are there feel free to say hi!</p>
           <div>PIMS Membership verified: <q-icon name="cancel" color="red" size="32px" /></div>
         </div>
         <div v-if="user_profile.pims.state === 'VERIFIED'">

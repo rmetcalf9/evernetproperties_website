@@ -22,7 +22,7 @@
       </div>
       <div v-if="step === 3">
         <h4>Step 3</h4>
-        <p>Your PIMS details have been submitted and you need to be verified. To verify your identity we confirm by verifying you from the academy whatsapp chat. Please add the following message into the chat:</p>
+        <p>Your PIMS details have been submitted and you need to be verified. To verify your identity we confirm by verifying you from the academy "Samuel Social" app. Search for "Robert Metcalf" or <a href="https://groupchat.samuelleeds.com/members/d185549c/" target="_new">click here to access my profile</a>. Send following message to me:</p>
         <div class="pimstext" @click="clickcopypimsverfiylink"><div v-html="pimsverfiylink"></div>&nbsp;
           <q-icon class="float-right" name="content_copy" size="16px" />
         </div>
