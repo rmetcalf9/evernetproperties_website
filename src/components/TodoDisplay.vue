@@ -49,6 +49,8 @@ import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 import TodoItem from './TodoItem.vue'
+import Workflow_main from '../components/Workflow/Workflow_main.js'
+import utils from '../components/utils.js'
 
 export default defineComponent({
   name: 'TodoDisplayComponent',
@@ -69,6 +71,7 @@ export default defineComponent({
   },
   data () {
     return {
+      show_only_active: true,
       loaded: false,
       loaded_todo_data: undefined,
       group_by: 'group',
@@ -163,7 +166,14 @@ export default defineComponent({
       })
     },
     refresh_success (response) {
-      this.loaded_todo_data = response.data.todos
+      const TTT = this
+      this.loaded_todo_data = response.data.todos.filter(function (x) {
+        if (!TTT.show_only_active) {
+          return true
+        }
+        console.log('aa', utils.boolean_undefined_to_false(Workflow_main.workflows[x.project_workflow.workflow_used_id].stages[x.project_workflow.current_stage].active))
+        return utils.boolean_undefined_to_false(Workflow_main.workflows[x.project_workflow.workflow_used_id].stages[x.project_workflow.current_stage].active)
+      })
       this.loaded = true
     }
   },
