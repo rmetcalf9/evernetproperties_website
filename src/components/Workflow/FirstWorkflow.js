@@ -1,6 +1,7 @@
 // This is the first workflow I created
 
 // For a stage is active is MISSING it is assumed false
+// Note workflow ID of "1" and stage id of "1" are used in backend and should not be changed
 
 export default {
   "id": "1",
