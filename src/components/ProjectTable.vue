@@ -213,6 +213,9 @@ export default defineComponent({
     }
   },
   methods: {
+    get_current_filter () {
+      return this.$refs.ProjectTableFilters.get_current_filter()
+    },
     set_selected_stages (stages) {
       this.$refs.ProjectTableFilters.set_selected_stages(stages)
     },

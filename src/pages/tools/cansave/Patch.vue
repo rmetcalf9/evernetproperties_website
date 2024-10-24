@@ -165,7 +165,6 @@ export default defineComponent({
     },
     recompute_filtered_projects () {
       const TTT = this
-      console.log('Start filter recompute_filtered_projects')
       this.filtered_loaded_projects = this.loaded_projects.filter(function (x) {
         if (!x.loaded) {
           return true
@@ -235,6 +234,7 @@ export default defineComponent({
           item_to_load.loaded=true
           item_to_load.item=response.data
           TTT.add_to_cumulatively_loaded(response.data)
+          TTT.projecttablefilterchanged(TTT.$refs.ProjectTableRef.get_current_filter())
           TTT.recompute_filtered_projects()
           TTT.recursive_load_project_details()
         },

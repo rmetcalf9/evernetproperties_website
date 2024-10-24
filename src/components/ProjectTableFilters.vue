@@ -244,7 +244,8 @@ export default defineComponent({
       })
       this.emit_filter_changed_signal()
     },
-    emit_filter_changed_signal () {
+    get_current_filter () {
+      // Added so I can read the filter without signal being emitted
       let selected_stages = []
       this.stages.forEach(function (x) {
         if (x.selected) {
@@ -263,11 +264,14 @@ export default defineComponent({
           selected_sources.push(x.name)
         }
       })
-      this.$emit('filterchanged', {
+      return {
         selected_stages: selected_stages,
         selected_agents: selected_agents,
         selected_sources: selected_sources
-      })
+      }
+    },
+    emit_filter_changed_signal () {
+      this.$emit('filterchanged', this.get_current_filter())
     },
     click_stages_select_none () {
       this.stages.forEach(function (x) {
