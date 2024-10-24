@@ -2,7 +2,14 @@
   <q-page class="flex flex-center">
     <div>
       <h1>Select Patch</h1>
-      <div v-for="patch in patches_data" :key="patch">
+      <div v-for="patch in active_patches" :key="patch">
+        <PatchCard
+          :patch="patch"
+        />
+      </div>
+      <h2>Dormant</h2>
+      <p>Dormant patches are patches with no projects in an active stage.</p>
+      <div v-for="patch in dormant_patches" :key="patch">
         <PatchCard
           :patch="patch"
         />
@@ -20,6 +27,7 @@ import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import CommonBRRToolLink from '../../../components/CommonBRRToolLink.vue'
 import PatchCard from '../../../components/PatchCard.vue'
+import Workflow_main from '../../../components/Workflow/Workflow_main.js'
 
 export default defineComponent({
   name: 'ToolsCansavePatchesPage',
@@ -39,11 +47,48 @@ export default defineComponent({
     }
   },
   computed: {
+    active_patches () {
+      const TTT = this
+      return Object.keys(this.patches_data)
+        .filter(function (key) {
+          if (!TTT.patches_data[key].loaded) return false
+          return TTT.patch_has_active_projects(TTT.patches_data[key])
+        })
+        .reduce((obj, key) => {
+          obj[key] = TTT.patches_data[key];
+          return obj;
+        }, {});
+    },
+    dormant_patches () {
+      const TTT = this
+      return Object.keys(this.patches_data)
+        .filter(function (key) {
+          if (!TTT.patches_data[key].loaded) return false
+          return !TTT.patch_has_active_projects(TTT.patches_data[key])
+        })
+        .reduce((obj, key) => {
+          obj[key] = TTT.patches_data[key];
+          return obj;
+        }, {});
+    },
     user_profile () {
       return this.backend_connection_store.user_profile
     }
   },
   methods: {
+    patch_has_active_projects (patch) {
+      let activeProjects = false
+      Object.keys(patch.detail.workflow_lookup).forEach(function (workflow_id) {
+        Object.keys(patch.detail.workflow_lookup[workflow_id]).forEach(function (stage_id) {
+          if (patch.detail.workflow_lookup[workflow_id][stage_id].length > 0) {
+            if (Workflow_main.isActiveStage(workflow_id, stage_id)) {
+              activeProjects = true
+            }
+          }
+        })
+      })
+      return activeProjects
+    },
     click_brrr_card () {
       this.$router.push('/tools/brrcalc')
     },

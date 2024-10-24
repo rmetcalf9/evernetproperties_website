@@ -15,9 +15,17 @@ function getWorkflowStage (workflow_id, stage_id) {
   return get_workflows()[workflow_id].stages[stage_id]
 }
 
+function isActiveStage (workflow_id, stage_id) {
+  if (typeof(get_workflows()[workflow_id].stages[stage_id].active) === 'undefined') {
+    return false
+  }
+  return get_workflows()[workflow_id].stages[stage_id].active
+}
+
 export default {
   default_workflow_id: '1', // ID of workflow to give a project that has no workflow
   workflows: get_workflows(),
   get_workflow_stage_key: get_workflow_stage_key,
-  getWorkflowStage: getWorkflowStage
+  getWorkflowStage: getWorkflowStage,
+  isActiveStage: isActiveStage
 }
