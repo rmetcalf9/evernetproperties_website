@@ -22,17 +22,11 @@
         <h2>
           Projects <q-btn label="Pick from workflow" color="primary" @click="btn_click_workflow" class="float-right" />
         </h2>
-        <div
-          v-if="isStageSelected"
-          class="selected_stage"
-        >
-          Stage {{ selectedStageText }} <q-btn color="primary" icon="close" round @click="clearselectesstage" />
-        </div>
         <div>
           <ProjectTable
             ref="ProjectTableRef"
             :projects="filtered_loaded_projects"
-            :prefiltered="isStageSelected"
+            :prefiltered="true"
             :cumulatively_loaded_stages="cumulatively_loaded_stages"
             :cumulatively_loaded_agents="cumulatively_loaded_agents"
             :cumulatively_loaded_sources="cumulatively_loaded_sources"
@@ -86,19 +80,15 @@ export default defineComponent({
       patch_data: {},
       loaded_projects: [],
       filtered_loaded_projects: [],
-      selected_stage: { // TODO REMOVE
-        workflow_id: undefined,
-        stage_id: undefined
-      },
       cumulatively_loaded_stages: {}, // We never delete from this
       cumulatively_loaded_sources: {}, // We never delete from this
       cumulatively_loaded_agents: {}, // We never delete from this
       project_filter: {
-        filter_stages: false,
+        filter_stages: true,
         selected_stages: [],
-        filter_agents: false,
+        filter_agents: true,
         selected_agents: [],
-        filter_sources: false,
+        filter_sources: true,
         selected_sources: []
       },
       tab: 'projects'
@@ -111,10 +101,6 @@ export default defineComponent({
     }
   },
   computed: {
-    isStageSelected () {
-      // TODO remove this function
-      return typeof (this.selected_stage.workflow_id) !== 'undefined'
-    },
     selectedStageText () {
       return Workflow_main.workflows[this.selected_stage.workflow_id].stages[this.selected_stage.stage_id].name
     },
@@ -165,27 +151,27 @@ export default defineComponent({
       }
       return true
     },
+    is_project_included_in_current_filters(project) {
+      if (!this._recompute_filtered_projects_stage_filter(project)) {
+        return false
+      }
+      if (!this._recompute_filtered_projects_agent_filter(project)) {
+        return false
+      }
+      if (!this._recompute_filtered_projects_source_filter(project)) {
+        return false
+      }
+      return true
+    },
     recompute_filtered_projects () {
       const TTT = this
+      console.log('Start filter recompute_filtered_projects')
       this.filtered_loaded_projects = this.loaded_projects.filter(function (x) {
-        if (!TTT._recompute_filtered_projects_stage_filter(x)) {
-          return false
+        if (!x.loaded) {
+          return true
         }
-        if (!TTT._recompute_filtered_projects_agent_filter(x)) {
-          return false
-        }
-        if (!TTT._recompute_filtered_projects_source_filter(x)) {
-          return false
-        }
-        return true
+        return TTT.is_project_included_in_current_filters(x)
       })
-    },
-    clearselectesstage () {
-      this.selected_stage = {
-        workflow_id: undefined,
-        stage_id: undefined
-      }
-      this.recompute_filtered_projects()
     },
     onchartclickstage (workflow_id, stage_id, stage_data) {
       const TTT=this
