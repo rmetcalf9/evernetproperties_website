@@ -42,7 +42,7 @@
             </template>
           </q-table>
           <div class="stamp-duty-card-detail-bottom-text">
-            <p>Example calculation only for use when estimating a project - check with an expert and also check if exemptions apply.</p>
+            <p>Example calculation only for use when estimating a project - check with an expert and also check if exemptions apply. You can also use the government stamp duty calculator  <a href="https://www.tax.service.gov.uk/calculate-stamp-duty-land-tax/#!/intro" target="_new">here</a>.</p>
             <p class="stamp-duty-card-detail-bottom-text-title">Sources:</p>
             <ul>
             <li>England Residential: <a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates" target="_new">here</a></li>
