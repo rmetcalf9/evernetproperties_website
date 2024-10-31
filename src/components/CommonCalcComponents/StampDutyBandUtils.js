@@ -96,36 +96,31 @@ function getstampdutyband (
   }
   return {
     name: 'Scotland Residential',
-    // 0% between £0 - £40,000
-    // 3% between £40,000 - £145,000
-    // 5% between £145,000 - £250,000
-    // 8% between £250,000 - £325,000
-    // 13% between £325,000 - £750,000
-    // 15% above £750,000
+    // 0% on the portion up to £145,000
+    // 2% on the portion from £145,001 to £250,000
+    // 5% on the portion from £250,001 to £325,000
+    // 10% on the portion from £325,001 to £750,000
+    // 12% on the portion above £750,000
     bands: [{
       from: 0,
-      upto: 40000,
-      rate: 0
-    },{
-      from: 40000,
       upto: 145000,
-      rate: 0.03
+      rate: 0
     },{
       from: 145000,
       upto: 250000,
-      rate: 0.05
+      rate: 0.02
     },{
       from: 250000,
       upto: 325000,
-      rate: 0.08
+      rate: 0.05
     },{
       from: 325000,
       upto: 750000,
-      rate: 0.13
+      rate: 0.1
     },{
       from: 750000,
       upto: undefined,
-      rate: 0.15
+      rate: 0.12
     }]
   }
 }
