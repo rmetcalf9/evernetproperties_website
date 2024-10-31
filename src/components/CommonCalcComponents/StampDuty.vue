@@ -2,7 +2,7 @@
   <q-card inline class="q-ma-sm card-style">
     <q-card-section>
       <div class="text-h6">Stamp Duty</div>
-      <div class="text-subtitle2">Stampduty calculation assuming investment property. This is a basic calculator useful for estimates. Factors effecting stamp duty include if the property is habitable, if it’s a commercial property and there are different rules for Scotland.</div>
+      <div class="text-subtitle2">Stampduty calculation assuming investment property This is known as Stamp Duty in England and Land and Buildings Transaction Tax (LBTT) in Scotland. This is a basic calculator useful for estimates. Factors affecting stamp duty include if the property is habitable, if it’s a commercial property and there are different rules for Scotland. This is an example calculation designed to give a rough idea. It is best to use the official government calculators. Refer to the links given in the detail section.</div>
     </q-card-section>
     <q-card-section>
       <q-checkbox v-model="stampdutydata.exempt" label="Stampduty Exempt" />
@@ -40,6 +40,16 @@
               </q-td>
             </template>
           </q-table>
+          <div class="stamp-duty-card-detail-bottom-text">
+            <p>Example calculation only for use when estimating a project - check with an expert and also check if exemptions apply.</p>
+            <p class="stamp-duty-card-detail-bottom-text-title">Sources:</p>
+            <ul>
+            <li>England Residential: <a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates" target="_new">here</a></li>
+            <li>England Commercial: <a href="https://www.gov.uk/stamp-duty-land-tax/nonresidential-and-mixed-rates" target="_new">here</a></li>
+            <li>Scotland Residential: <a href="https://revenue.scot/taxes/land-buildings-transaction-tax/residential-property" target="_new">here</a></li>
+            <li>Scotland Commercial: <a href="https://revenue.scot/taxes/land-buildings-transaction-tax/non-residential-property" target="_new">here</a></li>
+            </ul>
+          </div>
         </div>
       </q-expansion-item>
     </q-card-section>
@@ -48,24 +58,11 @@
 </template>
 
 <script>
-// TODO https://cruseburke.co.uk/stamp-duty-on-commercial-property/ - england comercial
-// TODO https://revenue.scot/taxes/land-buildings-transaction-tax/non-residential-property - scotland comercial
+// Source url's now in details section
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import utils from '../utils.js'
-
-function stampdutyforthisband (band, amount) {
-  if (amount < band.from) {
-    return 0
-  }
-  if (typeof (band.upto) === 'undefined') {
-    return (amount - band.from) * band.rate
-  }
-  if (amount > band.upto) {
-    return (band.upto - band.from) * band.rate
-  }
-  return (amount - band.from) * band.rate
-}
+import stampdutybandutils from './StampDutyBandUtils.js'
 
 export default defineComponent({
   name: 'BrrCalcStampduty',
@@ -167,122 +164,30 @@ export default defineComponent({
         return {
           range: utils.format_currency(band.from) + ' - ' + utils.format_currency(band.upto),
           rate: (band.rate * 100) + '%',
-          min: stampdutyforthisband(band, TTT.purchaserange.min),
-          max: stampdutyforthisband(band, TTT.purchaserange.max)
+          min: stampdutybandutils.stampdutyforthisband(band, TTT.purchaserange.min),
+          max: stampdutybandutils.stampdutyforthisband(band, TTT.purchaserange.max)
         }
       })
     },
     stampdutybands () {
-      if (this.stampdutydata.exempt) {
-        return {
-          name: 'exempt',
-          bands: [{
-            from: 0,
-            upto: undefined,
-            rate: 0
-          }]
-        }
-      }
-      if (this.stampdutydata.commercial) {
-        if (this.stampdutydata.location === 'england') {
-          return {
-            name: 'England Commercial',
-            bands: [{
-              from: 0,
-              upto: 150000,
-              rate: 0
-            },
-            {
-              from: 150000,
-              upto: 250000,
-              rate: 0.02
-            },
-            {
-              from: 250000,
-              upto: undefined,
-              rate: 0.05
-            }]
-          }
-        }
-        return {
-          name: 'Scotland Commercial',
-          bands: [{
-            from: 0,
-            upto: 150000,
-            rate: 0
-          },
-          {
-            from: 150000,
-            upto: 250000,
-            rate: 0.01
-          },
-          {
-            from: 250000,
-            upto: undefined,
-            rate: 0.05
-          }]
-        }
-      }
-      if (this.stampdutydata.location === 'england') {
-        return {
-          name: 'England Residential',
-          bands: [{
-            from: 0,
-            upto: 250000,
-            rate: 0.03
-          },
-          {
-            from: 250000,
-            upto: 925000,
-            rate: 0.08
-          },
-          {
-            from: 925000,
-            upto: 1500000,
-            rate: 0.13
-          },
-          {
-            from: 1500000,
-            upto: undefined,
-            rate: 0.15
-          }]
-        }
-      }
-      return {
-        name: 'Scotland Residential',
-        // 0% between £0 - £40,000
-        // 3% between £40,000 - £145,000
-        // 5% between £145,000 - £250,000
-        // 8% between £250,000 - £325,000
-        // 13% between £325,000 - £750,000
-        // 15% above £750,000
-        bands: [{
-          from: 0,
-          upto: 40000,
-          rate: 0
-        },{
-          from: 40000,
-          upto: 145000,
-          rate: 0.03
-        },{
-          from: 145000,
-          upto: 250000,
-          rate: 0.05
-        },{
-          from: 250000,
-          upto: 325000,
-          rate: 0.08
-        },{
-          from: 325000,
-          upto: 750000,
-          rate: 0.13
-        },{
-          from: 750000,
-          upto: undefined,
-          rate: 0.15
-        }]
-      }
+      return stampdutybandutils.getstampdutyband(
+        this.stampdutydata.exempt,
+        this.stampdutydata.commercial,
+        this.stampdutydata.location
+      )
     }
   }
 })
 </script>
+
+<style>
+.stamp-duty-card-detail-bottom-text {
+  padding-top: 10px;
+}
+.stamp-duty-card-detail-bottom-text-title {
+  margin-bottom: 0px;
+}
+.stamp-duty-card-detail-bottom-text ul {
+  margin-top: 0px;
+}
+</style>
