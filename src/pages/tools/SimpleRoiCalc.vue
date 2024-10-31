@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div class="main-page fit col wrap justify-center items-center content-center">
       <h1>Simple ROI Caculator</h1>
-      <div>This caculator is a quick and simple way of finding the ROI on a property on an intrest only mortgage. It doesn't take into account refurbishment.</div>
+      <div>This caculator is a quick and simple way of finding the ROI on a property on an intrest only mortgage. It doesn't take into account refurbishment nor does it do a detailed stamp duty calculation. It is useful as a quick check only.</div>
       <div class="row">
         <q-card inline class="q-ma-sm card-style">
           <q-card-section>
@@ -65,7 +65,7 @@
             <div>Total Mortgage: {{ format_currency(totalmortgage) }}</div>
             <div v-if="extrapurchasecosts != 0">Extra purchase costs: {{ format_currency(extrapurchasecosts) }}</div>
             <div>Deposit: {{ format_currency(deposit) }}</div>
-            <div>Stamp and fees: {{ format_currency(stampandfees) }}</div>
+            <div>Stamp and fees: {{ format_currency(stampandfees) }}<q-btn round dense flat icon="info" @click="helpstampandfees" /></div>
             <div><b>Total Money In: {{ format_currency(totalmoneyin) }}</b></div>
           </q-card-section>
         </q-card>
@@ -100,6 +100,7 @@
 import { defineComponent } from 'vue'
 import utils from '../../components/utils.js'
 
+const stampandfeespercentage =  0.06
 
 export default defineComponent({
   name: 'SimpleRoiCalc',
@@ -140,6 +141,15 @@ export default defineComponent({
       }).onOk(() => {
         // console.log('OK')
       })
+    },
+    helpstampandfees () {
+      this.$q.dialog({
+        title: 'Stamp duty and fees',
+        message: 'This is a quick estimate. Assuming ' +  utils.format_percent(stampandfeespercentage),
+        html: true
+      }).onOk(() => {
+        // console.log('OK')
+      })
     }
   },
   computed: {
@@ -150,7 +160,7 @@ export default defineComponent({
       return this.purchaseprice - this.totalmortgage
     },
     stampandfees () {
-      return this.purchaseprice * 0.04
+      return this.purchaseprice * stampandfeespercentage
     },
     totalmoneyin () {
       return this.deposit + this.stampandfees + this.extrapurchasecosts
