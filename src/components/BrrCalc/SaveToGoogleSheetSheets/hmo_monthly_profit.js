@@ -150,7 +150,7 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
   context.cur_row = context.cur_row + 1
   context.value_requests.push({
     range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
-    values: [['Building insurance', '', 'TODO VERIFY']]
+    values: [['Building insurance', '60', 'TODO VERIFY']]
   })
 
   context.cur_row = context.cur_row + 1
