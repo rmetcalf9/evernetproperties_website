@@ -10,6 +10,8 @@ import { clientsClaim } from 'workbox-core'
 import { precacheAndRoute, cleanupOutdatedCaches, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute, NavigationRoute } from 'workbox-routing'
 
+const rjmserviceworkerreleaseversion = '2024-10-31'
+
 self.skipWaiting()
 clientsClaim()
 
