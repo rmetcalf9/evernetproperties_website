@@ -2,7 +2,7 @@
   <q-card inline class="q-ma-sm card-style">
     <q-card-section>
       <div class="text-h6">Stamp Duty</div>
-      <div class="text-subtitle2">Stampduty calculation assuming investment property This is known as Stamp Duty in England and Land and Buildings Transaction Tax (LBTT) in Scotland. This is a basic calculator useful for estimates. Factors affecting stamp duty include if the property is habitable, if it’s a commercial property and there are different rules for Scotland. This is an example calculation designed to give a rough idea. It is best to use the official government calculators. Refer to the links given in the detail section.</div>
+      <div class="text-subtitle2">Stamp Duty calculation assuming investment property This is known as Stamp Duty in England and Land and Buildings Transaction Tax (LBTT) in Scotland. This is a basic calculator useful for estimates. Factors affecting stamp duty include if the property is habitable, if it’s a commercial property and there are different rules for Scotland. This is an example calculation designed to give a rough idea and uses assumptions that may not be correct (e.g. it is assumed this is a second property). It is best to use the official government calculators. Refer to the links given in the detail section.</div>
     </q-card-section>
     <q-card-section>
       <q-checkbox v-model="stampdutydata.exempt" label="Stampduty Exempt" />
@@ -13,6 +13,12 @@
         <q-option-group
           v-model="stampdutydata.location"
           :options="stampdutydata.locationoptions"
+          inline
+        />
+        Expected completion date
+        <q-option-group
+          v-model="stampdutydata.completion"
+          :options="stampdutydata.completionoptions"
           inline
         />
         <div class="text-h6">Stamp Duty: {{ format_currency(stampduty.min) }} - {{ format_currency(stampduty.max) }}</div>
@@ -45,7 +51,7 @@
             <p>Example calculation only for use when estimating a project - check with an expert and also check if exemptions apply. You can also use the government stamp duty calculator  <a href="https://www.tax.service.gov.uk/calculate-stamp-duty-land-tax/#!/intro" target="_new">here</a>.</p>
             <p class="stamp-duty-card-detail-bottom-text-title">Sources:</p>
             <ul>
-            <li>England Residential: <a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates" target="_new">here</a></li>
+            <li>England Residential: <a href="https://www.gov.uk/guidance/stamp-duty-land-tax-buying-an-additional-residential-property" target="_new">here</a></li>
             <li>England Commercial: <a href="https://www.gov.uk/stamp-duty-land-tax/nonresidential-and-mixed-rates" target="_new">here</a></li>
             <li>Scotland Residential: <a href="https://revenue.scot/taxes/land-buildings-transaction-tax/residential-property" target="_new">here</a></li>
             <li>Scotland Commercial: <a href="https://revenue.scot/taxes/land-buildings-transaction-tax/non-residential-property" target="_new">here</a></li>
@@ -91,6 +97,21 @@ export default defineComponent({
           {
             label: 'Scotland',
             value: 'scotland'
+          }
+        ],
+        completion: '31oct2024to31mar2025',
+        completionoptions: [
+          {
+            label: 'Before 31-Oct-2024',
+            value: 'bef31oct2024'
+          },
+          {
+            label: '31-Oct-2024 - 31-Mar-2025',
+            value: '31oct2024to31mar2025'
+          },
+          {
+            label: ' After 1 April 2025',
+            value: 'aft1apr2025'
           }
         ]
       },
@@ -164,7 +185,7 @@ export default defineComponent({
       return this.stampdutybands.bands.map(function (band) {
         return {
           range: utils.format_currency(band.from) + ' - ' + utils.format_currency(band.upto),
-          rate: (band.rate * 100) + '%',
+          rate: utils.format_percent(band.rate, 0),
           min: stampdutybandutils.stampdutyforthisband(band, TTT.purchaserange.min),
           max: stampdutybandutils.stampdutyforthisband(band, TTT.purchaserange.max)
         }
@@ -174,7 +195,8 @@ export default defineComponent({
       return stampdutybandutils.getstampdutyband(
         this.stampdutydata.exempt,
         this.stampdutydata.commercial,
-        this.stampdutydata.location
+        this.stampdutydata.location,
+        this.stampdutydata.completion
       )
     }
   }

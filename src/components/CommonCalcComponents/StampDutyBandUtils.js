@@ -17,7 +17,8 @@ function stampdutyforthisband (band, amount) {
 function getstampdutyband (
   exempt,
   commercial,
-  location
+  location,
+  completion
 ) {
   if (exempt) {
     return {
@@ -70,27 +71,82 @@ function getstampdutyband (
     }
   }
   if (location === 'england') {
+    if (completion === 'bef31oct2024') {
+      return {
+        name: 'England Residential Before 31-Oct-2024',
+        bands: [{
+          from: 0,
+          upto: 250000,
+          rate: 0.03
+        },
+        {
+          from: 250000,
+          upto: 925000,
+          rate: 0.08
+        },
+        {
+          from: 925000,
+          upto: 1500000,
+          rate: 0.13
+        },
+        {
+          from: 1500000,
+          upto: undefined,
+          rate: 0.15
+        }]
+      }
+    }
+    if (completion === '31oct2024to31mar2025') {
+      return {
+        name: 'England Residential 31-Oct-2024 - 31-Mar-2025',
+        bands: [{
+          from: 0,
+          upto: 250000,
+          rate: 0.05
+        },
+        {
+          from: 250000,
+          upto: 925000,
+          rate: 0.10
+        },
+        {
+          from: 925000,
+          upto: 1500000,
+          rate: 0.15
+        },
+        {
+          from: 1500000,
+          upto: undefined,
+          rate: 0.17
+        }]
+      }
+    }
     return {
-      name: 'England Residential',
+      name: 'England Residential After 1 April 2025',
       bands: [{
         from: 0,
+        upto: 125000,
+        rate: 0.05
+      },
+      {
+        from: 125000,
         upto: 250000,
-        rate: 0.03
+        rate: 0.07
       },
       {
         from: 250000,
         upto: 925000,
-        rate: 0.08
+        rate: 0.10
       },
       {
         from: 925000,
         upto: 1500000,
-        rate: 0.13
+        rate: 0.15
       },
       {
         from: 1500000,
         upto: undefined,
-        rate: 0.15
+        rate: 0.17
       }]
     }
   }

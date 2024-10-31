@@ -34,8 +34,11 @@ function format_currency (num) {
   return prefix + digits_with_commas_recusrive(num.toFixed(0).toString())
 }
 
-function format_percent (num) {
-  return (num * 100).toFixed(2).toString() + '%'
+function format_percent (num, decimal_places) {
+  if (typeof (decimal_places) === 'undefined') {
+    decimal_places = 2
+  }
+  return (num * 100).toFixed(decimal_places).toString() + '%'
 }
 
 function uuidv4() {
