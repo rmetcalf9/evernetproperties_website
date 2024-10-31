@@ -27,6 +27,7 @@
             :title="stampdutybands.name"
             :columns="table.columns"
             :rows="stampdutybandswithamount"
+            :rows-per-page-options="[50]"
             hide-bottom
           >
             <template v-slot:body-cell-min_amount="props">
