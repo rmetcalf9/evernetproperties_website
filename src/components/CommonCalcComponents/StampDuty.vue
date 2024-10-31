@@ -71,6 +71,15 @@ import { useQuasar } from 'quasar'
 import utils from '../utils.js'
 import stampdutybandutils from './StampDutyBandUtils.js'
 
+
+function get_default_completion_range() {
+  // after march switch to new calculation as default
+  if (new Date() > new Date("2025-03-01")) {
+    return 'aft1apr2025'
+  }
+  return '31oct2024to31mar2025'
+}
+
 export default defineComponent({
   name: 'BrrCalcStampduty',
   emits: ['projectchanged'],
@@ -99,7 +108,7 @@ export default defineComponent({
             value: 'scotland'
           }
         ],
-        completion: '31oct2024to31mar2025',
+        completion: get_default_completion_range(),
         completionoptions: [
           {
             label: 'Before 31-Oct-2024',
@@ -136,6 +145,11 @@ export default defineComponent({
       this.stampdutydata.exempt = data_to_load.stampdutydata_exempt
       this.stampdutydata.commercial = data_to_load.stampdutydata_commercial
       this.stampdutydata.location = data_to_load.stampdutydata_location
+      if (typeof (data_to_load.stampdutydata_completion) === 'undefined') {
+        this.stampdutydata.completion = 'bef31oct2024'
+      } else {
+        this.stampdutydata.completion = data_to_load.stampdutydata_completion
+      }
 
       const TTT = this
       setTimeout(function () {
@@ -156,6 +170,7 @@ export default defineComponent({
         stampdutydata_exempt: this.stampdutydata.exempt,
         stampdutydata_commercial: this.stampdutydata.commercial,
         stampdutydata_location: this.stampdutydata.location,
+        stampdutydata_completion: this.stampdutydata.completion,
       }
     },
     stampduty () {
