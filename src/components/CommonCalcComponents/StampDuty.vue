@@ -2,7 +2,7 @@
   <q-card inline class="q-ma-sm card-style">
     <q-card-section>
       <div class="text-h6">Stamp Duty</div>
-      <div class="text-subtitle2">Stamp Duty calculation assuming investment property This is known as Stamp Duty in England and Land and Buildings Transaction Tax (LBTT) in Scotland. This is a basic calculator useful for estimates. Factors affecting stamp duty include if the property is habitable, if it’s a commercial property and there are different rules for Scotland. This is an example calculation designed to give a rough idea and uses assumptions that may not be correct (e.g. it is assumed this is a second property). It is best to use the official government calculators. Refer to the links given in the detail section.</div>
+      <div class="text-subtitle2">Stamp Duty calculation assuming investment property This is known as Stamp Duty in England and Land and Buildings Transaction Tax (LBTT) in Scotland. This is a basic calculator useful for estimates. Factors affecting stamp duty include if the property is habitable, if it’s a commercial property and there are different rules for Scotland. This is an example calculation designed to give a rough idea and uses assumptions that may not be correct (e.g. it is assumed this is a second property). It is best to use the official government calculators. Refer to the links given in the detail section.  If buying a high value property get advice from a stamp duty tax specialist.</div>
     </q-card-section>
     <q-card-section>
       <q-checkbox v-model="stampdutydata.exempt" label="Stampduty Exempt" />

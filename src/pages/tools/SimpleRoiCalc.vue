@@ -1,8 +1,8 @@
 <template>
   <q-page class="flex flex-center">
     <div class="main-page fit col wrap justify-center items-center content-center">
-      <h1>Simple ROI Caculator</h1>
-      <div>This caculator is a quick and simple way of finding the ROI on a property on an intrest only mortgage. It doesn't take into account refurbishment nor does it do a detailed stamp duty calculation. It is useful as a quick check only.</div>
+      <h1>Simple ROI Calculator</h1>
+      <div>This calculator is a quick and simple way of finding the ROI on a property on an intrest only mortgage. It doesn't take into account refurbishment nor does it do a detailed stamp duty calculation. It is useful as a quick check only.</div>
       <div class="row">
         <q-card inline class="q-ma-sm card-style">
           <q-card-section>
