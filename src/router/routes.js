@@ -21,6 +21,7 @@ const routes = [
       { path: 'profile', component: () => import('pages/Profile.vue') },
       { path: 'v/:verifycode/:pimsnumber', component: () => import('pages/VerifyPims.vue') },
       { path: 'debug', component: () => import('pages/DebugInfo.vue') },
+      { path: 'ppbevent', component: () => import('pages/Ppbevent.vue') },
     ]
   },
   {
