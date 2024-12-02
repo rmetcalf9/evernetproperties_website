@@ -80,7 +80,13 @@ module.exports = configure(function (/* ctx */) {
       // distDir
 
       // extendViteConf (viteConf) {},
-      // viteVuePluginOptions: {},
+      viteVuePluginOptions: {
+        template: {
+          compilerOptions: {
+            isCustomElement: (tag) => tag.startsWith('add-to-calendar-button') || (tag === 'center')
+          }
+        }
+      },
 
 
       // vitePlugins: [
