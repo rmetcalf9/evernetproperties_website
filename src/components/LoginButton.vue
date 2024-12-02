@@ -1,45 +1,45 @@
 <template>
   <div :class="getMainStyle">
-    <div>
-      <div id="g_id_onload"
-           :data-client_id="googleclientid"
-           data-context="signin"
-           data-ux_mode="popup"
-           :data-login_uri="login_url"
-           data-itp_support="true">
+      <div>
+        <div id="g_id_onload"
+             :data-client_id="googleclientid"
+             data-context="signin"
+             data-ux_mode="popup"
+             :data-login_uri="login_url"
+             data-itp_support="true">
+        </div>
+        <div class="g_id_signin"
+          ref="g_id_signin"
+          :style="googlebuttonstyle"
+          data-type="standard"
+          data-shape="rectangular"
+          data-theme="filled_blue"
+          data-text="signin"
+          data-size="large"
+          data-logo_alignment="left"
+        >
+        </div>
       </div>
-      <div class="g_id_signin"
-        ref="g_id_signin"
-        :style="googlebuttonstyle"
-        data-type="standard"
-        data-shape="rectangular"
-        data-theme="filled_blue"
-        data-text="signin"
-        data-size="large"
-        data-logo_alignment="left"
-      >
+      <div v-if="isConnected && !isLoggedin && !isLogininprogress && showOldStyle">
+        <q-btn
+          @click="autoriseWithGoogle"
+          color="primary"
+          :label="googleloginbuttonlabel"
+          class = "q-ml-xs"
+        ></q-btn>
+      </div>
+      <div v-if="isConnected && !isLoggedin">
+        <q-btn round dense flat icon="info" @click="help" />
+      </div>
+      <div v-if="isLoggedin">
+        <q-btn
+          @click="clickProfile"
+          color="primary"
+          label="User Profile"
+          class = "q-ml-xs"
+        ></q-btn>
       </div>
     </div>
-    <div v-if="isConnected && !isLoggedin && !isLogininprogress && showOldStyle">
-      <q-btn
-        @click="autoriseWithGoogle"
-        color="primary"
-        :label="googleloginbuttonlabel"
-        class = "q-ml-xs"
-      ></q-btn>
-    </div>
-    <div v-if="isConnected && !isLoggedin">
-      <q-btn round dense flat icon="info" @click="help" />
-    </div>
-    <div v-if="isLoggedin">
-      <q-btn
-        @click="clickProfile"
-        color="primary"
-        label="User Profile"
-        class = "q-ml-xs"
-      ></q-btn>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -55,6 +55,10 @@ export default defineComponent({
     floating: {
       type: Boolean,
       default: true
+    },
+    center: {
+      type: Boolean,
+      default: false
     }
   },
   setup () {
@@ -70,9 +74,12 @@ export default defineComponent({
   computed: {
     getMainStyle () {
       if (this.floating) {
-        return 'float-right row'
+        return 'loginbutton-main float-right row'
       }
-      return 'row'
+      if (this.center) {
+        return 'loginbutton-main row justify-center'
+      }
+      return 'loginbutton-main row'
     },
     showOldStyle () {
       return false
