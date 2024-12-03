@@ -26,7 +26,7 @@ if (process.env.MODE !== 'ssr' || process.env.PROD) {
   registerRoute(
     new NavigationRoute(
       createHandlerBoundToURL(process.env.PWA_FALLBACK_HTML),
-      { denylist: [/sw\.js$/, /workbox-(.)*\.js$/, new RegExp('ppb.html'), new RegExp('/ppbevent.html'), new RegExp('/simpleroi.html')] }
+      { denylist: [/sw\.js$/, /workbox-(.)*\.js$/, new RegExp('ppb.html'), new RegExp('/ppbevent.html'), new RegExp('/simpleroi.html'), new RegExp('/investorcrm.html')] }
     )
   )
 }
