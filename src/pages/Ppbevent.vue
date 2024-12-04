@@ -91,19 +91,9 @@
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import LoginButton from '../components/LoginButton.vue'
 import 'add-to-calendar-button'
+import events from '../events.js'
 
-
-const next_event = {
-  date: '2024-12-11T18:30:00Z',
-  title: 'Property Pipeline Builder',
-  subtitle: 'Early Access Webinar',
-  description: 'Property Pipeline Builder early access user group session. This session is for users who are interested in using it to manage their deal pipeline. I will demonstrate major features, present the road map and invite discussion to shape the future direction. In order to generate the maximum value for users I want to gather as much feedback as possible.',
-  meeting_url: 'https://meet.google.com/fyv-szmv-wxs'
-}
-
-
-const webinarDate = new Date(next_event.date);
-const oneHour = 3600000;
+const webinarDate = new Date(events.next_event.date);
 
 function getTimeLeft() {
   const now = new Date().getTime();
@@ -134,7 +124,7 @@ export default {
   },
   computed: {
     next_event () {
-      return next_event
+      return events.next_event
     },
     event_cal_start_date () {
       // See https://add-to-calendar-button.com/configuration for format
@@ -170,18 +160,7 @@ export default {
       return webinarDate.toLocaleTimeString('en-GB', options)
     },
     stage () {
-      // before_event
-      // near_and_during_event -> 1 hour before event change to this
-      // after_event -> 2 hours after event change to this
-      const timeLeft = getTimeLeft()
-      if (timeLeft > (oneHour * 2)) {
-        return 'before_event'
-      }
-      // show join link half an hour before to logged on users
-      if (timeLeft > (oneHour * -0.5)) {
-        return 'near_and_during_event'
-      }
-      return 'after_event'
+      return events.get_stage(events.next_event)
     },
     isLoggedin () {
       return this.backend_connection_store.isLoggedin
