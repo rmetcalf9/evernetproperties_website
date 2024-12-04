@@ -23,15 +23,22 @@
           <router-link :to="item.target" class="toolbar">{{ item.name }}</router-link>
         </div>
       </div>
+      <PreEventBanner
+      />
     </div>
   </div>
 </template>
 
 <script>
 import { defineComponent, ref } from 'vue'
+import PreEventBanner from './PreEventBanner.vue'
+
 
 export default defineComponent({
   name: 'HeadToolbarLayoutComponent',
+  components: {
+    PreEventBanner
+  },
   data () {
     return {
       menu_items: [

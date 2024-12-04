@@ -28,7 +28,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { Notify } from 'quasar'
+import { Notify, Cookies } from 'quasar'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 
 export default defineComponent({
@@ -59,6 +59,14 @@ export default defineComponent({
   },
   methods: {
     forcereload () {
+      let cookies_for_this_site = []
+      Object.keys(Cookies.getAll()).map(function (x) {
+        cookies_for_this_site.push(x)
+      })
+      cookies_for_this_site.map(function (x) {
+        Cookies.remove(x)
+      })
+
       this.backend_connection_store.logout()
       window.location.reload(true)
     }
