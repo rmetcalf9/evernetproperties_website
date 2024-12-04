@@ -1,6 +1,6 @@
 <template>
   <div v-if="show_banner" class="preeventbanner fit row no-wrap justify-left items-center content-start">
-    <div>📰 Upcoming Event {{ next_event.title }} - {{ next_event.subtitle }} - <q-btn
+    <div>📰 Event in progress {{ next_event.title }} - {{ next_event.subtitle }} - <q-btn
         @click="$router.replace('/ppbevent')"
         flat
     >
@@ -17,10 +17,10 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import events from '../../events.js'
 import { Cookies } from 'quasar'
 
-const cookie_name = 'preeventbanner_seen_event'
+const cookie_name = 'duringbanner_seen_event'
 
 export default defineComponent({
-  name: 'PreEventBanner',
+  name: 'DuringEventBanner',
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -45,7 +45,7 @@ export default defineComponent({
       if (!this.isLoggedin) {
         return false
       }
-      if (events.get_stage(events.next_event) !== 'before_event') {
+      if (events.get_stage(events.next_event) !== 'near_and_during_event') {
         return false
       }
       if (this.shown_cookie_set) {
@@ -60,6 +60,8 @@ export default defineComponent({
   methods: {
     close_banner () {
       this.shown_cookie_set = true
+      return
+      // not setting cookie so banner will come back on page refresh
       Cookies.set(cookie_name, events.next_event.date, {
         secure: !window.location.href.includes('localhost'), // otherwise cookie not set on dev machines
         expires: 180 // expire in 180 days

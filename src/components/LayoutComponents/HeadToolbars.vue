@@ -25,6 +25,8 @@
       </div>
       <PreEventBanner
       />
+      <DuringEventBanner
+      />
     </div>
   </div>
 </template>
@@ -32,12 +34,14 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import PreEventBanner from './PreEventBanner.vue'
+import DuringEventBanner from './DuringEventBanner.vue'
 
 
 export default defineComponent({
   name: 'HeadToolbarLayoutComponent',
   components: {
-    PreEventBanner
+    PreEventBanner,
+    DuringEventBanner
   },
   data () {
     return {
