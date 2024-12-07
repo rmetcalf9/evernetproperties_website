@@ -9,6 +9,8 @@
        </q-item-section>
      </q-item>
      <q-item>
+      codebasever: {{ codebasever }}
+      <br/>
       isConnected: {{ isConnected }}
       <br/>
       isLoggedIn: {{ isLoggedin }}
@@ -30,6 +32,7 @@
 import { defineComponent } from 'vue'
 import { Notify, Cookies } from 'quasar'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import rjmversion from '../rjmversion'
 
 export default defineComponent({
   name: 'DebugPage',
@@ -41,6 +44,7 @@ export default defineComponent({
   },
   data () {
     return {
+      codebasever: rjmversion.codebasever
     }
   },
   computed: {

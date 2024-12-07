@@ -4,7 +4,30 @@
 
 quasar build -m pwa
 echo "evernetproperties.com" > dist/pwa/CNAME
+
+echo "Bump version"
+#Find minor version - text AFTER last dot in version string
+OLDVERSION=$(cat ${VERSIONFILE})
+OLDMINORVERSION=$(echo ${OLDVERSION} | sed 's/.*\.//')
+CHARSINFIRSTPART=$(expr ${#OLDVERSION} - ${#OLDMINORVERSION})
+RES=$?
+if [ ${RES} -ne 0 ]; then
+  echo "Invalid version number"
+  exit 1
+fi
+OLDVERSIONWITHOUTMINOR=${OLDVERSION:0:${CHARSINFIRSTPART}}
+RES=$?
+if [ ${RES} -ne 0 ]; then
+  echo "Invalid version number (Can't get first part)"
+  exit 1
+fi
+NEWVERSION=${OLDVERSIONWITHOUTMINOR}$(expr ${OLDMINORVERSION} + 1)
+
+echo ${NEWVERSION} > ${VERSIONFILE}
+printf "/* eslint-disable */\nexport default { codebasever: '${NEWVERSION}' }\n" > ./src/rjmversion.js
+
 cp -r ./redirects/* ./dist/pwa
+
 git add --all
 git commit -m"New website version"
 git push
