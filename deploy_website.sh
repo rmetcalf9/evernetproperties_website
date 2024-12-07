@@ -1,11 +1,15 @@
 #!/bin/bash
 
 ##git subtree pull --prefix=dist/spa origin gh-pages (If change made upstream)
+export START_DIR=$(pwd)
+export GITROOT=${START_DIR}
+VERSIONFILE=${GITROOT}/VERSION
+
 
 quasar build -m pwa
 echo "evernetproperties.com" > dist/pwa/CNAME
 
-echo "Bump version"
+echo "Bump version (Versionfile=${VERSIONFILE})"
 #Find minor version - text AFTER last dot in version string
 OLDVERSION=$(cat ${VERSIONFILE})
 OLDMINORVERSION=$(echo ${OLDVERSION} | sed 's/.*\.//')
@@ -22,6 +26,7 @@ if [ ${RES} -ne 0 ]; then
   exit 1
 fi
 NEWVERSION=${OLDVERSIONWITHOUTMINOR}$(expr ${OLDMINORVERSION} + 1)
+echo "Bumped to version ${NEWVERSION}"
 
 echo ${NEWVERSION} > ${VERSIONFILE}
 printf "/* eslint-disable */\nexport default { codebasever: '${NEWVERSION}' }\n" > ./src/rjmversion.js
