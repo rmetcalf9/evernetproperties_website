@@ -34,7 +34,8 @@ module.exports = configure(function (/* ctx */) {
       'axios',
       'brand-colors',
       'notify-defaults',
-      'googleapi'
+      'googleapi',
+      'sw-update-handler'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
