@@ -6,9 +6,6 @@ export GITROOT=${START_DIR}
 VERSIONFILE=${GITROOT}/VERSION
 
 
-quasar build -m pwa
-echo "evernetproperties.com" > dist/pwa/CNAME
-
 echo "Bump version (Versionfile=${VERSIONFILE})"
 #Find minor version - text AFTER last dot in version string
 OLDVERSION=$(cat ${VERSIONFILE})
@@ -30,6 +27,12 @@ echo "Bumped to version ${NEWVERSION}"
 
 echo ${NEWVERSION} > ${VERSIONFILE}
 printf "/* eslint-disable */\nexport default { codebasever: '${NEWVERSION}' }\n" > ./src/rjmversion.js
+
+quasar build -m pwa
+
+echo "Updating CNAME"
+echo "evernetproperties.com" > dist/pwa/CNAME
+
 
 cp -r ./redirects/* ./dist/pwa
 
