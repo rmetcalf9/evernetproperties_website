@@ -53,6 +53,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { usePatchLocalSettingsStore } from 'stores/patch_local_settings'
 import { Notify } from 'quasar'
 
 import ProjectTable from '../../../components/ProjectTable.vue'
@@ -70,8 +71,10 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const patch_local_settings_store = usePatchLocalSettingsStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      patch_local_settings_store
     }
   },
   data () {
@@ -80,7 +83,7 @@ export default defineComponent({
       patch_data: {},
       loaded_projects: [],
       filtered_loaded_projects: [],
-      cumulatively_loaded_stages: {}, // We never delete from this
+      cumulatively_loaded_stagesXXX: {}, // We never delete from this
       cumulatively_loaded_sources: {}, // We never delete from this
       cumulatively_loaded_agents: {}, // We never delete from this
       project_filter: {
@@ -101,6 +104,13 @@ export default defineComponent({
     }
   },
   computed: {
+    cumulatively_loaded_stages: {
+      get() {
+        console.log('GETTING')
+        // return this.cumulatively_loaded_stagesXXX;
+        return this.patch_local_settings_store.findPatchRecord(this.patch_data.id)
+      }
+    },
     selectedStageText () {
       return Workflow_main.workflows[this.selected_stage.workflow_id].stages[this.selected_stage.stage_id].name
     },
@@ -255,15 +265,14 @@ export default defineComponent({
     add_to_cumulatively_loaded (project) {
       // called from load project - so always loaded at this point
       const workflow_stage_id = Workflow_main.get_workflow_stage_key(project.workflow.workflow_used_id, project.workflow.current_stage)
-      if (!(workflow_stage_id in this.cumulatively_loaded_stages)) {
-        this.cumulatively_loaded_stages[workflow_stage_id] = {
-          workflow_stage_id: workflow_stage_id,
-          workflow_id: project.workflow.workflow_used_id,
-          stage_id: project.workflow.current_stage,
-          stage: Workflow_main.getWorkflowStage(project.workflow.workflow_used_id, project.workflow.current_stage),
-          selected: utils.boolean_undefined_to_false(Workflow_main.workflows[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active)
-        }
-      }
+      this.patch_local_settings_store.reportFoundStage({
+        patch_id: this.patch_data.id,
+        workflow_stage_id: workflow_stage_id,
+        workflow_id: project.workflow.workflow_used_id,
+        stage_id: project.workflow.current_stage,
+        stage: Workflow_main.getWorkflowStage(project.workflow.workflow_used_id, project.workflow.current_stage),
+        selected: utils.boolean_undefined_to_false(Workflow_main.workflows[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active)
+      })
       const source = utils.get_source_text(project.sub_section_details.dealbasicinfo.deal_source)
       if (!(source in this.cumulatively_loaded_sources)) {
         this.cumulatively_loaded_sources[source] = {
