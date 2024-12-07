@@ -33,7 +33,7 @@ if (process.env.MODE !== 'ssr' || process.env.PROD) {
           new RegExp('/ppbevent.html'),
           new RegExp('/simpleroi.html'),
           new RegExp('/investorcrm.html'),
-          new RegExp('^/nc/$')
+          new RegExp('^/nc/')
       ] }
     )
   )
