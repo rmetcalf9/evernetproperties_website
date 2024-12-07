@@ -83,9 +83,6 @@ export default defineComponent({
       patch_data: {},
       loaded_projects: [],
       filtered_loaded_projects: [],
-      cumulatively_loaded_stagesXXX: {}, // We never delete from this
-      cumulatively_loaded_sources: {}, // We never delete from this
-      cumulatively_loaded_agents: {}, // We never delete from this
       project_filter: {
         filter_stages: true,
         selected_stages: [],
@@ -106,9 +103,17 @@ export default defineComponent({
   computed: {
     cumulatively_loaded_stages: {
       get() {
-        console.log('GETTING')
-        // return this.cumulatively_loaded_stagesXXX;
-        return this.patch_local_settings_store.findPatchRecord(this.patch_data.id)
+        return this.patch_local_settings_store.findPatchRecord(this.patch_data.id).cumulatively_loaded_stages
+      }
+    },
+    cumulatively_loaded_sources: {
+      get() {
+        return this.patch_local_settings_store.findPatchRecord(this.patch_data.id).cumulatively_loaded_sources
+      }
+    },
+    cumulatively_loaded_agents: {
+      get() {
+        return this.patch_local_settings_store.findPatchRecord(this.patch_data.id).cumulatively_loaded_agents
       }
     },
     selectedStageText () {
@@ -265,15 +270,22 @@ export default defineComponent({
     add_to_cumulatively_loaded (project) {
       // called from load project - so always loaded at this point
       const workflow_stage_id = Workflow_main.get_workflow_stage_key(project.workflow.workflow_used_id, project.workflow.current_stage)
-      this.patch_local_settings_store.reportFoundStage({
+      const source = utils.get_source_text(project.sub_section_details.dealbasicinfo.deal_source)
+      const agent = utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
+
+      this.patch_local_settings_store.reportFoundProject({
         patch_id: this.patch_data.id,
         workflow_stage_id: workflow_stage_id,
         workflow_id: project.workflow.workflow_used_id,
         stage_id: project.workflow.current_stage,
         stage: Workflow_main.getWorkflowStage(project.workflow.workflow_used_id, project.workflow.current_stage),
-        selected: utils.boolean_undefined_to_false(Workflow_main.workflows[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active)
+        stage_selected: utils.boolean_undefined_to_false(Workflow_main.workflows[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active),
+        source: source,
+        source_selected: true,
+        agent: agent,
+        agent_selected: true
       })
-      const source = utils.get_source_text(project.sub_section_details.dealbasicinfo.deal_source)
+
       if (!(source in this.cumulatively_loaded_sources)) {
         this.cumulatively_loaded_sources[source] = {
           name: source,
@@ -281,7 +293,6 @@ export default defineComponent({
         }
       }
 
-      const agent = utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
       if (!(agent in this.cumulatively_loaded_agents)) {
         this.cumulatively_loaded_agents[agent] = {
           name: agent,
