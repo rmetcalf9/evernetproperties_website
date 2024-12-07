@@ -4,7 +4,7 @@
 
 quasar build -m pwa
 echo "evernetproperties.com" > dist/pwa/CNAME
-cp ./redirects/* ./dist/pwa
+cp -r ./redirects/* ./dist/pwa
 git add --all
 git commit -m"New website version"
 git push
