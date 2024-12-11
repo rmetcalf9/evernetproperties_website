@@ -1,6 +1,6 @@
 <template>
   <div v-if="show_banner" class="preeventbanner fit row no-wrap justify-left items-center content-start">
-    <div>📰 Event in progress {{ next_event.title }} - {{ next_event.subtitle }} - <q-btn
+    <div>📰 Event coming up/in progress {{ next_event.title }} - {{ next_event.subtitle }} - <q-btn
         @click="$router.replace('/ppbevent')"
         flat
     >
