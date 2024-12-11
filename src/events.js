@@ -14,11 +14,14 @@ function get_stage(event) {
   // after_event -> 2 hours after event change to this
   const webinarDate = new Date(event.date);
   const timeLeft = webinarDate.getTime() - (new Date()).getTime()
-  if (timeLeft > (oneHour * 2)) {
+
+  const time_to_switch_to_near = oneHour * 2
+
+  if (timeLeft > (time_to_switch_to_near)) {
     return 'before_event'
   }
   // show join link until one hour into the event
-  if (timeLeft < oneHour) { // one hour PASSED start
+  if (timeLeft < time_to_switch_to_near) { // one hour PASSED start
     return 'near_and_during_event'
   }
   return 'after_event'
