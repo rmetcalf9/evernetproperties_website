@@ -30,7 +30,19 @@
 
         <p>📅 <strong>Date:</strong> {{ event_day }}</p>
         <p>⏰ <strong>Time:</strong> {{ event_time }}</p>
-        <p>🌐 <strong>Where:</strong> Online (link sent upon registration)</p>
+        <div v-if="isLoggedin">
+          <div v-if="stage !== 'near_and_during_event'">
+            <p>🌐 <strong>Where:</strong> Online (link sent upon registration)</p>
+          </div>
+          <div v-if="stage === 'near_and_during_event'">
+            <p>🌐 <strong>Where:</strong> Online (<a :href="next_event.meeting_url" target="_new">Click here to join</a>)</p>
+          </div>
+
+        </div>
+        <div v-if="!isLoggedin">
+          <p>🌐 <strong>Where:</strong> Online (link sent upon registration)</p>
+        </div>
+
 
         <p>{{ next_event.description }}</p>
         </header>
