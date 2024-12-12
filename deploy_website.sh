@@ -5,6 +5,13 @@ export START_DIR=$(pwd)
 export GITROOT=${START_DIR}
 VERSIONFILE=${GITROOT}/VERSION
 
+echo "Running tests"
+npm run test:unit:ci
+RES=$?
+if [ ${RES} -ne 0 ]; then
+  echo "ERROR - unit tests not passing"
+  exit 1
+fi
 
 echo "Bump version (Versionfile=${VERSIONFILE})"
 #Find minor version - text AFTER last dot in version string

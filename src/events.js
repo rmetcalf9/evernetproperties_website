@@ -8,27 +8,32 @@ const next_event = {
 }
 const oneHour = 3600000;
 
-function get_stage(event) {
+function get_stage_internal(event, current_date) {
   // before_event
   // near_and_during_event -> 1 hour before event change to this
   // after_event -> 2 hours after event change to this
   const webinarDate = new Date(event.date);
-  const timeLeft = webinarDate.getTime() - (new Date()).getTime()
+  const timeLeft = webinarDate.getTime() - (current_date).getTime()
 
   const time_to_switch_to_near = oneHour * 2
+  const time_to_switch_to_after = oneHour * -1
 
   if (timeLeft > (time_to_switch_to_near)) {
     return 'before_event'
   }
   // show join link until one hour into the event
-  if (timeLeft < time_to_switch_to_near) { // one hour PASSED start
+  if (timeLeft > time_to_switch_to_after) { // one hour PASSED start
     return 'near_and_during_event'
   }
   return 'after_event'
 }
 
+function get_stage(event) {
+  return get_stage_internal(event, new Date())
+}
 
 export default {
   next_event: next_event,
-  get_stage: get_stage
+  get_stage: get_stage,
+  get_stage_internal: get_stage_internal //for testing
 }
