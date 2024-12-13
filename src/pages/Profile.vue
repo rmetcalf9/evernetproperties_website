@@ -55,6 +55,10 @@
           color="secondary"
           label="Logout"
         ></q-btn>
+      </div>
+
+      <div class="profile-delete-account-button-section">
+        <div>This option will wipe all your data from our servers. This includes personal data and all the patches, projects, etc. you have stored. Once completed it is not recoverable and if you want to use the system again you need to sign up again.</div>
         <q-btn
           class="bottom-button"
           @click="deleteaccount"
@@ -62,6 +66,8 @@
           label="Delete my account"
         ></q-btn>
       </div>
+
+
     </div>
     <ProfilePimsDetailDialog
       ref="ProfilePimsDetailDialog"
@@ -266,5 +272,18 @@ h5 {
   margin: 10px;
   padding: 5px;
   background: antiquewhite;
+}
+.profile-delete-account-button-section {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background: pink;
+  max-width: 600px;
+  color: red;
+  font-weight: 500;
+}
+.profile-delete-account-button-section > .bottom-button {
+  margin: 10px;
 }
 </style>
