@@ -47,7 +47,11 @@
         <template v-slot:body-cell-visionandnotes="props">
           <q-td>
             <div v-if="props.row.loaded">
-              <div class="projecttablehead">{{ props.row.devplan }}</div>
+              <div v-if="typeof (props.row.devplan) !== 'undefined'">
+                <div v-for="line_item in props.row.devplan.split('\n')" :key='line_item' class="projecttablehead">
+                  {{ line_item }}
+                </div>
+              </div>
               <div v-if="typeof (props.row.notes) !== 'undefined'">
                 <div v-for="line_item in props.row.notes.split('\n')" :key='line_item'>
                   {{ line_item }}

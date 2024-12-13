@@ -3,8 +3,10 @@
     <q-card-section>
       <div class="text-h6">Vision</div>
       <div class="row">
-        <q-input v-model="devplan" label="What is the development plan?" class="col-grow" />
-        <q-btn round  color="primary" icon="info" @click="helpdevplan" />
+        <q-input v-model="devplan" autogrow label="What is the development plan?" class="col-grow" />
+        <div>
+          <q-btn round  color="primary" icon="info" @click="helpdevplan" />
+        </div>
       </div>
       &nbsp;
       <div class="text-h6">Strategies</div>
