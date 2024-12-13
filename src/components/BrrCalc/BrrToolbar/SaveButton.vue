@@ -73,6 +73,17 @@ export default defineComponent({
       this.ever_saved = true
     },
     click_btn () {
+      if (!this.changed) {
+        return
+      }
+      if (this.no_save_message !== '') {
+        this.$q.dialog({
+          title: 'Not currently able to save',
+          message: this.no_save_message,
+          html: true
+        })
+        return
+      }
       this.autosave_seconds_left = -1 // This causes save monitor to abort
       this.save_now()
     },
