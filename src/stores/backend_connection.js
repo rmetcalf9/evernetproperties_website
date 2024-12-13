@@ -13,6 +13,8 @@ import utils from '../utils.js'
 //         3-> Failed to connect
 //    TODO Add logged in to this
 
+const seconds_to_wait_for_user_to_login = 10
+
 const backend_endpoint = 'https://api.metcarob.com/property_backend/v0'
 
 const api_prefixes = {
@@ -250,7 +252,7 @@ export const useBackendConnectionStore = defineStore('backendConnectionStore', {
           TTT.connection_state.state = ConnectionState.connected
           callback.error('Took too long to log in')
         }
-      }, 10000)
+      }, seconds_to_wait_for_user_to_login * 1000)
 
       window.google.accounts.id.prompt()
     },
