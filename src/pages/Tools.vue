@@ -15,7 +15,11 @@
           <div><q-icon name="check_box" color="green" size="32px" />Work with multiple patches</div>
           <div><q-icon name="check_box" color="green" size="32px" />Access on the road via your mobile</div>
           <div v-if="!isLoggedin" class="ppb-calltoaction">
-            <h5>Click Sign in to get started</h5>
+            <div class="tools-h5">Click Sign in to get started</div>
+            <LoginButton
+              :floating="false"
+              :center="false"
+            />
           </div>
           <div v-if="isLoggedinButNotSignedUp" class="ppb-calltoaction">
             <h5>Click User Profile in to register for early access</h5>
@@ -211,5 +215,11 @@ export default defineComponent({
 .ppb-embedded-vid {
 width: 280px;
 height: 200px
+}
+.tools-h5 {
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 2rem;
+  letter-spacing: normal;
 }
 </style>
