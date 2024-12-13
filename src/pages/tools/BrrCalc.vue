@@ -1,7 +1,12 @@
 <template>
   <q-page class="flex ">
     <div class="main-page fit col wrap justify-center items-center content-center">
-      <h1>Buy Refurbish Rent Refinance Calculator</h1>
+      <div v-if="security_role_cansave">
+        <h1>Project Analysis</h1>
+      </div>
+      <div v-if="!security_role_cansave">
+        <h1>Buy Refurbish Rent Refinance Calculator</h1>
+      </div>
       <BrrToolbar
         ref="BrrToolbar"
         v-if="security_role_cansave"
