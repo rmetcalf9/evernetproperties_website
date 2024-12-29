@@ -59,6 +59,26 @@
         <CommonBRRToolLink
           :ppbmainpage="true"
         />
+        <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('tools/rentproject/enterlead')">
+          <q-card-section>
+            <div class="text-h6">Enter Rental Lead</div>
+            <div class="row">
+              <div>
+                <img
+                  alt="Item Picture"
+                  src="~assets/enter_rental_lead.png"
+                  class="tool-picture"
+                >
+              </div>
+              <div class="col q-ma-sm">
+                <div style="height: 150px;">Enter a lead for the rent to SA or rent to HMO strategy. A lead is a landlord you want to approach to find out if they are interested in renting their property. Leads can be obtained by looking at rental adverts on gumtree, spareroom, facebook, or any other platform that enables you to get in contact with landlords with rooms to rent.</div>
+                <div align="right">
+                  <q-btn round  color="primary" icon="info" />
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
         <q-card inline class="q-ma-sm card-style tool-card featurecard" @click="$router.push('/tools/cansave/todo')">
           <q-card-section>
             <div class="text-h6">My Todo List</div>

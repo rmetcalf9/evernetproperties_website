@@ -22,6 +22,7 @@ const routes = [
       { path: 'v/:verifycode/:pimsnumber', component: () => import('pages/VerifyPims.vue') },
       { path: 'debug', component: () => import('pages/DebugInfo.vue') },
       { path: 'ppbevent', component: () => import('pages/Ppbevent.vue') },
+      { path: 'tools/rentproject/enterlead', component: () => import('pages/tools/rentproject/enterlead.vue') },
     ]
   },
   {
