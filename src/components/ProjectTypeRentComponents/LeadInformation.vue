@@ -114,6 +114,7 @@ export default defineComponent({
   },
   methods: {
     reset_data() {
+      console.log('RESET DATA CALL')
       this.emit_project_change_notification = false
 
       this.patch = {id: 'notset', name: 'Not Set'}
@@ -179,6 +180,7 @@ export default defineComponent({
       utils.copyTextToClipboard2(text, callback)
     },
     select_patch_by_id (id) {
+      console.log('LeadInformation select_patch_by_id', id)
       this.patch = this.patch_list.filter(function (x) {
         return x.id === id
       })[0]

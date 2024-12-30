@@ -23,9 +23,6 @@ function isActiveStage (workflow_id, stage_id) {
   return get_workflows()[workflow_id].stages[stage_id].active
 }
 
-console.log('Workflow.id', Workflow.id, typeof (Workflow.id))
-console.log('FirstRentWorkflow.id', FirstRentWorkflow.id, typeof (FirstRentWorkflow.id))
-
 export default {
   default_workflow_id: Workflow.id, // ID of workflow to give a project that has no workflow
   default_rent_workflow_id: FirstRentWorkflow.id,

@@ -122,19 +122,14 @@ export default defineComponent({
         return
       }
       if (passthroughdata.add_another) {
-        this.$router.push('/tools/rentproject/enterlead?patchid=' + passthroughdata.patch_id)
+        this.reset_data()
+        this.$refs.LeadInformation.select_patch_by_id(passthroughdata.patch_id)
       } else {
         this.$router.push('/tools')
       }
     },
     reset_data() {
       this.$refs.LeadInformation.reset_data()
-    }
-  },
-  mounted () {
-    this.reset_data()
-    if (typeof (this.$route.query.patchid) !== 'undefined') {
-      this.$refs.LeadInformation.select_patch_by_id(TTT.$route.query.patchid)
     }
   }
 })

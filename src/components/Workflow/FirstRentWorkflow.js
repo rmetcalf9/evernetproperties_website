@@ -9,7 +9,7 @@ export default {
       "name": "Lead",
       "active": true,
       "progression": {
-        "failed": "",
+        "failed": undefined,
         "success": []
       },
       "diagram_notes": "A<BR>B"
