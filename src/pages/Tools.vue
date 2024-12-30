@@ -59,6 +59,26 @@
         <CommonBRRToolLink
           :ppbmainpage="true"
         />
+        <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('tools/rentproject/callleads')">
+          <q-card-section>
+            <div class="text-h6">Call Rental Leads</div>
+            <div class="row">
+              <div>
+                <img
+                  alt="Item Picture"
+                  src="~assets/enter_rental_lead.png"
+                  class="tool-picture"
+                >
+              </div>
+              <div class="col q-ma-sm">
+                <div style="height: 150px;">You have leads to call! Make calls to generate new rent-to-rent opportunities</div>
+                <div align="right">
+                  <q-btn round  color="primary" icon="info" />
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
         <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('tools/rentproject/enterlead')">
           <q-card-section>
             <div class="text-h6">Enter Rental Lead</div>
