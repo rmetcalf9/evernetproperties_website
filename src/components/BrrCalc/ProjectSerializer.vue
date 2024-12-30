@@ -12,6 +12,17 @@ import { Notify } from 'quasar'
 export default defineComponent({
   name: 'ProjectSerializer',
   emits: ['saveprojectcomplete'],
+  props: {
+    project_type: {
+      type: String,
+      default: 'Unknown'
+    },
+    success_message: {
+      type: String,
+      default: 'Project Saved'
+    },
+  },
+
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -24,7 +35,8 @@ export default defineComponent({
       proj_summary_data: {
         metadata: undefined,
         timestamp_first_entered: undefined
-      }
+      },
+      passthroughdata: undefined
     }
   },
   methods: {
@@ -33,7 +45,8 @@ export default defineComponent({
       this.proj_summary_data.timestamp_first_entered  = data_to_load.timestamp_first_entered
       this.proj_summary_data.metadata = data_to_load.metadata
     },
-    save_project ({dict_of_card_info, activity_log, workflow}) {
+    save_project ({dict_of_card_info, activity_log, workflow, patch_id, passthroughdata}) {
+      this.passthroughdata = passthroughdata
       const sub_section_details = {}
       for (const card_name_idx in Object.keys(dict_of_card_info)) {
         const card_name = Object.keys(dict_of_card_info)[card_name_idx]
@@ -42,7 +55,7 @@ export default defineComponent({
 
       const project_data = {
         user_id: this.backend_connection_store.user_profile.id,
-        patch_id: dict_of_card_info.dealbasicinfo.patch_id,
+        patch_id: patch_id,
         timestamp_first_entered: this.proj_summary_data.timestamp_first_entered,
         initial_phase: {
           total_money_in: 0,
@@ -56,7 +69,8 @@ export default defineComponent({
         activity_log: activity_log,
         sub_section_details: sub_section_details,
         tags: [],
-        risks: []
+        risks: [],
+        type: this.project_type
       }
 
       if (typeof (this.loaded_project_id) !== 'undefined') {
@@ -81,16 +95,16 @@ export default defineComponent({
       })
     },
     save_api_call_success (response) {
-      this.$emit('saveprojectcomplete', {success: true, response: response})
+      this.$emit('saveprojectcomplete', {success: true, response: response, passthroughdata: this.passthroughdata})
       this.serializer_load_data(response.data)
       Notify.create({
         color: 'positive',
-        message: 'Project Saved',
+        message: this.success_message,
         timeout: 2000
       })
     },
     save_api_call_fail (response) {
-      this.$emit('saveprojectcomplete', {success: false, response: response})
+      this.$emit('saveprojectcomplete', {success: false, response: response, passthroughdata: this.passthroughdata})
       Notify.create({
         color: 'negative',
         message: 'Save failed - ' + response.response.data.message,

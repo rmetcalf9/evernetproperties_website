@@ -125,6 +125,7 @@
           ref="ProjectSerializer"
           v-if="security_role_cansave"
           @saveprojectcomplete="save_project_complete"
+          :project_type="project_type"
         />
       </div>
       <div class="row" v-show="tab==='project'">
@@ -185,10 +186,12 @@ import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
 import SaveToGoogleSheet from '../../components/BrrCalc/SaveToGoogleSheet.vue'
 import ActivityLog from '../../components/CommonCalcComponents/ActivityLog.vue'
 import Todos from '../../components/CommonCalcComponents/Todos.vue'
-import Workflow from '../../components/BrrCalc/Workflow.vue'
+import Workflow from '../../components/CommonCalcComponents/Workflow.vue'
 
 import ProjectSerializer from '../../components/BrrCalc/ProjectSerializer.vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+
+import common_constants from '../../components/common_constants.js'
 
 import { Notify } from 'quasar'
 
@@ -234,6 +237,9 @@ export default defineComponent({
     }
   },
   computed: {
+    project_type () {
+      return common_constants.project_type_constants.project_type_purchase
+    },
     is_saved_project_with_id () {
       return this.loaded_project_id !== ''
     },
@@ -516,7 +522,9 @@ export default defineComponent({
       this.$refs.ProjectSerializer.save_project({
         dict_of_card_info: this.serialized_data,
         activity_log: this.$refs.ActivityLog.serializer_card_data,
-        workflow: this.$refs.Workflow.serializer_card_data
+        workflow: this.$refs.Workflow.serializer_card_data,
+        patch_id: this.serialized_data.dealbasicinfo.patch_id,
+        passthroughdata: undefined
       })
     },
     load_project_into_cards (project) {
@@ -553,8 +561,10 @@ export default defineComponent({
       // todos only loaded. Never saved
       this.$refs.todos.serializer_load_data(project.todos)
     },
-    save_project_complete ({success, response}) {
-      this.loaded_project_id = response.data.id
+    save_project_complete ({success, response, passthroughdata}) {
+      if (success) {
+        this.loaded_project_id = response.data.id
+      }
       this.$refs.BrrToolbar.save_project_complete_notification({
         success: success,
         response: response

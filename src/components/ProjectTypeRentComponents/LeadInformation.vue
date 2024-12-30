@@ -113,6 +113,25 @@ export default defineComponent({
     },
   },
   methods: {
+    reset_data() {
+      this.emit_project_change_notification = false
+
+      this.patch = {id: 'notset', name: 'Not Set'}
+      this.address = ''
+      this.postcode = ''
+      this.landlord_name = ''
+      this.contact_phone = ''
+      this.contact_email = ''
+      this.advert_information = ''
+      this.advertweblinks = []
+      this.lead_source = 'Not Selected'
+
+      const TTT = this
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
+
+    },
     serializer_load_data (data_to_load) {
       this.emit_project_change_notification = false
 

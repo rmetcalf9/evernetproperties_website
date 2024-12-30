@@ -37,19 +37,25 @@ import { defineComponent } from 'vue'
 
 import Workflow_main from '../Workflow/Workflow_main.js'
 
-function get_default_workflow_data () {
+function get_default_workflow_data (default_workflow_id) {
   return {
-    workflow_used_id: Workflow_main.default_workflow_id,
-    current_stage: Workflow_main.workflows[Workflow_main.default_workflow_id].initial_stage
+    workflow_used_id: default_workflow_id,
+    current_stage: Workflow_main.workflows[default_workflow_id].initial_stage
   }
 }
 
 export default defineComponent({
   name: 'BrrCalcWorkflow',
   emits: ['projectchanged', 'activity_log'],
+  props: {
+    default_workflow_id: {
+      type: String,
+      default: Workflow_main.default_workflow_id
+    }
+  },
   data () {
     return {
-      workflow_data: get_default_workflow_data(),
+      workflow_data: get_default_workflow_data(Workflow_main.default_workflow_id),
       emit_project_change_notification: true
     }
   },
@@ -82,7 +88,7 @@ export default defineComponent({
     serializer_load_data (workflow_data) {
       this.emit_project_change_notification = false
       if (typeof (workflow_data.workflow_used_id) === 'undefined') {
-        this.workflow_data = get_default_workflow_data()
+        this.workflow_data = get_default_workflow_data(this.default_workflow_id)
       } else {
         this.workflow_data = workflow_data
       }
@@ -92,6 +98,9 @@ export default defineComponent({
         TTT.emit_project_change_notification = true
       }, 50)
     }
+  },
+  mounted () {
+    this.workflow_data = get_default_workflow_data(this.default_workflow_id)
   }
 })
 </script>
