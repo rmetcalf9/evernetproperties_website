@@ -11,7 +11,7 @@
       </div>
       <div class="flex" v-if="total_number_of_calls > 0">
         <div v-for="display in display_array" :key='display.id'>
-          <q-card inline class="q-ma-sm card-style" @click="$router.push('/tools/cansave/rentproject/calllead?patchid=' + display.id)">
+          <q-card inline class="q-ma-sm card-style" @click="$router.push('/tools/rentproject/batchcallleads?patchid=' + display.id)">
             <q-card-section>
               <div class="text-h6">{{ display.title }}</div>
               <div class="row">

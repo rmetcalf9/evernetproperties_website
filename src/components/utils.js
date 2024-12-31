@@ -80,11 +80,34 @@ function boolean_undefined_to_false(value) {
   return false
 }
 
+const nthNumber = (number) => {
+  if (number > 3 && number < 21) return "th";
+  switch (number % 10) {
+    case 1:
+      return "st";
+    case 2:
+      return "nd";
+    case 3:
+      return "rd";
+    default:
+      return "th";
+  }
+};
+
+function format_date_as_string_without_year (value) {
+  const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const currentDayOfWeek = daysOfWeek[value.getDay()]
+  const month = value.toLocaleString('default', { month: 'long' })
+
+  return currentDayOfWeek + ' ' + (value.getDate()).toString() + nthNumber(value.getDate()) + ' ' + month
+}
+
 export default {
   format_currency: format_currency,
   format_percent: format_percent,
   uuidv4: uuidv4,
   get_source_text: get_source_text,
   get_agent_text: get_agent_text,
-  boolean_undefined_to_false: boolean_undefined_to_false
+  boolean_undefined_to_false: boolean_undefined_to_false,
+  format_date_as_string_without_year: format_date_as_string_without_year
 }
