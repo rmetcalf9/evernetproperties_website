@@ -80,7 +80,18 @@ export default defineComponent({
       advert_information: '',
       advertweblinks: [],
       lead_source: 'Not Selected',
-      lead_source_options: ['Not Selected', 'Gumtree', 'Facebook', 'Spareroom', 'Other']
+      lead_source_options: [
+        'Not Selected',
+        'Gumtree',
+        'Facebook',
+        'Spareroom',
+        'Networking',
+        'Open Rent',
+        'Council HMO List',
+        'Referral',
+        'Response to Campaign', 
+        'Other'
+      ]
     }
   },
   watch: {
