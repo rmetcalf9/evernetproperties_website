@@ -3,7 +3,7 @@
     <div class="fit column wrap justify-start items-start content-center">
       <h2>{{ heading }}</h2>
       <div class="text-h6">Aim:</div>
-      <div>The aim of the phone call is to secure a viewing of the property.</div>
+      <div>The aim of the phone call is to secure a views on potential properties.</div>
       <div>We also want to introduce the idea of a company let and make sure the landlord does not get a surprise when we make the viewing.</div>
 
       <div class="text-h4">Story Prompt:</div>
@@ -15,13 +15,25 @@
 
       <div class="text-h4">Free days and time slots</div>
       <div>What days are you free for viewings? (This is used for suggestion prompts)</div>
+      <div>Random suggestions will be made between 9am and 6pm on the days selected. You can block off times as required.</div>
       <div v-for="day in viewing_days" :key="day.id" class="batchcallleads-daycheckbox">
-        <q-checkbox dense v-model="day.selected" :label="day.text"/>
+        <div class="row">
+          <q-checkbox dense v-model="day.selected" :label="day.text"/>
+          <div v-if="day.selected" class="batchcallleads-blockouttimebutton">
+            <q-btn color="primary" size="xs" label="Exclude Time" @click="addreservedslot(day)"  />
+          </div>
+        </div>
+        <div v-if="day.selected">
+          <div v-for="blocked_slot in day.reserved_slots" :key="blocked_slot.id">
+            Not {{ blocked_slot.start }}-{{ blocked_slot.end }} <q-btn round color="primary"  size="xs" icon="delete" @click="delreservedslot(day, blocked_slot.id)" />
+          </div>
+        </div>
       </div>
-      <div class="text-h6">Reserved slots</div>
-      <div>Random suggestions will be made between 9am and 6pm on the days selected. You can fill in the following reserved slots to avoid certain times.</div>
-      <q-btn round color="primary" icon="add" @click="addreservedslot" />
     </div>
+    <BatchCallLeadsAddBlockDialog
+      ref="BatchCallLeadsAddBlockDialog"
+    />
+    <q-btn label="Ready to start making calls..." @click="click_readytogo" color="secondary" />
   </q-page>
 </template>
 
@@ -30,11 +42,14 @@ import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import utils from '../../../components/utils.js'
 
+import BatchCallLeadsAddBlockDialog from '../../../components/BatchCallLeadsAddBlockDialog.vue'
+
 
 
 export default defineComponent({
   name: 'BatchCallLeads',
   components: {
+    BatchCallLeadsAddBlockDialog
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -70,7 +85,15 @@ export default defineComponent({
     }
   },
   methods: {
-    addreservedslot () {
+    addreservedslot (day) {
+      this.$refs.BatchCallLeadsAddBlockDialog.show_dialog(this.viewing_days, day.id)
+    },
+    delreservedslot(day, id) {
+      day.reserved_slots = day.reserved_slots.filter(function (x) {
+        return x.id !== id
+      })
+    },
+    click_readytogo () {
       console.log('TODO')
     }
   },
@@ -108,5 +131,8 @@ export default defineComponent({
   padding: 0px;
   margin: 0px;
   border: 0px;
+}
+.batchcallleads-blockouttimebutton {
+  margin-left: 10px;
 }
 </style>
