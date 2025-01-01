@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div class="fit column wrap justify-start items-start content-center">
       <h2>{{ heading }}</h2>
-      <div class="text-h6">Aim:</div>
+      <div class="text-h4">Aim:</div>
       <div>The aim of the phone call is to secure a views on potential properties.</div>
       <div>We also want to introduce the idea of a company let and make sure the landlord does not get a surprise when we make the viewing.</div>
 
@@ -11,7 +11,6 @@
       <div class="batchcallleads-storydiv">
         <q-input filled clearable v-model="story_prompt" label="Story Prompt" autogrow />
       </div>
-
 
       <div class="text-h4">Free days and time slots</div>
       <div>What days are you free for viewings? (This is used for suggestion prompts)</div>
@@ -29,11 +28,21 @@
           </div>
         </div>
       </div>
+      &nbsp;
+      <div v-if="!leads_fully_loaded" class="text-h6">
+        Please wait - loading lead information...
+        <br/>Patches {{ patches_to_scan }}
+        <br/>Projects {{ project_ids_to_load }}
+      </div>
+      <div v-if="leads_fully_loaded">
+        <div class="text-h4">You have {{ leads.length }} leads to call</div>
+        &nbsp;
+        <q-btn label="Ready to start making calls..." @click="click_readytogo" color="secondary" />
+      </div>
     </div>
     <BatchCallLeadsAddBlockDialog
       ref="BatchCallLeadsAddBlockDialog"
     />
-    <q-btn label="Ready to start making calls..." @click="click_readytogo" color="secondary" />
   </q-page>
 </template>
 
@@ -41,9 +50,13 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import utils from '../../../components/utils.js'
+import { Notify } from 'quasar'
 
 import BatchCallLeadsAddBlockDialog from '../../../components/BatchCallLeadsAddBlockDialog.vue'
 
+// If we are changing this it's also in callleads as well
+const rent_call_workflow_id = '2'
+const rent_to_call_stage_id = '1'
 
 
 export default defineComponent({
@@ -60,7 +73,10 @@ export default defineComponent({
   data () {
     return {
       story_prompt: '',
-      viewing_days: []
+      viewing_days: [],
+      leads_fully_loaded: false,
+      patches_to_scan: [],
+      project_ids_to_load: []
     }
   },
   computed: {
@@ -82,6 +98,9 @@ export default defineComponent({
         return 'Call Leads'
       }
       return 'Call Leads for ' + thispatchlist[0].name
+    },
+    leads () {
+      return []
     }
   },
   methods: {
@@ -95,9 +114,52 @@ export default defineComponent({
     },
     click_readytogo () {
       console.log('TODO')
+    },
+    recursive_get_list_of_projects_to_load () {
+      const TTT = this
+      // scans the list of patches and returns project ids that need scanning
+      if (this.patches_to_scan.length === 0) {
+        TTT.recursive_load_projects()
+        return
+      }
+      const id_of_patch_to_load = this.patches_to_scan.pop()
+
+      const callback = {
+        ok: function (response) {
+          //XXXXXXXXXXXXXX
+          if (typeof (response.data.workflow_lookup[rent_call_workflow_id]) !== 'undefined') {
+            if (typeof (response.data.workflow_lookup[rent_call_workflow_id][rent_to_call_stage_id]) !== 'undefined') {
+              response.data.workflow_lookup[rent_call_workflow_id][rent_to_call_stage_id].map(function (x) {
+                TTT.project_ids_to_load.push(x)
+              })
+            }
+          }
+
+          //project_ids_to_load
+          TTT.recursive_get_list_of_projects_to_load()
+        },
+        error: function (response) {
+          Notify.create({
+            color: 'negative',
+            message: 'Unable to load leads - please try again later',
+            timeout: 2000
+          })
+        }
+      }
+      this.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/patches/' + id_of_patch_to_load,
+        method: 'GET',
+        data: undefined,
+        callback: callback
+      })
+    },
+    recursive_load_projects () {
+      console.log('TODO Load projects')
     }
   },
   mounted () {
+    const TTT = this
     this.viewing_days = []
     const start_date = new Date();
     start_date.setHours(0,0,0,0)
@@ -112,6 +174,17 @@ export default defineComponent({
         reserved_slots: []
       })
     }
+    // User profile is not always loaded immediatadly
+    setTimeout(function () {
+      if (TTT.$route.query.patchid === 'all') {
+        TTT.patches_data = TTT.user_profile.patches.map(function (x) {
+          TTT.patches_to_scan.push(x.id)
+        })
+      } else {
+        TTT.patches_to_scan.push(TTT.$route.query.patchid)
+      }
+      TTT.recursive_get_list_of_projects_to_load()
+    }, 300)
   }
 })
 </script>

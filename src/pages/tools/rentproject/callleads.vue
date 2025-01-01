@@ -39,6 +39,7 @@ import common_constants from '../../../components/common_constants.js'
 
 import { Notify } from 'quasar'
 
+// If we are changing this it's also in batchcallleads as well
 const rent_call_workflow_id = '2'
 const rent_to_call_stage_id = '1'
 
@@ -145,7 +146,6 @@ export default defineComponent({
     }
   },
   mounted () {
-    console.log('up', this.user_profile)
     this.patches_data = this.user_profile.patches.map(function (x) {
       return {
         from_user_profile: x,
