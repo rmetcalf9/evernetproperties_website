@@ -31,8 +31,6 @@
       &nbsp;
       <div v-if="!leads_fully_loaded" class="text-h6">
         Please wait - loading lead information...
-        <br/>Patches {{ patches_to_scan }}
-        <br/>Projects {{ project_ids_to_load }}
       </div>
       <div v-if="leads_fully_loaded">
         <div class="text-h4">You have {{ leads.length }} leads to call</div>
@@ -76,7 +74,8 @@ export default defineComponent({
       viewing_days: [],
       leads_fully_loaded: false,
       patches_to_scan: [],
-      project_ids_to_load: []
+      project_ids_to_load: [],
+      leads: []
     }
   },
   computed: {
@@ -98,9 +97,6 @@ export default defineComponent({
         return 'Call Leads'
       }
       return 'Call Leads for ' + thispatchlist[0].name
-    },
-    leads () {
-      return []
     }
   },
   methods: {
@@ -126,7 +122,6 @@ export default defineComponent({
 
       const callback = {
         ok: function (response) {
-          //XXXXXXXXXXXXXX
           if (typeof (response.data.workflow_lookup[rent_call_workflow_id]) !== 'undefined') {
             if (typeof (response.data.workflow_lookup[rent_call_workflow_id][rent_to_call_stage_id]) !== 'undefined') {
               response.data.workflow_lookup[rent_call_workflow_id][rent_to_call_stage_id].map(function (x) {
@@ -141,7 +136,7 @@ export default defineComponent({
         error: function (response) {
           Notify.create({
             color: 'negative',
-            message: 'Unable to load leads - please try again later',
+            message: 'Unable to load leads (patches) - please try again later',
             timeout: 2000
           })
         }
@@ -155,7 +150,34 @@ export default defineComponent({
       })
     },
     recursive_load_projects () {
-      console.log('TODO Load projects')
+      const TTT = this
+      // Loads the projects and adds them to the leads variable
+      if (this.project_ids_to_load.length === 0) {
+        TTT.leads_fully_loaded = true
+        return
+      }
+      const id_of_project_to_load = this.project_ids_to_load.pop()
+
+      const callback = {
+        ok: function (response) {
+          TTT.leads.push(response.data)
+          TTT.recursive_load_projects()
+        },
+        error: function (response) {
+          Notify.create({
+            color: 'negative',
+            message: 'Unable to load leads (project) - please try again later',
+            timeout: 2000
+          })
+        }
+      }
+      this.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/projects/' + id_of_project_to_load,
+        method: 'GET',
+        data: undefined,
+        callback: callback
+      })
     }
   },
   mounted () {
