@@ -1,0 +1,1 @@
+const o=[{label:"Call Agent",value:"agent"},{label:"Call Sourcer",value:"sourcer"},{label:"Other",value:"other"}],t="purchase",e="rent",c=[t,e],p={project_type_purchase:t,project_type_rent:e,project_types:c};var r={todo_item_types:o,project_type_constants:p};export{r as c};
