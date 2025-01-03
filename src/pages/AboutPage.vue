@@ -12,7 +12,13 @@
       </div>
       <div style="max-width: 400px;">
         <h3 style="margin: 0px;">Robert Metcalf</h3>
-        Introducing Robert, a passionate real estate deal sourcer committed to identifying top-notch, profitable opportunities for investors dedicated to providing high-quality housing for tenants and guests. With Robert's keen market insight and strategic approach, he excels in uncovering deals that align with the vision of creating superior living spaces. Trust Robert to transform opportunities into successful investments, delivering exceptional value in the dynamic world of real estate.
+        <div class="aboutpage-paragraph">With over 20 years of experience in software engineering, I have built enterprise systems, CRM platforms, and integration solutions across industries such as local government, education, healthcare, broadcasting, and entertainment. My expertise spans full-stack development, DevOps, systematisation, and designing seamless integrations.</div>
+
+        <div class="aboutpage-paragraph">As a property investor specializing in HMOs, I’ve worked with deal sourcers and experienced firsthand the challenges of inconsistent due diligence. This frustration led me to develop a software solution that ensures every deal is backed by accurate calculations, thorough evidence, and a structured process.</div>
+
+        <div class="aboutpage-paragraph">Designed specifically for professional deal sourcers and investors, my software helps build a pipeline of potential deals, streamlines due diligence, and enhances tracking across multiple projects. By raising the quality and consistency of deal sourcing, it empowers users to operate more efficiently and scale their portfolios with confidence.</div>
+
+        <div class="aboutpage-paragraph">Let’s transform the way deal sourcing is done—smarter, faster, and more reliable. 🚀</div>
       </div>
     </div>
   </div>
@@ -28,6 +34,9 @@ export default defineComponent({
 </script>
 
 <style>
+.aboutpage-paragraph {
+  margin-top: 10px;
+}
 .profile-picture {
   width: 200px;
   height: 200px;
