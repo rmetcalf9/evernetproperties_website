@@ -59,7 +59,10 @@
         <CommonBRRToolLink
           :ppbmainpage="true"
         />
-        <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('tools/rentproject/callleads')">
+        <q-card
+          v-if="featureflags.rent_to_rent_projects"
+          inline class="q-ma-sm card-style tool-card" @click="$router.push('tools/rentproject/callleads')"
+        >
           <q-card-section>
             <div class="text-h6">Call Rental Leads</div>
             <div class="row">
@@ -79,7 +82,9 @@
             </div>
           </q-card-section>
         </q-card>
-        <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('tools/rentproject/enterlead')">
+        <q-card
+          v-if="featureflags.rent_to_rent_projects"
+          inline class="q-ma-sm card-style tool-card" @click="$router.push('tools/rentproject/enterlead')">
           <q-card-section>
             <div class="text-h6">Enter Rental Lead</div>
             <div class="row">
@@ -192,6 +197,7 @@ import { defineComponent } from 'vue'
 import LoginButton from '../components/LoginButton.vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import CommonBRRToolLink from '../components/CommonBRRToolLink.vue'
+import featureflags from '../featureflags.js'
 
 export default defineComponent({
   name: 'ToolsPage',
@@ -210,6 +216,9 @@ export default defineComponent({
     }
   },
   computed: {
+    featureflags () {
+      return featureflags
+    },
     security_role_cansave () {
       return this.backend_connection_store.security_role_cansave
     },
