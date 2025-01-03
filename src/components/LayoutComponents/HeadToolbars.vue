@@ -47,7 +47,6 @@ export default defineComponent({
     return {
       menu_items: [
         {name: 'Home', target: '/'},
-        {name: 'FAQ', target: '/faq'},
         {name: 'Tools', target: '/tools'},
         {name: 'Contact Us', target: '/contact'},
         {name: 'About', target: '/about'}
