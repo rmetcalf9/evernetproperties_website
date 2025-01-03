@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <div class="main-page fit row wrap justify-center items-center content-center">
-      <h2>Let us find you a property</h2>
+      <h2>Transform the Way You Source Property Deals</h2>
       <div class="flex-break"></div>
       <div class="flex row first-section">
         <div>
@@ -12,13 +12,15 @@
           >
         </div>
         <div class="flex column">
-          <div v-for="feature in features" :key="feature"><q-icon name="check_box" color="green" size="32px" />{{ feature }}</div>
+          <div class="homepage-mainpara">Deal sourcing should be <b>efficient, accurate, and scalable</b>—but too often, it’s held back by inconsistent due diligence, scattered data, and time-consuming admin. Our software is built for <b>professional deal sourcers and investors</b> who want to streamline their workflow, raise the quality of their deals, and grow their portfolios with confidence.</div>
+          <div v-for="feature in features" :key="feature">
+            <q-icon name="check_box" color="green" size="32px" />
+            <b>{{ feature.main }}</b> - {{ feature.sub }}
+          </div>
+          <div class="homepage-start">🚀 Start streamlining your deal sourcing today!</div>
         </div>
       </div>
       <div class="flex-break"></div>
-      <CrmInvestorSubForm
-        ref="CrmInvestorSubForm"
-      ></CrmInvestorSubForm>
       <q-card style="max-width:700px; padding: 30px; margin: 20px;"  @click="click_ppb_card">
         <h4 style="margin: 0px;">Early Access to Property Pipeline Builder!</h4>
         <div class="row">
@@ -47,27 +49,21 @@
 
 <script>
 import { defineComponent } from 'vue'
-import CrmInvestorSubForm from '../components/CrmInvestorSubForm.vue'
 
 export default defineComponent({
   name: 'HomePage',
   data () {
     return {
       features: [
-      'Cash Flowing property found for you',
-      'Save Time and Energy',
-      'Rental and SA Market Assessed',
-      'Expert Insight',
-      'Risks Addressed',
-      'Due Diligence Support',
-      'Below Market Value Price Negotiated',
-      'Great ROI Deals Selected',
-      'Bespoke Search Service Available',
+        {main: 'Organized Deal Pipeline', sub: 'Keep track of all your potential deals in one place'},
+        {main: 'Standardized Due Diligence', sub: 'Ensure every deal meets high-quality standards with structured assessments'},
+        {main: 'Accurate Calculations', sub: 'Use verified formulas to back up your figures with evidence'},
+        {main: 'Increased Efficiency', sub: 'Save time, reduce errors, and focus on closing the best deals'},
+        {main: 'Scalability', sub: 'Manage more deals effortlessly as your business grows'},
       ]
     }
   },
   components: {
-    CrmInvestorSubForm
   },
   methods: {
     click_ppb_card () {
@@ -78,6 +74,21 @@ export default defineComponent({
 </script>
 
 <style>
+.homepage-featuremain {
+  font-weight: 700;
+}
+.homepage-featuresub {
+
+}
+.homepage-mainpara {
+  max-width: 400px;
+  margin-bottom: 15px;
+}
+.homepage-start {
+  margin-top: 15px;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
 .first-section {
   padding-bottom: 30px;
 }
