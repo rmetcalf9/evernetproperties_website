@@ -1,6 +1,8 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="fit column wrap justify-start items-start content-center">
+    <div
+      v-if="!callassistactive"
+      class="fit column wrap justify-start items-start content-center">
       <h2>{{ heading }}</h2>
       <div class="text-h4">Aim:</div>
       <div>The aim of the phone call is to secure a views on potential properties.</div>
@@ -37,10 +39,18 @@
         &nbsp;
         <q-btn label="Ready to start making calls..." @click="click_readytogo" color="secondary" />
       </div>
+      <BatchCallLeadsAddBlockDialog
+        ref="BatchCallLeadsAddBlockDialog"
+      />
     </div>
-    <BatchCallLeadsAddBlockDialog
-      ref="BatchCallLeadsAddBlockDialog"
-    />
+    <div
+      v-if="callassistactive"
+      class="fit column wrap justify-start items-start content-center batchcallleads-storydiv">
+      <CallAssist
+        ref="CallAssist"
+      />
+    </div>
+
   </q-page>
 </template>
 
@@ -49,6 +59,9 @@ import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import utils from '../../../components/utils.js'
 import { Notify } from 'quasar'
+
+import CallAssist from '../../../components/CallAssist/CallAssist.vue'
+import RentToRentLeadTemplate from '../../../components/CallAssistCalls/RentToRentLead.js'
 
 import BatchCallLeadsAddBlockDialog from '../../../components/BatchCallLeadsAddBlockDialog.vue'
 
@@ -60,7 +73,8 @@ const rent_to_call_stage_id = '1'
 export default defineComponent({
   name: 'BatchCallLeads',
   components: {
-    BatchCallLeadsAddBlockDialog
+    BatchCallLeadsAddBlockDialog,
+    CallAssist
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -70,6 +84,7 @@ export default defineComponent({
   },
   data () {
     return {
+      callassistactive: false,
       story_prompt: '',
       viewing_days: [],
       leads_fully_loaded: false,
@@ -109,7 +124,20 @@ export default defineComponent({
       })
     },
     click_readytogo () {
-      console.log('TODO')
+      this.callassistactive = true
+      const TTT = this
+      setTimeout(function () {
+        TTT.$refs.CallAssist.prepare(RentToRentLeadTemplate,
+          TTT.leads.map(function (x) {
+            return {
+              id: x.id,
+              name: x.project_name,
+              raw: x
+            }
+          })
+        )
+      }, 10)
+
     },
     recursive_get_list_of_projects_to_load () {
       const TTT = this
