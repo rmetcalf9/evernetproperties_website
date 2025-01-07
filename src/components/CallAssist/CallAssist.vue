@@ -17,17 +17,15 @@ import CallAssistCall from './CallAssistCall.vue'
 import utils from '../../components/utils.js'
 import { Notify } from 'quasar'
 
-//Standard outcome action ids
-//skip_call
+// See README.md for action types and outcomes
 
-// Action types:
-// Outcome -> Finish this call and call outcome callback
-// Next_Stage -> go to next stage
 const standard_actions = {
   skip_call_action: {
     type: 'Outcome',
     id: 'skip_call',
-    button_label: 'Skip this lead'
+    button_label: 'Skip and return to later',
+    button_color: 'white',
+    button_text_color: 'black'
   }
 }
 
@@ -59,7 +57,6 @@ export default defineComponent({
       if (typeof (this.total_leads) === 'undefined') {
         return ''
       }
-      console.log('sss', this.total_leads)
       return '(' + this.remaining_leads.length.toString() + ' leads remaining)'
     }
   },
@@ -87,6 +84,15 @@ export default defineComponent({
       this.calltemplate.ordered_stages = []
       this.calltemplate.ordered_stages.push(review_stage)
       this.calltemplate.stages.map(function (x) {
+        let new_actions = []
+        new_actions.push(standard_actions.skip_call_action)
+        x.actions.map(function (action) {
+          new_actions.push(action)
+        })
+        TTT.calltemplate.common_actions.map(function (common_action) {
+          new_actions.push(JSON.parse(JSON.stringify(common_action)))
+        })
+        x.actions = new_actions
         new_stages[x.id] = x
         TTT.calltemplate.ordered_stages.push(x)
       })

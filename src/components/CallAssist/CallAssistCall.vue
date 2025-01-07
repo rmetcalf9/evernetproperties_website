@@ -20,6 +20,7 @@
         <q-btn
           :label="action.button_label"
           :color="get_action_button_color(action)"
+          :text-color="get_action_button_text_color(action)"
           @click="click_action_button(action)"
         />
       </div>
@@ -76,10 +77,19 @@ export default defineComponent({
       this.current_stage_id = stage_id
     },
     get_action_button_color (action) {
+      if (typeof (action.button_color) !== 'undefined') {
+        return action.button_color
+      }
       if (action.type === 'Outcome') {
         return 'secondary'
       }
       return 'primary'
+    },
+    get_action_button_text_color (action) {
+      if (typeof (action.button_text_color) !== 'undefined') {
+        return action.button_text_color
+      }
+      return undefined
     },
     click_action_button (action) {
       if (action.type === 'Outcome') {

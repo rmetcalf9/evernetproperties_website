@@ -15,7 +15,6 @@ export const usePatchLocalSettingsStore = defineStore('cumulatively_loaded_stage
 
   getters: {
     none (state) {
-      console.log('SSS')
     }
   },
 
