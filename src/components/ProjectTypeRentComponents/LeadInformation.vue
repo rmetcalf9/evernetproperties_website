@@ -89,7 +89,7 @@ export default defineComponent({
         'Open Rent',
         'Council HMO List',
         'Referral',
-        'Response to Campaign', 
+        'Response to Campaign',
         'Other'
       ]
     }
@@ -111,6 +111,7 @@ export default defineComponent({
         contact_phone: this.contact_phone,
         contact_email: this.contact_email,
         advert_information: this.advert_information,
+        advertweblinks: this.advertweblinks,
         lead_source: this.lead_source
       }
     },
@@ -158,6 +159,12 @@ export default defineComponent({
       this.patch = this.patch_list.filter(function (x) {
         return x.id === data_to_load.patch_id
       })[0]
+
+      if (typeof (data_to_load.advertweblinks) === 'undefined') {
+       this.advertweblinks = []
+      } else {
+        this.advertweblinks = data_to_load.advertweblinks
+      }
 
       const TTT = this
       setTimeout(function () {

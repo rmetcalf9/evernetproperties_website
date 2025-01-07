@@ -7,32 +7,38 @@ export default {
       {
         id: '1',
         name: 'Qualify the lead',
-        items: []
+        items: [],
+        actions: []
       },
       {
         id: '2',
         name: 'Investigate the property',
-        items: []
+        items: [],
+        actions: []
       },
       {
         id: '3',
         name: 'Identify landlord pain points',
-        items: []
+        items: [],
+        actions: []
       },
       {
         id: '4',
         name: 'Introduce Myself',
-        items: []
+        items: [],
+        actions: []
       },
       {
         id: '5',
         name: 'Mention company let',
-        items: []
+        items: [],
+        actions: []
       },
       {
         id: '6',
         name: 'Close',
-        items: []
+        items: [],
+        actions: []
       }
   ]
 }

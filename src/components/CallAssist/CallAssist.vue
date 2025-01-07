@@ -5,6 +5,8 @@
       ref="CallAssistCall"
       :current_lead="current_lead"
       :calltemplate="calltemplate"
+      :title_text="calltitletext"
+      @outcome="outcome"
     />
   </div>
 </template>
@@ -13,9 +15,25 @@
 import { defineComponent } from 'vue'
 import CallAssistCall from './CallAssistCall.vue'
 import utils from '../../components/utils.js'
+import { Notify } from 'quasar'
+
+//Standard outcome action ids
+//skip_call
+
+// Action types:
+// Outcome -> Finish this call and call outcome callback
+// Next_Stage -> go to next stage
+const standard_actions = {
+  skip_call_action: {
+    type: 'Outcome',
+    id: 'skip_call',
+    button_label: 'Skip this lead'
+  }
+}
 
 export default defineComponent({
   name: 'CallAssist',
+  emits: ['outcome'],
   components: {
     CallAssistCall
   },
@@ -36,6 +54,13 @@ export default defineComponent({
         return undefined
       }
       return this.remaining_leads[0]
+    },
+    calltitletext () {
+      if (typeof (this.total_leads) === 'undefined') {
+        return ''
+      }
+      console.log('sss', this.total_leads)
+      return '(' + this.remaining_leads.length.toString() + ' leads remaining)'
     }
   },
   methods: {
@@ -46,7 +71,16 @@ export default defineComponent({
       let review_stage = {
         id: utils.uuidv4(),
         name: 'Prepare for call',
-        items: [{ type: 'ShowCallAim'}, { type: 'ShowStages'}, { type: 'ShowLead'}]
+        items: [{ type: 'ShowCallAim'}, { type: 'ShowStages'}, { type: 'ShowLead'}],
+        actions: [
+          standard_actions.skip_call_action,
+          {
+            type: 'Next_Stage',
+            next_stage_id: this.calltemplate.initial_stage_id,
+            id: 'Make_call',
+            button_label: 'Ready to Dial...'
+          }
+        ]
       }
       let new_stages = {}
       new_stages[review_stage.id] = review_stage
@@ -67,6 +101,29 @@ export default defineComponent({
       this.$refs.CallAssistCall.set_stage(this.calltemplate.initial_stage_id)
 
       this.prepared = true
+    },
+    outcome (props) {
+      console.log('TODO deal with outcome', props)
+      const emit_object = {
+        outcome_id: props.outcome_id,
+        call_data: props.call_data,
+        current_lead: this.current_lead
+      }
+      this.$emit('outcome', JSON.parse(JSON.stringify(emit_object)))
+      this.remaining_leads.shift()
+
+      if (this.remaining_leads.length > 0) {
+        this.$refs.CallAssistCall.reset_call_data()
+        this.$refs.CallAssistCall.set_stage(this.calltemplate.initial_stage_id)
+        return
+      }
+      Notify.create({
+        color: 'positive',
+        message: 'Batch Complete',
+        timeout: 2000
+      })
+      // TODO may want to push to better place
+      this.$router.push('/tools')
     }
   }
 })
