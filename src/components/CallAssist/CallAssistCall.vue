@@ -25,6 +25,11 @@
         />
       </div>
     </div>
+    <q-btn
+      v-if="current_stage_id !== calltemplate.initial_stage_id"
+      label="Reset script to start"
+      @click="reset_script"
+    />
   </div>
 </template>
 
@@ -117,6 +122,9 @@ export default defineComponent({
     },
     reset_call_data () {
       this.call_data = get_initial_call_data()
+    },
+    reset_script () {
+      this.set_stage(this.calltemplate.initial_stage_id)
     }
   }
 })
