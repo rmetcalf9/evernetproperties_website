@@ -42,6 +42,16 @@ Example:
 
 Uses raw lead properties - displays the lead
 
+### CustomVariableDisplay
+
+Example:
+```
+{
+  type: 'CustomVariableDisplay',
+  title: 'Story Prompt',
+  body: '{{ batchdata.story_prompt }}'
+}
+```
 
 ## Script Action types
 

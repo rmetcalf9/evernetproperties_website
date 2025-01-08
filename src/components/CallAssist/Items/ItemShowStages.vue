@@ -24,6 +24,9 @@ export default defineComponent({
     },
     item: {
       type: Object
+    },
+    batchdata: {
+      type: Object
     }
   },
   data () {

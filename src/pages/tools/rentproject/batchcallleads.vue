@@ -134,7 +134,11 @@ export default defineComponent({
               name: x.project_name,
               raw: x
             }
-          })
+          },
+          {
+            story_prompt: TTT.story_prompt
+          }
+          )
         )
       }, 10)
 

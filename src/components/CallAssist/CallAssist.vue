@@ -6,6 +6,7 @@
       :current_lead="current_lead"
       :calltemplate="calltemplate"
       :title_text="calltitletext"
+      :batchdata="batchdata"
       @outcome="outcome"
     />
   </div>
@@ -40,7 +41,8 @@ export default defineComponent({
       prepared: false,
       calltemplate: undefined,
       remaining_leads: undefined,
-      total_leads: undefined
+      total_leads: undefined,
+      batchdata: undefined
     }
   },
   computed: {
@@ -61,9 +63,10 @@ export default defineComponent({
     }
   },
   methods: {
-    prepare (calltemplate, leads) {
+    prepare (calltemplate, leads, batchdata) {
       const TTT = this
       this.calltemplate = JSON.parse(JSON.stringify(calltemplate))
+      this.batchdata = batchdata
 
       let review_stage = {
         id: utils.uuidv4(),

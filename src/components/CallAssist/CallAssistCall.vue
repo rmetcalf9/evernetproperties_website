@@ -9,6 +9,7 @@
           :current_stage="current_stage"
           :calltemplate="calltemplate"
           :item="item"
+          :batchdata="batchdata"
         />
       </div>
     </div>
@@ -30,6 +31,18 @@
       label="Reset script to start"
       @click="reset_script"
     />
+    <div class="CallAssistCallItems">
+      <div v-for="item in current_stage.post_action_items" :key='item.id'>
+        <CallAssistCallItems
+          :current_lead="current_lead"
+          :current_stage="current_stage"
+          :calltemplate="calltemplate"
+          :item="item"
+          :batchdata="batchdata"
+        />
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -57,6 +70,9 @@ export default defineComponent({
     title_text: {
       type: String,
       default: ''
+    },
+    batchdata: {
+      type: Object
     }
   },
   emits: ['outcome'],

@@ -16,8 +16,7 @@ export default {
               'Is the property still availiable?',
               'Do you mind if I ask some questions about the property?'
             ]
-          },
-          { type: 'ShowLead'}
+          }
         ],
         actions: [
           {
@@ -26,37 +25,88 @@ export default {
             id: 'Investigate',
             button_label: 'Next Stage (Investigate Property)'
           }
-        ]
+        ],
+        post_action_items: [{ type: 'ShowLead'}]
       },
       {
         id: '2',
         name: 'Investigate the property',
-        items: [],
-        actions: []
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'General condition',
+              'Are you looking for long term or short term tenant?',
+              'Is it furnished or unfurnished?',
+              'Does it have wifi?',
+              'Could it have office or working space for remote working'
+            ]
+          },
+        ],
+        actions: [
+          {
+            type: 'Next_Stage',
+            next_stage_id: '3',
+            id: 'landlord_pain',
+            button_label: 'Next Stage (Identify landlord pain points)'
+          }
+        ],
+        post_action_items: [{ type: 'ShowLead'}]
       },
       {
         id: '3',
-        name: 'Identify landlord pain points',
-        items: [],
-        actions: []
+        name: 'Identify Landlord Pain Points',
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'How long has it been vacant?',
+              'What kind of Tenants do you get in this property? (Professional, student, nurses, etc.)',
+            ]
+          },
+        ],
+        actions: [
+          {
+            type: 'Next_Stage',
+            next_stage_id: '4',
+            id: 'landlord_pain',
+            button_label: 'Next Stage (Introduce Myself)'
+          }
+        ],
+        post_action_items: [{ type: 'ShowLead'}]
       },
       {
         id: '4',
         name: 'Introduce Myself',
-        items: [],
-        actions: []
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'Can I tell you about myself?',
+            ]
+          },
+          {
+            type: 'CustomVariableDisplay',
+            title: 'Story Prompt',
+            body: '{{ batchdata.story_prompt }}'
+          }
+        ],
+        actions: [],
+        post_action_items: [{ type: 'ShowLead'}]
       },
       {
         id: '5',
         name: 'Mention company let',
         items: [],
-        actions: []
+        actions: [],
+        post_action_items: [{ type: 'ShowLead'}]
       },
       {
         id: '6',
         name: 'Close',
         items: [],
-        actions: []
+        actions: [],
+        post_action_items: [{ type: 'ShowLead'}]
       }
   ],
   common_actions: [
