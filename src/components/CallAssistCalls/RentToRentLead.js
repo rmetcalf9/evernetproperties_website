@@ -87,7 +87,7 @@ export default {
           },
           {
             type: 'CustomVariableDisplay',
-            title: 'Story Prompt',
+            title: 'My Introduction',
             body: '{{ batchdata.story_prompt }}'
           }
         ],

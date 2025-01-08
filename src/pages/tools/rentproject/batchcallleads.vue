@@ -127,6 +127,10 @@ export default defineComponent({
       this.callassistactive = true
       const TTT = this
       setTimeout(function () {
+        var use_story_prompt = TTT.story_prompt
+        if (use_story_prompt === '') {
+          use_story_prompt = 'No story prompt provided'
+        }
         TTT.$refs.CallAssist.prepare(RentToRentLeadTemplate,
           TTT.leads.map(function (x) {
             return {
@@ -134,11 +138,10 @@ export default defineComponent({
               name: x.project_name,
               raw: x
             }
-          },
+          }),
           {
-            story_prompt: TTT.story_prompt
+            story_prompt: use_story_prompt
           }
-          )
         )
       }, 10)
 
