@@ -91,19 +91,19 @@ export default {
             body: '{{ batchdata.story_prompt }}'
           }
         ],
-        actions: [],
+        actions: [
+          {
+            type: 'Next_Stage',
+            next_stage_id: '5',
+            id: 'close',
+            button_label: 'Next Stage (Close whilst mentioning company let)'
+          }
+        ],
         post_action_items: [{ type: 'ShowLead'}]
       },
       {
         id: '5',
-        name: 'Mention company let',
-        items: [],
-        actions: [],
-        post_action_items: [{ type: 'ShowLead'}]
-      },
-      {
-        id: '6',
-        name: 'Close',
+        name: 'Close whilst Mentioning company let',
         items: [],
         actions: [],
         post_action_items: [{ type: 'ShowLead'}]
