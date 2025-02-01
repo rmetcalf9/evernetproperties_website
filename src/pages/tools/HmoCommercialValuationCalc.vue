@@ -2,7 +2,8 @@
   <q-page class="flex">
     <div class="HmoCommercialValuationCalc-main-page fit col wrap justify-center items-center content-center">
       <h1>HMO Commercial Valuation Calculator</h1>
-      <div>This calculator will help you estimate a commercial valuation on a HMO based on existing properties in the area. To use it fill in general information about the area, then list comparable HMO’s in the area. Finally enter details about the HMO you are looking at and the final card will show an estimated valuation.</div>
+      <div>This calculator will help you estimate a commercial valuation on a HMO based on existing properties in the area. To use it fill in general information about the area, then list comparable HMO’s in the area. Finally enter details about the HMO you are looking at and the final card will show an estimated valuation. These figures are for guidance only. During the due diligence process investors should consult brokers and get more specific estimates.</div>
+      <div><b>Market rent vs Passing Rent -</b> Passing rent is the actual rental income received from a property. Sometimes valuers will ignore this and will instead do the valuation on market rent. So it is best to estimate valuation against market rent and ignore the actual rent received.</div>
       <div class="row">
         <q-card inline class="q-ma-sm HmoCommercialValuationCalc-card-style">
           <q-card-section>
@@ -146,6 +147,19 @@
             />
           </q-card-section>
         </q-card>
+        <q-card inline class="q-ma-sm HmoCommercialValuationCalc-card-style">
+          <q-card-section>
+            <div class="text-h6">Range Valuation</div>
+          </q-card-section>
+          <q-card-section>
+            <div>Yields can vary between 9% and 12%. Sometimes it is hard to work out the yield even when you use this method so  it is useful to know the valuation on a range of yields and ensure the project stacks in every case.</div>
+            <div class="HmoCommercialValuationCalc-final-totals">
+              <div v-for="per in range_valuation_values" :key='per'>
+                <div>{{ format_percent(per) }}: - {{ format_currency(this_prop_val(per)) }} </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
       </div>
     </div>
   </q-page>
@@ -173,6 +187,7 @@ export default defineComponent({
   },
   data () {
     return {
+      range_valuation_values: [0.09,0.10,0.11,0.12],
       isMounted: false,
       general_area: {
         room_rate: 500,
@@ -227,7 +242,7 @@ export default defineComponent({
       return item.rooms * 12 * this.general_area.room_rate
     },
     getannualyield (item) {
-      return item.price / (this.getannualrent(item) * (100-this.general_area.cost_percentage))
+      return (this.getannualrent(item) * ((100-this.general_area.cost_percentage)/100)) / item.price
     },
     updateitemuse (item) {
       if (!item.use) {
@@ -250,6 +265,9 @@ export default defineComponent({
         return
       }
       items[0].use = true
+    },
+    this_prop_val(yieeld) {
+      return this.hmo_annual_rent * ((100-this.curhmo.cost_percentage)/100) / yieeld
     }
   },
   computed: {
@@ -304,13 +322,13 @@ export default defineComponent({
       }, -99999999)
     },
     min_val () {
-      return this.hmo_annual_rent * (100-this.curhmo.cost_percentage) * this.min_yield
+      return this.this_prop_val(this.max_yield)
     },
     avg_val () {
-      return this.hmo_annual_rent * (100-this.curhmo.cost_percentage) * this.avg_yield
+      return this.this_prop_val(this.avg_yield)
     },
     max_val () {
-      return this.hmo_annual_rent * (100-this.curhmo.cost_percentage) * this.max_yield
+      return this.this_prop_val(this.min_yield)
     },
     features () {
       const TTT = this
