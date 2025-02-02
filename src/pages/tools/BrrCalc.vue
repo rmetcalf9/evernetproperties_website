@@ -156,6 +156,7 @@
           :caculated_loan_details="caculated_loan_details"
           :finance_bridgecost="finance_bridgecost"
           :finance_bridgeamount="finance_bridgeamount"
+          :refinance_costs="refinance_costs"
           :gdv_total="gdv_total"
           @apiaddweblink="apiaddweblink"
           @activity_log="activity_log"
@@ -358,6 +359,12 @@ export default defineComponent({
         return []
       }
       return this.$refs.Refinance.refinance_out_items
+    },
+    refinance_costs () {
+      if (!this.isMounted) {
+        return []
+      }
+      return this.$refs.Refinance.refinance_costs
     },
     purchase_items () {
       if (!this.isMounted) {

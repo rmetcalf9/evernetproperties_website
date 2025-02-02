@@ -33,6 +33,12 @@
         <hr/>
         <div>Refinance amount: {{ format_currency(refinanceamount.worst) }} - {{ format_currency(refinanceamount.best) }}</div>
         <div>Monthly Payments: {{ format_currency(monthly_payments.worst) }} - {{ format_currency(monthly_payments.best) }}</div>
+        <div>
+          <div><b>Refinance Costs:</b></div>
+          <div v-for="item in refinance_costs" :key='item.name'>
+            <div>{{ item.name }}: {{ format_currency(item.worst * -1) }} - {{ format_currency(item.best * -1) }}</div>
+          </div>
+        </div>
       </div>
     </q-card-section>
   </q-card>
@@ -48,6 +54,10 @@ function default_rate () {
     min: 6.0,
     max: 6.0
   }
+}
+
+function default_bricks_and_mortar_remortgage_cost () {
+  return 2500
 }
 
 export default defineComponent({
@@ -120,13 +130,25 @@ export default defineComponent({
         best: this.gdv_total.max * (this.refinance.ltv.max / 100)
       }
     },
+    refinance_costs () {
+      let ret_val = []
+      ret_val.push({
+        name: 'Remortgage Cost',
+        worst: -1 * default_bricks_and_mortar_remortgage_cost(),
+        best: -1 * default_bricks_and_mortar_remortgage_cost()
+      })
+      return ret_val
+    },
     refinance_out_items () {
       let ret_val = []
       if (this.refinance.userefinance) {
         ret_val.push({name: 'Mortgage Refinance', worst: this.refinanceamount.worst, best: this.refinanceamount.best})
       }
+      this.refinance_costs.map(function (x) {
+        ret_val.push(x)
+      })
       return ret_val
-    }
+    },
   }
 })
 

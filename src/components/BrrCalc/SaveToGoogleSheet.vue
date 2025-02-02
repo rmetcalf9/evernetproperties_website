@@ -29,7 +29,7 @@ import sheet_refurb_cost from './SaveToGoogleSheetSheets/refurb_cost.js'
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
   emits: ['apiaddweblink', 'activity_log'],
-  props: ['serialized_data', 'patch', 'refurb_cost_total', 'stampduty_total', 'othercosts_items_detail', 'caculated_loan_details', 'finance_bridgecost', 'finance_bridgeamount', 'gdv_total'],
+  props: ['serialized_data', 'patch', 'refurb_cost_total', 'stampduty_total', 'othercosts_items_detail', 'caculated_loan_details', 'finance_bridgecost', 'finance_bridgeamount', 'gdv_total', 'refinance_costs'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -104,7 +104,7 @@ export default defineComponent({
           subsheet_javascript_code_files.push(sheet_hmo_room_sizes)
         }
       }
-      subsheet_javascript_code_files.push(sheet_refurb_cost)      
+      subsheet_javascript_code_files.push(sheet_refurb_cost)
 
       let sheedIdx = 0;
       while (sheedIdx < subsheet_javascript_code_files.length) {

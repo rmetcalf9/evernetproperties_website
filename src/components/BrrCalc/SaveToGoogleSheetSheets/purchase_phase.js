@@ -244,10 +244,8 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
   context.requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,3))
   context.requests.push(su.formatcurrency(row_start_of_details,context.cur_row,1,3))
 
-  if (vueobj.serialized_data.finance.bridge.usebridge) {
-    if (vueobj.serialized_data.refinance.refinance_userefinance) {
-      _output_refinance_using_bridge(context, su, vueobj, total_money_needed_row, detail_row_map)
-    }
+  if (vueobj.serialized_data.refinance.refinance_userefinance) {
+    _output_refinance(context, su, vueobj, total_money_needed_row, detail_row_map)
   }
 
   return {
@@ -256,15 +254,13 @@ function get_sheet_values (spreadsheet, vueobj, sheet_id_map) {
   }
 }
 
-function _output_refinance_using_bridge(context, su, vueobj, total_money_needed_row, detail_row_map) {
-  const bridge_costs_row = detail_row_map[bridge_amount_string]
-
+function _output_refinance(context, su, vueobj, total_money_needed_row, detail_row_map) {
   context.cur_row = context.cur_row + 1
 
   context.cur_row = context.cur_row + 1
   context.value_requests.push({
     range: sheet_name + '!A' + context.cur_row.toString() + ':B' + context.cur_row.toString(),
-    values: [['Refinance to exit bridge']]
+    values: [['Refinance']]
   })
   context.requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,1))
 
@@ -303,21 +299,46 @@ function _output_refinance_using_bridge(context, su, vueobj, total_money_needed_
   })
   context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
 
-  context.cur_row = context.cur_row + 1
-  const payback_bridge_row = context.cur_row
-  let paybacks_last_row = payback_bridge_row
-  context.value_requests.push({
-    range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
-    values: [[
-      'Pay back bridge', '=B' + (bridge_costs_row).toString() + ' * -1',
-      '=C' + (bridge_costs_row).toString() + ' * -1'
-    ]]
+  let paybacks_first_row = undefined
+  let paybacks_last_row = undefined
+  function set_paybacks_row() {
+    if (typeof (paybacks_first_row) === 'undefined') {
+      paybacks_first_row = context.cur_row
+    }
+    paybacks_last_row = context.cur_row
+  }
+
+  if (vueobj.serialized_data.finance.bridge.usebridge) {
+    const bridge_costs_row = detail_row_map[bridge_amount_string]
+    context.cur_row = context.cur_row + 1
+    set_paybacks_row()
+    context.value_requests.push({
+      range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+      values: [[
+        'Pay back bridge', '=B' + (bridge_costs_row).toString() + ' * -1',
+        '=C' + (bridge_costs_row).toString() + ' * -1'
+      ]]
+    })
+    context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
+  }
+
+  vueobj.refinance_costs.forEach(function (refinance_cost) {
+    context.cur_row = context.cur_row + 1
+    set_paybacks_row()
+    context.value_requests.push({
+      range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
+      values: [[
+        refinance_cost.name,
+        refinance_cost.worst * -1,
+        refinance_cost.best * -1,
+      ]]
+    })
+    context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
   })
-  context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
 
   vueobj.caculated_loan_details.forEach(function (loan) {
     context.cur_row = context.cur_row + 1
-    paybacks_last_row = context.cur_row
+    set_paybacks_row()
     context.value_requests.push({
       range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
       values: [[
@@ -327,18 +348,21 @@ function _output_refinance_using_bridge(context, su, vueobj, total_money_needed_
     context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
   })
 
+  // what if there are no paybacks?
+  //  for refinance there is always a refinance cost!
 
   context.cur_row = context.cur_row + 1
   const remaining_row = context.cur_row
   context.value_requests.push({
     range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
     values: [[
-      'Remaining',
-      '=B' + (mortgage_total_row).toString() + '-sum(B' + (payback_bridge_row).toString() + ":B" + (paybacks_last_row).toString() + ")",
-      '=C' + (mortgage_total_row).toString() + '-sum(C' + (payback_bridge_row).toString() + ":C" + (paybacks_last_row).toString() + ")",
+      'Total after deductions',
+      '=B' + (mortgage_total_row).toString() + '-sum(B' + (paybacks_first_row).toString() + ":B" + (paybacks_last_row).toString() + ")",
+      '=C' + (mortgage_total_row).toString() + '-sum(C' + (paybacks_first_row).toString() + ":C" + (paybacks_last_row).toString() + ")",
     ]]
   })
   context.requests.push(su.formatcurrency(context.cur_row-1,context.cur_row,1,3))
+  context.requests.push(su.makeboldandvaligntop(context.cur_row-1,context.cur_row,0,3))
 
   context.cur_row = context.cur_row + 1
   const original_row = context.cur_row
@@ -357,7 +381,7 @@ function _output_refinance_using_bridge(context, su, vueobj, total_money_needed_
   context.value_requests.push({
     range: sheet_name + '!A' + context.cur_row.toString() + ':C' + context.cur_row.toString(),
     values: [[
-      'Left in',
+      'Amount Left in the deal',
       '=B' + (original_row).toString() + '-B' + (remaining_row).toString(),
       '=C' + (original_row).toString() + '-C' + (remaining_row).toString()
     ]]
