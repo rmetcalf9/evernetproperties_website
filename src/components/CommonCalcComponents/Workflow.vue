@@ -46,7 +46,7 @@ function get_default_workflow_data (default_workflow_id) {
 
 export default defineComponent({
   name: 'BrrCalcWorkflow',
-  emits: ['projectchanged', 'activity_log'],
+  emits: ['projectchanged', 'activity_log', 'click_save_btn'],
   props: {
     default_workflow_id: {
       type: String,
@@ -76,6 +76,7 @@ export default defineComponent({
   },
   methods: {
     progress (next_stage_id) {
+      const TTT = this
       const obj = {
         type: 'wf_move',
         text: 'From ' + this.workflow_model.stages[this.workflow_data.current_stage].name + ' to ' + this.workflow_model.stages[next_stage_id].name,
@@ -84,6 +85,9 @@ export default defineComponent({
       this.workflow_data.current_stage = next_stage_id
       this.$emit('activity_log', obj)
       // this.$emit('projectchanged') NOT NEEDED - activity log does this
+      setTimeout(function () {
+        TTT.$emit('click_save_btn')
+      }, 100)
     },
     serializer_load_data (workflow_data) {
       this.emit_project_change_notification = false

@@ -50,7 +50,7 @@ export default defineComponent({
   },
   methods: {
     click_save_btn () {
-      this.$refs.SaveToolbar.click_btn()      
+      this.$refs.SaveToolbar.click_btn()
     },
     set_changed_true () {
       this.$refs.SaveToolbar.set_changed_true()

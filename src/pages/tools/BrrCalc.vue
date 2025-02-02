@@ -133,6 +133,7 @@
           ref="Workflow"
           @projectchanged="projectchanged"
           @activity_log="activity_log"
+          @click_save_btn="click_save_btn"
           v-if="security_role_cansave"
         />
         <Todos
@@ -502,7 +503,7 @@ export default defineComponent({
       this.$refs.ActivityLog.log_activity(obj)
     },
     projectchanged (source) {
-      console.log('BrrCalc page recieved project changed from ', source)
+      console.log('BrrCalc page received project changed from ', source)
       if (!this.security_role_cansave) {
         // console.log('WARNING projectchanged checked when cansave is false')
         // warning not needed - this is normal
@@ -517,6 +518,9 @@ export default defineComponent({
         return false
       }
       this.$refs.BrrToolbar.set_changed_true()
+    },
+    click_save_btn () {
+      this.$refs.BrrToolbar.click_save_btn()
     },
     save_project () {
       this.$refs.ProjectSerializer.save_project({
