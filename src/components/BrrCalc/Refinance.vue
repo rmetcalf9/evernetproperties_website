@@ -30,6 +30,7 @@
           min_label_text="Worst %"
           max_label_text="Best %"
         />
+        <div><q-checkbox v-model="refinance.commercial_valuation" label="Commercial Valuation" /></div>
         <hr/>
         <div>Refinance amount: {{ format_currency(refinanceamount.worst) }} - {{ format_currency(refinanceamount.best) }}</div>
         <div>Monthly Payments: {{ format_currency(monthly_payments.worst) }} - {{ format_currency(monthly_payments.best) }}</div>
@@ -59,6 +60,13 @@ function default_rate () {
 function default_bricks_and_mortar_remortgage_cost () {
   return 2500
 }
+function commercial_valuation_fees () {
+  return [
+    {name: 'Remortgage Arrangment', amount: 2500},
+    {name: 'Remortgage Solicitors', amount: 2300},
+    {name: 'Remortgage Valuation', amount: 1500}
+  ]
+}
 
 export default defineComponent({
   name: 'BrrCalcFinance',
@@ -75,7 +83,8 @@ export default defineComponent({
           min: 75,
           max: 75
         },
-        rate: default_rate()
+        rate: default_rate(),
+        commercial_valuation: false
       },
       emit_project_change_notification: true
     }
@@ -92,6 +101,11 @@ export default defineComponent({
         this.refinance.rate = default_rate()
       } else {
         this.refinance.rate = data_to_load.refinance_userefinance_rate
+      }
+      if (typeof (data_to_load.refinance_commercial_valuation) === 'undefined') {
+        this.refinance.commercial_valuation = false
+      } else {
+        this.refinance.commercial_valuation = data_to_load.refinance_commercial_valuation
       }
 
       const TTT = this
@@ -119,6 +133,7 @@ export default defineComponent({
         refinance_userefinance: this.refinance.userefinance,
         refinance_userefinance_ltv: this.refinance.ltv,
         refinance_userefinance_rate: this.refinance.rate,
+        refinance_commercial_valuation: this.refinance.commercial_valuation
       }
     },
     get_refinance () {
@@ -132,12 +147,23 @@ export default defineComponent({
     },
     refinance_costs () {
       let ret_val = []
-      ret_val.push({
-        name: 'Remortgage Cost',
-        worst: -1 * default_bricks_and_mortar_remortgage_cost(),
-        best: -1 * default_bricks_and_mortar_remortgage_cost()
-      })
-      return ret_val
+      if (this.refinance.commercial_valuation) {
+        commercial_valuation_fees().forEach(function (x) {
+          ret_val.push({
+            name: x.name,
+            worst: -1 * x.amount,
+            best: -1 * x.amount
+          })
+        })
+        return ret_val
+      } else {
+        ret_val.push({
+          name: 'Remortgage Cost',
+          worst: -1 * default_bricks_and_mortar_remortgage_cost(),
+          best: -1 * default_bricks_and_mortar_remortgage_cost()
+        })
+        return ret_val
+      }
     },
     refinance_out_items () {
       let ret_val = []
