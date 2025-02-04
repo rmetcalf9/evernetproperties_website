@@ -70,5 +70,6 @@ function evalmustachstragainstcontext (str, context) {
 
 
 export default {
-  evalmustachstragainstcontext: evalmustachstragainstcontext
+  evalmustachstragainstcontext: evalmustachstragainstcontext,
+  evalsinglemustach: evalsinglemustach
 }

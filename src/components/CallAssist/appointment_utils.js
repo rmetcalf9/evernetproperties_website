@@ -91,7 +91,6 @@ function get_next_free_slot(cur_time, day) {
       "end_js_day_obj":   slot_end_time
     }
   }
-  console.log('XXX', clash_slot_end)
   if (clash_slot_end > day_end_time) {
     return undefined
   }
@@ -106,10 +105,6 @@ function get_slots_from_viewing_days(viewing_days) {
     cur_time.setHours(9)
     let slot = get_next_free_slot(cur_time, day)
     while (typeof (slot) !== 'undefined') {
-      xxx++
-      if (xxx>10) {
-        return ret_val
-      }
       ret_val.push(slot)
       cur_time = new Date(slot.end_js_day_obj)
       slot = get_next_free_slot(cur_time, day)
