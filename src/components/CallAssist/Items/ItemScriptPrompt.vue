@@ -4,13 +4,14 @@
     <ul>
       <li
         v-for="line in item.lines" :key="line"
-      >{{ line }}</li>
+      >{{ get_line(line) }}</li>
     </ul>
   </div>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
+import mustach_utils from '../mustach_utils.js'
 
 export default defineComponent({
   name: 'CallAssistCallItemShowCallAim',
@@ -33,6 +34,18 @@ export default defineComponent({
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    get_line (line) {
+      console.log('DDD', this.current_lead)
+      return mustach_utils.evalmustachstragainstcontext(line, {
+        current_lead: this.current_lead,
+        current_stage: this.current_stage,
+        calltemplate: this.calltemplate,
+        item: this.item,
+        batchdata: this.batchdata
+      })
     }
   }
 })

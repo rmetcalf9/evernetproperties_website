@@ -12,7 +12,7 @@ export default {
             type: 'ScriptPrompt',
             lines: [
               'Am I speaking to...',
-              'I came across your advert for a room on ....',
+              'I came across your advert for a room on .... ({{ current_lead.raw.sub_section_details.leadinformation.lead_source }})',
               'Is the property still availiable?',
               'Do you mind if I ask some questions about the property?'
             ]
