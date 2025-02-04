@@ -48,6 +48,7 @@
       class="fit column wrap justify-start items-start content-center batchcallleads-storydiv">
       <CallAssist
         ref="CallAssist"
+        @outcome="outcome"
       />
     </div>
 
@@ -61,6 +62,8 @@ import utils from '../../../components/utils.js'
 import { Notify } from 'quasar'
 
 import CallAssist from '../../../components/CallAssist/CallAssist.vue'
+import appointment_utils from '../../../components/CallAssist/appointment_utils.js'
+
 import RentToRentLeadTemplate from '../../../components/CallAssistCalls/RentToRentLead.js'
 
 import BatchCallLeadsAddBlockDialog from '../../../components/BatchCallLeadsAddBlockDialog.vue'
@@ -115,6 +118,9 @@ export default defineComponent({
     }
   },
   methods: {
+    outcome (outcome_data) {
+      console.log('TODO deal with outcome EXT', outcome_data)
+    },
     addreservedslot (day) {
       this.$refs.BatchCallLeadsAddBlockDialog.show_dialog(this.viewing_days, day.id)
     },
@@ -140,7 +146,8 @@ export default defineComponent({
             }
           }),
           {
-            story_prompt: use_story_prompt
+            story_prompt: use_story_prompt,
+            slots: appointment_utils.get_slots_from_viewing_days(TTT.viewing_days)
           }
         )
       }, 10)
@@ -231,7 +238,7 @@ export default defineComponent({
         reserved_slots: []
       })
     }
-    // User profile is not always loaded immediatadly
+    // User profile is not always loaded immediately
     setTimeout(function () {
       if (TTT.$route.query.patchid === 'all') {
         TTT.patches_data = TTT.user_profile.patches.map(function (x) {

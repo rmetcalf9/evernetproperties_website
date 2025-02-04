@@ -104,8 +104,24 @@ export default {
       {
         id: '5',
         name: 'Close whilst Mentioning company let',
-        items: [],
-        actions: [],
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'It would be great to view the property and discuss further.',
+              'It won’t be me staying in the property myself and I am looking for a company let <NO PAUSE>',
+            ]
+          },
+          {
+            type: 'ArrangeAppointment',
+            prompt_text: 'I am going to be in the area and I am free on {{ option1 }} and {{ option2 }}, which of these works for you?',
+          }
+        ],
+        actions: [{
+          type: 'Outcome',
+          id: 'complete',
+          button_label: 'Complete Call - viewing arranged'
+        }],
         post_action_items: [{ type: 'ShowLead'}]
       }
   ],

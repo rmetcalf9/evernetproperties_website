@@ -112,11 +112,11 @@ export default defineComponent({
       this.prepared = true
     },
     outcome (props) {
-      console.log('TODO deal with outcome', props)
       const emit_object = {
         outcome_id: props.outcome_id,
         call_data: props.call_data,
-        current_lead: this.current_lead
+        current_lead: this.current_lead,
+        batch_data: this.batch_data
       }
       this.$emit('outcome', JSON.parse(JSON.stringify(emit_object)))
       this.remaining_leads.shift()

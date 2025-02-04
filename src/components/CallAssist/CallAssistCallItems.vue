@@ -40,6 +40,14 @@
       :item="item"
       :batchdata="batchdata"
     />
+    <ItemArrangeAppointment
+      v-if="item.type === 'ArrangeAppointment'"
+      :current_lead="current_lead"
+      :current_stage="current_stage"
+      :calltemplate="calltemplate"
+      :item="item"
+      :batchdata="batchdata"
+    />
   </div>
 </template>
 
@@ -51,6 +59,7 @@ import ItemShowStages from './Items/ItemShowStages.vue'
 import ItemShowLead from './Items/ItemShowLead.vue'
 import ItemScriptPrompt from './Items/ItemScriptPrompt.vue'
 import ItemCustomVariableDisplay from './Items/ItemCustomVariableDisplay.vue'
+import ItemArrangeAppointment from './Items/ItemArrangeAppointment.vue'
 
 
 export default defineComponent({
@@ -77,7 +86,8 @@ export default defineComponent({
     ItemShowStages,
     ItemShowLead,
     ItemScriptPrompt,
-    ItemCustomVariableDisplay
+    ItemCustomVariableDisplay,
+    ItemArrangeAppointment
   },
   data () {
     return {
