@@ -115,7 +115,8 @@ export default {
           {
             type: 'ArrangeAppointment',
             prompt_text: 'I am going to be in the area and I am free on {{ option1 }} and {{ option2 }}, which of these works for you?',
-            slot_var: 'batchdata.slots'
+            slot_var: 'batchdata.slots',
+            unique_id: 'appointment'
           }
         ],
         actions: [{

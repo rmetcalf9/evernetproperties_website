@@ -10,6 +10,8 @@
           :calltemplate="calltemplate"
           :item="item"
           :batchdata="batchdata"
+          :calldata="call_data"
+          @update_item_data="update_item_data"
         />
       </div>
     </div>
@@ -39,6 +41,8 @@
           :calltemplate="calltemplate"
           :item="item"
           :batchdata="batchdata"
+          :calldata="call_data"
+          @update_item_data="update_item_data"
         />
       </div>
     </div>
@@ -51,10 +55,26 @@ import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 
 import CallAssistCallItems from './CallAssistCallItems.vue'
+import {getDefaultItemData} from './CallAssistCallItems.vue'
 
-function get_initial_call_data () {
+function get_initial_call_data (calltemplate) {
+  let item_data_vals = {}
+  if (typeof (calltemplate) !== 'undefined') {
+    function process_item(item) {
+      if (typeof (item.unique_id) !== 'undefined') {
+        item_data_vals[item.unique_id] = getDefaultItemData(item.type)
+      }
+    }
+
+    Object.keys(calltemplate.stages).map(function (stageidx) {
+      calltemplate.stages[stageidx].items.map(process_item)
+
+      calltemplate.stages[stageidx].post_action_items.map(process_item)
+    })
+  }
   return {
-    notes: ''
+    notes: '',
+    item_data_vals: item_data_vals  //The key is always the unique id provided in call description
   }
 }
 
@@ -94,6 +114,9 @@ export default defineComponent({
     }
   },
   methods: {
+    update_item_data (props) {
+      this.call_data.item_data_vals[props.item_id] = props.item_data
+    },
     set_stage (stage_id) {
       this.current_stage_id = stage_id
     },
@@ -137,7 +160,7 @@ export default defineComponent({
       this.current_stage_id = action.next_stage_id
     },
     reset_call_data () {
-      this.call_data = get_initial_call_data()
+      this.call_data = get_initial_call_data(this.calltemplate)
     },
     reset_script () {
       this.set_stage(this.calltemplate.initial_stage_id)

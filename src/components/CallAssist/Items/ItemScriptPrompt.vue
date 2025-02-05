@@ -30,6 +30,9 @@ export default defineComponent({
     },
     batchdata: {
       type: Object
+    },
+    calldata: {
+      type: Object
     }
   },
   data () {

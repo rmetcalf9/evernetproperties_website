@@ -88,7 +88,8 @@ function get_next_free_slot(cur_time, day) {
     return {
       "text": get_slot_text(slot_start_time),
       "start_js_day_obj": slot_start_time,
-      "end_js_day_obj":   slot_end_time
+      "end_js_day_obj":   slot_end_time,
+      "day": day
     }
   }
   if (clash_slot_end > day_end_time) {

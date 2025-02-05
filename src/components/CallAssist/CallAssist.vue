@@ -80,7 +80,8 @@ export default defineComponent({
             id: 'Make_call',
             button_label: 'Ready to Dial...'
           }
-        ]
+        ],
+        post_action_items: []
       }
       let new_stages = {}
       new_stages[review_stage.id] = review_stage
@@ -108,6 +109,10 @@ export default defineComponent({
       this.total_leads = leads.length
 
       this.$refs.CallAssistCall.set_stage(this.calltemplate.initial_stage_id)
+
+      setTimeout(function () {
+        TTT.$refs.CallAssistCall.reset_call_data()
+      }, 50)
 
       this.prepared = true
     },

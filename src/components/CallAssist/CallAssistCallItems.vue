@@ -7,6 +7,7 @@
       :calltemplate="calltemplate"
       :item="item"
       :batchdata="batchdata"
+      :calldata="calldata"
     />
     <ItemShowStages
       v-if="item.type === 'ShowStages'"
@@ -15,6 +16,7 @@
       :calltemplate="calltemplate"
       :item="item"
       :batchdata="batchdata"
+      :calldata="calldata"
     />
     <ItemShowLead
       v-if="item.type === 'ShowLead'"
@@ -23,6 +25,7 @@
       :calltemplate="calltemplate"
       :item="item"
       :batchdata="batchdata"
+      :calldata="calldata"
     />
     <ItemScriptPrompt
       v-if="item.type === 'ScriptPrompt'"
@@ -31,6 +34,7 @@
       :calltemplate="calltemplate"
       :item="item"
       :batchdata="batchdata"
+      :calldata="calldata"
     />
     <ItemCustomVariableDisplay
       v-if="item.type === 'CustomVariableDisplay'"
@@ -39,6 +43,7 @@
       :calltemplate="calltemplate"
       :item="item"
       :batchdata="batchdata"
+      :calldata="calldata"
     />
     <ItemArrangeAppointment
       v-if="item.type === 'ArrangeAppointment'"
@@ -47,6 +52,8 @@
       :calltemplate="calltemplate"
       :item="item"
       :batchdata="batchdata"
+      :calldata="calldata"
+      @update_item_data="update_item_data"
     />
   </div>
 </template>
@@ -61,6 +68,14 @@ import ItemScriptPrompt from './Items/ItemScriptPrompt.vue'
 import ItemCustomVariableDisplay from './Items/ItemCustomVariableDisplay.vue'
 import ItemArrangeAppointment from './Items/ItemArrangeAppointment.vue'
 
+import {getDefaultItemDataArrangeAppointment} from './Items/ItemArrangeAppointment.vue'
+
+export function getDefaultItemData(itemType) {
+  if (itemType === 'ArrangeAppointment') {
+    return getDefaultItemDataArrangeAppointment()
+  }
+  return {}
+}
 
 export default defineComponent({
   name: 'CallAssistCallItems',
@@ -79,8 +94,12 @@ export default defineComponent({
     },
     batchdata: {
       type: Object
+    },
+    calldata: {
+      type: Object
     }
   },
+  emits: ['update_item_data'],  
   components: {
     ItemShowCallAim,
     ItemShowStages,
@@ -91,6 +110,11 @@ export default defineComponent({
   },
   data () {
     return {
+    }
+  },
+  methods: {
+    update_item_data (props) {
+      this.$emit('update_item_data', props)
     }
   }
 })

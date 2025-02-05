@@ -233,7 +233,7 @@ export default defineComponent({
       var this_date = new Date(start_date)
       this_date.setDate(this_date.getDate() + i);
       this.viewing_days.push({
-        id: i,
+        id: i.toString(),
         text: utils.format_date_as_string_without_year(this_date),
         js_day_obj: this_date,
         selected: true,
