@@ -2,7 +2,9 @@
   <div>
     <h1>Call Plan</h1>
     <div v-for="stage in calltemplate.ordered_stages" :key='stage.id' class="row">
-      {{ stage.name }}
+      <div v-if="!stage.hide_from_plan">
+        {{ stage.name }}
+      </div>
     </div>
   </div>
 </template>

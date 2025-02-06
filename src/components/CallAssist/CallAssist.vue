@@ -88,6 +88,9 @@ export default defineComponent({
       this.calltemplate.ordered_stages = []
       this.calltemplate.ordered_stages.push(review_stage)
       this.calltemplate.stages.map(function (x) {
+        if (typeof (x.hide_from_plan) === 'undefined') {
+          x.hide_from_plan = false
+        }
         let new_actions = []
         new_actions.push(standard_actions.skip_call_action)
         x.actions.map(function (action) {

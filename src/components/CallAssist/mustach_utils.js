@@ -47,6 +47,9 @@ function evalsinglemustach (mustach, context) {
 }
 
 function evalmustachstragainstcontext (str, context) {
+  if (typeof (str) === 'undefined') {
+    return undefined
+  }
   var output_str = ''
   var current_char = 0
   while (current_char < str.length) {

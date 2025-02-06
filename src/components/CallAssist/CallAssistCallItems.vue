@@ -61,6 +61,18 @@
       @update_item_data="update_item_data"
       ref="item"
     />
+    <ItemInlineActionList
+      v-if="item.type === 'InlineActionList'"
+      :current_lead="current_lead"
+      :current_stage="current_stage"
+      :calltemplate="calltemplate"
+      :item="item"
+      :batchdata="batchdata"
+      :calldata="calldata"
+      @update_item_data="update_item_data"
+      @click_action_button="click_action_button"
+      ref="item"
+    />
   </div>
 </template>
 
@@ -73,6 +85,7 @@ import ItemShowLead from './Items/ItemShowLead.vue'
 import ItemScriptPrompt from './Items/ItemScriptPrompt.vue'
 import ItemCustomVariableDisplay from './Items/ItemCustomVariableDisplay.vue'
 import ItemArrangeAppointment from './Items/ItemArrangeAppointment.vue'
+import ItemInlineActionList from './Items/ItemInlineActionList.vue'
 
 import {getDefaultItemDataArrangeAppointment} from './Items/ItemArrangeAppointment.vue'
 
@@ -105,14 +118,15 @@ export default defineComponent({
       type: Object
     }
   },
-  emits: ['update_item_data'],
+  emits: ['update_item_data', 'click_action_button'],
   components: {
     ItemShowCallAim,
     ItemShowStages,
     ItemShowLead,
     ItemScriptPrompt,
     ItemCustomVariableDisplay,
-    ItemArrangeAppointment
+    ItemArrangeAppointment,
+    ItemInlineActionList
   },
   data () {
     return {
@@ -121,6 +135,9 @@ export default defineComponent({
   methods: {
     update_item_data (props) {
       this.$emit('update_item_data', props)
+    },
+    click_action_button (props) {
+      this.$emit('click_action_button', props)
     },
     validate (action) {
       if (typeof (this.$refs.item.validate) === 'function') {

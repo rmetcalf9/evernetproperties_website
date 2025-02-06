@@ -13,10 +13,11 @@
           :calldata="call_data"
           :ref="'callitem-main-' + item.id"
           @update_item_data="update_item_data"
+          @click_action_button="click_action_button"
         />
       </div>
     </div>
-    <h2>Call Free notes</h2>
+    <h2>Call notes</h2>
     <div><q-input filled clearable v-model="call_data.notes" label="Notes from this call" autogrow/></div>
     <h2>Actions</h2>
     <div class="row">
@@ -45,6 +46,7 @@
           :calldata="call_data"
           :ref="'callitem-post-' + item.id"
           @update_item_data="update_item_data"
+          @click_action_button="click_action_button"
         />
       </div>
     </div>
@@ -193,6 +195,6 @@ export default defineComponent({
 
 <style>
 .CallAssistCall-actionbutton {
-  margin-right: 10px;
+  margin: 5px;
 }
 </style>
