@@ -17,6 +17,7 @@
           option-label="name"
         />
         <q-input
+          ref="selection_day"
           class="itemarrangeapointment-selection-day"
           filled v-model="selection_time"
           mask="time"
@@ -222,6 +223,16 @@ export default defineComponent({
     }
   },
   methods: {
+    validate (action) {
+      if (action.id==='skip_call') {
+        // No validation when skipping call
+        return true
+      }
+      if (!this.$refs.selection_day.validate()) {
+        return false
+      }
+      return true
+    },
     click_select_opt1 () {
       this.click_select_opt(this.calldata.item_data_vals[this.item.unique_id].option1)
     },

@@ -103,7 +103,18 @@ export default defineComponent({
       this.calltemplate.stages = new_stages
       this.calltemplate.initial_stage_id = review_stage.id
 
-      // console.log('xxx', this.calltemplate)
+      // Assign all items id's
+      Object.keys(TTT.calltemplate.stages).map(function (stageidx) {
+        let stage = TTT.calltemplate.stages[stageidx]
+        stage.items = stage.items.map(function (item) {
+          item.id=utils.uuidv4()
+          return item
+        })
+        stage.post_action_items = stage.post_action_items.map(function (item) {
+          item.id=utils.uuidv4()
+          return item
+        })
+      })
 
       this.remaining_leads = leads
       this.total_leads = leads.length
@@ -126,7 +137,6 @@ export default defineComponent({
 
       // Give items a chance to update batch data
       Object.keys(props.call_data.item_data_vals).map(function (x) {
-        console.log('check exec', props.call_data.item_data_vals[x])
         if (typeof (props.call_data.item_data_vals[x].outcome_callback) !== 'undefined') {
           props.call_data.item_data_vals[x].outcome_callback(props.call_data.item_data_vals[x], emit_object)
         }

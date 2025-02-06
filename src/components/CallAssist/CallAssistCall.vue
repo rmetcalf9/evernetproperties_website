@@ -11,6 +11,7 @@
           :item="item"
           :batchdata="batchdata"
           :calldata="call_data"
+          :ref="'callitem-main-' + item.id"
           @update_item_data="update_item_data"
         />
       </div>
@@ -42,6 +43,7 @@
           :item="item"
           :batchdata="batchdata"
           :calldata="call_data"
+          :ref="'callitem-post-' + item.id"
           @update_item_data="update_item_data"
         />
       </div>
@@ -135,7 +137,27 @@ export default defineComponent({
       }
       return undefined
     },
+    item_ref_list () {
+      //return a list of items
+      return Object.keys(this.$refs).filter(function (x) {
+        return x.substr(0,9) === 'callitem-'
+      })
+    },
     click_action_button (action) {
+      const TTT=this
+      let valid = true
+      this.item_ref_list().map(function (x) {
+        // Refs are sometimes unloaded and go to 0
+        //  so looping though resutls
+        TTT.$refs[x].map(function (y) {
+          if (!y.validate(action)) {
+            valid = false
+          }
+        })
+      })
+      if (!valid) {
+        return
+      }
       if (action.type === 'Outcome') {
         this.click_outcome_action_button(action)
       } else {

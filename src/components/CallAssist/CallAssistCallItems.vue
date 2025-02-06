@@ -8,6 +8,7 @@
       :item="item"
       :batchdata="batchdata"
       :calldata="calldata"
+      ref="item"
     />
     <ItemShowStages
       v-if="item.type === 'ShowStages'"
@@ -17,6 +18,7 @@
       :item="item"
       :batchdata="batchdata"
       :calldata="calldata"
+      ref="item"
     />
     <ItemShowLead
       v-if="item.type === 'ShowLead'"
@@ -26,6 +28,7 @@
       :item="item"
       :batchdata="batchdata"
       :calldata="calldata"
+      ref="item"
     />
     <ItemScriptPrompt
       v-if="item.type === 'ScriptPrompt'"
@@ -35,6 +38,7 @@
       :item="item"
       :batchdata="batchdata"
       :calldata="calldata"
+      ref="item"
     />
     <ItemCustomVariableDisplay
       v-if="item.type === 'CustomVariableDisplay'"
@@ -44,6 +48,7 @@
       :item="item"
       :batchdata="batchdata"
       :calldata="calldata"
+      ref="item"
     />
     <ItemArrangeAppointment
       v-if="item.type === 'ArrangeAppointment'"
@@ -54,6 +59,7 @@
       :batchdata="batchdata"
       :calldata="calldata"
       @update_item_data="update_item_data"
+      ref="item"
     />
   </div>
 </template>
@@ -99,7 +105,7 @@ export default defineComponent({
       type: Object
     }
   },
-  emits: ['update_item_data'],  
+  emits: ['update_item_data'],
   components: {
     ItemShowCallAim,
     ItemShowStages,
@@ -115,6 +121,12 @@ export default defineComponent({
   methods: {
     update_item_data (props) {
       this.$emit('update_item_data', props)
+    },
+    validate (action) {
+      if (typeof (this.$refs.item.validate) === 'function') {
+        return this.$refs.item.validate(action)
+      }
+      return true
     }
   }
 })
