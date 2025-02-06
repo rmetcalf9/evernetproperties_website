@@ -121,12 +121,20 @@ export default defineComponent({
         outcome_id: props.outcome_id,
         call_data: props.call_data,
         current_lead: this.current_lead,
-        batch_data: this.batch_data
+        batchdata: this.batchdata
       }
-      this.$emit('outcome', JSON.parse(JSON.stringify(emit_object)))
-      this.remaining_leads.shift()
 
-      if (this.remaining_leads.length > 0) {
+      // Give items a chance to update batch data
+      Object.keys(props.call_data.item_data_vals).map(function (x) {
+        console.log('check exec', props.call_data.item_data_vals[x])
+        if (typeof (props.call_data.item_data_vals[x].outcome_callback) !== 'undefined') {
+          props.call_data.item_data_vals[x].outcome_callback(props.call_data.item_data_vals[x], emit_object)
+        }
+      })
+
+      this.$emit('outcome', JSON.parse(JSON.stringify(emit_object)))
+      if (this.remaining_leads.length > 1) {
+        this.remaining_leads.shift()
         this.$refs.CallAssistCall.reset_call_data()
         this.$refs.CallAssistCall.set_stage(this.calltemplate.initial_stage_id)
         return

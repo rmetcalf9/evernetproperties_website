@@ -49,6 +49,44 @@
 import { defineComponent } from 'vue'
 import mustach_utils from '../mustach_utils.js'
 import appointment_utils from '../../../components/CallAssist/appointment_utils.js'
+import utils from '../../../components/utils.js'
+
+
+function add_one_hour_to_time(time) {
+  let hour = parseInt(time.substr(0,2)) + 1
+  if (hour < 10) {
+    hour = '0' + hour.toString()
+  } else {
+    hour = hour.toString()
+  }
+  return hour + time.substr(2)
+}
+
+function outcome_callback(item_data, outcome_obj, item) {
+  if (!item_data.mounted) {
+    return
+  }
+  let need_to_process = false
+  item.success_outcome_ids.map(function (id) {
+    if (outcome_obj.outcome_id === id) {
+      need_to_process = true
+    }
+  })
+  if (!need_to_process) {
+    return
+  }
+  let viewing_day_to_update = outcome_obj.batchdata.viewing_days.items.filter(function (x) {
+    return x.id===item_data.selection_day.id
+  })[0]
+
+  const reserved_slot_obj = {
+    id: utils.uuidv4(),
+    start: item_data.selection_time,
+    end: add_one_hour_to_time(item_data.selection_time),
+    text: outcome_obj.current_lead.name
+  }
+  viewing_day_to_update.reserved_slots.push(reserved_slot_obj)
+}
 
 export function getDefaultItemDataArrangeAppointment() {
   return {
@@ -57,7 +95,8 @@ export function getDefaultItemDataArrangeAppointment() {
     option2: 'SETONMOUNT',
     selection_day: '',
     selection_time: '09:00',
-    slots: []
+    slots: [],
+    outcome_callback: undefined
   }
 }
 
@@ -124,7 +163,8 @@ export default defineComponent({
         return this.calldata.item_data_vals[this.item.unique_id].selection_day
       },
       set(value) {
-        let item_data = JSON.parse(JSON.stringify(this.calldata.item_data_vals[this.item.unique_id]))
+        // let item_data = JSON.parse(JSON.stringify(this.calldata.item_data_vals[this.item.unique_id]))
+        let item_data = this.calldata.item_data_vals[this.item.unique_id]
         item_data.selection_day = value
         this.$emit('update_item_data',{
           item_id: this.item.unique_id,
@@ -137,7 +177,8 @@ export default defineComponent({
         return this.calldata.item_data_vals[this.item.unique_id].selection_time
       },
       set(value) {
-        let item_data = JSON.parse(JSON.stringify(this.calldata.item_data_vals[this.item.unique_id]))
+        // let item_data = JSON.parse(JSON.stringify(this.calldata.item_data_vals[this.item.unique_id]))
+        let item_data = this.calldata.item_data_vals[this.item.unique_id]
         item_data.selection_time = value
         this.$emit('update_item_data',{
           item_id: this.item.unique_id,
@@ -188,7 +229,8 @@ export default defineComponent({
       this.click_select_opt(this.calldata.item_data_vals[this.item.unique_id].option2)
     },
     click_select_opt (option) {
-      let item_data = JSON.parse(JSON.stringify(this.calldata.item_data_vals[this.item.unique_id]))
+      // let item_data = JSON.parse(JSON.stringify(this.calldata.item_data_vals[this.item.unique_id]))
+      let item_data = this.calldata.item_data_vals[this.item.unique_id]
       item_data.selection_time = get_time_str(option.start_js_day_obj)
       item_data.selection_day = this.selection_day_options.filter(function (x) {
         return (x.id === option.day.id)
@@ -239,6 +281,7 @@ export default defineComponent({
         items: appointment_utils.get_slots_from_viewing_days(this.viewing_days.items)
       }
       let option1 = this.generate_option(slots)
+      const frozen_item = JSON.parse(JSON.stringify(this.item))
       let item_data = {
         mounted: true,
         option1: option1,
@@ -246,7 +289,10 @@ export default defineComponent({
         selection_day: this.selection_day_options.filter(function (x) {
           return (x.id === option1.day.id)
         })[0],
-        selection_time: get_time_str(option1.start_js_day_obj)
+        selection_time: get_time_str(option1.start_js_day_obj),
+        outcome_callback: function (item_data, outcome_obj) {
+          return outcome_callback(item_data, outcome_obj, frozen_item)
+        }
       }
       this.$emit('update_item_data',{
         item_id: this.item.unique_id,

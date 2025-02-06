@@ -157,9 +157,6 @@ export default defineComponent({
             story_prompt: use_story_prompt,
             viewing_days: {
               items: selected_viewing_days
-            },
-            slots: {
-              items: appointment_utils.get_slots_from_viewing_days(TTT.viewing_days)
             }
           }
         )
