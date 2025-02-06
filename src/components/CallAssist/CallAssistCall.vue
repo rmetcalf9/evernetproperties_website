@@ -167,12 +167,14 @@ export default defineComponent({
       }
     },
     click_outcome_action_button (action) {
+      window.scrollTo(0,0)
       this.$emit('outcome', {
         outcome_id: action.id,
         call_data: this.call_data
       })
     },
     click_next_stage_action_button (action) {
+      window.scrollTo(0,0)
       if (typeof (this.calltemplate.stages[action.next_stage_id]) === 'undefined') {
         Notify.create({
           color: 'negative',
@@ -187,6 +189,7 @@ export default defineComponent({
       this.call_data = get_initial_call_data(this.calltemplate)
     },
     reset_script () {
+      window.scrollTo(0,0)
       this.set_stage(this.calltemplate.initial_stage_id)
     }
   }

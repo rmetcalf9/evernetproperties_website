@@ -132,6 +132,8 @@ export default defineComponent({
       })
     },
     click_readytogo () {
+      window.scrollTo(0,0)
+    
       this.callassistactive = true
       const TTT = this
       setTimeout(function () {
