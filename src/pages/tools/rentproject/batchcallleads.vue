@@ -26,7 +26,7 @@
         </div>
         <div v-if="day.selected">
           <div v-for="blocked_slot in day.reserved_slots" :key="blocked_slot.id">
-            Not {{ blocked_slot.start }}-{{ blocked_slot.end }} <q-btn round color="primary"  size="xs" icon="delete" @click="delreservedslot(day, blocked_slot.id)" />
+            Not {{ blocked_slot.start }}-{{ blocked_slot.end }} {{ blocked_slot.text }}<q-btn round color="primary"  size="xs" icon="delete" @click="delreservedslot(day, blocked_slot.id)" />
           </div>
         </div>
       </div>

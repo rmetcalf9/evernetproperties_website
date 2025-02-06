@@ -21,6 +21,7 @@
           />
         </div>-->
         <div>
+          Text: <q-input filled v-model="text"></q-input>
           Start Time: <q-input filled v-model="selected_start_time" mask="time" :rules="['time']" @update:model-value="update_start_time">
             <template v-slot:append>
               <q-icon name="access_time" class="cursor-pointer">
@@ -73,7 +74,8 @@ export default defineComponent({
       viewing_days: [],
       selected_day: undefined,
       selected_start_time: '09:00',
-      selected_end_time: '10:00'
+      selected_end_time: '10:00',
+      text: 'Busy'
     }
   },
   computed: {
@@ -143,6 +145,7 @@ export default defineComponent({
         id: utils.uuidv4(),
         start: this.selected_start_time,
         end: this.selected_end_time,
+        text: this.text
       })
       this.dialog_visible = false
     }

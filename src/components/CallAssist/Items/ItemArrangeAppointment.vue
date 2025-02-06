@@ -157,7 +157,7 @@ export default defineComponent({
       })[0].reserved_slots
 
       reserved_slots.map(function (x) {
-        ret_val.push(x.start + ' - ' + x.end)
+        ret_val.push(x.start + ' - ' + x.end + ' ' + x.text)
       })
       return ret_val
     },
