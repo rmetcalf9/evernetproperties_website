@@ -62,6 +62,8 @@ import utils from '../../../components/utils.js'
 import { Notify } from 'quasar'
 
 import CallAssist from '../../../components/CallAssist/CallAssist.vue'
+
+//TODO REMOVE THIS
 import appointment_utils from '../../../components/CallAssist/appointment_utils.js'
 
 import RentToRentLeadTemplate from '../../../components/CallAssistCalls/RentToRentLead.js'
@@ -137,6 +139,12 @@ export default defineComponent({
         if (use_story_prompt === '') {
           use_story_prompt = 'No story prompt provided'
         }
+        let selected_viewing_days = []
+        Object.keys(TTT.viewing_days).map(function (x) {
+          if (TTT.viewing_days[x].selected) {
+            selected_viewing_days.push(TTT.viewing_days[x])
+          }
+        })
         TTT.$refs.CallAssist.prepare(RentToRentLeadTemplate,
           TTT.leads.map(function (x) {
             return {
@@ -147,6 +155,9 @@ export default defineComponent({
           }),
           {
             story_prompt: use_story_prompt,
+            viewing_days: {
+              items: selected_viewing_days
+            },
             slots: {
               items: appointment_utils.get_slots_from_viewing_days(TTT.viewing_days)
             }

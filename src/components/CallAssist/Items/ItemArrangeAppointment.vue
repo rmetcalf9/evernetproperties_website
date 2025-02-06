@@ -48,6 +48,7 @@
 <script>
 import { defineComponent } from 'vue'
 import mustach_utils from '../mustach_utils.js'
+import appointment_utils from '../../../components/CallAssist/appointment_utils.js'
 
 export function getDefaultItemDataArrangeAppointment() {
   return {
@@ -55,7 +56,8 @@ export function getDefaultItemDataArrangeAppointment() {
     option1: 'SETONMOUNT',
     option2: 'SETONMOUNT',
     selection_day: '',
-    selection_time: '09:00'
+    selection_time: '09:00',
+    slots: []
   }
 }
 
@@ -112,7 +114,9 @@ export default defineComponent({
     }
   },
   data () {
-    return {}
+    return {
+      viewing_days: 'CACULATEDONMOUNT'
+    }
   },
   computed: {
     selection_day: {
@@ -142,11 +146,17 @@ export default defineComponent({
       },
     },
     busy_slots () {
-      if (typeof (this.unique_days[this.selection_day.id]) === 'undefined') {
+      if (typeof (this.viewing_days.items) === 'undefined') {
         return []
       }
       let ret_val = []
-      this.unique_days[this.selection_day.id].reserved_slots.map(function (x) {
+      const TTT = this
+
+      const reserved_slots = this.viewing_days.items.filter(function (x) {
+        return x.id === TTT.selection_day.id
+      })[0].reserved_slots
+
+      reserved_slots.map(function (x) {
         ret_val.push(x.start + ' - ' + x.end)
       })
       return ret_val
@@ -157,29 +167,15 @@ export default defineComponent({
     option2_text () {
       return this.calldata.item_data_vals[this.item.unique_id].option2.text
     },
-    unique_days () {
-      let slots = mustach_utils.evalsinglemustach(
-        '{{' + this.item.slot_var + '}}',{
-          current_lead: this.current_lead,
-          current_stage: this.current_stage,
-          calltemplate: this.calltemplate,
-          item: this.item,
-          batchdata: this.batchdata,
-          option1: this.option1_text,
-          option2: this.option2_text,
-      })
-      let unique_days = {}
-      slots.items.map(function (slot) {
-        unique_days[slot.day.id] = slot.day
-      })
-      return unique_days
-    },
     selection_day_options () {
-      const TTT = this
-      return Object.keys(TTT.unique_days).map(function (dayidx) {
+      if (this.viewing_days === 'CACULATEDONMOUNT') {
+        return []
+      }
+      return this.viewing_days.items.map(function (day) {
         return {
-          id: dayidx,
-          name: TTT.unique_days[dayidx].text
+          id: day.id,
+          name: day.text,
+          day: day
         }
       })
     }
@@ -213,17 +209,7 @@ export default defineComponent({
         option2: this.option2_text,
       })
     },
-    generate_option () {
-      let slots = mustach_utils.evalsinglemustach(
-        '{{' + this.item.slot_var + '}}',{
-          current_lead: this.current_lead,
-          current_stage: this.current_stage,
-          calltemplate: this.calltemplate,
-          item: this.item,
-          batchdata: this.batchdata,
-          option1: this.option1_text,
-          option2: this.option2_text,
-      })
+    generate_option (slots) {
       const this_slot_idx = getRandomInt(0, slots.items.length)
       const ret_val = slots.items[this_slot_idx]
       let new_arr = []
@@ -237,12 +223,26 @@ export default defineComponent({
     }
   },
   mounted () {
+    this.viewing_days = mustach_utils.evalsinglemustach(
+      '{{' + this.item.viewing_day_var + '}}',{
+        current_lead: this.current_lead,
+        current_stage: this.current_stage,
+        calltemplate: this.calltemplate,
+        item: this.item,
+        batchdata: this.batchdata,
+        option1: this.option1_text,
+        option2: this.option2_text,
+    })
     if (!this.calldata.item_data_vals[this.item.unique_id].mounted) {
-      let option1 = this.generate_option()
+      // Item data is reset every time a new lead is selected
+      let slots = {
+        items: appointment_utils.get_slots_from_viewing_days(this.viewing_days.items)
+      }
+      let option1 = this.generate_option(slots)
       let item_data = {
         mounted: true,
         option1: option1,
-        option2: this.generate_option(),
+        option2: this.generate_option(slots),
         selection_day: this.selection_day_options.filter(function (x) {
           return (x.id === option1.day.id)
         })[0],
