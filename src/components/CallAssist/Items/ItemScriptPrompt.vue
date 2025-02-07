@@ -46,7 +46,8 @@ export default defineComponent({
         current_stage: this.current_stage,
         calltemplate: this.calltemplate,
         item: this.item,
-        batchdata: this.batchdata
+        batchdata: this.batchdata,
+        calldata: this.calldata
       })
     }
   }

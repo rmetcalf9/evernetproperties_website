@@ -159,32 +159,46 @@ export default {
               },
               {
                 type: 'Next_Stage',
-                next_stage_id: '4',
+                next_stage_id: 'obj_granuteerent',
                 id: 'obj_granuteerent',
                 button_label: 'How can you guarantee the rent?',
                 button_color: 'negative'
               },
               {
                 type: 'Next_Stage',
-                next_stage_id: '4',
+                next_stage_id: 'obj_agent',
                 id: 'obj_agent',
                 button_label: 'Are you an agent?',
                 button_color: 'negative'
               },
               {
                 type: 'Next_Stage',
-                next_stage_id: '4',
+                next_stage_id: 'obj_bills',
                 id: 'obj_bills',
                 button_label: 'Who takes care of the bills?',
                 button_color: 'negative'
               },
               {
                 type: 'Next_Stage',
-                next_stage_id: '4',
+                next_stage_id: 'obj_airbnb',
                 id: 'obj_airbnb',
                 button_label: 'Will it be on Airbnb?',
                 button_color: 'negative'
               },
+            ]
+          },
+          {
+            type: 'InlineActionList',
+            title: 'Other useful notes',
+            body: undefined,
+            actions: [
+              {
+                type: 'Next_Stage',
+                next_stage_id: 'oth_landlordbenefits',
+                id: 'oth_landlordbenefits',
+                button_label: 'Benefits to landlords',
+                button_color: 'primary'
+              }
             ]
           }
         ],
@@ -204,6 +218,12 @@ export default {
             type: 'ScriptPrompt',
             lines: [
               'Can I confirm the address'
+            ]
+          },
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'Ok looking forward to seeing you {{ calldata.item_data_vals.appointment.selection_day.name }} at {{ calldata.item_data_vals.appointment.selection_time }}'
             ]
           },
         ],
@@ -317,7 +337,123 @@ export default {
         }],
         post_action_items: [{ type: 'ShowLead'}]
       },
-
+      {
+        id: 'obj_granuteerent',
+        hide_from_plan: true,
+        name: 'How can you guarantee the rent?',
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'Empathise and state concern: I am glad you asked, it’s important you can rely on consistent regular rent payments so you don’t have the stress of wondering if you are getting paid.',
+              'Here\'s how you can be confident in the arrangement',
+              'Company Let Agreement - We will be entering into a company let agreement, where my company rents your property for a fixed period. This means that the responsibility for rent payments falls on my company, not individual tenants.',
+              'Regular Rent Payments - You will receive a fixed rent every month, regardless of whether the property is occupied or not. This means you have a guaranteed income from your property each month.',
+              'Handling Tenant Issues - My company will handle all tenant issues, maintenance, and even void periods. This means you won\'t have to worry about unpaid rent due to tenant issues.',
+              'Financial Stability - My company has a strong financial standing and the ability to cover the rent payments. This means you can have peace of mind knowing that your rent will be paid on time, every time.',
+              'Legal Obligations - As per our agreement, my company has a legal obligation to pay the rent. This provides an additional layer of security for you as the landlord, ensuring that your rent will be paid as agreed.',
+              'Easy Eviction - If for any reason my company fails to pay the rent, you have the right to evict us immediately. This is because we are a commercial tenant, and the laws are more favorable towards landlords in commercial agreements. This provides you with an extra layer of security and control over your property.',
+              '(BACK TO CLOSE - and pick other objections)'
+            ]
+          },
+        ],
+        actions: [{
+          type: 'Next_Stage',
+          next_stage_id: '5',
+          id: 'close',
+          button_label: 'Back to Close Stage'
+        }],
+        post_action_items: [{ type: 'ShowLead'}]
+      },
+      {
+        id: 'obj_agent',
+        hide_from_plan: true,
+        name: 'Are you an agent?',
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'No, I\'m not an estate agent. I\'m a property investor',
+              'I run a property management company',
+              'We work with landlords to manage their properties, ensuring they receive a guaranteed rent each month and have a hands-off experience.',
+              '(BACK TO CLOSE - and pick other objections)'
+            ]
+          },
+        ],
+        actions: [{
+          type: 'Next_Stage',
+          next_stage_id: '5',
+          id: 'close',
+          button_label: 'Back to Close Stage'
+        }],
+        post_action_items: [{ type: 'ShowLead'}]
+      },
+      {
+        id: 'obj_bills',
+        hide_from_plan: true,
+        name: 'Who takes care of the bills?',
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'Our company will take care of all the bills in the same way a tenant would.',
+              'This includes utilities like gas, electricity, and council tax.',
+              'This means you won\'t have to worry about any unexpected costs or unpaid bills.',
+              '(BACK TO CLOSE - and pick other objections)'
+            ]
+          },
+        ],
+        actions: [{
+          type: 'Next_Stage',
+          next_stage_id: '5',
+          id: 'close',
+          button_label: 'Back to Close Stage'
+        }],
+        post_action_items: [{ type: 'ShowLead'}]
+      },
+      {
+        id: 'obj_airbnb',
+        hide_from_plan: true,
+        name: 'Will it be on Airbnb?',
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              'Yes, the property will be listed on Airbnb as well as other similar platforms.',
+              'This is part of our strategy to ensure maximum occupancy and income.',
+              'However, we handle all aspects of this, including managing bookings, guest communication, and property maintenance.',
+              '(BACK TO CLOSE - and pick other objections)'
+            ]
+          },
+        ],
+        actions: [{
+          type: 'Next_Stage',
+          next_stage_id: '5',
+          id: 'close',
+          button_label: 'Back to Close Stage'
+        }],
+        post_action_items: [{ type: 'ShowLead'}]
+      },
+      {
+        id: 'oth_landlordbenefits',
+        hide_from_plan: true,
+        name: 'Benefits to landlords',
+        items: [
+          {
+            type: 'ScriptPrompt',
+            lines: [
+              "Guaranteed Rent", "No Management Hassles", "No Agency Fees", "Property Care", "Legal Protection", "Bill Payment", "High Occupancy"
+            ]
+          },
+        ],
+        actions: [{
+          type: 'Next_Stage',
+          next_stage_id: '5',
+          id: 'close',
+          button_label: 'Back to Close Stage'
+        }],
+        post_action_items: [{ type: 'ShowLead'}]
+      }
   ],
   common_actions: [
     {
