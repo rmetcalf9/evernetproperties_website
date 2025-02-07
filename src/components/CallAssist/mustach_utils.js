@@ -27,8 +27,6 @@ function get_mustach (str, start_char) {
 }
 
 function evalarray (ites, context) {
-  console.log('ites', ites)
-  console.log('context', context)
   if (ites.length===1) {
     return context[ites]
   }

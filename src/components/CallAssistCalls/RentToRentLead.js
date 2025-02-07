@@ -221,6 +221,18 @@ export default {
             ]
           },
           {
+            type: 'Field',
+            unique_id: 'address',
+            label: 'Address',
+            default: '{{ current_lead.raw.sub_section_details.leadinformation.address }}'
+          },
+          {
+            type: 'Field',
+            unique_id: 'postcode',
+            label: 'Postcode',
+            default: '{{ current_lead.raw.sub_section_details.leadinformation.postcode }}'
+          },
+          {
             type: 'ScriptPrompt',
             lines: [
               'Ok looking forward to seeing you {{ calldata.item_data_vals.appointment.selection_day.name }} at {{ calldata.item_data_vals.appointment.selection_time }}'

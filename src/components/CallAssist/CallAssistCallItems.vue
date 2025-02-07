@@ -73,6 +73,17 @@
       @click_action_button="click_action_button"
       ref="item"
     />
+    <ItemField
+      v-if="item.type === 'Field'"
+      :current_lead="current_lead"
+      :current_stage="current_stage"
+      :calltemplate="calltemplate"
+      :item="item"
+      :batchdata="batchdata"
+      :calldata="calldata"
+      @update_item_data="update_item_data"
+      ref="item"
+    />
   </div>
 </template>
 
@@ -86,12 +97,17 @@ import ItemScriptPrompt from './Items/ItemScriptPrompt.vue'
 import ItemCustomVariableDisplay from './Items/ItemCustomVariableDisplay.vue'
 import ItemArrangeAppointment from './Items/ItemArrangeAppointment.vue'
 import ItemInlineActionList from './Items/ItemInlineActionList.vue'
+import ItemField from './Items/ItemField.vue'
 
 import {getDefaultItemDataArrangeAppointment} from './Items/ItemArrangeAppointment.vue'
+import {getDefaultItemDataField} from './Items/ItemField.vue'
 
 export function getDefaultItemData(itemType) {
   if (itemType === 'ArrangeAppointment') {
     return getDefaultItemDataArrangeAppointment()
+  }
+  if (itemType === 'Field') {
+    return getDefaultItemDataField()
   }
   return {}
 }
@@ -126,7 +142,8 @@ export default defineComponent({
     ItemScriptPrompt,
     ItemCustomVariableDisplay,
     ItemArrangeAppointment,
-    ItemInlineActionList
+    ItemInlineActionList,
+    ItemField
   },
   data () {
     return {
