@@ -23,6 +23,7 @@ export default defineComponent({
       patch_local_settings_store
     }
   },
+  props: ['project_type'],
   data () {
     return {
       loaded_projects: [],
@@ -48,28 +49,38 @@ export default defineComponent({
   computed: {
     cumulatively_loaded_stages: {
       get() {
-        return this.patch_local_settings_store.findPatchRecord(this.patch_id).cumulatively_loaded_stages
+        return this.patch_local_settings_store.findPatchRecord(this.patch_id)[this.project_type].cumulatively_loaded_stages
       }
     },
     cumulatively_loaded_sources: {
       get() {
-        return this.patch_local_settings_store.findPatchRecord(this.patch_id).cumulatively_loaded_sources
+        return this.patch_local_settings_store.findPatchRecord(this.patch_id)[this.project_type].cumulatively_loaded_sources
       }
     },
     cumulatively_loaded_agents: {
       get() {
-        return this.patch_local_settings_store.findPatchRecord(this.patch_id).cumulatively_loaded_agents
+        return this.patch_local_settings_store.findPatchRecord(this.patch_id)[this.project_type].cumulatively_loaded_agents
       }
     }
   },
   methods: {
     projecttablefilterchanged (newfilter) {
-      this.project_filter.filter_stages = true
-      this.project_filter.selected_stages = newfilter.selected_stages
-      this.project_filter.filter_agents = true
-      this.project_filter.selected_agents = newfilter.selected_agents
-      this.project_filter.filter_sources = true
-      this.project_filter.selected_sources = newfilter.selected_sources
+      console.log('filter changed', newfilter)
+      if (typeof (newfilter) === 'undefined') {
+        this.project_filter.filter_stages = false
+        this.project_filter.selected_stages = []
+        this.project_filter.filter_agents = false
+        this.project_filter.selected_agents = []
+        this.project_filter.filter_sources = false
+        this.project_filter.selected_sources = []
+      } else {
+        this.project_filter.filter_stages = true
+        this.project_filter.selected_stages = newfilter.selected_stages
+        this.project_filter.filter_agents = true
+        this.project_filter.selected_agents = newfilter.selected_agents
+        this.project_filter.filter_sources = true
+        this.project_filter.selected_sources = newfilter.selected_sources
+      }
       this.recompute_filtered_projects()
     },
     _recompute_filtered_projects_stage_filter (x) {
@@ -175,6 +186,7 @@ export default defineComponent({
       const agent = utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
 
       this.patch_local_settings_store.reportFoundProject({
+        type: this.project_type,
         patch_id: this.patch_id,
         workflow_stage_id: workflow_stage_id,
         workflow_id: project.workflow.workflow_used_id,

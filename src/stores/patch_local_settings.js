@@ -2,9 +2,16 @@ import { defineStore } from 'pinia'
 
 function blank_patch_record (patch_id) {
   return {
-    cumulatively_loaded_stages: {},
-    cumulatively_loaded_sources: {},
-    cumulatively_loaded_agents: {}
+    buy: {
+      cumulatively_loaded_stages: {},
+      cumulatively_loaded_sources: {},
+      cumulatively_loaded_agents: {}
+    },
+    rent: {
+      cumulatively_loaded_stages: {},
+      cumulatively_loaded_sources: {},
+      cumulatively_loaded_agents: {}
+    }
   }
 }
 
@@ -29,6 +36,7 @@ export const usePatchLocalSettingsStore = defineStore('cumulatively_loaded_stage
       return this.value[patch_id]
     },
     reportFoundProject ({
+      type, // buy or rent
       patch_id,
       workflow_stage_id,
       workflow_id,
@@ -41,8 +49,8 @@ export const usePatchLocalSettingsStore = defineStore('cumulatively_loaded_stage
       agent_selected
     }) {
       this._createPatchRecordIfRequired(patch_id)
-      if (!(workflow_stage_id in this.value[patch_id].cumulatively_loaded_stages)) {
-        this.value[patch_id].cumulatively_loaded_stages[workflow_stage_id] = {
+      if (!(workflow_stage_id in this.value[patch_id][type].cumulatively_loaded_stages)) {
+        this.value[patch_id][type].cumulatively_loaded_stages[workflow_stage_id] = {
           workflow_stage_id: workflow_stage_id,
           workflow_id: workflow_id,
           stage_id: stage_id,
@@ -50,15 +58,15 @@ export const usePatchLocalSettingsStore = defineStore('cumulatively_loaded_stage
           selected: stage_selected
         }
       }
-      if (!(source in this.value[patch_id].cumulatively_loaded_sources)) {
-        this.value[patch_id].cumulatively_loaded_sources[source] = {
+      if (!(source in this.value[patch_id][type].cumulatively_loaded_sources)) {
+        this.value[patch_id][type].cumulatively_loaded_sources[source] = {
           name: source,
           selected: source_selected
         }
       }
 
-      if (!(agent in this.value[patch_id].cumulatively_loaded_agents)) {
-        this.value[patch_id].cumulatively_loaded_agents[agent] = {
+      if (!(agent in this.value[patch_id][type].cumulatively_loaded_agents)) {
+        this.value[patch_id][type].cumulatively_loaded_agents[agent] = {
           name: agent,
           selected: agent_selected
         }

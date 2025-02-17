@@ -41,6 +41,15 @@
           Rent Projects <q-btn label="Pick from workflow TODO" color="primary" @click="btn_click_workflow" class="float-right" />
         </h2>
         <div>
+          <ProjectTable
+            ref="RentProjectTableRef"
+            :projects="rent_filtered_loaded_projects"
+            :prefiltered="true"
+            :cumulatively_loaded_stages="rent_cumulatively_loaded_stages"
+            :cumulatively_loaded_agents="rent_cumulatively_loaded_agents"
+            :cumulatively_loaded_sources="rent_cumulatively_loaded_sources"
+            @filterchanged="rent_projecttablefilterchanged"
+          />
         </div>
       </div>
       <div v-if="tab === 'todos'">
@@ -56,7 +65,12 @@
       </div>
     </div>
     <ProjectData
-      ref="buyProjectData"
+      ref="BuyProjectData"
+      project_type="buy"
+    />
+    <ProjectData
+      ref="RentProjectData"
+      project_type="rent"
     />
   </q-page>
 </template>
@@ -95,16 +109,28 @@ export default defineComponent({
   },
   computed: {
     buy_filtered_loaded_projects () {
-      return this.$refs.buyProjectData.filtered_loaded_projects
+      return this.$refs.BuyProjectData.filtered_loaded_projects
     },
     buy_cumulatively_loaded_stages () {
-      return this.$refs.buyProjectData.cumulatively_loaded_stages
+      return this.$refs.BuyProjectData.cumulatively_loaded_stages
     },
     buy_cumulatively_loaded_sources () {
-      return this.$refs.buyProjectData.cumulatively_loaded_sources
+      return this.$refs.BuyProjectData.cumulatively_loaded_sources
     },
     buy_cumulatively_loaded_agents () {
-      return this.$refs.buyProjectData.cumulatively_loaded_agents
+      return this.$refs.BuyProjectData.cumulatively_loaded_agents
+    },
+    rent_filtered_loaded_projects () {
+      return this.$refs.RentProjectData.filtered_loaded_projects
+    },
+    rent_cumulatively_loaded_stages () {
+      return this.$refs.RentProjectData.cumulatively_loaded_stages
+    },
+    rent_cumulatively_loaded_sources () {
+      return this.$refs.RentProjectData.cumulatively_loaded_sources
+    },
+    rent_cumulatively_loaded_agents () {
+      return this.$refs.RentProjectData.cumulatively_loaded_agents
     },
     selectedStageText () {
       return Workflow_main.workflows[this.selected_stage.workflow_id].stages[this.selected_stage.stage_id].name
@@ -118,7 +144,10 @@ export default defineComponent({
       this.tab = 'workflow'
     },
     buy_projecttablefilterchanged (newfilter) {
-      this.$refs.buyProjectData.projecttablefilterchanged(newfilter)
+      this.$refs.BuyProjectData.projecttablefilterchanged(newfilter)
+    },
+    rent_projecttablefilterchanged (newfilter) {
+      this.$refs.RentProjectData.projecttablefilterchanged(newfilter)
     },
     onchartclickstage (workflow_id, stage_id, stage_data) {
       const TTT=this
@@ -156,16 +185,32 @@ export default defineComponent({
       })
     },
     get_buy_current_project_filter () {
+      if (typeof (this.$refs.BuyProjectTableRef) === 'undefined') {
+        return undefined
+      }
       return this.$refs.BuyProjectTableRef.get_current_filter()
+    },
+    get_rent_current_project_filter () {
+      if (typeof (this.$refs.RentProjectTableRef) === 'undefined') {
+        return undefined
+      }
+      return this.$refs.RentProjectTableRef.get_current_filter()
     },
     refresh_success (response) {
       this.patch_data = response.data
-      this.$refs.buyProjectData.refresh({
+      this.$refs.BuyProjectData.refresh({
         project_ids_to_load: this.patch_data.projects.map(function (x) {
           return x
         }),
         patch_id: this.patch_data.id,
         get_cur_filter_fn: this.get_buy_current_project_filter
+      })
+      this.$refs.RentProjectData.refresh({
+        project_ids_to_load: this.patch_data.projects.map(function (x) {
+          return x
+        }),
+        patch_id: this.patch_data.id,
+        get_cur_filter_fn: this.get_rent_current_project_filter
       })
       this.loaded = true
     },
