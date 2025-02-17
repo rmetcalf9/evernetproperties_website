@@ -173,7 +173,6 @@ export default defineComponent({
         if (!TTT.show_only_active) {
           return true
         }
-        console.log('aa', utils.boolean_undefined_to_false(Workflow_main.workflows[x.project_workflow.workflow_used_id].stages[x.project_workflow.current_stage].active))
         return utils.boolean_undefined_to_false(Workflow_main.workflows[x.project_workflow.workflow_used_id].stages[x.project_workflow.current_stage].active)
       })
       this.loaded = true

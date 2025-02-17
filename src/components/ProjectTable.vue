@@ -19,7 +19,7 @@
         no-data-label="I didn't find anything for you"
         no-results-label="The filter didn't uncover any results"
         row-key="name"
-        @row-click="(evt, row, index) => onRowClick(row, false)"
+        @row-click="(evt, row, index) => $emit('onRowClick', {table_row: row, new_tab: false})"
       >
         <template v-slot:header-cell-todo="">
           <th align="left">Todo<br>due/total (done)</th>
@@ -30,7 +30,7 @@
             <q-popup-proxy context-menu>
               <q-banner>
                 <q-list style="min-width: 100px">
-                  <q-item clickable v-close-popup @click="onRowClick(props.row, true)">
+                  <q-item clickable v-close-popup @click="() => $emit('onRowClick', {table_row: props.row, new_tab: true})">
                     <q-item-section>Open in new tab...</q-item-section>
                   </q-item>
                   <q-separator />
@@ -94,14 +94,14 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import { Notify } from 'quasar'
 import CommonBRRToolLink from '../components/CommonBRRToolLink.vue'
 import ProjectTableFilters from '../components/ProjectTableFilters.vue'
-import utils from './utils.js'
+import commonProjectValues from './commonProjectValues.js'
 
 import Workflow_main from '../components/Workflow/Workflow_main.js'
 
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
   props: ['projects', 'prefiltered', 'cumulatively_loaded_stages', 'cumulatively_loaded_agents', 'cumulatively_loaded_sources'],
-  emits: ['filterchanged'],
+  emits: ['filterchanged', 'onRowClick'],
   components: {
     CommonBRRToolLink,
     ProjectTableFilters
@@ -204,12 +204,12 @@ export default defineComponent({
         return {
           id: project.id,
           loaded: project.loaded,
-          address: project.item.sub_section_details.dealbasicinfo.address,
-          source: TTT.get_source_text(project),
-          selling_agent: utils.get_agent_text(project.item.sub_section_details.dealbasicinfo.selling_agent),
+          address: commonProjectValues.address(project.item),
+          source: TTT.get_source_text(project.item),
+          selling_agent: commonProjectValues.sellingAgent(project.item),
           vandnotes: 'NOT DISPLAYED',
-          devplan: project.item.sub_section_details.vision.devplan,
-          notes: project.item.sub_section_details.dealbasicinfo.notes,
+          devplan: commonProjectValues.devplan(project.item),
+          notes: commonProjectValues.notes(project.item),
           stage: TTT.getWorkflowStage(project.item.workflow).name,
           todo: TTT.get_todo_text(project)
         }
@@ -241,21 +241,11 @@ export default defineComponent({
       return due.toString() + '/' + (notdue + due).toString() + ' (' + done.toString() + ')'
     },
     get_source_text (row) {
-      return utils.get_source_text(row.item.sub_section_details.dealbasicinfo.deal_source)
+      return commonProjectValues.dealsource(row)
     },
     getWorkflowStage ({workflow_used_id, current_stage}) {
       return Workflow_main.workflows[workflow_used_id].stages[current_stage]
-    },
-    onRowClick (table_row, new_tab) {
-      if (new_tab) {
-        const route = this.$router.resolve('/tools/brrcalc');
-        const absoluteURL = new URL(route.href, window.location.origin + window.location.pathname).href + '?projectid=' + table_row.id;
-        var handle = window.open(absoluteURL);
-        window.focus();
-        return
-      }
-      this.$router.push('/tools/brrcalc?projectid=' + table_row.id)
-    },
+    }
   },
   mounted () {
   }

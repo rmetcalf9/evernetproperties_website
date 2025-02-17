@@ -12,6 +12,14 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import { usePatchLocalSettingsStore } from 'stores/patch_local_settings'
 import Workflow_main from '../components/Workflow/Workflow_main.js'
 import utils from '../components/utils.js'
+import commonProjectValues from '../components/commonProjectValues.js'
+
+const get_source_text_fn = function (project) {
+  return commonProjectValues.dealsource(project)
+}
+const get_agent_text_fn = function (project) {
+  return commonProjectValues.sellingAgent(project)
+}
 
 export default defineComponent({
   name: 'ProjectData',
@@ -37,7 +45,9 @@ export default defineComponent({
         selected_sources: []
       },
       patch_id: undefined,
-      get_cur_filter_fn: undefined
+      get_cur_filter_fn: undefined,
+      get_source_text_fn: get_source_text_fn,
+      get_agent_text_fn: get_agent_text_fn
     }
   },
   watch: {
@@ -65,7 +75,6 @@ export default defineComponent({
   },
   methods: {
     projecttablefilterchanged (newfilter) {
-      console.log('filter changed', newfilter)
       if (typeof (newfilter) === 'undefined') {
         this.project_filter.filter_stages = false
         this.project_filter.selected_stages = []
@@ -97,7 +106,8 @@ export default defineComponent({
       if (!this.project_filter.filter_agents) {
         return true
       }
-      const agent = utils.get_agent_text(x.item.sub_section_details.dealbasicinfo.selling_agent)
+      const agent = this.get_agent_text_fn(x.item)
+      // TODO DEL const agent = utils.get_agent_text(x.item.sub_section_details.dealbasicinfo.selling_agent)
       if (!this.project_filter.selected_agents.includes(agent)) {
         return false
       }
@@ -107,7 +117,8 @@ export default defineComponent({
       if (!this.project_filter.filter_sources) {
         return true
       }
-      const source = utils.get_source_text(x.item.sub_section_details.dealbasicinfo.deal_source)
+      const source = this.get_source_text_fn(x.item)
+      // TODO DEL const source = utils.get_source_text(x.item.sub_section_details.dealbasicinfo.deal_source)
       if (!this.project_filter.selected_sources.includes(source)) {
         return false
       }
@@ -182,8 +193,12 @@ export default defineComponent({
     add_to_cumulatively_loaded (project) {
       // called from load project - so always loaded at this point
       const workflow_stage_id = Workflow_main.get_workflow_stage_key(project.workflow.workflow_used_id, project.workflow.current_stage)
-      const source = utils.get_source_text(project.sub_section_details.dealbasicinfo.deal_source)
-      const agent = utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
+
+      // TODO DEL const source = utils.get_source_text(project.sub_section_details.dealbasicinfo.deal_source)
+      const source = this.get_source_text_fn(project)
+
+      // TODO DEL const agent = utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
+      const agent = this.get_agent_text_fn(project)
 
       this.patch_local_settings_store.reportFoundProject({
         type: this.project_type,

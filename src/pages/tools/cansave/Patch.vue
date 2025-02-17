@@ -32,6 +32,7 @@
             :cumulatively_loaded_agents="buy_cumulatively_loaded_agents"
             :cumulatively_loaded_sources="buy_cumulatively_loaded_sources"
             @filterchanged="buy_projecttablefilterchanged"
+            @onRowClick="buy_onRowClick"
           />
         </div>
         <q-btn color="primary" label="Add Project" @click="clicknewproject" />
@@ -49,6 +50,7 @@
             :cumulatively_loaded_agents="rent_cumulatively_loaded_agents"
             :cumulatively_loaded_sources="rent_cumulatively_loaded_sources"
             @filterchanged="rent_projecttablefilterchanged"
+            @onRowClick="rent_onRowClick"
           />
         </div>
       </div>
@@ -66,7 +68,7 @@
     </div>
     <ProjectData
       ref="BuyProjectData"
-      project_type="buy"
+      project_type="purchase"
     />
     <ProjectData
       ref="RentProjectData"
@@ -140,6 +142,23 @@ export default defineComponent({
     }
   },
   methods: {
+    buy_onRowClick ({table_row, new_tab}) {
+      if (new_tab) {
+        const route = this.$router.resolve('/tools/brrcalc');
+        const absoluteURL = new URL(route.href, window.location.origin + window.location.pathname).href + '?projectid=' + table_row.id;
+        var handle = window.open(absoluteURL);
+        window.focus();
+        return
+      }
+      this.$router.push('/tools/brrcalc?projectid=' + table_row.id)
+    },
+    rent_onRowClick ({table_row, new_tab}) {
+      Notify.create({
+        color: 'negative',
+        message: 'Not implemented',
+        timeout: 2000
+      })
+    },
     btn_click_workflow () {
       this.tab = 'workflow'
     },
@@ -188,10 +207,16 @@ export default defineComponent({
       if (typeof (this.$refs.BuyProjectTableRef) === 'undefined') {
         return undefined
       }
+      if (this.$refs.BuyProjectTableRef === null) {
+        return undefined
+      }
       return this.$refs.BuyProjectTableRef.get_current_filter()
     },
     get_rent_current_project_filter () {
       if (typeof (this.$refs.RentProjectTableRef) === 'undefined') {
+        return undefined
+      }
+      if (this.$refs.RentProjectTableRef === null) {
         return undefined
       }
       return this.$refs.RentProjectTableRef.get_current_filter()
@@ -206,7 +231,7 @@ export default defineComponent({
         get_cur_filter_fn: this.get_buy_current_project_filter
       })
       this.$refs.RentProjectData.refresh({
-        project_ids_to_load: this.patch_data.projects.map(function (x) {
+        project_ids_to_load: this.patch_data.typed_projects.rent.map(function (x) {
           return x
         }),
         patch_id: this.patch_data.id,

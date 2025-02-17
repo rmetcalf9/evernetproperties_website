@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 function blank_patch_record (patch_id) {
   return {
-    buy: {
+    purchase: {
       cumulatively_loaded_stages: {},
       cumulatively_loaded_sources: {},
       cumulatively_loaded_agents: {}
@@ -36,7 +36,7 @@ export const usePatchLocalSettingsStore = defineStore('cumulatively_loaded_stage
       return this.value[patch_id]
     },
     reportFoundProject ({
-      type, // buy or rent
+      type, // purchase or rent
       patch_id,
       workflow_stage_id,
       workflow_id,
