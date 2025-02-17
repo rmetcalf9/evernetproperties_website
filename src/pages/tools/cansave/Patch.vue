@@ -21,7 +21,7 @@
       </q-tabs>
       <div v-if="tab === 'projects'">
         <h2>
-          Buy Projects <q-btn label="Pick from workflow" color="primary" @click="btn_click_workflow" class="float-right" />
+          Buy Projects <q-btn label="Pick from workflow" color="primary" @click="btn_click_workflow('purchase')" class="float-right" />
         </h2>
         <div>
           <ProjectTable
@@ -39,7 +39,7 @@
       </div>
       <div v-if="tab === 'rent_projects'">
         <h2>
-          Rent Projects <q-btn label="Pick from workflow TODO" color="primary" @click="btn_click_workflow" class="float-right" />
+          Rent Projects <q-btn label="Pick from workflow TODO" color="primary" @click="btn_click_workflow('rent')" class="float-right" />
         </h2>
         <div>
           <ProjectTable
@@ -62,6 +62,7 @@
       <div v-if="tab === 'workflow'">
         <WrokflowChart
           :patch_data="patch_data"
+          :workflow_id="workflow_id"
           @onclickstage="onchartclickstage"
         />
       </div>
@@ -106,7 +107,9 @@ export default defineComponent({
     return {
       loaded: false,
       patch_data: {},
-      tab: 'projects'
+      tab: 'projects',
+      workflow_id: Workflow_main.default_workflow_id,
+      workflow_return_type: undefined
     }
   },
   computed: {
@@ -159,7 +162,13 @@ export default defineComponent({
         timeout: 2000
       })
     },
-    btn_click_workflow () {
+    btn_click_workflow (type) {
+      if (type==='rent') {
+        this.workflow_id = Workflow_main.default_rent_workflow_id
+      } else {
+        this.workflow_id = Workflow_main.default_workflow_id
+      }
+      this.workflow_return_type = type
       this.tab = 'workflow'
     },
     buy_projecttablefilterchanged (newfilter) {
@@ -170,6 +179,14 @@ export default defineComponent({
     },
     onchartclickstage (workflow_id, stage_id, stage_data) {
       const TTT=this
+      if (this.workflow_return_type==='rent') {
+        this.tab = 'rent_projects'
+        setTimeout(function () {
+          const stagekey = Workflow_main.get_workflow_stage_key(workflow_id, stage_id)
+          TTT.$refs.BuyProjectTableRef.set_selected_stages([stagekey])
+        }, 5)
+        return
+      }
       this.tab = 'projects'
       setTimeout(function () {
         const stagekey = Workflow_main.get_workflow_stage_key(workflow_id, stage_id)

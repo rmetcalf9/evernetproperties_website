@@ -193,7 +193,7 @@ function draw_stage(parent, this_stage_id, stage_data, is_fail_stage, click_stag
 
 export default defineComponent({
   name: 'WorkflowChart',
-  props: ['patch_data'],
+  props: ['patch_data', 'workflow_id'],
   emits: ['onclickstage'],
   data () {
     return {
@@ -211,7 +211,7 @@ export default defineComponent({
   },
   computed: {
     workflow () {
-      return Workflow_main.workflows[Workflow_main.default_workflow_id]
+      return Workflow_main.workflows[this.workflow_id]
     }
   },
   methods: {
