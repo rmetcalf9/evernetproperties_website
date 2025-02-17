@@ -16,7 +16,11 @@
         narrow-indicator
       >
         <q-tab name="projects" label="Buy Projects" />
-        <q-tab name="rent_projects" label="Rent Projects" />
+        <q-tab
+          v-if="featureflags.rent_to_rent_projects"
+          name="rent_projects"
+          label="Rent Projects"
+        />
         <q-tab name="todos" label="Todos" />
       </q-tabs>
       <div v-if="tab === 'projects'">
@@ -91,6 +95,8 @@ import Workflow_main from '../../../components/Workflow/Workflow_main.js'
 import TodoDisplay from '../../../components/TodoDisplay.vue'
 import utils from '../../../components/utils.js'
 
+import featureflags from '../../../featureflags.js'
+
 
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
@@ -113,6 +119,9 @@ export default defineComponent({
     }
   },
   computed: {
+    featureflags () {
+      return featureflags
+    },
     buy_filtered_loaded_projects () {
       return this.$refs.BuyProjectData.filtered_loaded_projects
     },
