@@ -269,14 +269,14 @@ export default defineComponent({
           .attr('style', 'font-size: 50px; font-weight: 300;')
           .text(d => 'Projects for patch ' + TTT.patch_data.name)
 
-          viewObj.allzoomedelements
-            .append('text')
-            .attr('text-anchor', 'middle')
-            .attr('alignment-baseline', 'central')
-            .attr('x', 0)
-            .attr('y', 60)
-            .attr('style', 'font-size: 40px; font-weight: 300;')
-            .text(d => '(Note: Diagram only - workflows not yet implemented)')
+          // viewObj.allzoomedelements
+          //   .append('text')
+          //   .attr('text-anchor', 'middle')
+          //   .attr('alignment-baseline', 'central')
+          //   .attr('x', 0)
+          //   .attr('y', 60)
+          //   .attr('style', 'font-size: 40px; font-weight: 300;')
+          //   .text(d => '(Note: Diagram only - workflows not yet implemented)')
 
         return viewObj.svg.node()
       }
