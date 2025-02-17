@@ -90,16 +90,6 @@ export default defineComponent({
     return {
       loaded: false,
       patch_data: {},
-      loaded_projects: [],
-      filtered_loaded_projects: [],
-      project_filter: {
-        filter_stages: true,
-        selected_stages: [],
-        filter_agents: true,
-        selected_agents: [],
-        filter_sources: true,
-        selected_sources: []
-      },
       tab: 'projects'
     }
   },
