@@ -192,7 +192,7 @@ export default defineComponent({
         this.tab = 'rent_projects'
         setTimeout(function () {
           const stagekey = Workflow_main.get_workflow_stage_key(workflow_id, stage_id)
-          TTT.$refs.BuyProjectTableRef.set_selected_stages([stagekey])
+          TTT.$refs.RentProjectTableRef.set_selected_stages([stagekey])
         }, 5)
         return
       }
