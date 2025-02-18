@@ -43,7 +43,7 @@
       </div>
       <div v-if="tab === 'rent_projects'">
         <h2>
-          Rent Projects <q-btn label="Pick from workflow TODO" color="primary" @click="btn_click_workflow('rent')" class="float-right" />
+          Rent Projects <q-btn label="Pick from workflow" color="primary" @click="btn_click_workflow('rent')" class="float-right" />
         </h2>
         <div>
           <ProjectTable
