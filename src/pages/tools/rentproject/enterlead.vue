@@ -131,6 +131,11 @@ export default defineComponent({
     reset_data() {
       this.$refs.LeadInformation.reset_data()
     }
+  },
+  mounted () {
+    if (typeof(this.$route.query.defaultpatch) !== 'undefined') {
+      this.$refs.LeadInformation.select_patch_by_id(this.$route.query.defaultpatch)
+    }
   }
 })
 </script>

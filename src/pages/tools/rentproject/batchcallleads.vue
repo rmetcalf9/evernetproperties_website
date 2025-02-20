@@ -35,9 +35,23 @@
         Please wait - loading lead information...
       </div>
       <div v-if="leads_fully_loaded">
-        <div class="text-h4">You have {{ leads.length }} leads to call</div>
-        &nbsp;
-        <q-btn label="Ready to start making calls..." @click="click_readytogo" color="secondary" />
+        <div v-if="leads.length===0">
+          <div class="text-h4">There are currently no leads to call</div>
+          <div v-if="$route.query.patchid === 'all'">
+            <q-btn color="primary" label="Add Lead" @click="$router.push('/tools/rentproject/enterlead')" />
+            <q-btn color="primary" label="Tools" @click="$router.push('/tools')" />
+          </div>
+          <div v-if="$route.query.patchid !== 'all'" class="batchcallleads-buttongroup">
+            <q-btn color="primary" label="Add Lead" @click="$router.push('/tools/rentproject/enterlead?defaultpatch=' + $route.query.patchid)" />
+            <q-btn color="primary" label="Patch Info" @click="$router.push('/tools/cansave/patches/' + $route.query.patchid + '?starttab=rent_projects')" />
+            <q-btn color="primary" label="Tools" @click="$router.push('/tools')" />
+          </div>
+        </div>
+        <div v-if="leads.length!==0">
+          <div class="text-h4">You have {{ leads.length }} leads to call</div>
+          &nbsp;
+          <q-btn label="Ready to start making calls..." @click="click_readytogo" color="secondary" />
+        </div>
       </div>
       <BatchCallLeadsAddBlockDialog
         ref="BatchCallLeadsAddBlockDialog"
@@ -133,7 +147,7 @@ export default defineComponent({
     },
     click_readytogo () {
       window.scrollTo(0,0)
-    
+
       this.callassistactive = true
       const TTT = this
       setTimeout(function () {
@@ -283,5 +297,8 @@ export default defineComponent({
 }
 .batchcallleads-blockouttimebutton {
   margin-left: 10px;
+}
+.batchcallleads-buttongroup > button {
+  margin: 5px;
 }
 </style>

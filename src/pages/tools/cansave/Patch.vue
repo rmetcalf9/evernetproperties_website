@@ -39,7 +39,9 @@
             @onRowClick="buy_onRowClick"
           />
         </div>
-        <q-btn color="primary" label="Add Project" @click="clicknewproject" />
+        <div class="patch-button-bar">
+          <q-btn color="primary" label="Add Project" @click="clicknewproject" />
+        </div>
       </div>
       <div v-if="tab === 'rent_projects'">
         <h2>
@@ -56,6 +58,10 @@
             @filterchanged="rent_projecttablefilterchanged"
             @onRowClick="rent_onRowClick"
           />
+          <div class="patch-button-bar">
+            <q-btn color="primary" label="Add Lead" @click="$router.push('/tools/rentproject/enterlead?defaultpatch=' + $route.query.patchid)" />
+            <q-btn color="primary" label="Call Leads" @click="$router.push('/tools/rentproject/batchcallleads?patchid=' + patch_data.id)" />
+          </div>
         </div>
       </div>
       <div v-if="tab === 'todos'">
@@ -256,10 +262,14 @@ export default defineComponent({
         patch_id: this.patch_data.id,
         get_cur_filter_fn: this.get_buy_current_project_filter
       })
-      this.$refs.RentProjectData.refresh({
-        project_ids_to_load: this.patch_data.typed_projects.rent.map(function (x) {
+      let project_ids_to_load = []
+      if (typeof (this.patch_data.typed_projects.rent) !== 'undefined') {
+        project_ids_to_load = this.patch_data.typed_projects.rent.map(function (x) {
           return x
-        }),
+        })
+      }
+      this.$refs.RentProjectData.refresh({
+        project_ids_to_load: project_ids_to_load,
         patch_id: this.patch_data.id,
         get_cur_filter_fn: this.get_rent_current_project_filter
       })
@@ -268,6 +278,9 @@ export default defineComponent({
   },
   mounted () {
     this.loaded = false
+    if (typeof(this.$route.query.starttab) !== 'undefined') {
+      this.tab = this.$route.query.starttab
+    }
     this.refresh()
   }
 })
@@ -293,5 +306,8 @@ export default defineComponent({
 .selected_stage {
   font-weight: 800;
   font-size: 26px;
+}
+.patch-button-bar > button {
+  margin: 10px;
 }
 </style>
