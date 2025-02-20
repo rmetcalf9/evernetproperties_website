@@ -32,7 +32,7 @@ const standard_actions = {
 
 export default defineComponent({
   name: 'CallAssist',
-  emits: ['outcome'],
+  emits: ['outcome', 'fully_complete'],
   components: {
     CallAssistCall
   },
@@ -152,13 +152,7 @@ export default defineComponent({
         this.$refs.CallAssistCall.set_stage(this.calltemplate.initial_stage_id)
         return
       }
-      Notify.create({
-        color: 'positive',
-        message: 'Batch Complete',
-        timeout: 2000
-      })
-      // TODO may want to push to better place
-      this.$router.push('/tools')
+      this.$emit('fully_complete')
     }
   }
 })

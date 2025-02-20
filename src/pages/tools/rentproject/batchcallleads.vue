@@ -63,6 +63,7 @@
       <CallAssist
         ref="CallAssist"
         @outcome="outcome"
+        @fully_complete="fully_complete"
       />
     </div>
 
@@ -73,6 +74,7 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import utils from '../../../components/utils.js'
+import atomicProjectUpdates from '../../../atomicProjectUpdates.js'
 import { Notify } from 'quasar'
 
 import CallAssist from '../../../components/CallAssist/CallAssist.vue'
@@ -87,6 +89,7 @@ import BatchCallLeadsAddBlockDialog from '../../../components/BatchCallLeadsAddB
 // If we are changing this it's also in callleads as well
 const rent_call_workflow_id = '2'
 const rent_to_call_stage_id = '1'
+const rent_rejected_stage_id = '1.1'
 
 
 export default defineComponent({
@@ -135,9 +138,28 @@ export default defineComponent({
   },
   methods: {
     outcome (outcome_data) {
+      const TTT = this
       if (outcome_data.outcome_id==='reject_lead') {
-        // Rjected before calling
+        // Rejected before calling
         console.log('TODO handle reject_lead', outcome_data.call_data.notes, outcome_data.current_lead.id)
+        atomicProjectUpdates.startChange({
+          backend_connection_store: TTT.backend_connection_store,
+          projectId: outcome_data.current_lead.id
+        }).then(
+          function ({active_change_object}) {
+            active_change_object.change_workflow_state({
+              workflow_id: rent_call_workflow_id,
+              workflow_stage: rent_rejected_stage_id,
+              notes: outcome_data.call_data.notes
+            })
+            active_change_object.complete()
+          },
+          function (response) {
+            console.log('ERROR', response)
+          }
+        )
+        // Need to change workflow stage to new value
+        // Need to set activity log
         return
       }
       if (outcome_data.outcome_id==='notavailaible') {
@@ -146,6 +168,18 @@ export default defineComponent({
         return
       }
       console.log('TODO deal with outcome EXT', outcome_data)
+    },
+    fully_complete () {
+      Notify.create({
+        color: 'positive',
+        message: 'Batch Complete',
+        timeout: 2000
+      })
+      if (this.$route.query.patchid !== 'all') {
+        this.$router.push('/tools/cansave/patches/' + this.$route.query.patchid + '?starttab=rent_projects')
+      } else {
+        this.$router.push('/tools')
+      }
     },
     addreservedslot (day) {
       this.$refs.BatchCallLeadsAddBlockDialog.show_dialog(this.viewing_days, day.id)
