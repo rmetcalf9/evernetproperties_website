@@ -59,7 +59,7 @@
             @onRowClick="rent_onRowClick"
           />
           <div class="patch-button-bar">
-            <q-btn color="primary" label="Add Lead" @click="$router.push('/tools/rentproject/enterlead?defaultpatch=' + $route.query.patchid)" />
+            <q-btn color="primary" label="Add Lead" @click="$router.push('/tools/rentproject/enterlead?defaultpatch=' + patch_data.id)" />
             <q-btn color="primary" label="Call Leads" @click="$router.push('/tools/rentproject/batchcallleads?patchid=' + patch_data.id)" />
           </div>
         </div>
