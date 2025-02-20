@@ -180,7 +180,35 @@ export default defineComponent({
         )
         return
       }
-      // rent_viewing_arranged_stage_id
+      if (outcome_data.outcome_id==='complete') {
+        // TODO This should store the arranged apointment and so something with appointment system
+        console.log('TODO deal with complete outcome project id:', outcome_data.current_lead.id)
+        console.log('appointment day: ', outcome_data.call_data.item_data_vals.appointment.selection_day)
+        console.log('appointment time: ', outcome_data.call_data.item_data_vals.appointment.selection_time)
+
+        atomicProjectUpdates.startChange({
+          backend_connection_store: TTT.backend_connection_store,
+          projectId: outcome_data.current_lead.id
+        }).then(
+          function ({active_change_object}) {
+            active_change_object.change_workflow_state({
+              workflow_id: rent_call_workflow_id,
+              workflow_stage: rent_viewing_arranged_stage_id,
+              notes: 'Viewing booked for ' + outcome_data.call_data.item_data_vals.appointment.selection_day.name + ' at ' + outcome_data.call_data.item_data_vals.appointment.selection_time + '<BR>' + outcome_data.call_data.notes
+            })
+            active_change_object.change_address({
+              address: outcome_data.call_data.item_data_vals.address.value,
+              postcode: outcome_data.call_data.item_data_vals.postcode.value
+            })
+            active_change_object.complete()
+          },
+          function (response) {
+            console.log('ERROR', response)
+          }
+        )
+        return
+      }
+
       console.log('TODO deal with outcome EXT', outcome_data)
     },
     fully_complete () {

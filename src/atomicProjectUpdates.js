@@ -30,6 +30,13 @@ function log_activity(proj, {type, text, head_notes}) {
     head_notes: head_notes
   })
 }
+function change_address(proj, {address, postcode}) {
+  if (proj.type==='rent') {
+    proj.sub_section_details.leadinformation.address = address
+    proj.sub_section_details.leadinformation.postcode = postcode
+  }
+  console.log('change_address proj', proj)
+}
 
 function startChange({backend_connection_store, projectId}) {
   return new Promise(function(successFn, errorFn) {
@@ -54,16 +61,15 @@ function startChange({backend_connection_store, projectId}) {
               callback: savecallback
             })
           },
-          change_workflow_state: function ({
-              workflow_id: workflow_id,
-              workflow_stage: workflow_stage,
-              notes: notes
-          }) {
+          change_workflow_state: function ({workflow_id, workflow_stage, notes}) {
             const orig_workflow_used_id = proj.workflow.workflow_used_id
             const orig_current_stage = proj.workflow.current_stage
             change_workflow_state(proj, {workflow_id: workflow_id, workflow_stage: workflow_stage})
             const text = 'From ' + Workflow_main.workflows[orig_workflow_used_id].stages[orig_current_stage].name + ' to ' + Workflow_main.workflows[workflow_id].stages[workflow_stage].name + '<BR>' + notes
             log_activity(proj, {type: 'wf_move', text: text, head_notes: 'Progressed through workflow'})
+          },
+          change_address: function ({address, postcode}) {
+            change_address(proj, {address: address, postcode: postcode})
           }
         }
         successFn({active_change_object})
