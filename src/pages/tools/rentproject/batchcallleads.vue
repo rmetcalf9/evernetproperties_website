@@ -135,6 +135,16 @@ export default defineComponent({
   },
   methods: {
     outcome (outcome_data) {
+      if (outcome_data.outcome_id==='reject_lead') {
+        // Rjected before calling
+        console.log('TODO handle reject_lead', outcome_data.call_data.notes, outcome_data.current_lead.id)
+        return
+      }
+      if (outcome_data.outcome_id==='notavailaible') {
+        // PHone call made but not availaible
+        console.log('TODO NOT AVAILABEL', outcome_data.call_data.notes, outcome_data.current_lead.id)
+        return
+      }
       console.log('TODO deal with outcome EXT', outcome_data)
     },
     addreservedslot (day) {
