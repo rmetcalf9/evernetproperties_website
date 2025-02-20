@@ -90,6 +90,7 @@ import BatchCallLeadsAddBlockDialog from '../../../components/BatchCallLeadsAddB
 const rent_call_workflow_id = '2'
 const rent_to_call_stage_id = '1'
 const rent_rejected_stage_id = '1.1'
+const rent_viewing_arranged_stage_id = '2'
 
 
 export default defineComponent({
@@ -141,7 +142,6 @@ export default defineComponent({
       const TTT = this
       if (outcome_data.outcome_id==='reject_lead') {
         // Rejected before calling
-        console.log('TODO handle reject_lead', outcome_data.call_data.notes, outcome_data.current_lead.id)
         atomicProjectUpdates.startChange({
           backend_connection_store: TTT.backend_connection_store,
           projectId: outcome_data.current_lead.id
@@ -158,15 +158,29 @@ export default defineComponent({
             console.log('ERROR', response)
           }
         )
-        // Need to change workflow stage to new value
-        // Need to set activity log
         return
       }
       if (outcome_data.outcome_id==='notavailaible') {
-        // PHone call made but not availaible
-        console.log('TODO NOT AVAILABEL', outcome_data.call_data.notes, outcome_data.current_lead.id)
+        // Phone call made but not property available
+        atomicProjectUpdates.startChange({
+          backend_connection_store: TTT.backend_connection_store,
+          projectId: outcome_data.current_lead.id
+        }).then(
+          function ({active_change_object}) {
+            active_change_object.change_workflow_state({
+              workflow_id: rent_call_workflow_id,
+              workflow_stage: rent_rejected_stage_id,
+              notes: 'Property not available ' + outcome_data.call_data.notes
+            })
+            active_change_object.complete()
+          },
+          function (response) {
+            console.log('ERROR', response)
+          }
+        )
         return
       }
+      // rent_viewing_arranged_stage_id
       console.log('TODO deal with outcome EXT', outcome_data)
     },
     fully_complete () {
