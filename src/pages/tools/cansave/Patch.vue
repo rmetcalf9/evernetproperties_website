@@ -171,11 +171,14 @@ export default defineComponent({
       this.$router.push('/tools/brrcalc?projectid=' + table_row.id)
     },
     rent_onRowClick ({table_row, new_tab}) {
-      Notify.create({
-        color: 'negative',
-        message: 'Not implemented',
-        timeout: 2000
-      })
+      if (new_tab) {
+        const route = this.$router.resolve('/tools/rentproject/rentcalc');
+        const absoluteURL = new URL(route.href, window.location.origin + window.location.pathname).href + '?projectid=' + table_row.id;
+        var handle = window.open(absoluteURL);
+        window.focus();
+        return
+      }
+      this.$router.push('/tools/rentproject/rentcalc?projectid=' + table_row.id)
     },
     btn_click_workflow (type) {
       if (type==='rent') {

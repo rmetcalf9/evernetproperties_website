@@ -24,6 +24,7 @@ const routes = [
       { path: 'tools/rentproject/enterlead', component: () => import('pages/tools/rentproject/enterlead.vue') },
       { path: 'tools/rentproject/callleads', component: () => import('pages/tools/rentproject/callleads.vue') },
       { path: 'tools/rentproject/batchcallleads', component: () => import('pages/tools/rentproject/batchcallleads.vue') },
+      { path: 'tools/rentproject/rentcalc', component: () => import('pages/tools/rentproject/rentCalc.vue') },
     ]
   },
   {
