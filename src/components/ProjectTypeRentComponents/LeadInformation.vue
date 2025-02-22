@@ -13,7 +13,7 @@
         />
       </div>
       <div v-if="ever_saved" class="brrcalc-dealbasicinfo-patch">
-        Patch: <q-btn flat @click="(obj) => $emit('navigate_away',{ 'dest': '/tools/cansave/patches/' + patch.id})">{{ patch.name }}</q-btn>
+        Patch: <q-btn flat @click="(obj) => $emit('navigate_away',{ 'dest': '/tools/cansave/patches/' + patch.id + '?starttab=rent_projects'})">{{ patch.name }}</q-btn>
       </div>
       <div><q-input filled clearable v-model="address" label="Address" /></div>
       <div>
@@ -57,7 +57,7 @@ import Weblinks from '../../components/Weblinks.vue'
 
 export default defineComponent({
   name: 'LeadInformationCard',
-  emits: ['projectchanged'],
+  emits: ['projectchanged', 'navigate_away'],
   props: ['ever_saved'],
   components: {
     Weblinks,

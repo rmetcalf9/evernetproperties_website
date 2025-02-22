@@ -18,7 +18,11 @@
       <q-tab name="project" label="Project" />
     </q-tabs>
     <div class="row" v-show="tab==='main'">
-      <div>TODO Tab main</div>
+      <LeadInformation
+        ref="LeadInformation"
+        ever_saved=true
+        @navigate_away="navigate_away"
+      />
     </div>
     <div class="row" v-show="tab==='project'">
       <Workflow
@@ -51,6 +55,8 @@ import { Notify } from 'quasar'
 
 import { useBackendConnectionStore } from 'stores/backend_connection'
 
+import LeadInformation from '../../../components/ProjectTypeRentComponents/LeadInformation.vue'
+
 import ActivityLog from '../../../components/CommonCalcComponents/ActivityLog.vue'
 import Todos from '../../../components/CommonCalcComponents/Todos.vue'
 import Workflow from '../../../components/CommonCalcComponents/Workflow.vue'
@@ -62,6 +68,7 @@ import common_constants from '../../../components/common_constants.js'
 export default defineComponent({
   name: 'CalcBrrToFlip',
   components: {
+    LeadInformation,
     ActivityLog,
     Workflow,
     Todos,
@@ -86,6 +93,19 @@ export default defineComponent({
     }
   },
   methods: {
+    navigate_away(params) {
+      const TTT = this
+      this.$router.push(params.dest)
+      // TODO project change and save check
+      // if (!this.$refs.BrrToolbar.is_project_changed) {
+      //   this.$router.push(params.dest)
+      //   return
+      // }
+      // this.$refs.BrrToolbar.click_save_btn()
+      // setTimeout(function () {
+      //   TTT.navigate_away(params)
+      // }, 100)
+    },
     call_load_api () {
       const TTT = this
       const callback = {
@@ -128,6 +148,11 @@ export default defineComponent({
     },
     load_project_into_cards (project) {
       this.$refs.ProjectSerializer.serializer_load_data(project)
+
+      if (typeof (project.sub_section_details.leadinformation) !== 'undefined') {
+        this.$refs.LeadInformation.serializer_load_data(project.sub_section_details.leadinformation)
+      }
+
 
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
       this.$refs.Workflow.serializer_load_data(project.workflow)
