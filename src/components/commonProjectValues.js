@@ -2,8 +2,15 @@ import utils from './utils.js'
 
 
 function address (project) {
+  // for display - can include postcode
   if (project.type === 'purchase') {
+    if ( typeof (project.sub_section_details.dealbasicinfo.postcode) !== 'undefined') {
+      return project.sub_section_details.dealbasicinfo.address + ', ' + project.sub_section_details.dealbasicinfo.postcode
+    }
     return project.sub_section_details.dealbasicinfo.address
+  }
+  if ( typeof (project.sub_section_details.leadinformation.postcode) !== 'undefined') {
+    return project.sub_section_details.leadinformation.address + ', ' + project.sub_section_details.leadinformation.postcode
   }
   return project.sub_section_details.leadinformation.address
 }
