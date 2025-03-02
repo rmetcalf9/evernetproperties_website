@@ -23,7 +23,7 @@
           ref="slider"
           v-model:range="refinance.rate"
           :min="0"
-          :max="50"
+          :max="10"
           :step="0.1"
           :left_label_value="refinance.rate.min + '%'"
           :right_label_value="refinance.rate.max+ '%'"
