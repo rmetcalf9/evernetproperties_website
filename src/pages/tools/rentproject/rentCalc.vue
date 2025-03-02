@@ -4,7 +4,15 @@
     <div>
       <h1>Rent Project</h1>
     </div>
-    <div>TODO Toolbar</div>
+    <BrrToolbar
+      ref="BrrToolbar"
+      reason_project_not_savable=""
+      is_saved_project_with_id="true"
+      is_rent_project="true"
+      @activity_log="activity_log"
+      @saveproject="save_project"
+      @createtodo="createtodo"
+    />
     <q-tabs
       v-model="tab"
       dense
@@ -22,6 +30,7 @@
         ref="LeadInformation"
         ever_saved=true
         @navigate_away="navigate_away"
+        @projectchanged="projectchanged"
       />
     </div>
     <div class="row" v-show="tab==='project'">
@@ -53,6 +62,8 @@
 import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 
+import BrrToolbar from '../../../components/BrrCalc/BrrToolbar/BrrToolbar.vue'
+
 import { useBackendConnectionStore } from 'stores/backend_connection'
 
 import LeadInformation from '../../../components/ProjectTypeRentComponents/LeadInformation.vue'
@@ -72,7 +83,8 @@ export default defineComponent({
     ActivityLog,
     Workflow,
     Todos,
-    ProjectSerializer
+    ProjectSerializer,
+    BrrToolbar
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -90,9 +102,56 @@ export default defineComponent({
   computed: {
     project_type () {
       return common_constants.project_type_constants.project_type_rent
-    }
+    },
+    serialized_data () {
+      if (!this.isMounted) {
+        return {}
+      }
+      return {
+        leadinformation: this.$refs.LeadInformation.serializer_card_data
+      }
+    },
+
   },
   methods: {
+    createtodo(params) {
+      const TTT = this
+      const callback = {
+        ok: function (response) {
+          TTT.$refs.todos.add_single_todo(response.data.todo)
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Todo added',
+            timeout: 2000,
+            color: 'positive'
+          })
+        },
+        error: function (response) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: response.message,
+            timeout: 2000,
+            color: 'negative'
+          })
+        }
+      }
+      TTT.backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: '/projects/' + TTT.loaded_project_id + '/todos',
+        method: 'POST',
+        data: params,
+        callback: callback
+      })
+    },
+    save_project () {
+      this.$refs.ProjectSerializer.save_project({
+        dict_of_card_info: this.serialized_data,
+        activity_log: this.$refs.ActivityLog.serializer_card_data,
+        workflow: this.$refs.Workflow.serializer_card_data,
+        patch_id: this.serialized_data.leadinformation.patch_id,
+        passthroughdata: undefined
+      })
+    },
     navigate_away(params) {
       const TTT = this
       this.$router.push(params.dest)
@@ -162,6 +221,13 @@ export default defineComponent({
       this.$refs.todos.serializer_load_data(project.todos)
     },
     save_project_complete ({success, response, passthroughdata}) {
+      if (success) {
+        this.loaded_project_id = response.data.id
+      }
+      this.$refs.BrrToolbar.save_project_complete_notification({
+        success: success,
+        response: response
+      })
     },
     projectchanged (source) {
       console.log('rentCalc page received project changed from ', source)
@@ -169,12 +235,11 @@ export default defineComponent({
         console.log('WARNING = projectchanged called when mounted is false')
         return
       }
-      // TODO reactavate when I put in toolbar
-      // if (typeof (this.$refs.BrrToolbar) === 'undefined') {
-      //   console.log('WARNING = projectchanged called when BrrToolbar is undefined')
-      //   return false
-      // }
-      // this.$refs.BrrToolbar.set_changed_true()
+      if (typeof (this.$refs.BrrToolbar) === 'undefined') {
+       console.log('WARNING = projectchanged called when BrrToolbar is undefined')
+       return false
+      }
+      this.$refs.BrrToolbar.set_changed_true()
     },
     click_save_btn () {
       this.$refs.BrrToolbar.click_save_btn()

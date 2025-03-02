@@ -6,6 +6,7 @@
       :reason_project_not_savable="reason_project_not_savable"
     />
     <CallSellingAgent
+      v-if="!is_rent_project"
       @activity_log="(obj) => $emit('activity_log',obj)"
     />
     <ResearchCall
@@ -28,7 +29,18 @@ import TodoButton from './TodoButton.vue'
 
 export default defineComponent({
   name: 'BrrCalcToolbar',
-  props: ['reason_project_not_savable', 'is_saved_project_with_id'],
+  props: {
+    reason_project_not_savable: {
+      type: String
+    },
+    is_saved_project_with_id: {
+      type: Boolean
+    },
+    is_rent_project: {
+      type: Boolean,
+      default: false
+    }
+  },
   emits: ['activity_log', 'saveproject', 'createtodo'],
   components: {
     CallSellingAgent,
