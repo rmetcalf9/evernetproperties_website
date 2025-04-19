@@ -13,6 +13,7 @@
             <q-chat-message
               :name=item.name
               :text="[item.text]"
+              text-html
               :sent="item.sent"
               :stamp="item.stamp"
               :avatar="item.avatar"
