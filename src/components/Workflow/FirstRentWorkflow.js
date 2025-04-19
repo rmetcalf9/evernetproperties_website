@@ -1,11 +1,12 @@
 // This is the first workflow I created for the rent project type
 
-export default {
+const workflow_data = {
   "id": "2",
   "name": 'Rent Project Workflow',
   "initial_stage": "1",
   "stages": {
     "1": {
+      "_viewing_not_arranged": true,
       "name": "Lead",
       "active": true,
       "progression": {
@@ -18,8 +19,12 @@ export default {
       },
       "diagram_notes": "Identify Lead<BR>Contact landlord<BR>Arrange viewing"
     },
-    "1.1": { "name": "Rejected Lead"},
+    "1.1": {
+      "_viewing_not_arranged": true,
+      "name": "Rejected Lead"
+    },
     "2": {
+      "_viewing_not_held": true,
       "name": "Viewing Arranged",
       "active": true,
       "progression": {
@@ -32,8 +37,12 @@ export default {
       },
       "diagram_notes": "Create Vision<BR>Initial numbers"
     },
-    "2.1": { "name": "Cancelled Viewing"},
+    "2.1": {
+      "_viewing_not_held": true,
+      "name": "Cancelled Viewing"
+    },
     "3": {
+      "_viewing_not_held": true,
       "name": "Ready to view",
       "active": true,
       "progression": {
@@ -85,3 +94,26 @@ export default {
     },
   },
 }
+
+function true_if_set(value) {
+  if (typeof (value) === 'undefined') {
+    return false
+  }
+  if (value) return true
+  return false
+}
+
+export const stage_calc_fn = function (stage_id) {
+  const isViewingArranged = !true_if_set(workflow_data.stages[stage_id]._viewing_not_arranged)
+  let isViewingHeld = false
+  if (isViewingArranged) {
+    isViewingHeld = !true_if_set(workflow_data.stages[stage_id]._viewing_not_held)
+  }
+  return {
+    isViewingArranged: isViewingArranged,
+    isViewingHeld: isViewingHeld
+  }
+}
+
+
+export default workflow_data

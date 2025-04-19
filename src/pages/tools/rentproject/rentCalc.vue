@@ -7,8 +7,8 @@
     <BrrToolbar
       ref="BrrToolbar"
       reason_project_not_savable=""
-      is_saved_project_with_id="true"
-      is_rent_project="true"
+      :is_saved_project_with_id="true"
+      :is_rent_project="true"
       @activity_log="activity_log"
       @saveproject="save_project"
       @createtodo="createtodo"
@@ -30,6 +30,12 @@
         ref="LeadInformation"
         ever_saved=true
         @navigate_away="navigate_away"
+        @projectchanged="projectchanged"
+      />
+      <ViewingInfo
+        ref="ViewingInfo"
+        :isViewingArranged='false'
+        :isViewingHeld='false'
         @projectchanged="projectchanged"
       />
     </div>
@@ -67,6 +73,7 @@ import BrrToolbar from '../../../components/BrrCalc/BrrToolbar/BrrToolbar.vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 
 import LeadInformation from '../../../components/ProjectTypeRentComponents/LeadInformation.vue'
+import ViewingInfo from '../../../components/ProjectTypeRentComponents/ViewingInfo.vue'
 
 import ActivityLog from '../../../components/CommonCalcComponents/ActivityLog.vue'
 import Todos from '../../../components/CommonCalcComponents/Todos.vue'
@@ -84,7 +91,8 @@ export default defineComponent({
     Workflow,
     Todos,
     ProjectSerializer,
-    BrrToolbar
+    BrrToolbar,
+    ViewingInfo
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -110,8 +118,7 @@ export default defineComponent({
       return {
         leadinformation: this.$refs.LeadInformation.serializer_card_data
       }
-    },
-
+    }
   },
   methods: {
     createtodo(params) {
@@ -211,6 +218,9 @@ export default defineComponent({
       if (typeof (project.sub_section_details.leadinformation) !== 'undefined') {
         this.$refs.LeadInformation.serializer_load_data(project.sub_section_details.leadinformation)
       }
+      if (typeof (project.sub_section_details.viewinginformation) !== 'undefined') {
+        this.$refs.ViewingInfo.serializer_load_data(project.sub_section_details.viewinginformation)
+      }
 
 
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
@@ -219,6 +229,10 @@ export default defineComponent({
 
       // todos only loaded. Never saved
       this.$refs.todos.serializer_load_data(project.todos)
+
+      // Loading viewing AFTER workflow
+      this.$refs.ViewingInfo.setWorkflowInfo(project.workflow)
+
     },
     save_project_complete ({success, response, passthroughdata}) {
       if (success) {
@@ -240,6 +254,8 @@ export default defineComponent({
        return false
       }
       this.$refs.BrrToolbar.set_changed_true()
+      this.$refs.ViewingInfo.setWorkflowInfo(this.$refs.Workflow.serializer_card_data)
+
     },
     click_save_btn () {
       this.$refs.BrrToolbar.click_save_btn()

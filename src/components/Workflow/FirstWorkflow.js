@@ -3,6 +3,11 @@
 // For a stage is active is MISSING it is assumed false
 // Note workflow ID of "1" and stage id of "1" are used in backend and should not be changed
 
+export const stage_calc_fn = function (stage_id) {
+  return {
+  }
+}
+
 export default {
   "id": "1",
   "name": 'BRR Project Workflow',

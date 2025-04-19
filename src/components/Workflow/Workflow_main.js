@@ -1,10 +1,14 @@
 import Workflow from './FirstWorkflow.js'
+import {stage_calc_fn as firstworkflow_stage_calc_fn} from './FirstWorkflow.js'
 import FirstRentWorkflow from './FirstRentWorkflow.js'
+import {stage_calc_fn as firstrentworkflow_stage_calc_fn} from './FirstRentWorkflow.js'
 
 function get_workflows () {
   let ret_val = {}
   ret_val[Workflow.id] = Workflow
+  ret_val[Workflow.id]._stage_calc_fn = firstworkflow_stage_calc_fn
   ret_val[FirstRentWorkflow.id] = FirstRentWorkflow
+  ret_val[FirstRentWorkflow.id]._stage_calc_fn = firstrentworkflow_stage_calc_fn
   return ret_val
 }
 
