@@ -34,8 +34,6 @@
       />
       <ViewingInfo
         ref="ViewingInfo"
-        :isViewingArranged='false'
-        :isViewingHeld='false'
         @projectchanged="projectchanged"
       />
     </div>
@@ -116,7 +114,8 @@ export default defineComponent({
         return {}
       }
       return {
-        leadinformation: this.$refs.LeadInformation.serializer_card_data
+        leadinformation: this.$refs.LeadInformation.serializer_card_data,
+        viewinginformation: this.$refs.ViewingInfo.serializer_card_data
       }
     }
   },

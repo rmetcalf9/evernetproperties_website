@@ -37,6 +37,17 @@ function change_address(proj, {address, postcode}) {
   }
   console.log('change_address proj', proj)
 }
+function change_viewing_information(proj, {viewing_timestamp}) {
+  if ( typeof (proj.sub_section_details.viewinginformation) === 'undefined') {
+    proj.sub_section_details.viewinginformation = {
+      viewing_timestamp: ''
+    }
+  }
+  if ( typeof (proj.sub_section_details.viewinginformation.viewing_timestamp) === 'undefined') {
+    proj.sub_section_details.viewinginformation.viewing_timestamp = ''
+  }
+  proj.sub_section_details.viewinginformation.viewing_timestamp = viewing_timestamp
+}
 
 function startChange({backend_connection_store, projectId}) {
   return new Promise(function(successFn, errorFn) {
@@ -70,6 +81,9 @@ function startChange({backend_connection_store, projectId}) {
           },
           change_address: function ({address, postcode}) {
             change_address(proj, {address: address, postcode: postcode})
+          },
+          change_viewing_information: function ({viewing_timestamp}) {
+            change_viewing_information(proj, {viewing_timestamp: viewing_timestamp})
           }
         }
         successFn({active_change_object})

@@ -181,10 +181,17 @@ export default defineComponent({
         return
       }
       if (outcome_data.outcome_id==='complete') {
-        // TODO This should store the arranged apointment and so something with appointment system
+        // TODO This should store the arranged appointment and so something with appointment system
         console.log('TODO deal with complete outcome project id:', outcome_data.current_lead.id)
         console.log('appointment day: ', outcome_data.call_data.item_data_vals.appointment.selection_day)
+        console.log('appointment day: ', outcome_data.call_data.item_data_vals.appointment.selection_day.day.js_day_obj.substring(0,10))
         console.log('appointment time: ', outcome_data.call_data.item_data_vals.appointment.selection_time)
+
+        // This will give something like 2025-04-20
+        const viewing_day_ts = outcome_data.call_data.item_data_vals.appointment.selection_day.day.js_day_obj.substring(0,10)
+        const full_viewing_timestamp = viewing_day_ts + 'T' + outcome_data.call_data.item_data_vals.appointment.selection_time + ':00.000Z'
+
+        console.log('Setting viewing', full_viewing_timestamp)
 
         atomicProjectUpdates.startChange({
           backend_connection_store: TTT.backend_connection_store,
@@ -199,6 +206,9 @@ export default defineComponent({
             active_change_object.change_address({
               address: outcome_data.call_data.item_data_vals.address.value,
               postcode: outcome_data.call_data.item_data_vals.postcode.value
+            })
+            active_change_object.change_viewing_information({
+              viewing_timestamp: full_viewing_timestamp
             })
             active_change_object.complete()
           },
@@ -338,7 +348,7 @@ export default defineComponent({
     const TTT = this
     this.viewing_days = []
     const start_date = new Date();
-    start_date.setHours(0,0,0,0)
+    start_date.setHours(2,0,0,0) // STart at 2am because otherwise on daylight savings I get wrong day
     for (let i = 1; i < 8; i++) {
       var this_date = new Date(start_date)
       this_date.setDate(this_date.getDate() + i);
