@@ -86,6 +86,8 @@ import RentToRentLeadTemplate from '../../../components/CallAssistCalls/RentToRe
 
 import BatchCallLeadsAddBlockDialog from '../../../components/BatchCallLeadsAddBlockDialog.vue'
 
+import { DateTime } from 'luxon'
+
 // If we are changing this it's also in callleads as well
 const rent_call_workflow_id = '2'
 const rent_to_call_stage_id = '1'
@@ -181,17 +183,11 @@ export default defineComponent({
         return
       }
       if (outcome_data.outcome_id==='complete') {
-        // TODO This should store the arranged appointment and so something with appointment system
-        console.log('TODO deal with complete outcome project id:', outcome_data.current_lead.id)
-        console.log('appointment day: ', outcome_data.call_data.item_data_vals.appointment.selection_day)
-        console.log('appointment day: ', outcome_data.call_data.item_data_vals.appointment.selection_day.day.js_day_obj.substring(0,10))
-        console.log('appointment time: ', outcome_data.call_data.item_data_vals.appointment.selection_time)
-
         // This will give something like 2025-04-20
         const viewing_day_ts = outcome_data.call_data.item_data_vals.appointment.selection_day.day.js_day_obj.substring(0,10)
-        const full_viewing_timestamp = viewing_day_ts + 'T' + outcome_data.call_data.item_data_vals.appointment.selection_time + ':00.000Z'
-
-        console.log('Setting viewing', full_viewing_timestamp)
+        const viewing_time_ts = outcome_data.call_data.item_data_vals.appointment.selection_time
+        const dt = DateTime.fromISO(viewing_day_ts + 'T' + viewing_time_ts, { zone: 'Europe/London' })
+        const full_viewing_timestamp = dt.toISO({ includeOffset: true, suppressMilliseconds: false })
 
         atomicProjectUpdates.startChange({
           backend_connection_store: TTT.backend_connection_store,
