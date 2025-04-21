@@ -37,16 +37,32 @@ function change_address(proj, {address, postcode}) {
   }
   console.log('change_address proj', proj)
 }
-function change_viewing_information(proj, {viewing_timestamp}) {
+function change_viewing_information(proj, {viewing_timestamp, call_timestamp, call_notes}) {
   if ( typeof (proj.sub_section_details.viewinginformation) === 'undefined') {
     proj.sub_section_details.viewinginformation = {
-      viewing_timestamp: ''
+      viewing_timestamp: '',
+      call_timestamp: undefined,
+      call_notes: ''
     }
   }
-  if ( typeof (proj.sub_section_details.viewinginformation.viewing_timestamp) === 'undefined') {
-    proj.sub_section_details.viewinginformation.viewing_timestamp = ''
+  if ( typeof (viewing_timestamp) !== 'undefined') {
+    if ( typeof (proj.sub_section_details.viewinginformation.viewing_timestamp) === 'undefined') {
+      proj.sub_section_details.viewinginformation.viewing_timestamp = ''
+    }
+    proj.sub_section_details.viewinginformation.viewing_timestamp = viewing_timestamp
   }
-  proj.sub_section_details.viewinginformation.viewing_timestamp = viewing_timestamp
+  if ( typeof (call_timestamp) !== 'undefined') {
+    if ( typeof (proj.sub_section_details.viewinginformation.call_timestamp) === 'undefined') {
+      proj.sub_section_details.viewinginformation.call_timestamp = undefined
+    }
+    proj.sub_section_details.viewinginformation.call_timestamp = call_timestamp
+  }
+  if ( typeof (call_notes) !== 'undefined') {
+    if ( typeof (proj.sub_section_details.viewinginformation.call_notes) === 'undefined') {
+      proj.sub_section_details.viewinginformation.call_notes = ''
+    }
+    proj.sub_section_details.viewinginformation.call_notes = call_notes
+  }
 }
 
 function startChange({backend_connection_store, projectId}) {
@@ -82,8 +98,8 @@ function startChange({backend_connection_store, projectId}) {
           change_address: function ({address, postcode}) {
             change_address(proj, {address: address, postcode: postcode})
           },
-          change_viewing_information: function ({viewing_timestamp}) {
-            change_viewing_information(proj, {viewing_timestamp: viewing_timestamp})
+          change_viewing_information: function ({viewing_timestamp, call_timestamp, call_notes}) {
+            change_viewing_information(proj, {viewing_timestamp: viewing_timestamp, call_timestamp: call_timestamp, call_notes: call_notes})
           }
         }
         successFn({active_change_object})

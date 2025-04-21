@@ -188,6 +188,7 @@ export default defineComponent({
         const viewing_time_ts = outcome_data.call_data.item_data_vals.appointment.selection_time
         const dt = DateTime.fromISO(viewing_day_ts + 'T' + viewing_time_ts, { zone: 'Europe/London' })
         const full_viewing_timestamp = dt.toISO({ includeOffset: true, suppressMilliseconds: false })
+        const current_timestamp = DateTime.now().toISO()
 
         atomicProjectUpdates.startChange({
           backend_connection_store: TTT.backend_connection_store,
@@ -204,7 +205,9 @@ export default defineComponent({
               postcode: outcome_data.call_data.item_data_vals.postcode.value
             })
             active_change_object.change_viewing_information({
-              viewing_timestamp: full_viewing_timestamp
+              viewing_timestamp: full_viewing_timestamp,
+              call_timestamp: current_timestamp,
+              call_notes: outcome_data.call_data.notes,
             })
             active_change_object.complete()
           },

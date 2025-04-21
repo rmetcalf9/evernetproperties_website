@@ -1,41 +1,49 @@
 <template>
   <q-card inline class="q-ma-sm card-style col-grow">
     <q-card-section>
-      <div class="text-h6">Viewing</div>
+      <div class="text-h6">Call for Viewing</div>
       <div v-if="!workflow_stage_data.isViewingArranged">
         No viewing has been arranged.
       </div>
       <div v-if="workflow_stage_data.isViewingArranged">
-        <div v-if="!workflow_stage_data.isViewingHeld" class="row viewinginfo-datetime-controls">
+        <div v-if="!workflow_stage_data.isViewingHeld">
           <div>
-            Date: <q-input filled v-model="dateOnly" readonly>
+            Call made on {{ callMadeOnText }}
+          </div>
+          <div>
+            Notes: <q-input filled v-model="call_notes" label="Notes from this call" autogrow/>
+          </div>
+          <div class="row viewinginfo-datetime-controls">
+            <div>
+              Viewing Date: <q-input filled v-model="dateOnly" readonly>
+                <template v-slot:append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-date v-model="dateOnly" mask="dddd, MMM D, YYYY">
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </div>
+            <div>
+              Viewing Time: <q-input filled v-model="timeOnly" mask="time" :rules="['time']" readonly>
               <template v-slot:append>
-                <q-icon name="event" class="cursor-pointer">
+                <q-icon name="access_time" class="cursor-pointer">
                   <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-date v-model="dateOnly" mask="dddd, MMM D, YYYY">
+                    <q-time v-model="timeOnly">
                       <div class="row items-center justify-end">
                         <q-btn v-close-popup label="Close" color="primary" flat />
                       </div>
-                    </q-date>
+                    </q-time>
                   </q-popup-proxy>
                 </q-icon>
               </template>
-            </q-input>
-          </div>
-          <div>
-            Time: <q-input filled v-model="timeOnly" mask="time" :rules="['time']" readonly>
-        <template v-slot:append>
-          <q-icon name="access_time" class="cursor-pointer">
-            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-              <q-time v-model="timeOnly">
-                <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Close" color="primary" flat />
-                </div>
-              </q-time>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
+              </q-input>
+            </div>
           </div>
         </div>
         <div v-if="workflow_stage_data.isViewingHeld">
@@ -82,7 +90,9 @@ export default defineComponent({
         current_stage: -1
       },
       // Actual format will be 2025-04-19T10:50:44.066Z
-      viewing_timestamp: '2025-04-19T10:50:44.066Z'
+      viewing_timestamp: '2025-04-19T10:50:44.066Z',
+      call_timestamp: undefined,
+      call_notes: ''
     }
   },
   watch: {
@@ -93,6 +103,20 @@ export default defineComponent({
     }
   },
   computed: {
+    callMadeOnText () {
+      if (typeof (this.call_timestamp) === 'undefined') {
+        return 'Unknown'
+      }
+      const date = new Date(this.call_timestamp)
+      const hours = date.getHours().toString().padStart(2, '0')
+      const minutes = date.getMinutes().toString().padStart(2, '0')
+      return date.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      }) + ' at ' + `${hours}:${minutes}`
+    },
     dateOnly: {
       get() {
         const date = new Date(this.viewing_timestamp)
@@ -137,6 +161,8 @@ export default defineComponent({
     serializer_card_data () {
       return {
         viewing_timestamp: this.viewing_timestamp,
+        call_timestamp: this.call_timestamp,
+        call_notes: this.call_notes
       }
     },
     workflow_stage_data () {
@@ -166,6 +192,16 @@ export default defineComponent({
       this.emit_project_change_notification = false
 
       this.viewing_timestamp = data_to_load.viewing_timestamp
+      if (typeof (data_to_load.call_timestamp) === 'undefined') {
+        this.call_timestamp = undefined
+      } else {
+        this.call_timestamp = data_to_load.call_timestamp
+      }
+      if (typeof (data_to_load.call_notes) === 'undefined') {
+        this.call_notes = ''
+      } else {
+        this.call_notes = data_to_load.call_notes
+      }
 
       const TTT = this
       setTimeout(function () {
