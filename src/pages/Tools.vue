@@ -104,6 +104,28 @@
             </div>
           </q-card-section>
         </q-card>
+        <q-card
+          v-if="featureflags.rent_to_rent_projects"
+          inline class="q-ma-sm card-style tool-card" @click="$router.push('tools/rentproject/showviewings')">
+          <q-card-section>
+            <div class="text-h6">Show Rental Viewing List</div>
+            <div class="row">
+              <div>
+                <img
+                  alt="Item Picture"
+                  src="~assets/enter_rental_lead.png"
+                  class="tool-picture"
+                >
+              </div>
+              <div class="col q-ma-sm">
+                <div style="height: 150px;">View and manage all your upcoming rental appointments in one place. This section lists your viewings in date order and provides tools and resources to help you complete your due diligence before each viewing.</div>
+                <div align="right">
+                  <q-btn round  color="primary" icon="info" />
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
         <q-card inline class="q-ma-sm card-style tool-card featurecard" @click="$router.push('/tools/cansave/todo')">
           <q-card-section>
             <div class="text-h6">My Todo List</div>
