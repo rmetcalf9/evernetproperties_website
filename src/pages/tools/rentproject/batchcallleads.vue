@@ -141,6 +141,7 @@ export default defineComponent({
   },
   methods: {
     outcome (outcome_data) {
+      const notes_in_activity_format = outcome_data.call_data.notes.replaceAll('\n','<BR>')
       const TTT = this
       if (outcome_data.outcome_id==='reject_lead') {
         // Rejected before calling
@@ -152,7 +153,7 @@ export default defineComponent({
             active_change_object.change_workflow_state({
               workflow_id: rent_call_workflow_id,
               workflow_stage: rent_rejected_stage_id,
-              notes: outcome_data.call_data.notes
+              notes: notes_in_activity_format
             })
             active_change_object.complete()
           },
@@ -172,7 +173,7 @@ export default defineComponent({
             active_change_object.change_workflow_state({
               workflow_id: rent_call_workflow_id,
               workflow_stage: rent_rejected_stage_id,
-              notes: 'Property not available ' + outcome_data.call_data.notes
+              notes: 'Property not available ' + notes_in_activity_format
             })
             active_change_object.complete()
           },
@@ -198,7 +199,7 @@ export default defineComponent({
             active_change_object.change_workflow_state({
               workflow_id: rent_call_workflow_id,
               workflow_stage: rent_viewing_arranged_stage_id,
-              notes: 'Viewing booked for ' + outcome_data.call_data.item_data_vals.appointment.selection_day.name + ' at ' + outcome_data.call_data.item_data_vals.appointment.selection_time + '<BR>' + outcome_data.call_data.notes
+              notes: 'Viewing booked for ' + outcome_data.call_data.item_data_vals.appointment.selection_day.name + ' at ' + outcome_data.call_data.item_data_vals.appointment.selection_time + '<BR>' + notes_in_activity_format
             })
             active_change_object.change_address({
               address: outcome_data.call_data.item_data_vals.address.value,
@@ -217,8 +218,6 @@ export default defineComponent({
         )
         return
       }
-
-      console.log('TODO deal with outcome EXT', outcome_data)
     },
     fully_complete () {
       Notify.create({
