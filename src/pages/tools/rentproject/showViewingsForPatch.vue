@@ -1,15 +1,23 @@
 <template>
   <q-page class="flex flex-center">
     <div class="fit column wrap justify-start items-start content-center">
-      <h2>Viewings for Rental Leads For Patch XXX</h2>
+      <h2>{{ heading }}</h2>
       <div v-if="!projects_fully_loaded">
-        <div>patches_to_scan: {{ patches_to_scan }}</div>
-        <div>project_ids_to_load: {{ project_ids_to_load }}</div>
-        <div>projects: {{ projects }}</div>
         <div>Loading...</div>
       </div>
       <div v-if="projects_fully_loaded">
-        <div>projects: {{ projects }}</div>
+        <div v-for="day in days" :key="day">
+          <div class="showviewingsforpatch-dayheading">{{ display_string_for_day(day) }}</div>
+          <div v-for="project in projects_by_day[day]" :key="project.id">
+            <div class="row">
+              <div class="showviewingsforpatch-projecttime">{{ project.calc.time_str }}</div>
+              <div>: {{ project.raw.sub_section_details.leadinformation.address }}, {{ project.raw.sub_section_details.leadinformation.postcode }} </div>
+              <div v-if="project.calc.is_need_to_prepare">&nbsp;(Need to prepare)</div>
+              <div><q-btn round dense flat color="primary" icon="info" @click="$router.push('/tools/rentproject/rentcalc?projectid=' + project.raw.id)" /></div>
+            </div>
+            <div>TODO Add to cal</div>
+          </div>
+        </div>
       </div>
     </div>
   </q-page>
@@ -18,6 +26,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { DateTime } from 'luxon'
 
 const rent_call_workflow_id = '2'
 const rent_to_call_stage_id_viewing_arranged = '2'
@@ -36,15 +45,70 @@ export default defineComponent({
       projects_fully_loaded: false,
       patches_to_scan: [],
       project_ids_to_load: [],
-      projects: []
+      days: [],
+      projects_by_day: {}
     }
   },
   computed: {
+    heading () {
+      const TTT = this
+      if (this.$route.query.patchid === 'all') {
+        return 'Viewings for Rental Leads For All patches'
+      }
+      if (typeof (this.user_profile.patches) === 'undefined') {
+        return 'Viewings for Rental Leads'
+      }
+      const thispatchlist = this.user_profile.patches.filter(function (x) {
+        return x.id ===TTT.$route.query.patchid
+      })
+      if (thispatchlist.length!==1) {
+        return 'Viewings for Rental Leads'
+      }
+      return 'Viewings for Rental Leads For ' + thispatchlist[0].name
+    },
     user_profile () {
       return this.backend_connection_store.user_profile
     }
   },
   methods: {
+    display_string_for_day (day) {
+      const dt = DateTime.fromISO(day);
+      return dt.toFormat('cccc d LLL yyyy');
+    },
+    load_project (project) {
+      if (typeof (project.sub_section_details.viewinginformation) === 'undefined') {
+        console.log('Warning - project with no viewing information - skipping')
+        return
+      }
+      if (typeof (project.sub_section_details.viewinginformation.viewing_timestamp) === 'undefined') {
+        console.log('Warning - project with no viewing_timestamp information - skipping')
+        return
+      }
+      const day = project.sub_section_details.viewinginformation.viewing_timestamp.substring(0,10)
+      if (!this.days.includes(day)) {
+        this.days.push(day)
+        this.days = this.days.sort()
+        this.projects_by_day[day] = []
+      }
+      const time_obj = DateTime.fromISO(project.sub_section_details.viewinginformation.viewing_timestamp)
+      this.projects_by_day[day].push({
+        raw: project,
+        calc: {
+          viewing_timestamp_js_td: time_obj,
+          time_str: time_obj.toFormat('h:mm a'),
+          is_need_to_prepare: project.workflow.current_stage === rent_to_call_stage_id_viewing_arranged
+        }
+      })
+      this.projects_by_day[day].sort(function (a,b) {
+        if (a<b) {
+          return -1
+        }
+        if (a===b) {
+          return 0
+        }
+        return 1
+      })
+    },
     recursive_get_list_of_projects_to_load () {
       const TTT = this
       // scans the list of patches and returns project ids that need scanning
@@ -99,7 +163,7 @@ export default defineComponent({
 
       const callback = {
         ok: function (response) {
-          TTT.projects.push(response.data)
+          TTT.load_project(response.data)
           TTT.recursive_load_projects()
         },
         error: function (response) {
@@ -122,6 +186,11 @@ export default defineComponent({
   mounted () {
     const TTT = this
     TTT.projects_fully_loaded = false
+    TTT.patches_to_scan = []
+    TTT.project_ids_to_load = []
+    TTT.days = []
+    TTT.projects_by_day = {}
+
     // User profile is not always loaded immediately
     setTimeout(function () {
       if (TTT.$route.query.patchid === 'all') {
@@ -138,4 +207,11 @@ export default defineComponent({
 </script>
 
 <style>
+.showviewingsforpatch-dayheading {
+  font-size: 2rem;
+  font-weight: 600;
+}
+.showviewingsforpatch-projecttime {
+  font-weight: 600;
+}
 </style>
