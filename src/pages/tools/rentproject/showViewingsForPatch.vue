@@ -8,14 +8,27 @@
       <div v-if="projects_fully_loaded">
         <div v-for="day in days" :key="day">
           <div class="showviewingsforpatch-dayheading">{{ display_string_for_day(day) }}</div>
-          <div v-for="project in projects_by_day[day]" :key="project.id">
+          <div v-for="project in projects_by_day[day]" :key="project.id" class="showviewingsforpatch-project">
             <div class="row">
               <div class="showviewingsforpatch-projecttime">{{ project.calc.time_str }}</div>
               <div>: {{ project.raw.sub_section_details.leadinformation.address }}, {{ project.raw.sub_section_details.leadinformation.postcode }} </div>
               <div v-if="project.calc.is_need_to_prepare">&nbsp;(Need to prepare)</div>
               <div><q-btn round dense flat color="primary" icon="info" @click="$router.push('/tools/rentproject/rentcalc?projectid=' + project.raw.id)" /></div>
             </div>
-            <div>TODO Add to cal</div>
+            <div>
+              <add-to-calendar-button
+                :name="'Viewing: ' + project.raw.sub_section_details.leadinformation.address + ', ' + project.raw.sub_section_details.leadinformation.postcode"
+                options="'Apple','Google','Yahoo','iCal'"
+                :location="project.raw.sub_section_details.leadinformation.address + ', ' + project.raw.sub_section_details.leadinformation.postcode"
+                :description="calendar_description(project.raw)"
+                :startDate="project.calc.event_cal_start_date"
+                :endDate="project.calc.event_cal_end_date"
+                :startTime="project.calc.event_cal_start_time"
+                :endTime="project.calc.event_cal_end_time"
+                timeZone="Europe/London"
+              ></add-to-calendar-button>
+              <hr/>
+            </div>
           </div>
         </div>
       </div>
@@ -27,6 +40,8 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { DateTime } from 'luxon'
+import 'add-to-calendar-button'
+import utils from '../../../components/utils.js'
 
 const rent_call_workflow_id = '2'
 const rent_to_call_stage_id_viewing_arranged = '2'
@@ -71,6 +86,9 @@ export default defineComponent({
     }
   },
   methods: {
+    calendar_description (project) {
+      return utils.rentalprojectcalendardescription(project)
+    },
     display_string_for_day (day) {
       const dt = DateTime.fromISO(day);
       return dt.toFormat('cccc d LLL yyyy');
@@ -91,12 +109,17 @@ export default defineComponent({
         this.projects_by_day[day] = []
       }
       const time_obj = DateTime.fromISO(project.sub_section_details.viewinginformation.viewing_timestamp)
+      const time_objPlusOneHour = time_obj.plus({ hours: 1 });
       this.projects_by_day[day].push({
         raw: project,
         calc: {
           viewing_timestamp_js_td: time_obj,
           time_str: time_obj.toFormat('h:mm a'),
-          is_need_to_prepare: project.workflow.current_stage === rent_to_call_stage_id_viewing_arranged
+          is_need_to_prepare: project.workflow.current_stage === rent_to_call_stage_id_viewing_arranged,
+          event_cal_start_date: day,
+          event_cal_end_date: day,
+          event_cal_start_time: time_obj.toFormat('HH:mm'),
+          event_cal_end_time: time_objPlusOneHour.toFormat('HH:mm')
         }
       })
       this.projects_by_day[day].sort(function (a,b) {
@@ -213,5 +236,8 @@ export default defineComponent({
 }
 .showviewingsforpatch-projecttime {
   font-weight: 600;
+}
+.showviewingsforpatch-project {
+  padding-bottom: 20px;
 }
 </style>

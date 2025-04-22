@@ -34,6 +34,8 @@
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import { Notify } from 'quasar'
+import utils from '../components/utils.js'
+
 
 function uuidv4() {
   return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
@@ -48,7 +50,6 @@ function new_weblink_record(label, displaytext) {
     displaytext: displaytext
   }
 }
-
 
 export default defineComponent({
   name: 'WebLinksComponent',
@@ -79,29 +80,12 @@ export default defineComponent({
             }
           }
         }
-        const url = new URL(x.label)
-        let icon = 'web'
-        let text = url.hostname
-        if (url.hostname === 'www.google.com') {
-          if (url.pathname.startsWith('/maps/@')) {
-            if (url.pathname.includes('/data=')) {
-              text = 'Google Streetview'
-              icon = 'streetview'
-            } else {
-              text = 'Google Map'
-              icon = 'map'
-            }
-          }
-          if (url.pathname.startsWith('/maps/place')) {
-            text = 'Google Place'
-            icon = 'place'
-          }
-        }
+        const textandicon = utils.getDefaultWeblinkDisplayTextAndIcon(x.label)
         return {
           id: x.id,
           label: x.label,
-          text: text,
-          icon: icon
+          text: textandicon.text,
+          icon: textandicon.icon
         }
       })
     }

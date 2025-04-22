@@ -102,6 +102,62 @@ function format_date_as_string_without_year (value) {
   return currentDayOfWeek + ' ' + (value.getDate()).toString() + nthNumber(value.getDate()) + ' ' + month
 }
 
+function getDefaultWeblinkDisplayTextAndIcon (inpurl) {
+  const url = new URL(inpurl)
+  let icon = 'web'
+  let text = url.hostname
+  if (url.hostname === 'www.google.com') {
+    if (url.pathname.startsWith('/maps/@')) {
+      if (url.pathname.includes('/data=')) {
+        text = 'Google Streetview'
+        icon = 'streetview'
+      } else {
+        text = 'Google Map'
+        icon = 'map'
+      }
+    }
+    if (url.pathname.startsWith('/maps/place')) {
+      text = 'Google Place'
+      icon = 'place'
+    }
+  }
+  return {
+    text: text,
+    icon: icon
+  }
+}
+
+function rentalprojectcalendardescription (project) {
+  const project_external_url = window.location.origin + '/#/tools/rentproject/rentcalc?projectid=' + project.id
+  var weblinkString = ''
+  if ( typeof (project.sub_section_details.leadinformation.advertweblinks) !== 'undefined') {
+    weblinkString = project.sub_section_details.leadinformation.advertweblinks.reduce(function (str, current_item) {
+      var d = current_item.displaytext
+      if (current_item.displaytext.length===0) {
+        d = getDefaultWeblinkDisplayTextAndIcon(current_item.label).text
+      }
+      const text = '[li][url]' + current_item.label + '|' + d + '[/url][/li]'
+      return str + text
+    }, '')
+  }
+  if (weblinkString.length > 1) {
+    weblinkString = 'Links:[ul]' + weblinkString + '[/ul]'
+  }
+  var call_notes_text = ''
+  if ( typeof (project.sub_section_details.viewinginformation.call_notes) !== 'undefined') {
+    call_notes_text = project.sub_section_details.viewinginformation.call_notes.replace('\n','[br]')
+  }
+  return '[strong]Evernetproerties.com - Rental property viewing[/strong] [br]'
+    + 'Address: ' + project.sub_section_details.leadinformation.address + ', ' + project.sub_section_details.leadinformation.postcode + '[br]'
+    + 'Landlord: ' + project.sub_section_details.leadinformation.landlord_name + ' (' + project.sub_section_details.leadinformation.contact_phone + '/' + project.sub_section_details.leadinformation.contact_email + ')' + '[br]'
+    + 'Lead source: ' + project.sub_section_details.leadinformation.lead_source + '[br]'
+    + 'Advert Info: ' + project.sub_section_details.leadinformation.advert_information + '[br]'
+    + weblinkString
+    + '[br]Call Notes:[br]'
+    + call_notes_text + '[br]'
+    + '[br][url]' + project_external_url + '|Click here for full information[/url]'
+}
+
 export default {
   format_currency: format_currency,
   format_percent: format_percent,
@@ -109,5 +165,7 @@ export default {
   get_source_text: get_source_text,
   get_agent_text: get_agent_text,
   boolean_undefined_to_false: boolean_undefined_to_false,
-  format_date_as_string_without_year: format_date_as_string_without_year
+  format_date_as_string_without_year: format_date_as_string_without_year,
+  getDefaultWeblinkDisplayTextAndIcon: getDefaultWeblinkDisplayTextAndIcon,
+  rentalprojectcalendardescription: rentalprojectcalendardescription
 }
