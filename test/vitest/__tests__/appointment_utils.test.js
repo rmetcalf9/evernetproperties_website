@@ -31,6 +31,10 @@ function get_slot(day, start_hour, start_minute) {
   start_d.setHours(start_hour, start_minute)
   let end_d = new Date(day.js_day_obj)
   end_d.setTime(start_d.getTime() + (60 * 60 * 1000))
+
+  function time_str(d) {
+    return d.toTimeString().split(' ')[0].split(':')[0] + ':' + d.toTimeString().split(' ')[0].split(':')[1]
+  }
   return {
     "text": appointment_utils.get_slot_text(start_d), //"9am wed 5th",
     "start_js_day_obj": start_d,
@@ -38,12 +42,22 @@ function get_slot(day, start_hour, start_minute) {
   }
 }
 
+function remove_day_tag_from_objects_in_array(ite) {
+  ite = ite.map(function (x) {
+    delete x['day']
+    return x
+  })
+  return ite
+}
+
 test('No days', () => {
   expect(appointment_utils.get_slots_from_viewing_days([])).toStrictEqual([])
 })
 
 test('One Day All Slots', () => {
-  expect(appointment_utils.get_slots_from_viewing_days(example_viewing_day_no_reserved_slots)).toStrictEqual([
+  expect(
+    remove_day_tag_from_objects_in_array(appointment_utils.get_slots_from_viewing_days(example_viewing_day_no_reserved_slots))
+  ).toStrictEqual([
     get_slot(example_viewing_day_no_reserved_slots[0], 9),
     get_slot(example_viewing_day_no_reserved_slots[0], 10),
     get_slot(example_viewing_day_no_reserved_slots[0], 11),
@@ -57,7 +71,9 @@ test('One Day All Slots', () => {
 })
 
 test('One Day 9am slot blocked', () => {
-  expect(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot)).toStrictEqual([
+  expect(
+    remove_day_tag_from_objects_in_array(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot))
+  ).toStrictEqual([
     get_slot(example_viewing_day_no_reserved_slots[0], 10),
     get_slot(example_viewing_day_no_reserved_slots[0], 11),
     get_slot(example_viewing_day_no_reserved_slots[0], 12),
@@ -73,7 +89,9 @@ test('One Day 10am slot blocked', () => {
   let dup = JSON.parse(JSON.stringify(example_viewing_day_one_reserved_slot))
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].start = "10:00"
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].end = "11:00"
-  expect(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot)).toStrictEqual([
+  expect(
+    remove_day_tag_from_objects_in_array(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot))
+  ).toStrictEqual([
     get_slot(example_viewing_day_no_reserved_slots[0], 9),
     get_slot(example_viewing_day_no_reserved_slots[0], 11),
     get_slot(example_viewing_day_no_reserved_slots[0], 12),
@@ -89,7 +107,9 @@ test('One Day 4pm slot blocked', () => {
   let dup = JSON.parse(JSON.stringify(example_viewing_day_one_reserved_slot))
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].start = "16:00"
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].end = "17:00"
-  expect(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot)).toStrictEqual([
+  expect(
+    remove_day_tag_from_objects_in_array(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot))
+  ).toStrictEqual([
     get_slot(example_viewing_day_no_reserved_slots[0], 9),
     get_slot(example_viewing_day_no_reserved_slots[0], 10),
     get_slot(example_viewing_day_no_reserved_slots[0], 11),
@@ -105,7 +125,9 @@ test('One Day 5pm slot blocked', () => {
   let dup = JSON.parse(JSON.stringify(example_viewing_day_one_reserved_slot))
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].start = "17:00"
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].end = "18:00"
-  expect(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot)).toStrictEqual([
+  expect(
+    remove_day_tag_from_objects_in_array(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot))
+  ).toStrictEqual([
     get_slot(example_viewing_day_no_reserved_slots[0], 9),
     get_slot(example_viewing_day_no_reserved_slots[0], 10),
     get_slot(example_viewing_day_no_reserved_slots[0], 11),
@@ -121,7 +143,9 @@ test('One Day 6pm slot blocked', () => {
   let dup = JSON.parse(JSON.stringify(example_viewing_day_one_reserved_slot))
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].start = "18:00"
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].end = "19:00"
-  expect(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot)).toStrictEqual([
+  expect(
+    remove_day_tag_from_objects_in_array(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot))
+  ).toStrictEqual([
     get_slot(example_viewing_day_no_reserved_slots[0], 9),
     get_slot(example_viewing_day_no_reserved_slots[0], 10),
     get_slot(example_viewing_day_no_reserved_slots[0], 11),
@@ -138,7 +162,9 @@ test('One Day 10:30 slot blocked', () => {
   let dup = JSON.parse(JSON.stringify(example_viewing_day_one_reserved_slot))
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].start = "10:30"
   example_viewing_day_one_reserved_slot[0].reserved_slots[0].end = "11:30"
-  expect(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot)).toStrictEqual([
+  expect(
+    remove_day_tag_from_objects_in_array(appointment_utils.get_slots_from_viewing_days(example_viewing_day_one_reserved_slot))
+  ).toStrictEqual([
     get_slot(example_viewing_day_no_reserved_slots[0], 9),
     get_slot(example_viewing_day_no_reserved_slots[0], 11, 30),
     get_slot(example_viewing_day_no_reserved_slots[0], 12, 30),
