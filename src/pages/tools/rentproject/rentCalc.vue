@@ -34,6 +34,8 @@
       />
       <ViewingInfo
         ref="ViewingInfo"
+        :projectid="loaded_project_id"
+        :leadinformation="leadinformation"
         @projectchanged="projectchanged"
       />
     </div>
@@ -106,6 +108,22 @@ export default defineComponent({
     }
   },
   computed: {
+    leadinformation () {
+      if (!this.isMounted) {
+        return {
+          address: '',
+          advert_information: '',
+          advertweblinks: [],
+          contact_email: '',
+          contact_phone: '',
+          landlord_name: '',
+          lead_source: 'Not Selected',
+          patch_id: undefined,
+          postcode: ''
+        }
+      }
+      return this.$refs.LeadInformation.serializer_card_data
+    },
     project_type () {
       return common_constants.project_type_constants.project_type_rent
     },

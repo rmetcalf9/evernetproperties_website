@@ -45,6 +45,19 @@
               </q-input>
             </div>
           </div>
+          <div>
+            <add-to-calendar-button
+              :name="'Viewing: ' + leadinformation.address + ', ' + leadinformation.postcode"
+              options="'Apple','Google','Yahoo','iCal'"
+              :location="leadinformation.address + ', ' + leadinformation.postcode"
+              :description="calendar_description"
+              :startDate="calendar_day"
+              :endDate="calendar_day"
+              :startTime="calendar_start_time"
+              :endTime="calendar_end_time"
+              timeZone="Europe/London"
+            ></add-to-calendar-button>
+          </div>
         </div>
         <div v-if="workflow_stage_data.isViewingHeld">
           <div>Viewing held {{dateOnly}} at {{ timeOnly }}</div>
@@ -61,6 +74,9 @@ import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 import utils from '../../utils.js'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import 'add-to-calendar-button'
+import {rentalprojectcalendardescription} from '../../components/utils.js'
+import { DateTime } from 'luxon'
 
 import Workflow_main from '../../components/Workflow/Workflow_main.js'
 
@@ -73,6 +89,7 @@ function default_workflow_stage_data () {
 
 export default defineComponent({
   name: 'ViewingInformationCard',
+  props: [ 'projectid', 'leadinformation'],
   // emits: ['projectchanged'],
   components: {
   },
@@ -103,6 +120,25 @@ export default defineComponent({
     }
   },
   computed: {
+    calendar_start_time () {
+      const time_obj = DateTime.fromISO(this.viewing_timestamp)
+      return time_obj.toFormat('HH:mm')
+    },
+    calendar_end_time () {
+      const time_obj = DateTime.fromISO(this.viewing_timestamp)
+      const time_objPlusOneHour = time_obj.plus({ hours: 1 });
+      return time_objPlusOneHour.toFormat('HH:mm')
+    },
+    calendar_day () {
+      return this.viewing_timestamp.substring(0,10)
+    },
+    calendar_description () {
+      return rentalprojectcalendardescription({
+        projectid: this.projectid,
+        leadinformation: this.leadinformation,
+        call_notes: this.call_notes
+      })
+    },
     callMadeOnText () {
       if (typeof (this.call_timestamp) === 'undefined') {
         return 'Unknown'

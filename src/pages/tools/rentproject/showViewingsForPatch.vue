@@ -87,7 +87,11 @@ export default defineComponent({
   },
   methods: {
     calendar_description (project) {
-      return utils.rentalprojectcalendardescription(project)
+      return utils.rentalprojectcalendardescription({
+        projectid: project.id,
+        leadinformation: project.sub_section_details.leadinformation,
+        call_notes: project.sub_section_details.viewinginformation.call_notes
+      })
     },
     display_string_for_day (day) {
       const dt = DateTime.fromISO(day);
