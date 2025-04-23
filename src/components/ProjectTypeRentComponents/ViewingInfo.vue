@@ -76,7 +76,7 @@ import utils from '../../utils.js'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import 'add-to-calendar-button'
 import {rentalprojectcalendardescription} from '../../components/utils.js'
-import { DateTime } from 'luxon'
+// import { DateTime } from 'luxon'
 
 import Workflow_main from '../../components/Workflow/Workflow_main.js'
 

@@ -2,7 +2,7 @@
 <q-page class="flex ">
   <div class="rentcalc-page fit col wrap justify-center items-center content-center">
     <div>
-      <h1>Rent Project</h1>
+      <h1>Rent Project {{ sucessful_load_completed }}</h1>
     </div>
     <BrrToolbar
       ref="BrrToolbar"
@@ -66,7 +66,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { Notify } from 'quasar'
+import { Notify, useQuasar } from 'quasar'
 
 import BrrToolbar from '../../../components/BrrCalc/BrrToolbar/BrrToolbar.vue'
 
@@ -96,7 +96,9 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const q = useQuasar()
     return {
+      q,
       backend_connection_store
     }
   },
@@ -104,7 +106,8 @@ export default defineComponent({
     return {
       tab: 'main',
       isMounted: false,
-      loaded_project_id: ''
+      loaded_project_id: '',
+      sucessful_load_completed: false
     }
   },
   computed: {
@@ -206,6 +209,7 @@ export default defineComponent({
     load_project_api_success (response) {
       this.loaded_project_id = response.data.id
       this.load_project_into_cards(response.data)
+      this.sucessful_load_completed = true
       Notify.create({
         color: 'bg-grey-2',
         message: 'Project Loaded',
@@ -224,6 +228,7 @@ export default defineComponent({
       this.load_complete()
     },
     load_complete () {
+      this.q.loading.hide()
       const TTT = this
       setTimeout(function () {
         TTT.isMounted = true
@@ -287,6 +292,7 @@ export default defineComponent({
   },
   mounted (){
     const TTT = this
+    this.q.loading.show()
     if (typeof (TTT.$route.query.projectid) === 'undefined') {
       // No project ID so go to tools
       this.$router.push('/tools')
