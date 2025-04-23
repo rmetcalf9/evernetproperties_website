@@ -1,11 +1,17 @@
 <template>
   <q-page class="flex flex-center">
-    <div class="fit column wrap justify-start items-start content-center">
-      <h2>{{ heading }}</h2>
+    <div class="fit column wrap justify-start items-start content-center showviewingsforpatch-maindiv">
+      <div class="showviewingsforpatch-headingdiv">
+        <h2>{{ heading }}</h2>
+        <q-btn label="Patch" @click="$router.push('/tools/cansave/patches/' +  $route.query.patchid + '?starttab=rent_projects')" />
+      </div>
       <div v-if="!projects_fully_loaded">
         <div>Loading...</div>
       </div>
       <div v-if="projects_fully_loaded">
+        <div v-if="days.length === 0" class="showviewingsforpatch-dayheading">
+          No viewings for this patch
+        </div>
         <div v-for="day in days" :key="day">
           <div class="showviewingsforpatch-dayheading">{{ display_string_for_day(day) }}</div>
           <div v-for="project in projects_by_day[day]" :key="project.id" class="showviewingsforpatch-project">
@@ -243,5 +249,11 @@ export default defineComponent({
 }
 .showviewingsforpatch-project {
   padding-bottom: 20px;
+}
+.showviewingsforpatch-maindiv h2 {
+  margin-bottom: 0px;
+}
+.showviewingsforpatch-headingdiv {
+  margin-bottom: 20px;
 }
 </style>
