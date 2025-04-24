@@ -128,6 +128,9 @@ export default defineComponent({
       if (!this._recompute_filtered_projects_stage_filter(project)) {
         return false
       }
+      if (!project.loaded) {
+        return true // Rest of filters require data from loaded projects
+      }
       if (!this._recompute_filtered_projects_agent_filter(project)) {
         return false
       }
@@ -139,32 +142,51 @@ export default defineComponent({
     recompute_filtered_projects () {
       const TTT = this
       this.filtered_loaded_projects = this.loaded_projects.filter(function (x) {
-        if (!x.loaded) {
-          return true
-        }
         return TTT.is_project_included_in_current_filters(x)
       })
     },
-    refresh ({project_ids_to_load, patch_id, get_cur_filter_fn}) {
+    refresh ({project_info_to_load, patch_id, get_cur_filter_fn}) {
       this.get_cur_filter_fn = get_cur_filter_fn
       this.patch_id = patch_id
-      this.loaded_projects = project_ids_to_load.map(function (x) {
+      this.loaded_projects = project_info_to_load.map(function (x) {
         return {
-          id: x,
+          id: x.project_id,
           loaded: false,
-          item: undefined
+          item: {
+            workflow: {
+              workflow_used_id: x.workflow_id,
+              current_stage: x.stage_id
+            }
+          }
         }
       })
+      // console.log('TEMP disable loading')
       this.recursive_load_project_details()
     },
-    recursive_load_project_details () {
-      const items_to_load = this.loaded_projects.filter(function (x) {
-        return x.loaded === false
+    _get_next_item_to_load () {
+      const TTT = this
+      const visible_items_to_load = this.loaded_projects.filter(function (x) {
+        if (x.loaded) {
+          return false
+        }
+        return TTT.is_project_included_in_current_filters(x)
       })
-      if (items_to_load.length === 0) {
+      if (visible_items_to_load.length !== 0) {
+        return visible_items_to_load[0]
+      }
+      const items_to_load = this.loaded_projects.filter(function (x) {
+        return x.loaded !== true
+      })
+      if (items_to_load.length !== 0) {
+        return items_to_load[0]
+      }
+      return undefined
+    },
+    recursive_load_project_details () {
+      const item_to_load = this._get_next_item_to_load()
+      if (typeof (item_to_load) === 'undefined') {
         return
       }
-      const item_to_load = items_to_load[0]
 
       const TTT = this
       const callback = {

@@ -258,22 +258,36 @@ export default defineComponent({
       return this.$refs.RentProjectTableRef.get_current_filter()
     },
     refresh_success (response) {
-      this.patch_data = response.data
+      const TTT = this
+      TTT.patch_data = response.data
+      var project_info_to_load = []
+      var rent_project_info_to_load = []
+      Object.keys(TTT.patch_data.workflow_lookup).map(function (workflow_id) {
+        Object.keys(TTT.patch_data.workflow_lookup[workflow_id]).map(function (stage_id) {
+          TTT.patch_data.workflow_lookup[workflow_id][stage_id].map(function (project_id) {
+            if (TTT.patch_data.typed_projects.rent.includes(project_id)) {
+              rent_project_info_to_load.push({
+                workflow_id: workflow_id,
+                stage_id: stage_id,
+                project_id: project_id
+              })
+            } else {
+              project_info_to_load.push({
+                workflow_id: workflow_id,
+                stage_id: stage_id,
+                project_id: project_id
+              })
+            }
+          })
+        })
+      })
       this.$refs.BuyProjectData.refresh({
-        project_ids_to_load: this.patch_data.projects.map(function (x) {
-          return x
-        }),
+        project_info_to_load: project_info_to_load,
         patch_id: this.patch_data.id,
         get_cur_filter_fn: this.get_buy_current_project_filter
       })
-      let project_ids_to_load = []
-      if (typeof (this.patch_data.typed_projects.rent) !== 'undefined') {
-        project_ids_to_load = this.patch_data.typed_projects.rent.map(function (x) {
-          return x
-        })
-      }
       this.$refs.RentProjectData.refresh({
-        project_ids_to_load: project_ids_to_load,
+        project_info_to_load: rent_project_info_to_load,
         patch_id: this.patch_data.id,
         get_cur_filter_fn: this.get_rent_current_project_filter
       })

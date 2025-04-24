@@ -197,7 +197,7 @@ export default defineComponent({
             vandnotes: '',
             devplan: '',
             notes: '',
-            stage: '',
+            stage: TTT.getWorkflowStage(project.item.workflow).name,
             todo: ''
           }
         }
