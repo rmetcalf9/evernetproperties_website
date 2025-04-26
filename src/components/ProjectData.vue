@@ -146,9 +146,21 @@ export default defineComponent({
       })
     },
     refresh ({project_info_to_load, patch_id, get_cur_filter_fn}) {
+      const TTT = this
       this.get_cur_filter_fn = get_cur_filter_fn
       this.patch_id = patch_id
       this.loaded_projects = project_info_to_load.map(function (x) {
+        const workflow_stage_id = Workflow_main.get_workflow_stage_key(x.workflow_id, x.stage_id)
+
+        TTT.patch_local_settings_store.reportFoundStage({
+          type: TTT.project_type,
+          patch_id: TTT.patch_id,
+          workflow_stage_id: workflow_stage_id,
+          workflow_id: x.workflow_id,
+          stage_id: x.stage_id,
+          stage:  Workflow_main.getWorkflowStage(x.workflow_id, x.stage_id),
+          stage_selected: utils.boolean_undefined_to_false(Workflow_main.workflows[x.workflow_id].stages[x.stage_id].active)
+        })
         return {
           id: x.project_id,
           loaded: false,

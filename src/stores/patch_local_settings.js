@@ -35,6 +35,27 @@ export const usePatchLocalSettingsStore = defineStore('cumulatively_loaded_stage
       this._createPatchRecordIfRequired(patch_id)
       return this.value[patch_id]
     },
+    reportFoundStage ({
+      type, // purchase or rent
+      patch_id,
+      workflow_stage_id,
+      workflow_id,
+      stage_id,
+      stage,
+      stage_selected
+    }) {
+      //workflow_stage_id is the combined ID of workflow and stage
+      this._createPatchRecordIfRequired(patch_id)
+      if (!(workflow_stage_id in this.value[patch_id][type].cumulatively_loaded_stages)) {
+        this.value[patch_id][type].cumulatively_loaded_stages[workflow_stage_id] = {
+          workflow_stage_id: workflow_stage_id,
+          workflow_id: workflow_id,
+          stage_id: stage_id,
+          stage: stage,
+          selected: stage_selected
+        }
+      }
+    },
     reportFoundProject ({
       type, // purchase or rent
       patch_id,
@@ -48,16 +69,15 @@ export const usePatchLocalSettingsStore = defineStore('cumulatively_loaded_stage
       agent,
       agent_selected
     }) {
-      this._createPatchRecordIfRequired(patch_id)
-      if (!(workflow_stage_id in this.value[patch_id][type].cumulatively_loaded_stages)) {
-        this.value[patch_id][type].cumulatively_loaded_stages[workflow_stage_id] = {
-          workflow_stage_id: workflow_stage_id,
-          workflow_id: workflow_id,
-          stage_id: stage_id,
-          stage: stage,
-          selected: stage_selected
-        }
-      }
+      this.reportFoundStage({
+        type: type,
+        patch_id: patch_id,
+        workflow_stage_id: workflow_stage_id,
+        workflow_id: workflow_id,
+        stage_id: stage_id,
+        stage: stage,
+        stage_selected: stage_selected
+      })
       if (!(source in this.value[patch_id][type].cumulatively_loaded_sources)) {
         this.value[patch_id][type].cumulatively_loaded_sources[source] = {
           name: source,
