@@ -235,18 +235,6 @@ export default defineComponent({
         agent: agent,
         agent_selected: true
       })
-      if (!(source in this.cumulatively_loaded_sources)) {
-        this.cumulatively_loaded_sources[source] = {
-          name: source,
-          selected: true
-        }
-      }
-      if (!(agent in this.cumulatively_loaded_agents)) {
-        this.cumulatively_loaded_agents[agent] = {
-          name: agent,
-          selected: true
-        }
-      }
     }
   }
 })
