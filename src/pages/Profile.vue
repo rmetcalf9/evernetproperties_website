@@ -78,6 +78,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
 import { Notify } from 'quasar'
 import utils from '../utils.js'
 
@@ -89,8 +90,10 @@ export default defineComponent({
   name: 'ProfilePage',
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   components: {
@@ -139,6 +142,7 @@ export default defineComponent({
       utils.copyTextToClipboard2(this.pimsverfiylink, callback)
     },
     logout () {
+      this.dataCachesStore.reset()
       this.backend_connection_store.logout()
       this.$router.push("/tools")
     },
