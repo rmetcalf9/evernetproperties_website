@@ -37,6 +37,7 @@
             :cumulatively_loaded_sources="buy_cumulatively_loaded_sources"
             @filterchanged="buy_projecttablefilterchanged"
             @onRowClick="buy_onRowClick"
+            @refresh_button="refresh_button('purchase')"
           />
         </div>
         <div class="patch-button-bar">
@@ -57,6 +58,7 @@
             :cumulatively_loaded_sources="rent_cumulatively_loaded_sources"
             @filterchanged="rent_projecttablefilterchanged"
             @onRowClick="rent_onRowClick"
+            @refresh_button="refresh_button('rent')"
           />
           <div class="patch-button-bar">
             <q-btn color="primary" label="Add Lead" @click="$router.push('/tools/rentproject/enterlead?defaultpatch=' + patch_data.id)" />
@@ -91,7 +93,10 @@
 
 <script>
 import { defineComponent } from 'vue'
+
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import { Notify } from 'quasar'
 
 import ProjectData from '../../../components/ProjectData.vue'
@@ -112,8 +117,10 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -161,6 +168,18 @@ export default defineComponent({
     }
   },
   methods: {
+    refresh_button (project_type) {
+      this.dataCachesStore.reset()
+      this.refresh()
+      // In furute may refresh only rent or purchase
+      // if (project_type === 'rent') {
+      //   TTT.$refs.RentProjectData.xxx
+      //   console.log('refresh press rent')
+      // } else {
+      //   TTT.$refs.BuyProjectData.xxx
+      //   console.log('refresh press')
+      // }
+    },
     buy_onRowClick ({table_row, new_tab}) {
       if (new_tab) {
         const route = this.$router.resolve('/tools/brrcalc');

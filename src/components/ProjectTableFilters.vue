@@ -9,7 +9,6 @@
     <q-chip clickable @click="click_filter_chip('Sources')" :removable="isFiltered('Sources')" @remove="click_sources_select_all" color="primary" text-color="white" icon-remove="close">
       {{ filter_text('Sources') }}
     </q-chip>
-
     <q-dialog v-model="dialog_stages">
       <q-card class="todoitem-dialogcard">
         <q-card-section class="row items-center q-pb-none">

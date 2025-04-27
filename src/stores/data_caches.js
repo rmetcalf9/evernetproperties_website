@@ -4,7 +4,6 @@ import { defineStore } from 'pinia'
   This stoe is wiped when user logs out
 
   TODO:
-  4- add refresh option to patches page
   5- Invalidate options
 */
 

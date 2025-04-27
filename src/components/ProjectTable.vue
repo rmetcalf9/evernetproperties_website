@@ -1,14 +1,19 @@
 <template>
   <div class="projecttablecontainer">
     <div class="projecttablestyle">
-      <ProjectTableFilters
-        ref="ProjectTableFilters"
-        :projects="projects"
-        :cumulatively_loaded_stages="cumulatively_loaded_stages"
-        :cumulatively_loaded_agents="cumulatively_loaded_agents"
-        :cumulatively_loaded_sources="cumulatively_loaded_sources"
-        @filterchanged="(obj) => $emit('filterchanged',obj)"
-      />
+      <div class="row">
+        <div class="col-grow">
+          <ProjectTableFilters
+            ref="ProjectTableFilters"
+            :projects="projects"
+            :cumulatively_loaded_stages="cumulatively_loaded_stages"
+            :cumulatively_loaded_agents="cumulatively_loaded_agents"
+            :cumulatively_loaded_sources="cumulatively_loaded_sources"
+            @filterchanged="(obj) => $emit('filterchanged',obj)"
+          />
+        </div>
+        <q-btn icon="refresh" flat round dense @click="() => $emit('refresh_button')"/>
+      </div>
       <q-table
         flat bordered
         title="Projects"
@@ -101,7 +106,7 @@ import Workflow_main from '../components/Workflow/Workflow_main.js'
 export default defineComponent({
   name: 'ToolsCansavePatchePage',
   props: ['projects', 'prefiltered', 'cumulatively_loaded_stages', 'cumulatively_loaded_agents', 'cumulatively_loaded_sources'],
-  emits: ['filterchanged', 'onRowClick'],
+  emits: ['filterchanged', 'onRowClick', 'refresh_button'],
   components: {
     CommonBRRToolLink,
     ProjectTableFilters
