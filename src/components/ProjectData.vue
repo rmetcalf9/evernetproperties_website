@@ -218,7 +218,7 @@ export default defineComponent({
       }
       this.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + item_to_load.id,
+        url: '/projects/' + item_to_load.id,  // GET -> Loading
         method: 'GET',
         data: undefined,
         callback: callback

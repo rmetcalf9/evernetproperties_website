@@ -200,7 +200,7 @@ export default defineComponent({
       }
       TTT.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + TTT.$route.query.projectid,
+        url: '/projects/' + TTT.$route.query.projectid, // GET -> Loading
         method: 'GET',
         data: undefined,
         callback: callback

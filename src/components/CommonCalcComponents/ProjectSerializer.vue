@@ -88,7 +88,7 @@ export default defineComponent({
       }
       this.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/projects',
+        url: '/projects', // POST -> Saving
         method: 'POST',
         data: project_data,
         callback: callback

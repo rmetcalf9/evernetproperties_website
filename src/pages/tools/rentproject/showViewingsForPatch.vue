@@ -209,7 +209,7 @@ export default defineComponent({
       }
       this.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + id_of_project_to_load,
+        url: '/projects/' + id_of_project_to_load, // GET -> Loading
         method: 'GET',
         data: undefined,
         callback: callback
