@@ -71,6 +71,7 @@ import { Notify, useQuasar } from 'quasar'
 import BrrToolbar from '../../../components/BrrCalc/BrrToolbar/BrrToolbar.vue'
 
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
 
 import LeadInformation from '../../../components/ProjectTypeRentComponents/LeadInformation.vue'
 import ViewingInfo from '../../../components/ProjectTypeRentComponents/ViewingInfo.vue'
@@ -97,9 +98,11 @@ export default defineComponent({
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     const q = useQuasar()
+    const dataCachesStore = useDataCachesStore()
     return {
       q,
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -198,11 +201,11 @@ export default defineComponent({
         ok: TTT.load_project_api_success,
         error: TTT.load_project_api_fail
       }
-      TTT.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + TTT.$route.query.projectid, // GET -> Loading
-        method: 'GET',
-        data: undefined,
+      TTT.dataCachesStore.get({
+        backend_connection_store: TTT.backend_connection_store,
+        object_type: 'projects',
+        object_id: TTT.$route.query.projectid,
+        skip_cache: false,
         callback: callback
       })
     },

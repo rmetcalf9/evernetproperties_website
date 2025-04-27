@@ -191,7 +191,9 @@ import Todos from '../../components/CommonCalcComponents/Todos.vue'
 import Workflow from '../../components/CommonCalcComponents/Workflow.vue'
 
 import ProjectSerializer from '../../components/CommonCalcComponents/ProjectSerializer.vue'
+
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
 
 import common_constants from '../../components/common_constants.js'
 
@@ -223,8 +225,10 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -613,11 +617,11 @@ export default defineComponent({
         ok: TTT.load_project_api_success,
         error: TTT.load_project_api_fail
       }
-      TTT.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + TTT.$route.query.projectid, // GET -> Loading
-        method: 'GET',
-        data: undefined,
+      TTT.dataCachesStore.get({
+        backend_connection_store: TTT.backend_connection_store,
+        object_type: 'projects',
+        object_id: TTT.$route.query.projectid,
+        skip_cache: false,
         callback: callback
       })
     }

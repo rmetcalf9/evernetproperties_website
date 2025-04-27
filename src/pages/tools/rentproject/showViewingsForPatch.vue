@@ -44,7 +44,10 @@
 
 <script>
 import { defineComponent } from 'vue'
+
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import { DateTime } from 'luxon'
 import 'add-to-calendar-button'
 import utils from '../../../components/utils.js'
@@ -57,8 +60,10 @@ export default defineComponent({
   name: 'ShowViewingsForPatchPage',
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store: backend_connection_store
+      backend_connection_store: backend_connection_store,
+      dataCachesStore: dataCachesStore
     }
   },
   data () {
@@ -207,11 +212,11 @@ export default defineComponent({
           })
         }
       }
-      this.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + id_of_project_to_load, // GET -> Loading
-        method: 'GET',
-        data: undefined,
+      this.dataCachesStore.get({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'projects',
+        object_id: id_of_project_to_load,
+        skip_cache: false,
         callback: callback
       })
     }

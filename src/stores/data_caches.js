@@ -4,8 +4,6 @@ import { defineStore } from 'pinia'
   This stoe is wiped when user logs out
 
   TODO:
-  2- All loads go through here
-  3- Loads check here first then go through
   4- add refresh option to patches page
   5- Invalidate options
 */
@@ -85,7 +83,7 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
       }
       backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
-        url: valid_objects[object_type].url + '/' + object_id,  // GET -> Loading
+        url: valid_objects[object_type].url + '/' + object_id,
         method: 'GET',
         data: undefined,
         callback: callback2
