@@ -190,7 +190,7 @@ import ActivityLog from '../../components/CommonCalcComponents/ActivityLog.vue'
 import Todos from '../../components/CommonCalcComponents/Todos.vue'
 import Workflow from '../../components/CommonCalcComponents/Workflow.vue'
 
-import ProjectSerializer from '../../components/BrrCalc/ProjectSerializer.vue'
+import ProjectSerializer from '../../components/CommonCalcComponents/ProjectSerializer.vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 
 import common_constants from '../../components/common_constants.js'

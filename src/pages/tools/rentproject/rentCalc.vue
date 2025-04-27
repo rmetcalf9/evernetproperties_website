@@ -79,7 +79,7 @@ import ActivityLog from '../../../components/CommonCalcComponents/ActivityLog.vu
 import Todos from '../../../components/CommonCalcComponents/Todos.vue'
 import Workflow from '../../../components/CommonCalcComponents/Workflow.vue'
 
-import ProjectSerializer from '../../../components/BrrCalc/ProjectSerializer.vue'
+import ProjectSerializer from '../../../components/CommonCalcComponents/ProjectSerializer.vue'
 import common_constants from '../../../components/common_constants.js'
 
 

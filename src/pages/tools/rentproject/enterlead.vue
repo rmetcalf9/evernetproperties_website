@@ -39,7 +39,7 @@ import ActivityLog from '../../../components/CommonCalcComponents/ActivityLog.vu
 import Workflow from '../../../components/CommonCalcComponents/Workflow.vue'
 import Workflow_main from '../../../components/Workflow/Workflow_main.js'
 
-import ProjectSerializer from '../../../components/BrrCalc/ProjectSerializer.vue'
+import ProjectSerializer from '../../../components/CommonCalcComponents/ProjectSerializer.vue'
 import common_constants from '../../../components/common_constants.js'
 
 import { Notify } from 'quasar'
