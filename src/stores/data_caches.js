@@ -4,7 +4,6 @@ import { defineStore } from 'pinia'
   This stoe is wiped when user logs out
 
   TODO:
-  1- All saves for project object must go through here
   2- All loads go through here
   3- Loads check here first then go through
   4- Invalidate options
@@ -12,7 +11,9 @@ import { defineStore } from 'pinia'
 
 // Only objects in this dict are valid objects to cache
 const valid_objects = {
-  projects: {}
+  projects: {
+    url: '/projects'
+  }
 }
 
 function get_blank_cache_data () {
@@ -37,6 +38,27 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
   actions: {
     reset () {
       this.cache_data = get_blank_cache_data()
+    },
+    save ({backend_connection_store, object_type, object_data, callback}) {
+      const TTT = this
+      if (!Object.hasOwn(valid_objects, object_type)) {
+        callback.error('Tried to save invalid object type ' + object_type)
+        return
+      }
+      const callback2 = {
+        ok: function (response) {
+          TTT.cache_data[object_type][response.data.id] = response.data
+          callback.ok(response)
+        },
+        error: callback.error
+      }
+      backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: valid_objects[object_type].url,
+        method: 'POST',
+        data: object_data,
+        callback: callback2
+      })
     }
   }
 })

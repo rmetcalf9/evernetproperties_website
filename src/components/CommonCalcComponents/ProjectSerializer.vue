@@ -6,6 +6,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
 import { Notify } from 'quasar'
 
 
@@ -25,8 +26,10 @@ export default defineComponent({
 
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -86,11 +89,10 @@ export default defineComponent({
         ok: TTT.save_api_call_success,
         error: TTT.save_api_call_fail
       }
-      this.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/projects', // POST -> Saving
-        method: 'POST',
-        data: project_data,
+      this.dataCachesStore.save({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'projects',
+        object_data: project_data,
         callback: callback
       })
     },
