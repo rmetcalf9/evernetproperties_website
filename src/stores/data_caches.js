@@ -6,7 +6,8 @@ import { defineStore } from 'pinia'
   TODO:
   2- All loads go through here
   3- Loads check here first then go through
-  4- Invalidate options
+  4- add refresh option to patches page
+  5- Invalidate options
 */
 
 // Only objects in this dict are valid objects to cache
@@ -40,11 +41,11 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
       this.cache_data = get_blank_cache_data()
     },
     save ({backend_connection_store, object_type, object_data, callback}) {
-      const TTT = this
       if (!Object.hasOwn(valid_objects, object_type)) {
         callback.error('Tried to save invalid object type ' + object_type)
         return
       }
+      const TTT = this
       const callback2 = {
         ok: function (response) {
           TTT.cache_data[object_type][response.data.id] = response.data
@@ -57,6 +58,36 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
         url: valid_objects[object_type].url,
         method: 'POST',
         data: object_data,
+        callback: callback2
+      })
+    },
+    get ({backend_connection_store, object_type, object_id, skip_cache, callback}) {
+      if (!Object.hasOwn(valid_objects, object_type)) {
+        callback.error('Tried to save invalid object type ' + object_type)
+        return
+      }
+      const TTT = this
+      if (!skip_cache) {
+        if (Object.hasOwn(TTT.cache_data[object_type], object_id)) {
+          const cache_response = {
+            data: TTT.cache_data[object_type][object_id]
+          }
+          callback.ok(cache_response)
+          return
+        }
+      }
+      const callback2 = {
+        ok: function (response) {
+          TTT.cache_data[object_type][response.data.id] = response.data
+          callback.ok(response)
+        },
+        error: callback.error
+      }
+      backend_connection_store.call_api({
+        apiprefix: 'privateUserAPIPrefix',
+        url: valid_objects[object_type].url + '/' + object_id,  // GET -> Loading
+        method: 'GET',
+        data: undefined,
         callback: callback2
       })
     }

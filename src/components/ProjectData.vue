@@ -10,6 +10,7 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { usePatchLocalSettingsStore } from 'stores/patch_local_settings'
+import { useDataCachesStore } from 'stores/data_caches'
 import Workflow_main from '../components/Workflow/Workflow_main.js'
 import utils from '../components/utils.js'
 import commonProjectValues from '../components/commonProjectValues.js'
@@ -26,9 +27,11 @@ export default defineComponent({
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     const patch_local_settings_store = usePatchLocalSettingsStore()
+    const dataCachesStore = useDataCachesStore()
     return {
       backend_connection_store,
-      patch_local_settings_store
+      patch_local_settings_store,
+      dataCachesStore
     }
   },
   props: ['project_type'],
@@ -216,11 +219,11 @@ export default defineComponent({
           TTT.recursive_load_project_details()
         }
       }
-      this.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + item_to_load.id,  // GET -> Loading
-        method: 'GET',
-        data: undefined,
+      this.dataCachesStore.get({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'projects',
+        object_id: item_to_load.id,
+        skip_cache: false,
         callback: callback
       })
     },
