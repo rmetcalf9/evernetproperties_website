@@ -284,7 +284,13 @@ export default defineComponent({
       Object.keys(TTT.patch_data.workflow_lookup).map(function (workflow_id) {
         Object.keys(TTT.patch_data.workflow_lookup[workflow_id]).map(function (stage_id) {
           TTT.patch_data.workflow_lookup[workflow_id][stage_id].map(function (project_id) {
-            if (TTT.patch_data.typed_projects.rent.includes(project_id)) {
+            const isRentProject = function (project_id) {
+              if (typeof (TTT.patch_data.typed_projects.rent) === 'undefined') {
+                return false
+              }
+              return TTT.patch_data.typed_projects.rent.includes(project_id)
+            }
+            if (isRentProject(project_id)) {
               rent_project_info_to_load.push({
                 workflow_id: workflow_id,
                 stage_id: stage_id,
