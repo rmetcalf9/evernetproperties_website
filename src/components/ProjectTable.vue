@@ -253,6 +253,7 @@ export default defineComponent({
     }
   },
   mounted () {
+    this.$refs.ProjectTableFilters.emit_filter_changed_signal()
   }
 })
 </script>
