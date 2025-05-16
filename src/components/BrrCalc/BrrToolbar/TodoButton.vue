@@ -56,6 +56,7 @@
 import { defineComponent } from 'vue'
 import utils from '../../../components/utils.js'
 import common_constants from '../../../components/common_constants.js'
+import { uuidv4 } from 'node-common-library'
 
 function default_dialog_data () {
   return {
@@ -109,7 +110,7 @@ export default defineComponent({
       const due_date = new Date(new Date().getTime()+(days_until_due*24*60*60*1000))
 
       const post_data = {
-          'id': utils.uuidv4(),
+          'id': uuidv4(),
           'weight': '100',
           'due_date': due_date.toISOString(),
           'description': this.dialog_data.description,

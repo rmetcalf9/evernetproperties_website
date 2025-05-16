@@ -17,6 +17,7 @@ import { defineComponent } from 'vue'
 import CallAssistCall from './CallAssistCall.vue'
 import utils from '../../components/utils.js'
 import { Notify } from 'quasar'
+import { uuidv4 } from 'node-common-library'
 
 // See README.md for action types and outcomes
 
@@ -69,7 +70,7 @@ export default defineComponent({
       this.batchdata = batchdata
 
       let review_stage = {
-        id: utils.uuidv4(),
+        id: uuidv4(),
         name: 'Prepare for call',
         items: [{ type: 'ShowCallAim'}, { type: 'ShowStages'}, { type: 'ShowLead'}],
         actions: [
@@ -110,11 +111,11 @@ export default defineComponent({
       Object.keys(TTT.calltemplate.stages).map(function (stageidx) {
         let stage = TTT.calltemplate.stages[stageidx]
         stage.items = stage.items.map(function (item) {
-          item.id=utils.uuidv4()
+          item.id=uuidv4()
           return item
         })
         stage.post_action_items = stage.post_action_items.map(function (item) {
-          item.id=utils.uuidv4()
+          item.id=uuidv4()
           return item
         })
       })

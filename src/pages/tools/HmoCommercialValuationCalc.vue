@@ -170,10 +170,11 @@ import { defineComponent } from 'vue'
 import utils from '../../components/utils.js'
 import { Notify } from 'quasar'
 import FeatureTable from '../../components/CommonCalcComponents/FeatureTable.vue'
+import { uuidv4 } from 'node-common-library'
 
 function getdefaultcomp () {
   return {
-    id: utils.uuidv4(),
+    id: uuidv4(),
     price: '200000',
     rooms: 6,
     use: true

@@ -51,7 +51,7 @@ import { defineComponent } from 'vue'
 import mustach_utils from '../mustach_utils.js'
 import appointment_utils from '../../../components/CallAssist/appointment_utils.js'
 import utils from '../../../components/utils.js'
-
+import { uuidv4 } from 'node-common-library'
 
 function add_one_hour_to_time(time) {
   let hour = parseInt(time.substr(0,2)) + 1
@@ -81,7 +81,7 @@ function outcome_callback(item_data, outcome_obj, item) {
   })[0]
 
   const reserved_slot_obj = {
-    id: utils.uuidv4(),
+    id: uuidv4(),
     start: item_data.selection_time,
     end: add_one_hour_to_time(item_data.selection_time),
     text: outcome_obj.current_lead.name

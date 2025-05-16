@@ -15,7 +15,7 @@ change.save()
 */
 import Workflow_main from './components/Workflow/Workflow_main.js'
 import utils from './components/utils.js'
-
+import { uuidv4 } from 'node-common-library'
 
 function change_workflow_state(proj, {workflow_id, workflow_stage}) {
   proj.workflow.workflow_used_id = workflow_id
@@ -23,7 +23,7 @@ function change_workflow_state(proj, {workflow_id, workflow_stage}) {
 }
 function log_activity(proj, {type, text, head_notes}) {
   proj.activity_log.push({
-    id: utils.uuidv4(),
+    id: uuidv4(),
     type: type,
     timestamp: (new Date()).toISOString(),
     text: text,

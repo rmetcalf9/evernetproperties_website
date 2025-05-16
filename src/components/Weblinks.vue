@@ -35,13 +35,8 @@ import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import { Notify } from 'quasar'
 import utils from '../components/utils.js'
+import { uuidv4 } from 'node-common-library'
 
-
-function uuidv4() {
-  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
-    (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
-  );
-}
 
 function new_weblink_record(label, displaytext) {
   return {

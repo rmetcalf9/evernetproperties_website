@@ -65,6 +65,7 @@ import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 import utils from '../components/utils.js'
 import timeUtils from '../components/timeUtils.js'
+import { uuidv4 } from 'node-common-library'
 
 export default defineComponent({
   name: 'BatchCallLeadsAddBlockDialog',
@@ -142,7 +143,7 @@ export default defineComponent({
         return x.id === TTT.selected_day
       })[0]
       day_to_change.reserved_slots.push({
-        id: utils.uuidv4(),
+        id: uuidv4(),
         start: this.selected_start_time,
         end: this.selected_end_time,
         text: this.text
