@@ -27,6 +27,7 @@ const routes = [
       { path: 'tools/rentproject/rentcalc', component: () => import('pages/tools/rentproject/rentCalc.vue') },
       { path: 'tools/rentproject/showviewings', component: () => import('pages/tools/rentproject/showViewings.vue') },
       { path: 'tools/rentproject/showviewingsforpatch', component: () => import('pages/tools/rentproject/showViewingsForPatch.vue') },
+      { path: 'tools/location', component: () => import('pages/tools/Location.vue') },
     ]
   },
   {

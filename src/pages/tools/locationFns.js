@@ -1,0 +1,60 @@
+function getLocation ({
+  attemptsRemaining,
+  bestAttemptSoFar,
+  callback,
+  allowLowAccuracy
+}) {
+  // console.log('Start of get location ', allowLowAccuracy)
+  var timeout = 8000
+  var enableHighAccuracy = true
+  var maximumAge = 0
+  if (typeof (allowLowAccuracy) === 'undefined') {
+    allowLowAccuracy = false
+  }
+  if (allowLowAccuracy) {
+    // don't worry about retries only do once
+    attemptsRemaining = 1
+    timeout = undefined
+    enableHighAccuracy = false
+    maximumAge = undefined
+  }
+  if (bestAttemptSoFar.coords.accuracy < 11) {
+    // We have accurate result, no reason to keep trying
+    attemptsRemaining = 0
+  }
+  if (attemptsRemaining === 0) {
+    var evidence = {
+      coords: {
+        latitude: bestAttemptSoFar.coords.latitude,
+        longitude: bestAttemptSoFar.coords.longitude,
+        speed: bestAttemptSoFar.coords.speed,
+        heading: bestAttemptSoFar.coords.heading,
+        altitude: bestAttemptSoFar.coords.altitude,
+        accuracy: bestAttemptSoFar.coords.accuracy,
+        altitudeAccuracy: bestAttemptSoFar.coords.altitudeAccuracy
+      },
+      timestamp: bestAttemptSoFar.timestamp
+    }
+    callback.ok(evidence)
+    return
+  }
+  // get position
+  navigator.geolocation.getCurrentPosition(pos => {
+    // console.log('Got Gelocation with accuracy:', pos.coords.accuracy)
+    if (pos.coords.accuracy < bestAttemptSoFar.coords.accuracy) {
+      bestAttemptSoFar = pos
+    }
+    getLocation({
+      attemptsRemaining: attemptsRemaining - 1,
+      bestAttemptSoFar: bestAttemptSoFar,
+      callback: callback
+    })
+  }, err => {
+    callback.error(err)
+  },
+  { maximumAge: maximumAge, timeout: timeout, enableHighAccuracy: enableHighAccuracy })
+}
+
+export default {
+  getLocation: getLocation
+}

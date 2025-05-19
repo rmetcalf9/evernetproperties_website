@@ -102,6 +102,29 @@
       <h3 style="margin-bottom: 0px;">Tools</h3>
       Useful tools and calculators for property tasks.
       <div class="row">
+        <q-card
+          v-if="showlocation"
+          inline class="q-ma-sm card-style tool-card" @click="$router.push('/tools/location')"
+        >
+          <q-card-section>
+            <div class="text-h6">Around Me</div>
+            <div class="row">
+              <div>
+                <img
+                  alt="Item Picture"
+                  src="~assets/location.png"
+                  class="tool-picture"
+                >
+              </div>
+              <div class="col q-ma-sm" style="min-width: 158px;">
+                <div style="height: 150px;">Use your phone's GPS to find information about your current location. When standing in front of a property use this tool to quickly access Rightmove listings, spare room, EPC, etc. for the location you are standing.</div>
+                <div align="right">
+                  <q-btn round  color="primary" icon="info" />
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
         <q-card inline class="q-ma-sm card-style tool-card" @click="$router.push('/tools/simpleroicalc')">
           <q-card-section>
             <div class="text-h6">Simple ROI Calculator</div>
@@ -194,6 +217,15 @@ export default defineComponent({
     }
   },
   computed: {
+    showlocation () {
+      if (featureflags.location_tool) {
+        return true
+      }
+      if (this.isAdmin) {
+        return true
+      }
+      return false
+    },
     featureflags () {
       return featureflags
     },
@@ -208,6 +240,9 @@ export default defineComponent({
         return false
       }
       return !this.security_role_cansave
+    },
+    isAdmin () {
+      return this.backend_connection_store.hasRole({role: 'admin'})
     }
   },
   methods: {
