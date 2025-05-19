@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 function getLocation ({
   attemptsRemaining,
   bestAttemptSoFar,
@@ -55,6 +57,51 @@ function getLocation ({
   { maximumAge: maximumAge, timeout: timeout, enableHighAccuracy: enableHighAccuracy })
 }
 
+function getPostcode (callback, lat, long) {
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: 'https://api.postcodes.io/postcodes?longitude=' + lat + '&latitude=' + long + '',
+    headers: {
+      'Accept': 'application/json'
+    }
+  };
+
+
+  axios.request(config)
+  .then((response) => {
+    callback.ok(response)
+  })
+  .catch((error) => {
+    callback.error(err)
+  });
+
+}
+
+function getRightmoveLocationCode (callback, outcode, incode) {
+  console.log('TODO getRightmoveLocationCode', outcode, incode)
+
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: 'https://los.rightmove.co.uk/typeahead?query=SE6+2du&limit=10&exclude=STREET',
+  };
+
+
+  axios.request(config)
+  .then((response) => {
+    console.log('DDDD', response)
+    // callback.ok(response)
+  })
+  .catch((error) => {
+    console.log('RRR', error)
+    // callback.error(err)
+  });
+
+}
+
 export default {
-  getLocation: getLocation
+  getLocation: getLocation,
+  getPostcode: getPostcode,
+  getRightmoveLocationCode: getRightmoveLocationCode
 }
