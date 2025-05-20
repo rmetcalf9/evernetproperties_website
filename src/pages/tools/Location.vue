@@ -24,61 +24,83 @@
           />
         </q-tabs>
         <div>Links to external sites providing information about this area</div>
-        <div class="locationpage-extlinkbuttonlist">
-          <q-btn
-            label="xxx"
-            @click="temp(cur_postcode_data)"
-          />
-          <q-btn
-            label="Rightmove Sold House Prices"
-            @click="goto_url('https://www.rightmove.co.uk/house-prices/' + get_rightmovesold_postcode(cur_postcode_data) + '.html?radius=0.5')"
+        <div class="locationpage-extlinkbuttonlist row">
+          <div class="locationpage-extlinkbuttonlist-rightmove column wrap justify-center items-center content-center">
+            <h1>Rightmove</h1>
+            <div><q-btn
+              v-if="is_rightmoveid_loaded(cur_postcode_data)"
+              label="Sale"
+              @click="goto_url(get_rightmove_url(cur_postcode_data, 'BUY'))"
+              color="primary"
+            /></div>
+            <div><q-btn
+              v-if="is_rightmoveid_loaded(cur_postcode_data)"
+              label="Rent"
+              @click="goto_url(get_rightmove_url(cur_postcode_data, 'RENT'))"
+              color="primary"
+            /></div>
+            <div><q-btn
+              v-if="is_rightmoveid_loaded(cur_postcode_data)"
+              label="Student Rent"
+              @click="goto_url(get_rightmove_url(cur_postcode_data, 'STUDENTS_RENT'))"
+              color="primary"
+            /></div>
+            <div><q-btn
+              label="Sold House Prices"
+              @click="goto_url('https://www.rightmove.co.uk/house-prices/' + get_rightmovesold_postcode(cur_postcode_data) + '.html?radius=0.5')"
+              color="primary"
+            /></div>
+          </div>
+          <div><q-btn
+            label="Spareroom"
+            @click="goto_url('https://www.spareroom.co.uk/flatshare/?search_id=&location=' + get_police_postcode(cur_postcode_data) + '')"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="Openrent"
             @click="goto_url('https://www.openrent.co.uk/properties-to-rent/' + get_rightmovesold_postcode(cur_postcode_data) + '')"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="AirBnb"
             @click="goto_url('https://www.airbnb.co.uk/s/' + get_rightmovesold_postcode(cur_postcode_data) + '/homes?refinement_paths%5B%5D=%2Fhomes&flexible_trip_lengths%5B%5D=one_week&price_filter_input_type=2&channel=EXPLORE&search_type=search_query')"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="EPCs"
             @click="goto_url('https://find-energy-certificate.service.gov.uk/find-a-certificate/search-by-postcode?postcode=' + get_epc_postcode(cur_postcode_data) + '')"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="UK Gov planning data"
             @click="goto_url(get_ukgovplanningurl(cur_postcode_data))"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="Streetcheck"
             @click="goto_url('https://www.streetcheck.co.uk/postcode/' + get_streetcheck_postcode(cur_postcode_data) + '')"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="LHA Rates"
             @click="goto_url('https://lha-direct.voa.gov.uk/SearchResults.aspx?Postcode=' + get_lharate_postcode(cur_postcode_data) + '&LHACategory=999&Month=5&Year=2025&SearchPageParameters=true')"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="Google Search"
             @click="goto_url('https://www.google.com/search?q=' + get_epc_postcode(cur_postcode_data) + '')"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="Census"
             @click="goto_url('https://www.nomisweb.co.uk/reports/localarea?search=' + get_census_postcode(cur_postcode_data) + '')"
             color="primary"
-          />
-          <q-btn
+          /></div>
+          <div><q-btn
             label="Crime"
             @click="goto_url('https://www.police.uk/pu/your-area/?q=' +  get_police_postcode(cur_postcode_data) + '')"
             color="primary"
-          />
+          /></div>
         </div>
         <div v-html="postcode_data_div"></div>
       </div>
@@ -86,9 +108,8 @@
   </q-page>
 </template>
 
-//https://www.police.uk/pu/your-area/?q=SE62DU
+//
 
-//https://www.rightmove.co.uk/property-for-sale/map.html?keywords=&sortType=2&viewType=MAP&channel=BUY&index=0&radius=0.25&locationIdentifier=POSTCODE%5E1222222
 
 <script>
 import { defineComponent } from 'vue'
@@ -106,7 +127,8 @@ export default defineComponent({
       error_message: '',
       cur_location: {},
       postcodes: [],
-      cur_postcode: ''
+      cur_postcode: '',
+      rmlocationcodes: {}
     }
   },
   computed: {
@@ -163,6 +185,19 @@ export default defineComponent({
     }
   },
   methods: {
+    is_rightmoveid_loaded (postcodedata) {
+      return Object.prototype.hasOwnProperty.call(this.rmlocationcodes, postcodedata.postcode)
+    },
+    get_rightmove_url (postcodedata, channel) {
+      var startpart = 'property-for-sale'
+      if (channel==='RENT') {
+        startpart = 'property-to-rent'
+      }
+      if (channel==='STUDENTS_RENT') {
+        startpart = 'student-accommodation'
+      }
+      return 'https://www.rightmove.co.uk/' + startpart + '/map.html?keywords=&sortType=2&viewType=MAP&channel=' + channel  + '&index=0&radius=0.25&locationIdentifier=POSTCODE%5E' + this.rmlocationcodes[postcodedata.postcode] + ''
+    },
     get_police_postcode (postcodedata) {
       return postcodedata.outcode.toUpperCase() + postcodedata.incode.toUpperCase()
     },
@@ -177,12 +212,6 @@ export default defineComponent({
     },
     get_ukgovplanningurl (postcodedata) {
       return 'https://www.planning.data.gov.uk/map/#' + postcodedata.latitude + ',' + postcodedata.longitude + ',14.800276418264161z'
-    },
-    temp (postcodedata) {
-      const callback = {}
-      console.log(postcodedata)
-      // locationFns.getRightmoveLocationCode(callback, postcodedata.outcode, postcodedata.incode)
-
     },
     get_rightmovesold_postcode (postcode) {
       return postcode.outcode.toLowerCase() + '-' + postcode.incode.toLowerCase()
@@ -207,21 +236,24 @@ export default defineComponent({
         ok: this.rescan_positive,
         error: this.rescan_negative
       }
-      // locationFns.getLocation({
-      //   attemptsRemaining: 4,
-      //   bestAttemptSoFar: bestAttemptSoFar,
-      //   callback: callback,
-      //   allowLowAccuracy: false
-      // })
-      // "https://api.postcodes.io/postcodes?longitude=51.4430773&latitude=-0.0138776"
-      // 'https://api.postcodes.io/postcodes?longitude=-0.0138776&latitude=51.4430773',
-
-      callback.ok({
-        coords: {
-          latitude: -0.0138776,
-          longitude: 51.4430773
-        }
-      })
+      const useDevLocation = true
+      if (useDevLocation) {
+        callback.ok({
+          coords: {
+            latitude: -0.0138776,
+            longitude: 51.4430773
+          }
+        })
+      } else {
+        locationFns.getLocation({
+          attemptsRemaining: 4,
+          bestAttemptSoFar: bestAttemptSoFar,
+          callback: callback,
+          allowLowAccuracy: false
+        })
+        // "https://api.postcodes.io/postcodes?longitude=51.4430773&latitude=-0.0138776"
+        // 'https://api.postcodes.io/postcodes?longitude=-0.0138776&latitude=51.4430773',
+      }
     },
     rescan_positive (response) {
       this.status = 3
@@ -244,11 +276,26 @@ export default defineComponent({
       })
     },
     findpostcode_positive (response) {
+      const TTT = this
       this.status = 4
       this.postcodes = response.data.result
       if (this.postcodes.length > 0) {
         this.cur_postcode = this.postcodes[0].postcode
       }
+      Object.keys(this.postcodes).forEach(function (x) {
+        const curpostcode = TTT.postcodes[x]
+        if (!TTT.rmlocationcodes.hasOwnProperty(curpostcode.postcode)) {
+          const callback = {
+            ok: function (response) {
+              TTT.rmlocationcodes[curpostcode.postcode] = JSON.parse(response.data).matches[0].id
+            },
+            error: function (error) {
+              console.log('Error looking up rightmove location code', error)
+            }
+          }
+          locationFns.getRightmoveLocationCode (callback, curpostcode.outcode, curpostcode.incode)
+        }
+      })
     },
     findpostcode_negative (response) {
       this.status = 2
@@ -280,5 +327,18 @@ export default defineComponent({
 .locationpage-extlinkbuttonlist button {
   margin-left: 5px;
   margin-right: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
+.locationpage-extlinkbuttonlist-rightmove {
+  background: lightblue;
+  padding: 10px;
+}
+.locationpage-extlinkbuttonlist-rightmove h1 {
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: 600;
+  margin: 10px;
+}
+
 </style>

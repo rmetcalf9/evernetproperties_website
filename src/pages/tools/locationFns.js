@@ -73,29 +73,25 @@ function getPostcode (callback, lat, long) {
     callback.ok(response)
   })
   .catch((error) => {
-    callback.error(err)
+    callback.error(error)
   });
 
 }
 
 function getRightmoveLocationCode (callback, outcode, incode) {
-  console.log('TODO getRightmoveLocationCode', outcode, incode)
-
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: 'https://los.rightmove.co.uk/typeahead?query=SE6+2du&limit=10&exclude=STREET',
+    url: 'https://api.metcarob.com/property_backend/v0/public/api/rmproxy/typeahead?query=' + outcode + '+' + incode + '&limit=10&exclude=STREET',
   };
 
 
   axios.request(config)
   .then((response) => {
-    console.log('DDDD', response)
-    // callback.ok(response)
+    callback.ok(response)
   })
   .catch((error) => {
-    console.log('RRR', error)
-    // callback.error(err)
+    callback.error(error)
   });
 
 }
