@@ -236,7 +236,7 @@ export default defineComponent({
         ok: this.rescan_positive,
         error: this.rescan_negative
       }
-      const useDevLocation = true
+      const useDevLocation = false
       if (useDevLocation) {
         callback.ok({
           coords: {
