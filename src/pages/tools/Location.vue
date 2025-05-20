@@ -255,8 +255,8 @@ export default defineComponent({
       if (useDevLocation) {
         callback.ok({
           coords: {
-            latitude: -0.0138776,
-            longitude: 51.4430773
+            latitude: 51.4430773,
+            longitude: -0.0138776
           }
         })
       } else {
@@ -277,7 +277,7 @@ export default defineComponent({
         ok: this.findpostcode_positive,
         error: this.findpostcode_negative
       }
-      locationFns.getPostcode(callback, this.cur_location.coords.latitude, this.cur_location.coords.longitude)
+      locationFns.getPostcode(callback, this.cur_location.coords.longitude, this.cur_location.coords.latitude)
     },
     rescan_negative (response) {
       this.status = STATUS_FAILEDTOFINDLOCATION
@@ -294,6 +294,11 @@ export default defineComponent({
       console.log('findpostcode_positive', response)
       const TTT = this
       this.status = STATUS_POSTCODEFOUND
+      if (response.data.result === null) {
+        this.status = STATUS_FAILEDTOFINDPOSTCODE
+        this.error_message = 'Failed to find postcode - No postcodes found for this location'
+        return
+      }
       this.postcodes = response.data.result
       if (this.postcodes.length > 0) {
         this.cur_postcode = this.postcodes[0].postcode
