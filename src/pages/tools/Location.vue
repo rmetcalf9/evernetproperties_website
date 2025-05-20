@@ -15,14 +15,12 @@
         </tr>
       </table>
       <div v-if="status > 4">
-        <q-tabs
-          v-model=cur_postcode
-        >
-          <q-tab v-for="postcode in postcodes" :key='postcode.postcode'
-            :name="postcode.postcode"
-            :label="postcode.postcode"
+        <div class="locationpage-postcodeselector">
+          <q-select
+            v-model="cur_postcode"
+            :options="button_toggle_options" :label="button_toggle_options.length.toString() + ' postcodes found'" emit-value
           />
-        </q-tabs>
+        </div>
         <div>Links to external sites providing information about this area</div>
         <div class="locationpage-extlinkbuttonlist row">
           <div class="locationpage-extlinkbuttonlist-rightmove column wrap justify-center items-center content-center">
@@ -116,7 +114,7 @@ import locationFns from './locationFns.js'
 import { Notify } from 'quasar'
 
 
-const useDevLocation = false
+const useDevLocation = true
 
 const STATUS_FAILEDTOFINDLOCATION= 2   //Value appears in template
 const STATUS_FINDINGPOSTCODE= 3
@@ -177,6 +175,17 @@ export default defineComponent({
       return this.postcodes.filter(function (x) {
         return x.postcode === TTT.cur_postcode
       })[0]
+    },
+    button_toggle_options () {
+      if (this.postcodes === null) {
+        return []
+      }
+      return this.postcodes.map(function (x) {
+        return {
+          label: x.postcode,
+          value: x.postcode
+        }
+      })
     },
     status_text () {
       if (this.status===0) {
@@ -379,6 +388,9 @@ export default defineComponent({
   margin: 10px;
 }
 .postcode_data_title_field {
+  max-width: 200px;
+}
+.locationpage-postcodeselector {
   max-width: 200px;
 }
 
