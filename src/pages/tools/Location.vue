@@ -291,6 +291,7 @@ export default defineComponent({
       })
     },
     findpostcode_positive (response) {
+      console.log('findpostcode_positive', response)
       const TTT = this
       this.status = STATUS_POSTCODEFOUND
       this.postcodes = response.data.result
