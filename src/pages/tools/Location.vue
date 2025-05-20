@@ -114,7 +114,7 @@ import locationFns from './locationFns.js'
 import { Notify } from 'quasar'
 
 
-const useDevLocation = true
+const useDevLocation = false
 
 const STATUS_FAILEDTOFINDLOCATION= 2   //Value appears in template
 const STATUS_FINDINGPOSTCODE= 3
