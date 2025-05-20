@@ -48,6 +48,18 @@
               @click="goto_url('https://www.rightmove.co.uk/house-prices/' + get_rightmovesold_postcode(cur_postcode_data) + '.html?radius=0.5')"
               color="primary"
             /></div>
+            <div><q-btn
+              v-if="is_rightmoveid_loaded(cur_postcode_data)"
+              label="Commercial Sale"
+              @click="goto_url(get_rightmove_url(cur_postcode_data, 'COMMERCIAL_BUY'))"
+              color="primary"
+            /></div>
+            <div><q-btn
+              v-if="is_rightmoveid_loaded(cur_postcode_data)"
+              label="Commercial Rent"
+              @click="goto_url(get_rightmove_url(cur_postcode_data, 'COMMERCIAL_RENT'))"
+              color="primary"
+            /></div>
           </div>
           <div><q-btn
             label="Spareroom"
@@ -215,13 +227,22 @@ export default defineComponent({
     },
     get_rightmove_url (postcodedata, channel) {
       var startpart = 'property-for-sale'
+      var radius = '0.25'
       if (channel==='RENT') {
         startpart = 'property-to-rent'
       }
       if (channel==='STUDENTS_RENT') {
         startpart = 'student-accommodation'
       }
-      return 'https://www.rightmove.co.uk/' + startpart + '/map.html?keywords=&sortType=2&viewType=MAP&channel=' + channel  + '&index=0&radius=0.25&locationIdentifier=POSTCODE%5E' + this.rmlocationcodes[postcodedata.postcode] + ''
+      if (channel==='COMMERCIAL_RENT') {
+        startpart = 'commercial-property-to-let'
+        radius = '0.5'
+      }
+      if (channel==='COMMERCIAL_BUY') {
+        startpart = 'commercial-property-for-sale'
+        radius = '0.5'
+      }
+      return 'https://www.rightmove.co.uk/' + startpart + '/map.html?keywords=&sortType=2&viewType=MAP&channel=' + channel  + '&index=0&radius=' + radius + '&locationIdentifier=POSTCODE%5E' + this.rmlocationcodes[postcodedata.postcode] + ''
     },
     get_police_postcode (postcodedata) {
       return postcodedata.outcode.toUpperCase() + postcodedata.incode.toUpperCase()
