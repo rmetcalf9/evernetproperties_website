@@ -282,20 +282,33 @@ export default defineComponent({
       if (this.postcodes.length > 0) {
         this.cur_postcode = this.postcodes[0].postcode
       }
+      var postcodes_to_lookup_in_rightmove = []
       Object.keys(this.postcodes).forEach(function (x) {
         const curpostcode = TTT.postcodes[x]
         if (!TTT.rmlocationcodes.hasOwnProperty(curpostcode.postcode)) {
-          const callback = {
-            ok: function (response) {
-              TTT.rmlocationcodes[curpostcode.postcode] = JSON.parse(response.data).matches[0].id
-            },
-            error: function (error) {
-              console.log('Error looking up rightmove location code', error)
-            }
-          }
-          locationFns.getRightmoveLocationCode (callback, curpostcode.outcode, curpostcode.incode)
+          postcodes_to_lookup_in_rightmove.push(curpostcode)
         }
       })
+      function lookup_all_rightmove_postcodes () {
+        if (postcodes_to_lookup_in_rightmove.length===0) {
+          return
+        }
+        const cur_postcode = postcodes_to_lookup_in_rightmove.pop()
+        const callback = {
+          ok: function (response) {
+          TTT.rmlocationcodes = {
+            ...TTT.rmlocationcodes,
+            [cur_postcode.postcode]: JSON.parse(response.data).matches[0].id
+          }
+          lookup_all_rightmove_postcodes()
+        },
+          error: function (error) {
+            console.log('Error looking up rightmove location code', error)
+            }
+        }
+        locationFns.getRightmoveLocationCode (callback, cur_postcode.outcode, cur_postcode.incode)
+      }
+      lookup_all_rightmove_postcodes()
     },
     findpostcode_negative (response) {
       this.status = 2
