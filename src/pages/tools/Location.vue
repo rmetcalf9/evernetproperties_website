@@ -138,20 +138,20 @@ export default defineComponent({
 
       function add_row(title, field) {
         if (typeof (TTT.cur_postcode_data[field]) !== 'undefined') {
-          retVal += '<tr><td>' + title + '</td><td>' + TTT.cur_postcode_data[field] + '</td></tr>'
+          retVal += '<tr><td class="postcode_data_title_field">' + title + '</td><td>' + TTT.cur_postcode_data[field] + '</td></tr>'
         }
       }
       add_row('Postcode', 'postcode')
-      add_row('nhs_ha', 'nhs_ha')
+      add_row('nhs ha', 'nhs_ha')
 
-      add_row('european_electoral_region', 'european_electoral_region')
-      add_row('primary_care_trust', 'primary_care_trust')
-      add_row('region', 'region')
-      add_row('parliamentary_constituency', 'parliamentary_constituency')
-      add_row('parliamentary_constituency_2024', 'parliamentary_constituency_2024')
-      add_row('admin_district', 'admin_district')
-      add_row('parish', 'parish')
-      add_row('admin_ward', 'admin_ward')
+      add_row('European Electoral Region', 'european_electoral_region')
+      add_row('Primary Care Trust', 'primary_care_trust')
+      add_row('Region', 'region')
+      add_row('Parliamentary Constituency', 'parliamentary_constituency')
+      add_row('Parliamentary Constituency (2024)', 'parliamentary_constituency_2024')
+      add_row('Admin District', 'admin_district')
+      add_row('Parish', 'parish')
+      add_row('Admin Ward', 'admin_ward')
       add_row('ccg', 'ccg')
       add_row('nuts', 'nuts')
       add_row('pfa', 'pfa')
@@ -331,6 +331,7 @@ export default defineComponent({
 <style>
 .locationpage-main-div {
   padding: 20px;
+  margin: 20px;
 }
 .locationpage-main h1 {
   margin-top: 0px;
@@ -355,6 +356,9 @@ export default defineComponent({
   line-height: 2rem;
   font-weight: 600;
   margin: 10px;
+}
+.postcode_data_title_field {
+  max-width: 200px;
 }
 
 </style>
