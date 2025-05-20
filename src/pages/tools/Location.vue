@@ -2,6 +2,7 @@
   <q-page class="flex flex-center locationpage-main">
     <div class="cols locationpage-main-div">
       <h1>Area Research</h1>
+      <div class="locationpage-devnotice" v-if="useDevLocation">DEBUG DEV LOCATION</div>
       <table>
         <tr>
           <td>Status:</td>
@@ -148,6 +149,9 @@ export default defineComponent({
     }
   },
   computed: {
+    useDevLocation () {
+      return useDevLocation
+    },
     postcode_data_div () {
       var retVal = '<table>'
       const TTT = this
@@ -413,6 +417,10 @@ export default defineComponent({
 }
 .locationpage-postcodeselector {
   max-width: 200px;
+}
+.locationpage-devnotice {
+  background: red;
+  padding: 10px;
 }
 
 </style>
