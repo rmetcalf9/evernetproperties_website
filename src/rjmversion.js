@@ -1,2 +1,2 @@
 /* eslint-disable */
-export default { codebasever: '0.0.24' }
+export default { codebasever: '0.0.25' }
