@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center locationpage-main">
-    <div class="cols">
+    <div class="cols locationpage-main-div">
       <h1>Area Research</h1>
       <table>
         <tr>
@@ -329,6 +329,9 @@ export default defineComponent({
 </script>
 
 <style>
+.locationpage-main-div {
+  padding: 20px;
+}
 .locationpage-main h1 {
   margin-top: 0px;
   margin-bottom: 10px;
