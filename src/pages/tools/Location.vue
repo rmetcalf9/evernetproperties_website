@@ -14,7 +14,7 @@
           <td></td>
         </tr>
       </table>
-      <div v-if="status > 3">
+      <div v-if="status > 4">
         <q-tabs
           v-model=cur_postcode
         >
@@ -110,12 +110,18 @@
 
 //
 
-
 <script>
 import { defineComponent } from 'vue'
 import locationFns from './locationFns.js'
 import { Notify } from 'quasar'
 
+
+const useDevLocation = false
+
+const STATUS_FAILEDTOFINDLOCATION= 2   //Value appears in template
+const STATUS_FINDINGPOSTCODE= 3
+const STATUS_FAILEDTOFINDPOSTCODE= 4  //Value appears in template
+const STATUS_POSTCODEFOUND = 5
 
 export default defineComponent({
   name: 'ToolsLocationPage',
@@ -172,13 +178,16 @@ export default defineComponent({
       if (this.status===1) {
         return 'Finding Location...'
       }
-      if (this.status===2) {
+      if (this.status===STATUS_FAILEDTOFINDLOCATION) {
         return 'Failed to find location - ' + this.error_message
       }
-      if (this.status===3) {
+      if (this.status===STATUS_FINDINGPOSTCODE) {
         return 'Location Found - finding postcode...'
       }
-      if (this.status===4) {
+      if (this.status===STATUS_FAILEDTOFINDPOSTCODE) {
+        return 'Failed to find postcode - ' + this.error_message
+      }
+      if (this.status===STATUS_POSTCODEFOUND) {
         return 'Postcode Found'
       }
       return 'Unknown'
@@ -236,7 +245,6 @@ export default defineComponent({
         ok: this.rescan_positive,
         error: this.rescan_negative
       }
-      const useDevLocation = false
       if (useDevLocation) {
         callback.ok({
           coords: {
@@ -256,7 +264,7 @@ export default defineComponent({
       }
     },
     rescan_positive (response) {
-      this.status = 3
+      this.status = STATUS_FINDINGPOSTCODE
       this.cur_location = response
       var callback = {
         ok: this.findpostcode_positive,
@@ -265,7 +273,7 @@ export default defineComponent({
       locationFns.getPostcode(callback, this.cur_location.coords.latitude, this.cur_location.coords.longitude)
     },
     rescan_negative (response) {
-      this.status = 2
+      this.status = STATUS_FAILEDTOFINDLOCATION
       this.error_message = response.message
       console.log('rescan_negative', response)
       Notify.create({
@@ -277,7 +285,7 @@ export default defineComponent({
     },
     findpostcode_positive (response) {
       const TTT = this
-      this.status = 4
+      this.status = STATUS_POSTCODEFOUND
       this.postcodes = response.data.result
       if (this.postcodes.length > 0) {
         this.cur_postcode = this.postcodes[0].postcode
@@ -311,7 +319,7 @@ export default defineComponent({
       lookup_all_rightmove_postcodes()
     },
     findpostcode_negative (response) {
-      this.status = 2
+      this.status = STATUS_FAILEDTOFINDPOSTCODE
       this.error_message = 'Failed to find postcode - ' +  JSON.stringify(response)
       console.log('findpostcode_negative', response)
       Notify.create({
