@@ -312,7 +312,7 @@ export default defineComponent({
     },
     findpostcode_negative (response) {
       this.status = 2
-      this.error_message = 'Failed to find postcode'
+      this.error_message = 'Failed to find postcode - ' +  JSON.stringify(response)
       console.log('findpostcode_negative', response)
       Notify.create({
         color: 'bg-grey-2',
