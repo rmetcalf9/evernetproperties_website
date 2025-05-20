@@ -167,6 +167,13 @@ export default defineComponent({
     },
     cur_postcode_data () {
       const TTT = this
+      if (this.postcodes === null) {
+        return {
+          postcode: 'AAA AAA',
+          outcode: 'AAA',
+          incode: 'AAA'
+        }
+      }
       return this.postcodes.filter(function (x) {
         return x.postcode === TTT.cur_postcode
       })[0]
