@@ -289,8 +289,8 @@ export default defineComponent({
       if (useDevLocation) {
         callback.ok({
           coords: {
-            latitude: 51.4430773,
-            longitude: -0.0138776
+            latitude: 52.5645684, // 51.4430773,
+            longitude: -0.2632206 // -0.0138776
           }
         })
       } else {
