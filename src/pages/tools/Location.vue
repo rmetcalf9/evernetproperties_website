@@ -127,8 +127,6 @@ import locationFns from './locationFns.js'
 import { Notify } from 'quasar'
 
 
-const useDevLocation = false
-
 const STATUS_FAILEDTOFINDLOCATION= 2   //Value appears in template
 const STATUS_FINDINGPOSTCODE= 3
 const STATUS_FAILEDTOFINDPOSTCODE= 4  //Value appears in template
@@ -150,7 +148,7 @@ export default defineComponent({
   },
   computed: {
     useDevLocation () {
-      return useDevLocation
+      return window.location.href.startsWith('http://localhost:')
     },
     postcode_data_div () {
       var retVal = '<table>'
