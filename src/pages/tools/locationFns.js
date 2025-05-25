@@ -78,22 +78,8 @@ function getPostcode (callback, lat, long) {
 
 }
 
-function getRightmoveLocationCode (callback, outcode, incode) {
-  let config = {
-    method: 'get',
-    maxBodyLength: Infinity,
-    url: 'https://api.metcarob.com/property_backend/v0/public/api/rmproxy/typeahead?query=' + outcode + '+' + incode + '&limit=10&exclude=STREET',
-  };
-
-
-  axios.request(config)
-  .then((response) => {
-    callback.ok(response)
-  })
-  .catch((error) => {
-    callback.error(error)
-  });
-
+function getRightmoveLocationCode (callback, outcode, incode, locationCodeStore) {
+  locationCodeStore.getLocationCode(outcode + '+' + incode, callback)
 }
 
 export default {

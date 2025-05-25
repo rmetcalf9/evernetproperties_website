@@ -125,6 +125,7 @@
 import { defineComponent } from 'vue'
 import locationFns from './locationFns.js'
 import { Notify } from 'quasar'
+import { useRightmoveLocationCodeStore } from 'stores/rightmoveLocationCodes'
 
 
 const STATUS_FAILEDTOFINDLOCATION= 2   //Value appears in template
@@ -135,6 +136,12 @@ const STATUS_POSTCODEFOUND = 5
 export default defineComponent({
   name: 'ToolsLocationPage',
   components: {
+  },
+  setup () {
+    const rightmoveLocationCode_store = useRightmoveLocationCodeStore()
+    return {
+      rightmoveLocationCode_store
+    }
   },
   data () {
     return {
@@ -359,7 +366,7 @@ export default defineComponent({
             console.log('Error looking up rightmove location code', error)
             }
         }
-        locationFns.getRightmoveLocationCode (callback, cur_postcode.outcode, cur_postcode.incode)
+        locationFns.getRightmoveLocationCode (callback, cur_postcode.outcode, cur_postcode.incode, TTT.rightmoveLocationCode_store)
       }
       lookup_all_rightmove_postcodes()
     },
