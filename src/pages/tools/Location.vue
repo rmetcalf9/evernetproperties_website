@@ -284,7 +284,7 @@ export default defineComponent({
         ok: this.rescan_positive,
         error: this.rescan_negative
       }
-      if (useDevLocation) {
+      if (this.useDevLocation) {
         callback.ok({
           coords: {
             latitude: 52.5645684, // 51.4430773,
