@@ -10,7 +10,7 @@
         <tbody>
           <tr>
             <td>
-              <div v-for="item in workflow_model.stages[workflow_data.current_stage].progression.success" :key="item.next_stage">
+              <div class="workflow_success_progress_button_div" v-for="item in workflow_model.stages[workflow_data.current_stage].progression.success" :key="item.next_stage">
                 <q-btn color="positive" icon="donut_large" :label="'Progress to next stage (' + workflow_model.stages[item.next_stage].name + ')'" @click="progress(item.next_stage)" />
               </div>
             </td>
@@ -112,5 +112,8 @@ export default defineComponent({
 <style>
 .resetbuttondiv {
   padding: 10px;
+}
+.workflow_success_progress_button_div {
+  padding: 5px;
 }
 </style>

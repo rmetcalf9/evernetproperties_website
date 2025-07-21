@@ -10,13 +10,58 @@ import * as d3 from 'd3'
 
 import Workflow_main from './Workflow_main.js'
 
+const stage_height = 130
+const stage_width = 400
+const x_up_link_right_size = 50
+
+
+
+function get_incomming_stages_for_stage (workflow_json, stage_key) {
+  let ret_val = []
+  Object.keys(workflow_json.stages).forEach(function (cur_stage_key) {
+    if (cur_stage_key !== stage_key) {
+      const cur_stage = workflow_json.stages[cur_stage_key]
+      if (typeof (cur_stage.progression) !== 'undefined') {
+        if (typeof (cur_stage.progression.failed) !== 'undefined') {
+          if (cur_stage.progression.failed === stage_key) {
+            ret_val.push(cur_stage_key)
+          }
+        }
+        if (typeof (cur_stage.progression.success) !== 'undefined') {
+          cur_stage.progression.success.forEach(function (success_item) {
+            if (success_item.next_stage === stage_key) {
+              ret_val.push(cur_stage_key)
+            }
+          })
+        }
+      }
+    }
+  })
+
+  return [...new Set(ret_val)] // Remove duplicates
+}
+
+function generate_incomming_stage_map (workflow_json) {
+  // This map lets us look up which stages link in to this stage
+  let ret_val = {}
+  Object.keys(workflow_json.stages).forEach(function (k) {
+    const s = workflow_json.stages[k]
+    ret_val[k] = get_incomming_stages_for_stage(workflow_json, k)
+  })
+  return ret_val
+}
+
 function draw_workflow(parent, workflow_json, click_stage_callback, patch_data) {
   const context = {
     items_drawn: {},
-    cols: [-300, 120, 560]
+    cols: [-300, 120, 560],
+    incomming_stage_map: generate_incomming_stage_map(workflow_json)
   }
+  const arrows = parent.append('g')
+  const stages = parent.append('g')
+
   draw_stage_and_all_children(
-    parent,
+    stages,
     workflow_json.initial_stage,
     workflow_json.stages[workflow_json.initial_stage],
     context,
@@ -26,11 +71,34 @@ function draw_workflow(parent, workflow_json, click_stage_callback, patch_data) 
     click_stage_callback,
     patch_data
   )
-
+  draw_arrows_from_green_stages_to_failed_stages(arrows, workflow_json, context)
 }
 
-const stage_height = 130
-const stage_width = 400
+function draw_arrows_from_green_stages_to_failed_stages (parent, workflow_json, context) {
+  Object.keys(workflow_json.stages).forEach (function (cur_green_stage_key) {
+    const cur_green_stage = workflow_json.stages[cur_green_stage_key]
+    if ((typeof (cur_green_stage.active) !== 'undefined') && (cur_green_stage.active)) {
+      if (typeof (cur_green_stage.progression) !== 'undefined') {
+        if (typeof (cur_green_stage.progression.failed) !== 'undefined') {
+          const red_stage = workflow_json.stages[cur_green_stage.progression.failed]
+          const from = context.items_drawn[cur_green_stage_key]
+          const to = context.items_drawn[cur_green_stage.progression.failed]
+          // console.log('draw arrow from', from, 'to', to)
+          draw_arrow(
+            parent,
+            from.pos_x,
+            from.pos_y + stage_height,
+            to.pos_x - (stage_width/2),
+            to.pos_y + (stage_height/2)
+          )
+        }
+      }
+    }
+  })
+
+
+
+}
 
 function get_x_for_stage(stage_data, context, is_fail_path) {
   let draw_col = 0
@@ -42,6 +110,16 @@ function get_x_for_stage(stage_data, context, is_fail_path) {
     }
   }
   return context.cols[draw_col]
+}
+
+function all_incomming_stages_have_been_drawn (this_stage_id, context) {
+  let ret_val = true
+  context.incomming_stage_map[this_stage_id].forEach(function (incoming_stage_key) {
+    if (typeof (context.items_drawn[incoming_stage_key]) === 'undefined') {
+      ret_val = false
+    }
+  })
+  return ret_val
 }
 
 function draw_stage_and_all_children(parent, this_stage_id, stage_data, context, workflow_json, cur_y, is_fail_path, click_stage_callback, patch_data) {
@@ -60,27 +138,24 @@ function draw_stage_and_all_children(parent, this_stage_id, stage_data, context,
   draw_stage(group, this_stage_id, stage_data, is_fail_path, click_stage_callback, workflow_json, patch_data)
   if (typeof (stage_data.progression) !== 'undefined') {
     if (typeof (stage_data.progression.failed) !== 'undefined') {
-      draw_stage_and_all_children(
-        parent,
-        stage_data.progression.failed,
-        workflow_json.stages[stage_data.progression.failed],
-        context,
-        workflow_json,
-        cur_y + 150,
-        true,
-        click_stage_callback,
-        patch_data
-      )
-      draw_arrow(
-        parent,
-        x_pos,
-        cur_y + stage_height,
-        context.cols[2] - (stage_width/2),
-        cur_y + 150 + (stage_height/2)
-      )
+      if (all_incomming_stages_have_been_drawn(this_stage_id, context)) {
+        draw_stage_and_all_children(
+          parent,
+          stage_data.progression.failed,
+          workflow_json.stages[stage_data.progression.failed],
+          context,
+          workflow_json,
+          cur_y + 150,
+          true,
+          click_stage_callback,
+          patch_data
+        )
+        // Note arrows from Green stage to red fail stage drawn in a seperate pass at end
+      }
     }
     if (typeof (stage_data.progression.success) !== 'undefined') {
       stage_data.progression.success.forEach(function (ite) {
+        // Not already drawn - link will go down the page
         draw_stage_and_all_children(
           parent,
           ite.next_stage,
@@ -93,14 +168,25 @@ function draw_stage_and_all_children(parent, this_stage_id, stage_data, context,
           patch_data
         )
         // It has just been drawn so will always be in drawn array
-        draw_arrow(
-          parent,
-          x_pos,
-          cur_y + stage_height,
-          context.items_drawn[ite.next_stage].pos_x,
-          context.items_drawn[ite.next_stage].pos_y
-        )
-
+        if (cur_y < context.items_drawn[ite.next_stage].pos_y) {
+          draw_arrow(
+            parent,
+            x_pos,
+            cur_y + stage_height,
+            context.items_drawn[ite.next_stage].pos_x,
+            context.items_drawn[ite.next_stage].pos_y
+          )
+        } else {
+          // Link goes back up the page
+          draw_back_line(
+            parent,
+            x_pos + (stage_width / 2),
+            cur_y + (stage_height / 2),
+            context.items_drawn[ite.next_stage].pos_x + (stage_width / 2),
+            context.items_drawn[ite.next_stage].pos_y + (stage_height / 2),
+            x_up_link_right_size
+          )
+        }
       })
     }
 
@@ -117,8 +203,62 @@ function draw_arrow(parent, x1, y1, x2, y2) {
     .attr('stroke', 'black')
     .attr('style', 'stroke-width:10;')
     .attr('marker-end', 'url(#triangle)')
-
 }
+
+function draw_back_line(parent, x1, y1, x2, y2, right_size) {
+  let x3 = x2
+  if (x1 > x2) {
+    x3 = x1
+  }
+  x3 += right_size
+  parent.append('line')
+    .attr('x1', x1)
+    .attr('y1', y1)
+    .attr('x2', x3)
+    .attr('y2', y1)
+    .attr('stroke', 'black')
+    .attr('style', 'stroke-width:10;')
+
+  parent.append('line')
+    .attr('x1', x3)
+    .attr('y1', y1)
+    .attr('x2', x3)
+    .attr('y2', y2)
+    .attr('stroke', 'black')
+    .attr('style', 'stroke-width:10;')
+
+  parent.append('line')
+    .attr('x1', x3)
+    .attr('y1', y2)
+    .attr('x2', x2)
+    .attr('y2', y2)
+    .attr('stroke', 'black')
+    .attr('style', 'stroke-width:10;')
+    .attr('marker-end', 'url(#triangle)')
+
+    // draw_arrow(
+    //  parent,
+    //  x_pos + (stage_width / 2),
+    //  cur_y + (stage_height / 2),
+    //  x_pos + (stage_width / 2) + x_up_link_right_size,
+    //  cur_y + (stage_height / 2)
+    //)
+    // draw_arrow(
+    //  parent,
+    //  x_pos + (stage_width / 2) + x_up_link_right_size,
+    //  cur_y + (stage_height / 2),
+    //  x_pos + (stage_width / 2) + x_up_link_right_size,
+    //  context.items_drawn[ite.next_stage].pos_y + (stage_height / 2)
+    // )
+    // draw_arrow(
+    //  parent,
+    //  x_pos + (stage_width / 2) + x_up_link_right_size,
+    //  context.items_drawn[ite.next_stage].pos_y + (stage_height / 2),
+    //  context.items_drawn[ite.next_stage].pos_x + (stage_width / 2),
+    //  context.items_drawn[ite.next_stage].pos_y + (stage_height / 2)
+    // )
+}
+
 
 function draw_stage(parent, this_stage_id, stage_data, is_fail_stage, click_stage_callback, workflow_json, patch_data) {
   // 0,0 is centre TOP of the rectangle
@@ -205,7 +345,7 @@ export default defineComponent({
         xmin: -950,
         xmax: 950,
         ymin: -150,
-        ymax: 2300
+        ymax: 2500
       }
     }
   },

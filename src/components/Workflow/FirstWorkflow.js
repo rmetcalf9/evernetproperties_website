@@ -34,7 +34,27 @@ export default {
         "failed": "2.1",
         "success": [
           {
+            "next_stage": "2.2"
+          },
+          {
             "next_stage": "3"
+          }
+        ]
+      },
+      "diagram_notes": "Phone Agent<BR>Is property still available<BR>What is sellers situation"
+    },
+    "2.2": {
+      "name": "Need to view",
+      "draw_col": 1, // Defaults to 0 - unless fail stage defaults to 2
+      "active": true,
+      "progression": {
+        "failed": "2.1",
+        "success": [
+          {
+            "next_stage": "3"
+          },
+          {
+            "next_stage": "2"
           }
         ]
       },
