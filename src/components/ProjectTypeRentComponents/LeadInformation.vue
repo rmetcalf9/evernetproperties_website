@@ -90,6 +90,7 @@ export default defineComponent({
         'Council HMO List',
         'Referral',
         'Response to Campaign',
+        'Right move',
         'Other'
       ]
     }
