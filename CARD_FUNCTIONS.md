@@ -41,12 +41,17 @@ methods: {
 
 RefurbCost StampDuty OtherCosts Finance Refinance
 
-In BrrCalc:
+In BrrCalc: (and rentCalc if required)
+Note import in rent calc has different path
+
 Add ref like:
 <Vision
   ref="Vision"
   @projectchanged="projectchanged"
 />
+
+Import statement
+Component statement
 
 Add to save_project:
 serialized_data () {

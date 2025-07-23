@@ -121,6 +121,10 @@
           :refurb_cost_total="refurb_cost_total"
           :is_valid_input="is_valid_input"
         />
+        <Location
+          ref="Location"
+          @projectchanged="projectchanged"
+        />
         <ProjectSerializer
           ref="ProjectSerializer"
           v-if="security_role_cansave"
@@ -184,6 +188,7 @@ import DealSummary from '../../components/BrrCalc/DealSummary.vue'
 import DealRating from '../../components/BrrCalc/DealRating.vue'
 import FlipDealRating from '../../components/FlipCalc/DealRating.vue'
 import DealBasicInfo from '../../components/BrrCalc/DealBasicInfo.vue'
+import Location from '../../components/CommonCalcComponents/Location.vue'
 
 import SaveToGoogleSheet from '../../components/BrrCalc/SaveToGoogleSheet.vue'
 import ActivityLog from '../../components/CommonCalcComponents/ActivityLog.vue'
@@ -221,7 +226,8 @@ export default defineComponent({
     BrrToolbar,
     Workflow,
     FlipDealRating,
-    Todos
+    Todos,
+    Location
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -448,6 +454,7 @@ export default defineComponent({
         othercosts: this.$refs.OtherCosts.serializer_card_data,
         finance: this.$refs.Finance.serializer_card_data,
         refinance: this.$refs.Refinance.serializer_card_data,
+        location: this.$refs.Location.serializer_card_data,
       }
     },
     patch () {
@@ -568,6 +575,9 @@ export default defineComponent({
       }
       if (typeof (project.sub_section_details.refinance) !== 'undefined') {
         this.$refs.Refinance.serializer_load_data(project.sub_section_details.refinance)
+      }
+      if (typeof (project.sub_section_details.location) !== 'undefined') {
+        this.$refs.Location.serializer_load_data(project.sub_section_details.location)
       }
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
       this.$refs.Workflow.serializer_load_data(project.workflow)

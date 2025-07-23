@@ -38,6 +38,10 @@
         :leadinformation="leadinformation"
         @projectchanged="projectchanged"
       />
+      <Location
+        ref="Location"
+        @projectchanged="projectchanged"
+      />
     </div>
     <div class="row" v-show="tab==='project'">
       <Workflow
@@ -81,6 +85,7 @@ import Todos from '../../../components/CommonCalcComponents/Todos.vue'
 import Workflow from '../../../components/CommonCalcComponents/Workflow.vue'
 
 import ProjectSerializer from '../../../components/CommonCalcComponents/ProjectSerializer.vue'
+import Location from '../../../components/CommonCalcComponents/Location.vue'
 import common_constants from '../../../components/common_constants.js'
 
 
@@ -93,7 +98,8 @@ export default defineComponent({
     Todos,
     ProjectSerializer,
     BrrToolbar,
-    ViewingInfo
+    ViewingInfo,
+    Location
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -139,7 +145,8 @@ export default defineComponent({
       }
       return {
         leadinformation: this.$refs.LeadInformation.serializer_card_data,
-        viewinginformation: this.$refs.ViewingInfo.serializer_card_data
+        viewinginformation: this.$refs.ViewingInfo.serializer_card_data,
+        location: this.$refs.Location.serializer_card_data,
       }
     }
   },
@@ -246,7 +253,9 @@ export default defineComponent({
       if (typeof (project.sub_section_details.viewinginformation) !== 'undefined') {
         this.$refs.ViewingInfo.serializer_load_data(project.sub_section_details.viewinginformation)
       }
-
+      if (typeof (project.sub_section_details.location) !== 'undefined') {
+        this.$refs.Location.serializer_load_data(project.sub_section_details.location)
+      }
 
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
       this.$refs.Workflow.serializer_load_data(project.workflow)
