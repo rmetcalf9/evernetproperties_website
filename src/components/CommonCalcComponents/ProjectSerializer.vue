@@ -48,7 +48,7 @@ export default defineComponent({
       this.proj_summary_data.timestamp_first_entered  = data_to_load.timestamp_first_entered
       this.proj_summary_data.metadata = data_to_load.metadata
     },
-    save_project ({dict_of_card_info, activity_log, workflow, patch_id, passthroughdata}) {
+    save_project ({dict_of_card_info, activity_log, workflow, patch_id, location, passthroughdata}) {
       this.passthroughdata = passthroughdata
       const sub_section_details = {}
       for (const card_name_idx in Object.keys(dict_of_card_info)) {
@@ -67,7 +67,7 @@ export default defineComponent({
           flip_roi: 0
         },
         reoccurring_phase: [],
-        location: {},
+        location: location,
         workflow: workflow,
         activity_log: activity_log,
         sub_section_details: sub_section_details,

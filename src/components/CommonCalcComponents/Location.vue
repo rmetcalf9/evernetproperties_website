@@ -54,9 +54,17 @@ export default defineComponent({
     },
     serializer_load_data (data_to_load) {
       this.emit_project_change_notification = false
-      this.coords = data_to_load.coords
-      this.entry_mode = data_to_load.entry_mode
-
+      this.coords = {
+        lat: '',
+        long: ''
+      }
+      this.entry_mode = ''
+      if (typeof (data_to_load.coords) !== 'undefined') {
+        this.coords = data_to_load.coords
+      }
+      if (typeof (data_to_load.entry_mode) !== 'undefined') {
+        this.entry_mode = data_to_load.entry_mode
+      }
       const TTT = this
       setTimeout(function () {
         TTT.emit_project_change_notification = true

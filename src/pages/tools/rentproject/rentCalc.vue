@@ -146,7 +146,6 @@ export default defineComponent({
       return {
         leadinformation: this.$refs.LeadInformation.serializer_card_data,
         viewinginformation: this.$refs.ViewingInfo.serializer_card_data,
-        location: this.$refs.Location.serializer_card_data,
       }
     }
   },
@@ -186,6 +185,7 @@ export default defineComponent({
         activity_log: this.$refs.ActivityLog.serializer_card_data,
         workflow: this.$refs.Workflow.serializer_card_data,
         patch_id: this.serialized_data.leadinformation.patch_id,
+        location: this.$refs.Location.serializer_card_data,
         passthroughdata: undefined
       })
     },
@@ -253,8 +253,8 @@ export default defineComponent({
       if (typeof (project.sub_section_details.viewinginformation) !== 'undefined') {
         this.$refs.ViewingInfo.serializer_load_data(project.sub_section_details.viewinginformation)
       }
-      if (typeof (project.sub_section_details.location) !== 'undefined') {
-        this.$refs.Location.serializer_load_data(project.sub_section_details.location)
+      if (typeof (project.location) !== 'undefined') {
+        this.$refs.Location.serializer_load_data(project.location)
       }
 
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)

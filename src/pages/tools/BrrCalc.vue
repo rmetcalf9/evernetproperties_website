@@ -453,8 +453,7 @@ export default defineComponent({
         stampduty: this.$refs.StampDuty.serializer_card_data,
         othercosts: this.$refs.OtherCosts.serializer_card_data,
         finance: this.$refs.Finance.serializer_card_data,
-        refinance: this.$refs.Refinance.serializer_card_data,
-        location: this.$refs.Location.serializer_card_data,
+        refinance: this.$refs.Refinance.serializer_card_data
       }
     },
     patch () {
@@ -550,6 +549,7 @@ export default defineComponent({
         activity_log: this.$refs.ActivityLog.serializer_card_data,
         workflow: this.$refs.Workflow.serializer_card_data,
         patch_id: this.serialized_data.dealbasicinfo.patch_id,
+        location: this.$refs.Location.serializer_card_data,
         passthroughdata: undefined
       })
     },
@@ -580,8 +580,8 @@ export default defineComponent({
       if (typeof (project.sub_section_details.refinance) !== 'undefined') {
         this.$refs.Refinance.serializer_load_data(project.sub_section_details.refinance)
       }
-      if (typeof (project.sub_section_details.location) !== 'undefined') {
-        this.$refs.Location.serializer_load_data(project.sub_section_details.location)
+      if (typeof (project.location) !== 'undefined') {
+        this.$refs.Location.serializer_load_data(project.location)
       }
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
       this.$refs.Workflow.serializer_load_data(project.workflow)
