@@ -80,14 +80,12 @@ export default defineComponent({
       const obj = {
         type: 'wf_move',
         text: 'From ' + this.workflow_model.stages[this.workflow_data.current_stage].name + ' to ' + this.workflow_model.stages[next_stage_id].name,
-        head_notes: 'Progressed through workflow'
+        head_notes: 'Progressed through workflow',
+        immediate_save_after_log: true
       }
       this.workflow_data.current_stage = next_stage_id
       this.$emit('activity_log', obj)
       // this.$emit('projectchanged') NOT NEEDED - activity log does this
-      setTimeout(function () {
-        TTT.$emit('click_save_btn')
-      }, 100)
     },
     serializer_load_data (workflow_data) {
       this.emit_project_change_notification = false

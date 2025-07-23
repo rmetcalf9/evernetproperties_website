@@ -535,7 +535,11 @@ export default defineComponent({
         console.log('WARNING = projectchanged called when BrrToolbar is undefined')
         return false
       }
-      this.$refs.BrrToolbar.set_changed_true()
+      if (source === 'ActivityLog:log_activity:forcesave') {
+        this.$refs.BrrToolbar.set_changed_true({autosave_seconds: 0})
+      } else {
+        this.$refs.BrrToolbar.set_changed_true()
+      }
     },
     click_save_btn () {
       this.$refs.BrrToolbar.click_save_btn()

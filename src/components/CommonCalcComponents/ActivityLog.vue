@@ -115,6 +115,7 @@ export default defineComponent({
   },
   methods: {
     log_activity (obj) {
+      const TTT = this
       var new_act_log = this.activity_log.filter(function (x) {
         return true
       })
@@ -126,7 +127,15 @@ export default defineComponent({
         head_notes: obj.head_notes
       })
       this.activity_log = new_act_log
-      this.$emit('projectchanged', 'ActivityLog:log_activity')
+      this.emit_project_change_notification = false
+      if ((typeof (obj.immediate_save_after_log) !== 'undefined') && (obj.immediate_save_after_log)) {
+        this.$emit('projectchanged', 'ActivityLog:log_activity:forcesave')
+      } else {
+        this.$emit('projectchanged', 'ActivityLog:log_activity')
+      }
+      setTimeout(function () {
+        TTT.emit_project_change_notification = true
+      }, 50)
     },
     serializer_load_data (activity_log) {
       this.emit_project_change_notification = false

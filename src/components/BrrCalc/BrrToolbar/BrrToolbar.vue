@@ -64,8 +64,8 @@ export default defineComponent({
     click_save_btn () {
       this.$refs.SaveToolbar.click_btn()
     },
-    set_changed_true () {
-      this.$refs.SaveToolbar.set_changed_true()
+    set_changed_true (params) {
+      this.$refs.SaveToolbar.set_changed_true(params)
     },
     save_project_complete_notification (params) {
       this.$refs.SaveToolbar.save_project_complete_notification(params)

@@ -87,7 +87,7 @@ export default defineComponent({
       this.autosave_seconds_left = -1 // This causes save monitor to abort
       this.save_now()
     },
-    set_changed_true() {
+    set_changed_true(params) {
       if (this.pending_set_changed) {
         console.log('SaveButton.vue:set_changed_true - set changed called but there is already one pending')
         return
@@ -106,7 +106,11 @@ export default defineComponent({
       if (this.no_save_message !== '') {
         return
       }
-      this.autosave_seconds_left = default_autosave_Seconds
+      if ((typeof (params) !== 'undefined') && (typeof (params.autosave_seconds) !== 'undefined')) {
+        this.autosave_seconds_left = params.autosave_seconds
+      } else {
+        this.autosave_seconds_left = default_autosave_Seconds
+      }
       this.start_save_monitor_function()
     },
     start_save_monitor_function () {
