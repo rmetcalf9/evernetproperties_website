@@ -37,7 +37,8 @@ export default defineComponent({
       loaded_project_id: undefined,
       proj_summary_data: {
         metadata: undefined,
-        timestamp_first_entered: undefined
+        timestamp_first_entered: undefined,
+        external_category: undefined
       },
       passthroughdata: undefined
     }
@@ -47,6 +48,7 @@ export default defineComponent({
       this.loaded_project_id  = data_to_load.id
       this.proj_summary_data.timestamp_first_entered  = data_to_load.timestamp_first_entered
       this.proj_summary_data.metadata = data_to_load.metadata
+      this.proj_summary_data.external_category = data_to_load.external_category
     },
     save_project ({dict_of_card_info, activity_log, workflow, patch_id, location, passthroughdata}) {
       this.passthroughdata = passthroughdata
@@ -54,6 +56,10 @@ export default defineComponent({
       for (const card_name_idx in Object.keys(dict_of_card_info)) {
         const card_name = Object.keys(dict_of_card_info)[card_name_idx]
         sub_section_details[card_name] = JSON.parse(JSON.stringify(dict_of_card_info[card_name]))
+      }
+
+      if (typeof (this.proj_summary_data.external_category) === 'undefined') {
+        this.proj_summary_data.external_category = {}
       }
 
       const project_data = {
@@ -73,7 +79,8 @@ export default defineComponent({
         sub_section_details: sub_section_details,
         tags: [],
         risks: [],
-        type: this.project_type
+        type: this.project_type,
+        external_category: this.proj_summary_data.external_category
       }
 
       if (typeof (this.loaded_project_id) !== 'undefined') {
