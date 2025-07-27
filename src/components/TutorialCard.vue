@@ -7,7 +7,7 @@
           <div>
             <img
               alt="Item Picture"
-              :src="'/training/' + tutorial.id + '.png'"
+              :src="image_link"
               class="tutorial-picture"
             >
           </div>
@@ -35,6 +35,14 @@ export default defineComponent({
   },
   data () {
     return {
+    }
+  },
+  computed: {
+    image_link () {
+      if ((typeof (this.tutorial.svg) !== 'undefined') && (this.tutorial.svg)) {
+        return '/training/' + this.tutorial.id + '.svg'
+      }
+      return '/training/' + this.tutorial.id + '.png'
     }
   },
   methods: {

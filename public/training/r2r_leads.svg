@@ -1,0 +1,24 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+
+  
+  <!-- Clipboard/form background -->
+  <rect x="65" y="40" width="70" height="90" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" rx="6"/>
+  <rect x="75" y="30" width="50" height="20" fill="#64748b" rx="4"/>
+  
+  <!-- Form lines/fields -->
+  <line x1="75" y1="60" x2="125" y2="60" stroke="#e2e8f0" stroke-width="2"/>
+  <line x1="75" y1="75" x2="125" y2="75" stroke="#e2e8f0" stroke-width="2"/>
+  <line x1="75" y1="90" x2="125" y2="90" stroke="#e2e8f0" stroke-width="2"/>
+  <line x1="75" y1="105" x2="125" y2="105" stroke="#e2e8f0" stroke-width="2"/>
+  
+  <!-- Filled form data (representing entered information) -->
+  <line x1="75" y1="60" x2="110" y2="60" stroke="#3b82f6" stroke-width="3"/>
+  <line x1="75" y1="75" x2="105" y2="75" stroke="#3b82f6" stroke-width="3"/>
+  <line x1="75" y1="90" x2="120" y2="90" stroke="#3b82f6" stroke-width="3"/>
+  
+  <!-- Pen/input tool -->
+  <line x1="130" y1="95" x2="145" y2="80" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="147" cy="78" r="3" fill="#fbbf24"/>
+  
+
+</svg>

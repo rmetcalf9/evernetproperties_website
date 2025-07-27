@@ -10,7 +10,7 @@
           <div>
             <img
               alt="Item Picture"
-              :src="'/training/' + tutorials[0].id + '.png'"
+              :src="image_link"
               style="height: 80px;"
             >
           </div>
@@ -80,6 +80,12 @@ export default defineComponent({
         return x.id === TTT.$route.params.tutorial
       })
       return tutorials
+    },
+    image_link () {
+      if ((typeof (this.tutorials[0].svg) !== 'undefined') && (this.tutorials[0].svg)) {
+        return '/training/' + this.tutorials[0].id + '.svg'
+      }
+      return '/training/' + this.tutorials[0].id + '.png'
     },
     next_tutorial () {
       const TTT = this
