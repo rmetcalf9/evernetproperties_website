@@ -7,12 +7,21 @@
       <div>
         <h1>{{tutorials[0].name}}</h1>
         <div class="col">
-          <div>
-            <img
-              alt="Item Picture"
-              :src="image_link"
-              style="height: 80px;"
-            >
+          <div class="row">
+            <div class="col-grow">
+              <img
+                alt="Item Picture"
+                :src="image_link"
+                style="height: 80px;"
+              >
+            </div>
+            <div>
+              <q-btn
+                color="positive"
+                label="Back to tutorial list"
+                @click="back_to_tutorial_list"
+              />
+            </div>
           </div>
           <div>
             {{tutorials[0].description}}

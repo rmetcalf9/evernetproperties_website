@@ -15,6 +15,12 @@
   <h3>{{ chapters[2] }}</h3>
   <p>TODO</p>
 
+  <h3>{{ chapters[3] }}</h3>
+  <p>TODO</p>
+
+  <h3>{{ chapters[4] }}</h3>
+  <p>TODO</p>
+  
 </template>
 
 <script>
@@ -30,9 +36,11 @@ export default defineComponent({
   data () {
     return {
       chapters: [
-        'TODO chap 1',
-        'TODO chap 2',
-        'TODO chap 3'
+        'Find the Lead',
+        'Enter the patch',
+        'Enter the main details',
+        'The web link',
+        'Save an add another'
       ]
     }
   },
