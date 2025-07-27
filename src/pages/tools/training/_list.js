@@ -34,7 +34,7 @@ const glob_tutorials = [
     description: 'A detailed orientation to the Rent‑to‑Rent feature set - what each tool does and why it matters. Delve into all the system tools and modules designed specifically for managing Rent‑to‑Rent projects.',
     component: Training_r2r_overview,
     next: 'r2r_leads',
-    youtubevidref: 'lN1htfsbEpY'
+    youtubevidref: 'nEkvURrr9-g'
   },
   {
     weight: 1,
@@ -45,7 +45,7 @@ const glob_tutorials = [
     description: 'Learn how to accurately capture new Rent‑to‑Rent landlord leads—covering contact information, property details, and status tracking.',
     component: Training_r2r_leads,
     next: 'r2r_calls',
-    youtubevidref: 'lN1htfsbEpY'
+    youtubevidref: 'xx'
   },
   {
     weight: 2,
@@ -56,7 +56,7 @@ const glob_tutorials = [
     description: 'Master the use of scripts to call landlords, record outcomes, manage objections, and arrange viewings within the system.',
     component: Training_r2r_calls,
     next: 'r2r_workflow',
-    youtubevidref: 'lN1htfsbEpY'
+    youtubevidref: 'xx'
   },
   {
     weight: 3,
@@ -66,7 +66,7 @@ const glob_tutorials = [
     section: 'Rent-to-Rent',
     description: 'Navigate the entirety of the Rent‑to‑Rent lifecycle - progress leads through the workflow, manage milestones, and finalise projects.',
     component: Training_r2r_workflow,
-    youtubevidref: 'lN1htfsbEpY'
+    youtubevidref: 'xx'
   }
 ]
 
