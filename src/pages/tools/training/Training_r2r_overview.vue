@@ -9,7 +9,7 @@
 
   <TutorialImage
     :src="'/training/' + tutorial.id + '_001.png'"
-    caption="Main Project interface showing actions, tabs and cards"
+    caption="Tools page showing Rental Project menu item"
   />
 
   <p>The second place the Rent-to-Rent features are available is in the Patch screen and this is covered in a later tutorial.</p>
@@ -21,7 +21,7 @@
 
   <TutorialImage
     :src="'/training/' + tutorial.id + '_002.png'"
-    caption="Main Project interface showing actions, tabs and cards"
+    caption="Rental projects menu"
   />
 
   <ul>

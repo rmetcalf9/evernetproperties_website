@@ -6,7 +6,7 @@
   <p>TODO CALLS</p>
   <TutorialImage
     :src="'/training/' + tutorial.id + '_002.png'"
-    caption="Main Project interface showing actions, tabs and cards"
+    caption="Tools page showing Rental Project menu item"
   />
 
   <h3>{{ chapters[1] }}</h3>
