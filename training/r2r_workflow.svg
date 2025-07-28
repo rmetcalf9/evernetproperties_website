@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 200 200"
+   version="1.1"
+   id="svg9"
+   sodipodi:docname="r2r_workflow.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs9" />
+  <sodipodi:namedview
+     id="namedview9"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.973384"
+     inkscape:cx="-14.629795"
+     inkscape:cy="71.63555"
+     inkscape:window-width="3448"
+     inkscape:window-height="2037"
+     inkscape:window-x="0"
+     inkscape:window-y="56"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg9" />
+  <!-- Workflow stages/milestones -->
+  <ellipse
+     cx="34.385975"
+     cy="36.085903"
+     fill="#ef4444"
+     stroke="#ffffff"
+     stroke-width="5.03194"
+     id="circle1"
+     rx="23.92601"
+     ry="26.45701" />
+  <text
+     x="36.159016"
+     y="42.703018"
+     text-anchor="middle"
+     fill="#ffffff"
+     font-family="Arial, sans-serif"
+     font-size="16.7731px"
+     font-weight="bold"
+     id="text1"
+     transform="scale(0.95096542,1.0515629)"
+     style="stroke-width:1.67731">1</text>
+  <ellipse
+     cx="98.188667"
+     cy="36.085903"
+     fill="#fbbf24"
+     stroke="#ffffff"
+     stroke-width="5.03194"
+     id="circle2"
+     rx="23.92601"
+     ry="26.45701" />
+  <text
+     x="103.25156"
+     y="42.703018"
+     text-anchor="middle"
+     fill="#ffffff"
+     font-family="Arial, sans-serif"
+     font-size="16.7731px"
+     font-weight="bold"
+     id="text2"
+     transform="scale(0.95096542,1.0515629)"
+     style="stroke-width:1.67731">2</text>
+  <ellipse
+     cx="161.99135"
+     cy="36.085903"
+     fill="#10b981"
+     stroke="#ffffff"
+     stroke-width="5.03194"
+     id="circle3"
+     rx="23.92601"
+     ry="26.45701" />
+  <text
+     x="170.34412"
+     y="42.703018"
+     text-anchor="middle"
+     fill="#ffffff"
+     font-family="Arial, sans-serif"
+     font-size="16.7731px"
+     font-weight="bold"
+     id="text3"
+     transform="scale(0.95096542,1.0515629)"
+     style="stroke-width:1.67731">3</text>
+  <!-- Workflow arrows -->
+  <path
+     d="m 58.311983,36.085904 h 15.950673 l -4.785202,-5.291403 m 4.785202,5.291403 -4.785202,5.291402"
+     stroke="#64748b"
+     stroke-width="5.03194"
+     fill="none"
+     id="path3" />
+  <path
+     d="m 122.11468,36.085904 h 15.95067 l -4.7852,-5.291403 m 4.7852,5.291403 -4.7852,5.291402"
+     stroke="#64748b"
+     stroke-width="5.03194"
+     fill="none"
+     id="path4" />
+  <!-- Progress tracking bar -->
+  <rect
+     x="2.484628"
+     y="88.999924"
+     width="191.40808"
+     height="17.638008"
+     fill="#e2e8f0"
+     rx="7.9753366"
+     id="rect4"
+     style="stroke-width:1.67731" />
+  <rect
+     x="2.484628"
+     y="88.999924"
+     width="127.60538"
+     height="17.638008"
+     fill="#3b82f6"
+     rx="7.9753366"
+     id="rect5"
+     style="stroke-width:1.67731" />
+  <!-- Milestone labels -->
+  <text
+     x="36.159016"
+     y="76.249298"
+     text-anchor="middle"
+     fill="#64748b"
+     font-family="Arial, sans-serif"
+     font-size="15.0958px"
+     id="text5"
+     transform="scale(0.95096542,1.0515629)"
+     style="stroke-width:1.67731">LEAD</text>
+  <text
+     x="103.25156"
+     y="76.249298"
+     text-anchor="middle"
+     fill="#64748b"
+     font-family="Arial, sans-serif"
+     font-size="15.0958px"
+     id="text6"
+     transform="scale(0.95096542,1.0515629)"
+     style="stroke-width:1.67731">ACTIVE</text>
+  <text
+     x="170.34412"
+     y="76.249298"
+     text-anchor="middle"
+     fill="#64748b"
+     font-family="Arial, sans-serif"
+     font-size="15.0958px"
+     id="text7"
+     transform="scale(0.95096542,1.0515629)"
+     style="stroke-width:1.67731">DONE</text>
+  <!-- Management dashboard elements -->
+  <rect
+     x="10.262554"
+     y="126.60837"
+     width="143.97957"
+     height="59.113411"
+     fill="#ffffff"
+     stroke="#cbd5e1"
+     stroke-width="2.91738"
+     rx="8.6387749"
+     id="rect7" />
+  <!-- Dashboard content -->
+  <ellipse
+     cx="39.058468"
+     cy="148.77589"
+     fill="#10b981"
+     id="circle7"
+     rx="7.1989789"
+     ry="7.3891764"
+     style="stroke-width:1.45869" />
+  <line
+     x1="53.456425"
+     y1="148.77589"
+     x2="125.44622"
+     y2="148.77589"
+     stroke="#64748b"
+     stroke-width="2.91738"
+     id="line7" />
+  <ellipse
+     cx="39.058468"
+     cy="163.55424"
+     fill="#fbbf24"
+     id="circle8"
+     rx="7.1989789"
+     ry="7.3891764"
+     style="stroke-width:1.45869" />
+  <line
+     x1="53.456425"
+     y1="163.55424"
+     x2="111.04823"
+     y2="163.55424"
+     stroke="#64748b"
+     stroke-width="2.91738"
+     id="line8" />
+  <!-- Completion checkmark -->
+  <ellipse
+     cx="168.64009"
+     cy="148.77589"
+     fill="#10b981"
+     id="circle9"
+     rx="17.27755"
+     ry="17.73402"
+     style="stroke-width:1.45869" />
+  <path
+     d="m 161.44111,148.77588 4.31939,4.43352 10.07858,-10.34484"
+     stroke="#ffffff"
+     stroke-width="2.91738"
+     fill="none"
+     stroke-linecap="round"
+     id="path9" />
+</svg>
