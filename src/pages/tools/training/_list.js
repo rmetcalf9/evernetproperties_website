@@ -61,7 +61,7 @@ const glob_tutorials = [
     component: Training_r2r_calls,
     next: 'r2r_workflow',
     youtubevidref: 'xx',
-    published: false
+    published: true
   },
   {
     weight: 3,

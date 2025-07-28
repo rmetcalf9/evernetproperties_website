@@ -206,7 +206,7 @@ export default {
           type: 'Next_Stage',
           next_stage_id: '6',
           id: 'confirm_address',
-          button_label: 'Confirm Address'
+          button_label: 'Next Stage (Confirm Address)'
         }],
         post_action_items: [{ type: 'ShowLead'}]
       },
