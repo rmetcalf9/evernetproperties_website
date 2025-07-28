@@ -51,6 +51,9 @@ export default defineComponent({
       this.proj_summary_data.external_category = data_to_load.external_category
     },
     save_project ({dict_of_card_info, activity_log, workflow, patch_id, location, passthroughdata}) {
+      if (typeof (location) === 'undefined') {
+        location = {}
+      }
       this.passthroughdata = passthroughdata
       const sub_section_details = {}
       for (const card_name_idx in Object.keys(dict_of_card_info)) {

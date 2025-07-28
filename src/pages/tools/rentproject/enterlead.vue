@@ -109,6 +109,7 @@ export default defineComponent({
         activity_log: this.$refs.ActivityLog.serializer_card_data,
         workflow: this.$refs.Workflow.serializer_card_data,
         patch_id: this.serialized_data.leadinformation.patch_id,
+        location: undefined,
         passthroughdata: {
           add_another: add_another,
           patch_id: this.serialized_data.leadinformation.patch_id
