@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 200 200"
+   version="1.1"
+   id="svg11"
+   sodipodi:docname="r2r_calls.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25)"
+   inkscape:export-filename="r2r_calls.svg"
+   inkscape:export-xdpi="48"
+   inkscape:export-ydpi="48"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs11" />
+  <sodipodi:namedview
+     id="namedview11"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="4.205"
+     inkscape:cx="55.053508"
+     inkscape:cy="151.0107"
+     inkscape:window-width="3448"
+     inkscape:window-height="2037"
+     inkscape:window-x="0"
+     inkscape:window-y="56"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg11" />
+  <!-- Phone handset receiver icon -->
+  <g
+     transform="matrix(0.40288261,0,0,0.40266211,-9.411434,24.564155)"
+     id="g1">
+    <path
+       d="M 332.821,367.991 C 321.588,380.976 240.71,462.395 118.87,272.811 -9.557,72.934 67.444,18.2 100.847,4.695 l 0.005,-0.043 c 0.53,-0.214 1.059,-0.378 1.597,-0.583 0.936,-0.359 1.814,-0.673 2.67,-0.971 0.367,-0.118 0.752,-0.263 1.123,-0.381 4.699,-1.545 7.692,-2.049 7.692,-2.049 0,0 -0.021,0.088 -0.037,0.23 22.136,-3.875 42.897,4.896 46.869,24.295 l 6.982,44.047 c 4.748,23.136 -13.581,50.933 -40.933,62.112 l -2.213,0.897 c 14.472,50.233 43.696,108.053 100.981,160.677 l 4.213,-3.666 c 22.285,-19.409 55.352,-23.245 73.878,-8.611 l 32.559,28.295 c 18.067,14.287 17.38,39.744 -3.412,59.047 z"
+       fill="#3b82f6"
+       id="path1" />
+  </g>
+  <!-- Script/document -->
+  <rect
+     x="85.703758"
+     y="20.968994"
+     width="107.43536"
+     height="134.2207"
+     fill="#ffffff"
+     stroke="#cbd5e1"
+     stroke-width="5.3703"
+     rx="10.743537"
+     id="rect1" />
+  <!-- Script lines -->
+  <line
+     x1="107.19083"
+     y1="47.813141"
+     x2="171.65202"
+     y2="47.813141"
+     stroke="#64748b"
+     stroke-width="5.3703"
+     id="line1" />
+  <line
+     x1="107.19083"
+     y1="69.288445"
+     x2="160.90849"
+     y2="69.288445"
+     stroke="#64748b"
+     stroke-width="5.3703"
+     id="line2" />
+  <line
+     x1="107.19083"
+     y1="90.763763"
+     x2="171.65202"
+     y2="90.763763"
+     stroke="#64748b"
+     stroke-width="5.3703"
+     id="line3" />
+  <line
+     x1="107.19083"
+     y1="112.23906"
+     x2="152.85083"
+     y2="112.23906"
+     stroke="#64748b"
+     stroke-width="5.3703"
+     id="line4" />
+  <!-- Dynamic/active indicator -->
+  <ellipse
+     cx="112.56259"
+     cy="133.71437"
+     fill="#10b981"
+     id="circle4"
+     rx="5.3717685"
+     ry="5.3688283"
+     style="stroke-width:2.68515" />
+  <ellipse
+     cx="134.04967"
+     cy="133.71437"
+     fill="#fbbf24"
+     id="circle5"
+     rx="5.3717685"
+     ry="5.3688283"
+     style="stroke-width:2.68515" />
+  <ellipse
+     cx="155.53673"
+     cy="133.71437"
+     fill="#ef4444"
+     id="circle6"
+     rx="5.3717685"
+     ry="5.3688283"
+     style="stroke-width:2.68515" />
+  <!-- Sound waves from phone -->
+  <path
+     d="m 50.501113,128.02473 q -13.429419,13.42206 0,26.84414"
+     stroke="#94a3b8"
+     stroke-width="5.3703"
+     fill="none"
+     id="path6" />
+  <path
+     d="m 37.071694,114.60268 q -26.85884,26.84411 0,53.68826"
+     stroke="#94a3b8"
+     stroke-width="5.3703"
+     fill="none"
+     id="path7" />
+  <path
+     d="m 23.642274,101.1806 q -26.8588409,40.26619 0,80.53242"
+     stroke="#94a3b8"
+     stroke-width="5.3703"
+     fill="none"
+     id="path8" />
+  <!-- House symbol (bigger and grey) -->
+</svg>
