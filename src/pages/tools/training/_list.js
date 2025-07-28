@@ -14,7 +14,8 @@ const glob_tutorials = [
     description: 'Learn how to get started. Find your first property and add it to the system. See how you can save links to external materials and keep access to it all using your phone when you\'re out and about.',
     component: Training_your_first_prop,
     next: 'fill_your_pipeline',
-    youtubevidref: 'lN1htfsbEpY'
+    youtubevidref: 'lN1htfsbEpY',
+    published: true
   },
   {
     weight: 1,
@@ -23,7 +24,8 @@ const glob_tutorials = [
     section: 'Getting Started',
     description: 'Working on properties one at a time is no good. In this tutorial you will learn how to fill your pipeline with multiple leads and go over the process to follow to find the best ones for your investors.',
     component: Training_fill_your_pipeline,
-    youtubevidref: 'UA7XWHDQ2CY'
+    youtubevidref: 'UA7XWHDQ2CY',
+    published: true
   },
   {
     weight: 0,
@@ -34,7 +36,8 @@ const glob_tutorials = [
     description: 'A detailed orientation to the Rent‑to‑Rent feature set - what each tool does and why it matters. Delve into all the system tools and modules designed specifically for managing Rent‑to‑Rent projects.',
     component: Training_r2r_overview,
     next: 'r2r_leads',
-    youtubevidref: 'nEkvURrr9-g'
+    youtubevidref: 'nEkvURrr9-g',
+    published: true
   },
   {
     weight: 1,
@@ -45,18 +48,20 @@ const glob_tutorials = [
     description: 'Learn how to accurately capture new Rent‑to‑Rent landlord leads—covering contact information, property details, and status tracking.',
     component: Training_r2r_leads,
     next: 'r2r_calls',
-    youtubevidref: 'xx'
+    youtubevidref: '6p_iIoP7D5E',
+    published: true
   },
   {
     weight: 2,
     id: 'r2r_calls',
     svg: true,
-    name: ' Making Calls with the Dynamic Script Tool',
+    name: 'Making Calls with the Dynamic Script Tool',
     section: 'Rent-to-Rent',
     description: 'Master the use of scripts to call landlords, record outcomes, manage objections, and arrange viewings within the system.',
     component: Training_r2r_calls,
     next: 'r2r_workflow',
-    youtubevidref: 'xx'
+    youtubevidref: 'xx',
+    published: false
   },
   {
     weight: 3,
@@ -66,7 +71,8 @@ const glob_tutorials = [
     section: 'Rent-to-Rent',
     description: 'Navigate the entirety of the Rent‑to‑Rent lifecycle - progress leads through the workflow, manage milestones, and finalise projects.',
     component: Training_r2r_workflow,
-    youtubevidref: 'xx'
+    youtubevidref: 'xx',
+    published: false
   }
 ]
 

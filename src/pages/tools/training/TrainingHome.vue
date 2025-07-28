@@ -44,22 +44,27 @@ export default defineComponent({
     }
   },
   computed: {
+    visible_tutorials () {
+      return glob_tutorials.glob_tutorials.filter(function (x) {
+        return x.published
+      })
+    },
     sections () {
       let unique_sections = {}
       let i = 0;
-      while (i < glob_tutorials.glob_tutorials.length) {
-        const section = glob_tutorials.glob_tutorials[i].section
+      while (i < this.visible_tutorials.length) {
+        const section = this.visible_tutorials[i].section
         if (  typeof (unique_sections[section]) === 'undefined' ) {
           unique_sections[section] = {
             name: section,
-            weight: glob_tutorials.glob_tutorials[i].weight,
-            tutorials: glob_tutorials.glob_tutorials.filter(function (x) {
+            weight: this.visible_tutorials[i].weight,
+            tutorials: this.visible_tutorials.filter(function (x) {
               return x.section === section
             }).sort(weight_based_compare)
           }
         } else {
-          if ( glob_tutorials.glob_tutorials[i].weight < unique_sections[section]) {
-            unique_sections[section].weight = glob_tutorials.glob_tutorials[i].weight
+          if ( this.visible_tutorials[i].weight < unique_sections[section]) {
+            unique_sections[section].weight = this.visible_tutorials[i].weight
           }
         }
         i++;
