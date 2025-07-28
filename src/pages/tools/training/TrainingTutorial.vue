@@ -49,7 +49,7 @@
         </component>
       </div>
     </div>
-    <div v-if="typeof (tutorials[0].next) !== 'undefined'">
+    <div v-if="show_next_tutorial">
       <h1>Next step...</h1>
       <p>We recommend you watch this tutorial next</p>
       <div>
@@ -96,6 +96,12 @@ export default defineComponent({
       }
       return '/training/' + this.tutorials[0].id + '.png'
     },
+    show_next_tutorial () {
+      if (typeof (this.next_tutorial) === 'undefined') {
+        return false
+      }
+      return true
+    },
     next_tutorial () {
       const TTT = this
       if (typeof (TTT.tutorials[0].next) === 'undefined') {
@@ -105,6 +111,9 @@ export default defineComponent({
         return x.id === TTT.tutorials[0].next
       })
       if (next_tutorials.length !== 1) {
+        return undefined
+      }
+      if (!next_tutorials[0].published) {
         return undefined
       }
       return next_tutorials[0]
