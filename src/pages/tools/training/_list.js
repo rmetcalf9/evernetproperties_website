@@ -63,7 +63,7 @@ const glob_tutorials = [
     description: 'Master the use of scripts to call landlords, record outcomes, manage objections, and arrange viewings within the system.',
     component: Training_r2r_calls,
     next: 'r2r_workflow',
-    youtubevidref: undefined,
+    youtubevidref: 'HLopU6JxywA',
     published: true
   },
   {
