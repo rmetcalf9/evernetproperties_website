@@ -56,6 +56,9 @@ export default defineComponent({
     return {
       features: [
         {main: 'Organized Deal Pipeline', sub: 'Keep track of all your potential deals in one place'},
+        {main: 'Purchase deals', sub: 'Support your search finding properties to purchase'},
+        {main: 'Rent-to-Rent deals', sub: 'Help organise your rent-to-rent deal hunt'},
+        {main: 'Dynamic call script call', sub: 'Make professional sales calls to landlords'},
         {main: 'Standardized Due Diligence', sub: 'Ensure every deal meets high-quality standards with structured assessments'},
         {main: 'Accurate Calculations', sub: 'Use verified formulas to back up your figures with evidence'},
         {main: 'Increased Efficiency', sub: 'Save time, reduce errors, and focus on closing the best deals'},
