@@ -5,6 +5,9 @@ import Training_r2r_leads from './Training_r2r_leads.vue'
 import Training_r2r_calls from './Training_r2r_calls.vue'
 import Training_r2r_workflow from './Training_r2r_workflow.vue'
 
+//// NOTE:
+// make youtubevidref undefined for comming soon
+
 const glob_tutorials = [
   {
     weight: 0,
@@ -60,7 +63,7 @@ const glob_tutorials = [
     description: 'Master the use of scripts to call landlords, record outcomes, manage objections, and arrange viewings within the system.',
     component: Training_r2r_calls,
     next: 'r2r_workflow',
-    youtubevidref: 'xx',
+    youtubevidref: undefined,
     published: true
   },
   {
@@ -71,7 +74,7 @@ const glob_tutorials = [
     section: 'Rent-to-Rent',
     description: 'Navigate the entirety of the Rent‑to‑Rent lifecycle - progress leads through the workflow, manage milestones, and finalise projects.',
     component: Training_r2r_workflow,
-    youtubevidref: 'xx',
+    youtubevidref: undefined,
     published: false
   }
 ]

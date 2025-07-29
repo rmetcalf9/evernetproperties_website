@@ -27,10 +27,7 @@
             {{tutorials[0].description}}
           </div>
         </div>
-        <h2>Video</h2>
-        <div v-if="typeof (tutorials[0].youtubevidref) === 'undefined'">
-          Coming soon...
-        </div>
+        <h2 v-if="typeof (tutorials[0].youtubevidref) !== 'undefined'">Video</h2>
         <div
           v-if="typeof (tutorials[0].youtubevidref) !== 'undefined'"
           class="tutorial-ppb-embedded-vid-outer-div"
