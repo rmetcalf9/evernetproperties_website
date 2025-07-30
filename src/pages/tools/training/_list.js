@@ -75,7 +75,7 @@ const glob_tutorials = [
     description: 'Navigate the entirety of the Rent‑to‑Rent lifecycle - progress leads through the workflow, manage milestones, and finalise projects.',
     component: Training_r2r_workflow,
     youtubevidref: undefined,
-    published: false
+    published: true
   }
 ]
 
