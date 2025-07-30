@@ -30,8 +30,8 @@ export default defineComponent({
   data () {
     return {
       chapters: [
-        'TODO chap 1',
-        'TODO chap 2',
+        'The Rent Project Workflow',
+        'Show Rental Viewing List',
         'TODO chap 3'
       ]
     }

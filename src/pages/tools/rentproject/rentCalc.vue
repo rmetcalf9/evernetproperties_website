@@ -2,7 +2,7 @@
 <q-page class="flex ">
   <div class="rentcalc-page fit col wrap justify-center items-center content-center">
     <div>
-      <h1>Rent Project {{ sucessful_load_completed }}</h1>
+      <h1>Rent Project</h1>
     </div>
     <BrrToolbar
       ref="BrrToolbar"
