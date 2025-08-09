@@ -24,7 +24,7 @@
     :src="'/training/' + tutorial.id + '_003.png'"
     caption="Viewings Overview"
   />
-  <p>This shows the days you have viewings as well as the addresses and times of each viewings. The add to calendar button will let you add a viewing into your calendar. The “i” icon will take you to more detailed information about this project and the “Patch” button takes you to the patch screen.</p>s
+  <p>This shows the days you have viewings as well as the addresses and times of each viewings. The add to calendar button will let you add a viewing into your calendar. The “i” icon will take you to more detailed information about this project and the “Patch” button takes you to the patch screen.</p>
 
 
   <h3>{{ chapters[2] }}</h3>
