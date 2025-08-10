@@ -1,10 +1,10 @@
 
 const next_event = {
-  date: '2024-12-11T18:30:00Z',
+  date: '2025-08-21T19:00:00Z',
   title: 'Property Pipeline Builder',
-  subtitle: 'Early Access Webinar',
-  description: 'Property Pipeline Builder early access user group session. This session is for users who are interested in using it to manage their deal pipeline. I will demonstrate major features, present the road map and invite discussion to shape the future direction. In order to generate the maximum value for users I want to gather as much feedback as possible.',
-  meeting_url: 'https://meet.google.com/fyv-szmv-wxs'
+  subtitle: 'Unlock the Full Potential of Rent-to-Rent with Property Pipeline Builder',
+  description: 'Our latest update to Property Pipeline Builder brings you a complete Rent-to-Rent toolkit — designed to streamline your process from lead to deal. In this webinar, you’ll discover how to: Effortlessly record and track landlord leads, Conduct high-impact sales calls that convert, Manage deals through every stage to successful completion. Whether you’re new to Rent-to-Rent or looking to sharpen your approach, this session will show you how Property Pipeline Builder can simplify your workflow, save you time, and boost your results.',
+  meeting_url: 'https://meet.google.com/gox-ptrk-msf'
 }
 const oneHour = 3600000;
 

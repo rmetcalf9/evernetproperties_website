@@ -51,7 +51,7 @@
       <section class="content">
         <h2>What’s in Store for You?</h2>
         <ul>
-          <li>🚀 Discover Core Features: Organize properties and streamline due diligence.</li>
+          <li>🚀 Discover Core Features: Organize deals and streamline due diligence.</li>
           <li>💡 Shape the Future: Share ideas for upcoming features and enhancements.</li>
           <li>🤝 Collaborate Live: Q&A session for feedback and workflow tips.</li>
         </ul>
