@@ -65,7 +65,7 @@ function change_viewing_information(proj, {viewing_timestamp, call_timestamp, ca
   }
 }
 
-function startChange({backend_connection_store, projectId}) {
+function startChange({backend_connection_store, dataCachesStore, projectId}) {
   return new Promise(function(successFn, errorFn) {
     const callback = {
       ok: function (response) {
@@ -80,13 +80,20 @@ function startChange({backend_connection_store, projectId}) {
               },
               error: errorFn
             }
-            backend_connection_store.call_api({
-              apiprefix: 'privateUserAPIPrefix',
-              url: '/projects',
-              method: 'POST',
-              data: proj,
+            // backend_connection_store.call_api({
+            //   apiprefix: 'privateUserAPIPrefix',
+            //   url: '/projects',
+            //   method: 'POST',
+            //   data: proj,
+            //   callback: savecallback
+            // })
+            dataCachesStore.save({
+              backend_connection_store: this.backend_connection_store,
+              object_type: 'projects',
+              object_data: proj,
               callback: savecallback
             })
+
           },
           change_workflow_state: function ({workflow_id, workflow_stage, notes}) {
             const orig_workflow_used_id = proj.workflow.workflow_used_id
@@ -106,13 +113,20 @@ function startChange({backend_connection_store, projectId}) {
       },
       error: errorFn
     }
-    backend_connection_store.call_api({
-      apiprefix: 'privateUserAPIPrefix',
-      url: '/projects/' + projectId,
-      method: 'GET',
-      data: undefined,
+    dataCachesStore.get({
+      backend_connection_store: backend_connection_store,
+      object_type: 'projects',
+      object_id: projectId,
+      skip_cache: false,
       callback: callback
     })
+    // backend_connection_store.call_api({
+    //   apiprefix: 'privateUserAPIPrefix',
+    //   url: '/projects/' + projectId,
+    //   method: 'GET',
+    //   data: undefined,
+    //   callback: callback
+    // })
   })
 }
 

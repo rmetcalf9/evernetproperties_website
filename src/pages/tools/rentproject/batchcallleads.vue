@@ -73,6 +73,8 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import utils from '../../../components/utils.js'
 import atomicProjectUpdates from '../../../atomicProjectUpdates.js'
 import { Notify } from 'quasar'
@@ -103,8 +105,10 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store: backend_connection_store
+      backend_connection_store: backend_connection_store,
+      dataCachesStore: dataCachesStore
     }
   },
   data () {
@@ -147,6 +151,7 @@ export default defineComponent({
         // Rejected before calling
         atomicProjectUpdates.startChange({
           backend_connection_store: TTT.backend_connection_store,
+          dataCachesStore: TTT.dataCachesStore,
           projectId: outcome_data.current_lead.id
         }).then(
           function ({active_change_object}) {
@@ -167,6 +172,7 @@ export default defineComponent({
         // Phone call made but not property available
         atomicProjectUpdates.startChange({
           backend_connection_store: TTT.backend_connection_store,
+          dataCachesStore: TTT.dataCachesStore,
           projectId: outcome_data.current_lead.id
         }).then(
           function ({active_change_object}) {
@@ -193,6 +199,7 @@ export default defineComponent({
 
         atomicProjectUpdates.startChange({
           backend_connection_store: TTT.backend_connection_store,
+          dataCachesStore: TTT.dataCachesStore,
           projectId: outcome_data.current_lead.id
         }).then(
           function ({active_change_object}) {
@@ -333,11 +340,11 @@ export default defineComponent({
           })
         }
       }
-      this.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/projects/' + id_of_project_to_load,
-        method: 'GET',
-        data: undefined,
+      TTT.dataCachesStore.get({
+        backend_connection_store: TTT.backend_connection_store,
+        object_type: 'projects',
+        object_id: id_of_project_to_load,
+        skip_cache: false,
         callback: callback
       })
     }
