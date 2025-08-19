@@ -4,7 +4,7 @@ const next_event = {
   title: 'Property Pipeline Builder',
   subtitle: 'Unlock the Full Potential of Rent-to-Rent with Property Pipeline Builder',
   description: 'Our latest update to Property Pipeline Builder brings you a complete Rent-to-Rent toolkit — designed to streamline your process from lead to deal. In this webinar, you’ll discover how to: Effortlessly record and track landlord leads, Conduct high-impact sales calls that convert, Manage deals through every stage to successful completion. Whether you’re new to Rent-to-Rent or looking to sharpen your approach, this session will show you how Property Pipeline Builder can simplify your workflow, save you time, and boost your results.',
-  meeting_url: 'https://meet.google.com/gox-ptrk-msf'
+  meeting_url: 'https://meet.google.com/ugz-ktpg-jfc'
 }
 const oneHour = 3600000;
 
