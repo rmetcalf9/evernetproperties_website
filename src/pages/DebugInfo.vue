@@ -70,7 +70,11 @@ export default defineComponent({
       cookies_for_this_site.map(function (x) {
         Cookies.remove(x)
       })
-
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          registrations.forEach(registration => registration.update())
+        })
+      }
       this.backend_connection_store.logout()
       window.location.reload(true)
     }
