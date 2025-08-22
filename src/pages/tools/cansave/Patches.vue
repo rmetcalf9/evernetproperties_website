@@ -28,6 +28,7 @@ import { useBackendConnectionStore } from 'stores/backend_connection'
 import CommonBRRToolLink from '../../../components/CommonBRRToolLink.vue'
 import PatchCard from '../../../components/PatchCard.vue'
 import Workflow_main from '../../../components/Workflow/Workflow_main.js'
+import { useDataCachesStore } from 'stores/data_caches'
 
 export default defineComponent({
   name: 'ToolsCansavePatchesPage',
@@ -37,8 +38,10 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -115,11 +118,11 @@ export default defineComponent({
           TTT.recursive_load_project_details()
         }
       }
-      this.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/patches/' + item_to_load.from_user_profile.id,
-        method: 'GET',
-        data: undefined,
+      this.dataCachesStore.get({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'patches',
+        object_id: item_to_load.from_user_profile.id,
+        skip_cache: false,
         callback: callback
       })
     }

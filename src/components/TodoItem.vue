@@ -71,6 +71,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
 import common_constants from '../components/common_constants.js'
 import { Notify } from 'quasar'
 
@@ -100,8 +101,10 @@ export default defineComponent({
   emits: ['update_todo_item', 'delete_todo_item'],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -241,6 +244,14 @@ export default defineComponent({
           })
         }
       }
+      TTT.dataCachesStore.invalidate({
+        object_type: 'projects',
+        object_id: todo.project_id
+      })
+      TTT.dataCachesStore.invalidate({
+        object_type: 'patches',
+        object_id: todo.patch_id
+      })
       TTT.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
         url: '/projects/' + todo.project_id + '/todos',
@@ -285,6 +296,14 @@ export default defineComponent({
           })
         }
       }
+      TTT.dataCachesStore.invalidate({
+        object_type: 'projects',
+        object_id: todo.project_id
+      })
+      TTT.dataCachesStore.invalidate({
+        object_type: 'patches',
+        object_id: todo.patch_id
+      })
       TTT.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
         url: '/projects/' + todo.project_id + '/todos/' + todo.id,

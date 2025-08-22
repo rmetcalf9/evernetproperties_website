@@ -250,11 +250,11 @@ export default defineComponent({
           TTT.$router.push('/tools/cansave/patches')
         }
       }
-      this.backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
-        url: '/patches/' + TTT.$route.params.patchid,
-        method: 'GET',
-        data: undefined,
+      this.dataCachesStore.get({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'patches',
+        object_id: TTT.$route.params.patchid,
+        skip_cache: false,
         callback: callback
       })
     },

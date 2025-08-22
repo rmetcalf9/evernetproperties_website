@@ -501,6 +501,14 @@ export default defineComponent({
           })
         }
       }
+      TTT.dataCachesStore.invalidate({
+        object_type: 'projects',
+        object_id: TTT.loaded_project_id
+      })
+      TTT.dataCachesStore.invalidate({
+        object_type: 'patches',
+        object_id: TTT.serialized_data.dealbasicinfo.patch_id
+      })
       TTT.backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
         url: '/projects/' + TTT.loaded_project_id + '/todos',

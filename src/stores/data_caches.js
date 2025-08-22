@@ -3,16 +3,26 @@ import { defineStore } from 'pinia'
   Store for system datacaches
   This stoe is wiped when user logs out
 
-  TODO:
-  5- Invalidate options
 */
 
 // Only objects in this dict are valid objects to cache
 const valid_objects = {
   projects: {
-    url: '/projects'
-  }
+    url: '/projects',
+    getOnSaveCacheInvalidationList: projectGetOnSaveCacheInvalidationList
+  },
+  patches: {
+    url: '/patches'
+  },
 }
+
+function projectGetOnSaveCacheInvalidationList(object_data) {
+  return [{
+    object_type: 'patches',
+    object_id: object_data.patch_id
+  }]
+}
+
 
 function get_blank_cache_data () {
   let retVal = {}
@@ -37,18 +47,37 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
     reset () {
       this.cache_data = get_blank_cache_data()
     },
+    invalidate ({ object_type, object_id}) {
+      if (!Object.hasOwn(valid_objects, object_type)) {
+        console.log('Warning - invalid object type in invalidate message', object_type)
+        return
+      }
+      // console.log('data_cache invalidate INVALIDATING', object_type, object_id)
+      if (!Object.hasOwn(this.cache_data[object_type], object_id)) {
+        // Commonly happens
+        // console.log('Warning - trying to invalidate object not in cache', object_type, object_id)
+        return
+      }
+      delete this.cache_data[object_type][object_id]
+    },
     save ({backend_connection_store, object_type, object_data, callback}) {
+      const TTT = this
       if (!Object.hasOwn(valid_objects, object_type)) {
         callback.error('Tried to save invalid object type ' + object_type)
         return
       }
-      const TTT = this
       const callback2 = {
         ok: function (response) {
           TTT.cache_data[object_type][response.data.id] = response.data
           callback.ok(response)
         },
         error: callback.error
+      }
+      if (typeof (valid_objects[object_type].getOnSaveCacheInvalidationList) !== 'undefined') {
+        const objectsToInvalidata = valid_objects[object_type].getOnSaveCacheInvalidationList(object_data)
+        objectsToInvalidata.forEach(function (x) {
+          TTT.invalidate(x)
+        })
       }
       backend_connection_store.call_api({
         apiprefix: 'privateUserAPIPrefix',
