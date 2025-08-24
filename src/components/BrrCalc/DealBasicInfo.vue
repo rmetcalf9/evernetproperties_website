@@ -38,6 +38,16 @@
         />
       </div>
       <q-separator class="basic-info-seperator" />
+      <div>
+        <PatchAgentInput
+          :ever_saved="ever_saved"
+          :patch_id="patch.id"
+          :selling_agent="selling_agent"
+          :selling_agent_id="selling_agent_id"
+          @update:selling_agent="selling_agent = $event"
+          @update:selling_agent_id="selling_agent_id = $event"
+        />
+      </div>
       <div><q-input filled clearable v-model="selling_agent" label="Selling Agent" /></div>
       <q-separator class="basic-info-seperator" />
       <div><q-input filled autogrow v-model="notes" label="Notes" /></div>
@@ -55,6 +65,7 @@ import { Notify } from 'quasar'
 import utils from '../../utils.js'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import Weblinks from '../../components/Weblinks.vue'
+import PatchAgentInput from '../../components/PatchAgents/PatchAgentInput.vue'
 
 function getDefaultSource() {
   return {
@@ -68,7 +79,7 @@ export default defineComponent({
   emits: ['projectchanged', 'navigate_away'],
   props: ['ever_saved'],
   components: {
-    Weblinks,
+    Weblinks, PatchAgentInput
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
@@ -84,6 +95,7 @@ export default defineComponent({
       weblinks: [],
       new_patch_value: '',
       selling_agent: '',
+      selling_agent_id: '',
       notes: '',
       emit_project_change_notification: true,
       deal_source: getDefaultSource(),
@@ -112,6 +124,7 @@ export default defineComponent({
         postcode: this.postcode,
         weblinks: this.weblinks,
         selling_agent: this.selling_agent,
+        selling_agent_id: this.selling_agent_id,
         notes: this.notes,
         deal_source: this.deal_source
       }
@@ -175,6 +188,11 @@ export default defineComponent({
       this.postcode = data_to_load.postcode
       this.weblinks = data_to_load.weblinks
       this.selling_agent = data_to_load.selling_agent
+      if (typeof (data_to_load.selling_agent_id) === 'undefined') {
+        this.selling_agent_id = ''
+      } else {
+        this.selling_agent_id = data_to_load.selling_agent_id
+      }
       this.notes = data_to_load.notes
 
       this.patch = this.patch_list.filter(function (x) {

@@ -11,7 +11,7 @@ const valid_objects = {
     url: '/projects',
     getOnSaveCacheInvalidationList: projectGetOnSaveCacheInvalidationList
   },
-  patches: {
+  patches: { // Save might not work because it uses /me/patches endpoint
     url: '/patches'
   },
 }
