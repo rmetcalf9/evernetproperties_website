@@ -41,6 +41,7 @@
       <div>
         <PatchAgentInput
           :ever_saved="ever_saved"
+          :loaded_project_id="loaded_project_id"
           :patch_id="patch.id"
           :selling_agent="selling_agent"
           :selling_agent_id="selling_agent_id"
@@ -77,7 +78,7 @@ function getDefaultSource() {
 export default defineComponent({
   name: 'DealBasicInfo',
   emits: ['projectchanged', 'navigate_away'],
-  props: ['ever_saved'],
+  props: ['ever_saved', 'loaded_project_id'],
   components: {
     Weblinks, PatchAgentInput
   },

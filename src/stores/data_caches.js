@@ -14,6 +14,9 @@ const valid_objects = {
   patches: { // Save might not work because it uses /me/patches endpoint
     url: '/patches'
   },
+  patchagents: {
+    url: '/patchagents'
+  }
 }
 
 function projectGetOnSaveCacheInvalidationList(object_data) {
@@ -89,7 +92,7 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
     },
     get ({backend_connection_store, object_type, object_id, skip_cache, callback}) {
       if (!Object.hasOwn(valid_objects, object_type)) {
-        callback.error('Tried to save invalid object type ' + object_type)
+        callback.error('Tried to load invalid object type ' + object_type)
         return
       }
       const TTT = this

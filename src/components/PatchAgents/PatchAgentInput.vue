@@ -1,10 +1,19 @@
 <template>
   <div class="row">
     <q-input
+      v-if="selling_agent_id === ''"
       filled
       clearable
       :model-value="selling_agent"
       @update:model-value="updateSellingAgent"
+      label="Selling Agent"
+      class="col"
+    />
+    <q-input
+      v-if="selling_agent_id !== ''"
+      filled
+      readonly
+      :model-value="caculated_selling_agent"
       label="Selling Agent"
       class="col"
     />
@@ -44,6 +53,7 @@
               @click="createbtnclick"
               :label="adddialogcreatebuttonlabel"
               class="patchagentinput-adddialogcreatebutton"
+              :disable="createbtndisable"
             />
           </div>
           <div>
@@ -76,20 +86,52 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
+import { uuidv4 } from 'node-common-library'
 
 export default defineComponent({
   name: 'PatchAgentInput',
-  props: ['ever_saved', 'patch_id', 'selling_agent', 'selling_agent_id'],
+  props: ['ever_saved', 'loaded_project_id', 'patch_id', 'selling_agent', 'selling_agent_id'],
   emits: ['update:selling_agent', 'update:selling_agent_id'],
+  setup () {
+    const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
+    return {
+      backend_connection_store,
+      dataCachesStore
+    }
+  },
   data () {
     return {
       add_dialog: {
         visible: false,
         agent_name: ''
-      }
+      },
+      loaded: false,
+      patchagents_data: {}
+    }
+  },
+  watch: {
+    patch_id(newValue, oldValue) {
+      this.loaded = false
+      this.refresh()
     }
   },
   computed: {
+    caculated_selling_agent () {
+      if (typeof (this.patchagents_data.agents) === 'undefined') {
+        return ''
+      }
+      if (typeof (this.selling_agent_id) === 'undefined') {
+        return ''
+      }
+      if (this.selling_agent_id === '') {
+        return ''
+      }
+      return this.patchagents_data.agents[this.selling_agent_id].agent_name
+    },
     notesbtnicon () {
       if (this.selling_agent_id === '') {
         return 'note_add'
@@ -101,6 +143,12 @@ export default defineComponent({
         return 'undefined'
       }
       return 'primary'
+    },
+    createbtndisable () {
+      if (this.add_dialog.agent_name === '') {
+        return true
+      }
+      return !this.loaded
     },
     add_dialog_linking_item () {
       const TTT = this
@@ -123,13 +171,24 @@ export default defineComponent({
       return 'Link'
     },
     known_agent_list_unfiltered () {
-      var ret_val = []
-      for (let i = 0; i < 10; i++) {
-        ret_val.push({
-          id: i.toString(),
-          label: 'Abce' + i.toString()
-        })
+      // for (let i = 0; i < 10; i++) {
+      //  this.known_agent_list_unfiltered.push({
+      //    id: i.toString(),
+      //    label: 'Abce' + i.toString()
+      //  })
+      // }
+      const TTT = this
+      if (typeof (this.patchagents_data.agents) == 'undefined') {
+        return []
       }
+      var ret_val = []
+      Object.keys(this.patchagents_data.agents).forEach(function (x) {
+        // this.patchagents_data.agents
+        ret_val.push({
+          id: x,
+          label: TTT.patchagents_data.agents[x].agent_name
+        })
+      })
       return ret_val
     },
     known_agent_list () {
@@ -144,6 +203,31 @@ export default defineComponent({
     }
   },
   methods: {
+    refresh () {
+      var TTT = this
+      if (TTT.patch_id === 'notset') {
+        console.log('Patch ID not set can not load')
+        return
+      }
+      const callback = {
+        ok: TTT.load_patchagents_api_success,
+        error: TTT.load_patchagents_api_fail
+      }
+      TTT.dataCachesStore.get({
+        backend_connection_store: TTT.backend_connection_store,
+        object_type: 'patchagents',
+        object_id: TTT.patch_id,
+        skip_cache: false,
+        callback: callback
+      })
+    },
+    load_patchagents_api_fail (response) {
+      console.log('patchagents load failed', response)
+    },
+    load_patchagents_api_success (response) {
+      this.patchagents_data = response.data
+      this.loaded = true
+    },
     updateSellingAgent (value) {
       this.$emit('update:selling_agent', value)
     },
@@ -157,8 +241,6 @@ export default defineComponent({
       if (this.selling_agent_id === '') {
         this.add_dialog.agent_name = this.selling_agent
         this.add_dialog.visible = true
-        // this.updateSellingAgentId('a')
-        // this.updateSellingAgent('a')
       } else {
         console.log('TODO show edit existing notes dialog')
         // this.updateSellingAgentId('')
@@ -166,13 +248,49 @@ export default defineComponent({
       }
     },
     createbtnclick () {
-      if (typeof (this.add_dialog_linking_item.id) === 'undefined') {
-        console.log('TODO create button click')
-      } else {
-        console.log('TODO link button click')
-        console.log('link to ', this.add_dialog_linking_item)
+      const TTT = this
+      if (this.add_dialog.agent_name === '') {
+        return
       }
+      if (typeof (this.add_dialog_linking_item.id) === 'undefined') {
+        const new_agent_id = uuidv4()
+        const new_agent = {
+          agent_name: this.add_dialog.agent_name,
+          agent_notes: '',
+          projects: [this.loaded_project_id]
+        }
+        this.patchagents_data.agents[new_agent_id] = new_agent
+        this.updateSellingAgentId(new_agent_id)
+        this.updateSellingAgent('')
+        const callback = {
+          ok: TTT.createbtnclick_create_saveagentpatches_success,
+          error: TTT.createbtnclick_create_saveagentpatches_fail
+        }
+        TTT.dataCachesStore.save({
+          backend_connection_store: TTT.backend_connection_store,
+          object_type: 'patchagents',
+          object_data: TTT.patchagents_data,
+          callback: callback
+        })
+      } else {
+        this.updateSellingAgentId(this.add_dialog_linking_item.id)
+        this.updateSellingAgent('')
+        console.log('TODO add this project to the agent and save agent')
+        // Add project to this agent
+        // TODO Launch  view dialog
+      }
+    },
+    createbtnclick_create_saveagentpatches_fail (response) {
+      console.log('createbtnclick_create_saveagentpatches_fail')
+    },
+    createbtnclick_create_saveagentpatches_success (response) {
+      this.patchagents_data = response.data
+
+      // TODO Launch  view dialog
     }
+  },
+  mounted () {
+    this.refresh()
   }
 })
 

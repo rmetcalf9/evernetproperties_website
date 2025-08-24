@@ -34,6 +34,7 @@
           ref="DealBasicInfo"
           v-if="security_role_cansave"
           :ever_saved="ever_saved"
+          :loaded_project_id="loaded_project_id"
           @projectchanged="projectchanged"
           @navigate_away="navigate_away"
         />
