@@ -64,6 +64,7 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
       delete this.cache_data[object_type][object_id]
     },
     save ({backend_connection_store, object_type, object_data, callback}) {
+      // Note object_data NOT needed as when object is changed it is only a pointer
       const TTT = this
       if (!Object.hasOwn(valid_objects, object_type)) {
         callback.error('Tried to save invalid object type ' + object_type)

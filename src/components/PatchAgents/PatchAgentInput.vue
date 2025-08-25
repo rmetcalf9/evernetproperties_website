@@ -1,5 +1,10 @@
 <template>
   <div class="row">
+    <!-- <q-btn
+      v-if="ever_saved"
+      label="RJMTEST"
+      @click="rjmtest"
+    /> -->
     <q-input
       v-if="selling_agent_id === ''"
       filled
@@ -443,7 +448,22 @@ export default defineComponent({
         object_data: this.patchagents_data,
         callback: update_agent_callback
       })
-    }
+    },
+    // rjmtest () {
+    //  console.log('SSS')
+    //  const agents1 = this.dataCachesStore.get_direct_from_cache({
+    //    object_type: 'patchagents',
+    //    object_id: this.patch_id
+    //  })
+    //  console.log('agents1', agents1)
+    //  agents1['extra'] = 'extra'
+    //  console.log('agents1', agents1)
+    //  const agents2 = this.dataCachesStore.get_direct_from_cache({
+    //    object_type: 'patchagents',
+    //    object_id: this.patch_id
+    //  })
+    //  console.log('agents2', agents2)
+    // }
   },
   mounted () {
     this.refresh()

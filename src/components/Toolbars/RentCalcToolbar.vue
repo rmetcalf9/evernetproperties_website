@@ -5,10 +5,6 @@
       @saveproject="$emit('saveproject')"
       :reason_project_not_savable="reason_project_not_savable"
     />
-    <CallSellingAgent
-      v-if="!is_rent_project"
-      @activity_log="(obj) => $emit('activity_log',obj)"
-    />
     <ResearchCall
       @activity_log="(obj) => $emit('activity_log',obj)"
     />
@@ -22,10 +18,9 @@
 <script>
 import { defineComponent } from 'vue'
 
-import CallSellingAgent from './CallSellingAgent.vue'
-import ResearchCall from './ResearchCall.vue'
-import SaveButton from './SaveButton.vue'
-import TodoButton from './TodoButton.vue'
+import ResearchCall from './Items/ResearchCall.vue'
+import SaveButton from './Items/SaveButton.vue'
+import TodoButton from './Items/TodoButton.vue'
 
 export default defineComponent({
   name: 'BrrCalcToolbar',
@@ -35,15 +30,10 @@ export default defineComponent({
     },
     is_saved_project_with_id: {
       type: Boolean
-    },
-    is_rent_project: {
-      type: Boolean,
-      default: false
     }
   },
   emits: ['activity_log', 'saveproject', 'createtodo'],
   components: {
-    CallSellingAgent,
     ResearchCall,
     SaveButton,
     TodoButton

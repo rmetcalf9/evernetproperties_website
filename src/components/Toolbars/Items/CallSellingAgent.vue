@@ -25,6 +25,8 @@
               :rules="[val => val.length>2 || 'Too short']"
             />
           </div>
+          <div>
+          </div>
           <q-card-actions align="right" class="text-primary">
           <q-btn label="Cancel" @click="this.dialog_visible = false" />
             <q-btn color="primary" icon="call" label="Save" @click="click_selling_agent_btn" :disable="isDisabled" />

@@ -7,8 +7,8 @@
       <div v-if="!security_role_cansave">
         <h1>Buy Refurbish Rent Refinance Calculator</h1>
       </div>
-      <BrrToolbar
-        ref="BrrToolbar"
+      <BrrCalcToolbar
+        ref="BrrCalcToolbar"
         v-if="security_role_cansave"
         :reason_project_not_savable="reason_project_not_savable"
         :is_saved_project_with_id="is_saved_project_with_id"
@@ -174,7 +174,7 @@
 <script>
 import { defineComponent } from 'vue'
 
-import BrrToolbar from '../../components/BrrCalc/BrrToolbar/BrrToolbar.vue'
+import BrrCalcToolbar from '../../components/Toolbars/BrrCalcToolbar.vue'
 
 
 import Vision from '../../components/BrrCalc/Vision.vue'
@@ -224,7 +224,7 @@ export default defineComponent({
     ProjectSerializer,
     SaveToGoogleSheet,
     ActivityLog,
-    BrrToolbar,
+    BrrCalcToolbar,
     Workflow,
     FlipDealRating,
     Todos,
@@ -264,7 +264,7 @@ export default defineComponent({
         console.log('WARNING ever_saved checked when cansave is false')
         return false
       }
-      return this.$refs.BrrToolbar.ever_saved
+      return this.$refs.BrrCalcToolbar.ever_saved
     },
     reason_project_not_savable () {
       if (!this.isMounted) {
@@ -472,11 +472,11 @@ export default defineComponent({
   methods: {
     navigate_away(params) {
       const TTT = this
-      if (!this.$refs.BrrToolbar.is_project_changed) {
+      if (!this.$refs.BrrCalcToolbar.is_project_changed) {
         this.$router.push(params.dest)
         return
       }
-      this.$refs.BrrToolbar.click_save_btn()
+      this.$refs.BrrCalcToolbar.click_save_btn()
       setTimeout(function () {
         TTT.navigate_away(params)
       }, 100)
@@ -539,18 +539,18 @@ export default defineComponent({
         console.log('WARNING = projectchanged called when mounted is false')
         return
       }
-      if (typeof (this.$refs.BrrToolbar) === 'undefined') {
-        console.log('WARNING = projectchanged called when BrrToolbar is undefined')
+      if (typeof (this.$refs.BrrCalcToolbar) === 'undefined') {
+        console.log('WARNING = projectchanged called when BrrCalcToolbar is undefined')
         return false
       }
       if (source === 'ActivityLog:log_activity:forcesave') {
-        this.$refs.BrrToolbar.set_changed_true({autosave_seconds: 0})
+        this.$refs.BrrCalcToolbar.set_changed_true({autosave_seconds: 0})
       } else {
-        this.$refs.BrrToolbar.set_changed_true()
+        this.$refs.BrrCalcToolbar.set_changed_true()
       }
     },
     click_save_btn () {
-      this.$refs.BrrToolbar.click_save_btn()
+      this.$refs.BrrCalcToolbar.click_save_btn()
     },
     save_project () {
       this.$refs.ProjectSerializer.save_project({
@@ -594,7 +594,7 @@ export default defineComponent({
       }
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
       this.$refs.Workflow.serializer_load_data(project.workflow)
-      this.$refs.BrrToolbar.serializer_load_data({})
+      this.$refs.BrrCalcToolbar.serializer_load_data({})
 
       // todos only loaded. Never saved
       this.$refs.todos.serializer_load_data(project.todos)
@@ -603,7 +603,7 @@ export default defineComponent({
       if (success) {
         this.loaded_project_id = response.data.id
       }
-      this.$refs.BrrToolbar.save_project_complete_notification({
+      this.$refs.BrrCalcToolbar.save_project_complete_notification({
         success: success,
         response: response
       })

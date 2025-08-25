@@ -4,11 +4,10 @@
     <div>
       <h1>Rent Project</h1>
     </div>
-    <BrrToolbar
-      ref="BrrToolbar"
+    <RentCalcToolbar
+      ref="RentCalcToolbar"
       reason_project_not_savable=""
       :is_saved_project_with_id="true"
-      :is_rent_project="true"
       @activity_log="activity_log"
       @saveproject="save_project"
       @createtodo="createtodo"
@@ -72,7 +71,7 @@
 import { defineComponent } from 'vue'
 import { Notify, useQuasar } from 'quasar'
 
-import BrrToolbar from '../../../components/BrrCalc/BrrToolbar/BrrToolbar.vue'
+import RentCalcToolbar from '../../../components/Toolbars/RentCalcToolbar.vue'
 
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { useDataCachesStore } from 'stores/data_caches'
@@ -97,7 +96,7 @@ export default defineComponent({
     Workflow,
     Todos,
     ProjectSerializer,
-    BrrToolbar,
+    RentCalcToolbar,
     ViewingInfo,
     Location
   },
@@ -201,11 +200,11 @@ export default defineComponent({
       const TTT = this
       this.$router.push(params.dest)
       // TODO project change and save check
-      // if (!this.$refs.BrrToolbar.is_project_changed) {
+      // if (!this.$refs.RentCalcToolbar.is_project_changed) {
       //   this.$router.push(params.dest)
       //   return
       // }
-      // this.$refs.BrrToolbar.click_save_btn()
+      // this.$refs.RentCalcToolbar.click_save_btn()
       // setTimeout(function () {
       //   TTT.navigate_away(params)
       // }, 100)
@@ -267,7 +266,7 @@ export default defineComponent({
 
       this.$refs.ActivityLog.serializer_load_data(project.activity_log)
       this.$refs.Workflow.serializer_load_data(project.workflow)
-      // this.$refs.BrrToolbar.serializer_load_data({})
+      // this.$refs.RentCalcToolbar.serializer_load_data({})
 
       // todos only loaded. Never saved
       this.$refs.todos.serializer_load_data(project.todos)
@@ -280,7 +279,7 @@ export default defineComponent({
       if (success) {
         this.loaded_project_id = response.data.id
       }
-      this.$refs.BrrToolbar.save_project_complete_notification({
+      this.$refs.RentCalcToolbar.save_project_complete_notification({
         success: success,
         response: response
       })
@@ -291,19 +290,19 @@ export default defineComponent({
         console.log('WARNING = projectchanged called when mounted is false')
         return
       }
-      if (typeof (this.$refs.BrrToolbar) === 'undefined') {
-       console.log('WARNING = projectchanged called when BrrToolbar is undefined')
+      if (typeof (this.$refs.RentCalcToolbar) === 'undefined') {
+       console.log('WARNING = projectchanged called when RentCalcToolbar is undefined')
        return false
       }
       if (source === 'ActivityLog:log_activity:forcesave') {
-        this.$refs.BrrToolbar.set_changed_true({autosave_seconds: 0})
+        this.$refs.RentCalcToolbar.set_changed_true({autosave_seconds: 0})
       } else {
-        this.$refs.BrrToolbar.set_changed_true()
+        this.$refs.RentCalcToolbar.set_changed_true()
       }
       this.$refs.ViewingInfo.setWorkflowInfo(this.$refs.Workflow.serializer_card_data)
     },
     click_save_btn () {
-      this.$refs.BrrToolbar.click_save_btn()
+      this.$refs.RentCalcToolbar.click_save_btn()
     },
     activity_log (obj) {
       if (!this.isMounted) {
