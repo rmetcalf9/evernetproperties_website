@@ -22,9 +22,28 @@ function dealsource (project) {
   return project.sub_section_details.leadinformation.lead_source
 }
 
-function sellingAgent (project) {
+function sellingAgent (project, dataCachesStore) {
   if (project.type === 'purchase') {
-    return utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
+    if (typeof (project.sub_section_details.dealbasicinfo.selling_agent_id) === 'undefined') {
+      return utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
+    }
+    if (project.sub_section_details.dealbasicinfo.selling_agent_id === '') {
+      return utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
+    }
+    const agents = dataCachesStore.get_direct_from_cache({
+      object_type: 'patchagents',
+      object_id: project.patch_id
+    })
+    if (typeof (agents) === 'undefined') {
+      return ''
+    }
+    if (typeof (agents.agents) === 'undefined') {
+      return ''
+    }
+    if (typeof (agents.agents[project.sub_section_details.dealbasicinfo.selling_agent_id]) === 'undefined') {
+      return ''
+    }
+    return agents.agents[project.sub_section_details.dealbasicinfo.selling_agent_id].agent_name
   }
   return '' // DOn't know what to use here
 }

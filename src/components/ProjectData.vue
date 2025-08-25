@@ -18,8 +18,8 @@ import commonProjectValues from '../components/commonProjectValues.js'
 const get_source_text_fn = function (project) {
   return commonProjectValues.dealsource(project)
 }
-const get_agent_text_fn = function (project) {
-  return commonProjectValues.sellingAgent(project)
+const get_agent_text_fn = function (project, dataCachesStore) {
+  return commonProjectValues.sellingAgent(project, dataCachesStore)
 }
 
 export default defineComponent({
@@ -109,8 +109,7 @@ export default defineComponent({
       if (!this.project_filter.filter_agents) {
         return true
       }
-      const agent = this.get_agent_text_fn(x.item)
-      // TODO DEL const agent = utils.get_agent_text(x.item.sub_section_details.dealbasicinfo.selling_agent)
+      const agent = this.get_agent_text_fn(x.item, this.dataCachesStore)
       if (!this.project_filter.selected_agents.includes(agent)) {
         return false
       }
@@ -176,7 +175,23 @@ export default defineComponent({
         }
       })
       // console.log('TEMP disable loading')
-      this.recursive_load_project_details()
+      const callback_patchagents = {
+        ok: function (response) {
+          // console.log('patch agents GOT', response)
+          // Not bothering to store it - will do a cache only lookup when needed
+          TTT.recursive_load_project_details()
+        },
+        error: function (response) {
+          console.log('Error when getting agent data for patch')
+        }
+      }
+      TTT.dataCachesStore.get({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'patchagents',
+        object_id: patch_id,
+        skip_cache: false,
+        callback: callback_patchagents
+      })
     },
     _get_next_item_to_load () {
       const TTT = this
@@ -231,11 +246,9 @@ export default defineComponent({
       // called from load project - so always loaded at this point
       const workflow_stage_id = Workflow_main.get_workflow_stage_key(project.workflow.workflow_used_id, project.workflow.current_stage)
 
-      // TODO DEL const source = utils.get_source_text(project.sub_section_details.dealbasicinfo.deal_source)
       const source = this.get_source_text_fn(project)
 
-      // TODO DEL const agent = utils.get_agent_text(project.sub_section_details.dealbasicinfo.selling_agent)
-      const agent = this.get_agent_text_fn(project)
+      const agent = this.get_agent_text_fn(project, this.dataCachesStore)
 
       this.patch_local_settings_store.reportFoundProject({
         type: this.project_type,

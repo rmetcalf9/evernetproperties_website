@@ -96,6 +96,8 @@
 <script>
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import { Notify } from 'quasar'
 import CommonBRRToolLink from '../components/CommonBRRToolLink.vue'
 import ProjectTableFilters from '../components/ProjectTableFilters.vue'
@@ -113,8 +115,10 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -211,7 +215,7 @@ export default defineComponent({
           loaded: project.loaded,
           address: commonProjectValues.address(project.item),
           source: TTT.get_source_text(project.item),
-          selling_agent: commonProjectValues.sellingAgent(project.item),
+          selling_agent: commonProjectValues.sellingAgent(project.item, TTT.dataCachesStore),
           vandnotes: 'NOT DISPLAYED',
           devplan: commonProjectValues.devplan(project.item),
           notes: commonProjectValues.notes(project.item),

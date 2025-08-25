@@ -419,6 +419,16 @@ export default defineComponent({
     },
     unlinkfromagentnotesbtn () {
       const TTT = this
+      if (typeof (this.patchagents_data.agents[this.selling_agent_id] === 'undefined')) {
+        console.log('WARNING - agent not foudn. Just unlinking')
+        this.updateSellingAgentId('')
+        return
+      }
+      if (typeof (this.patchagents_data.agents[this.selling_agent_id]['projects']) === 'undefined') {
+        console.log('WARNING - invalid agent format. Just unlinking')
+        this.updateSellingAgentId('')
+        return
+      }
       this.patchagents_data.agents[this.selling_agent_id]['projects'] = this.patchagents_data.agents[this.selling_agent_id]['projects'].filter(function (x) {
         return x !== TTT.loaded_project_id
       })
