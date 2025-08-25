@@ -71,6 +71,8 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
       }
       const callback2 = {
         ok: function (response) {
+          // console.log('data_caches save completed success', response)
+          // console.log(' object version', response.data.metadata.objectVersion)
           TTT.cache_data[object_type][response.data.id] = response.data
           callback.ok(response)
         },

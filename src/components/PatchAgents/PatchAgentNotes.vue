@@ -1,14 +1,17 @@
 <template>
-  <div class="patchagnetnotes-lines">
+  <div class="patchagnetnotes-lines  full-width">
     <div>
       <q-input
         filled
         v-model="agent_name"
-        label="Name"
+        label="Agent Name"
       />
     </div>
     <div>
-      <q-input filled autogrow v-model="agent_notes" label="Notes" />
+      <AutoLinkEditor
+        ref="AutoLinkEditor"
+        v-model="agent_notes"
+      />
     </div>
     <div>
       Projects with this agent ({{ projects.length }})
@@ -22,7 +25,7 @@
               class="patchagnetnotes-fake-link cursor-pointer"
               @click.prevent="project_onRowClick({project_id: project.id, new_tab: true})"
             >
-              Link Text
+              {{ project.name }}
             </a>
           </div>
           <div v-if="project.id == current_project">{{ project.name }} - this project</div>
@@ -37,10 +40,20 @@
 <script>
 import { defineComponent } from 'vue'
 import { useDataCachesStore } from 'stores/data_caches'
+import AutoLinkEditor from '../../components/AutoLinkEditor.vue'
+
+function getPlainText(html) {
+  const div = document.createElement('div'); // in memory only
+  div.innerHTML = html;
+  return div.textContent || div.innerText || '';
+}
 
 export default defineComponent({
   name: 'PatchAgentNotes',
   props: [],
+  components: {
+    AutoLinkEditor
+  },
   setup () {
     const dataCachesStore = useDataCachesStore()
     return {
@@ -87,6 +100,14 @@ export default defineComponent({
       this.agent_notes = agent_notes
       this.projects = projects
       this.current_project = current_project
+      var shouldStartInEditMode = false
+      if (this.agent_notes.trim() === '') {
+        shouldStartInEditMode = true
+      }
+      if (getPlainText(this.agent_notes).trim() === '') {
+        shouldStartInEditMode = true
+      }
+      this.$refs.AutoLinkEditor.setEdit(shouldStartInEditMode)
     },
     project_onRowClick ({project_id, new_tab}) {
       if (new_tab) {
@@ -98,7 +119,13 @@ export default defineComponent({
       }
       this.$router.push('/tools/brrcalc?projectid=' + project_id)
     },
-
+    get_agent_data () {
+      return {
+        agent_name: this.agent_name,
+        agent_notes: this.agent_notes,
+        projects: this.projects
+      }
+    }
   }
 })
 </script>

@@ -49,7 +49,6 @@
           @update:selling_agent_id="selling_agent_id = $event"
         />
       </div>
-      <div><q-input filled clearable v-model="selling_agent" label="Selling Agent" /></div>
       <q-separator class="basic-info-seperator" />
       <div><q-input filled autogrow v-model="notes" label="Notes" /></div>
       <q-separator class="basic-info-seperator" />

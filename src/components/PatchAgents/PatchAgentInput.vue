@@ -24,13 +24,6 @@
       class="patchagentinput-notesbutton"
       :icon="notesbtnicon"
     />
-    <q-btn
-      v-if="ever_saved && selling_agent_id !== ''"
-      color="primary"
-      @click="updateSellingAgentId('')"
-      class="patchagentinput-notesbutton"
-      label="tmpdis"
-    />
     <q-dialog v-model="add_dialog.visible">
       <q-card>
         <q-card-section class="row items-center q-pb-none">
@@ -82,21 +75,23 @@
       </q-card>
     </q-dialog>
     <q-dialog v-model="edit_dialog.visible">
-      <q-card>
+      <q-card class="patchagentinput-qcard">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Selling Agent Notes</div>
           <q-space />
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-card-section>
-          <div class="row">
+        <q-card-section class="full-width">
+          <div class="row full-width">
             <PatchAgentNotes
               ref="PatchAgentNotes"
             />
           </div>
-          <q-card-actions align="right" class="text-primary">
+          <q-card-actions align="right" class="text-primary full-width">
+            <q-btn icon="link_off" @click="unlinkfromagentnotesbtnclick" />
             <q-btn label="Cancel" @click="this.edit_dialog.visible = false" />
+            <q-btn color="primary" label="Save" @click="editdialogsavebtnclick" />
           </q-card-actions>
         </q-card-section>
       </q-card>
@@ -106,6 +101,8 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { Notify } from 'quasar'
+
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { useDataCachesStore } from 'stores/data_caches'
 import PatchAgentNotes from './PatchAgentNotes.vue'
@@ -273,6 +270,7 @@ export default defineComponent({
         this.edit_dialog.visible = true
         setTimeout(function () {
           const selected_agent = TTT.patchagents_data.agents[TTT.selling_agent_id]
+          // console.log('aa', selected_agent)
           TTT.$refs.PatchAgentNotes.init(
             selected_agent.agent_name,
             selected_agent.agent_notes,
@@ -335,7 +333,26 @@ export default defineComponent({
       }
     },
     createbtnclick_create_saveagentpatches_fail (response) {
-      console.log('createbtnclick_create_saveagentpatches_fail')
+      console.log('ss', response)
+      if (typeof (response.response) !== 'undefined') {
+        if (typeof (response.response.data) !== 'undefined') {
+          if (typeof (response.response.data.message) !== 'undefined') {
+            Notify.create({
+              color: 'bg-grey-2',
+              message: response.response.data.message,
+              timeout: 2000,
+              color: 'negative'
+            })
+            return
+          }
+        }
+      }
+      Notify.create({
+        color: 'bg-grey-2',
+        message: response.message,
+        timeout: 2000,
+        color: 'negative'
+      })
     },
     createbtnclick_create_saveagentpatches_success (response) {
       const TTT = this
@@ -351,6 +368,71 @@ export default defineComponent({
           TTT.loaded_project_id
         )
       }, 100)
+    },
+    editdialogsavebtnclick () {
+      const changed_agent_data = this.$refs.PatchAgentNotes.get_agent_data()
+      this.patchagents_data.agents[this.selling_agent_id]['agent_name'] = changed_agent_data['agent_name']
+      this.patchagents_data.agents[this.selling_agent_id]['agent_notes'] = changed_agent_data['agent_notes']
+
+      const update_agent_callback = {
+        ok: this.createbtnclick_create_editagentpatches_success,
+        error: this.createbtnclick_create_saveagentpatches_fail
+      }
+      this.dataCachesStore.save({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'patchagents',
+        object_data: this.patchagents_data,
+        callback: update_agent_callback
+      })
+    },
+    createbtnclick_create_editagentpatches_success (response) {
+      this.patchagents_data = response.data
+      this.edit_dialog.visible = false
+    },
+    unlinkfromagentnotesbtnclick () {
+      const TTT = this
+      const cur_project = TTT.dataCachesStore.get_direct_from_cache({
+        object_type: 'projects',
+        object_id: this.loaded_project_id
+      })
+      var cur_project_name = ''
+      if (typeof (cur_project.project_name) !== 'undefined') {
+        cur_project_name = cur_project.project_name
+      }
+      this.$q.dialog({
+        title: 'Unlink agent notes',
+        message: 'This will unlink these notes from the project "' + cur_project_name + '". Are you sure?',
+        html: false,
+        ok: {
+          push: true,
+          label: 'Unlink',
+          color: 'red'
+        },
+        cancel: {
+          push: true,
+          label: 'Cancel',
+          color: 'primary'
+        },
+      }).onOk((data) => {
+        TTT.unlinkfromagentnotesbtn()
+      })
+    },
+    unlinkfromagentnotesbtn () {
+      const TTT = this
+      this.patchagents_data.agents[this.selling_agent_id]['projects'] = this.patchagents_data.agents[this.selling_agent_id]['projects'].filter(function (x) {
+        return x !== TTT.loaded_project_id
+      })
+      this.updateSellingAgentId('')
+      const update_agent_callback = {
+        ok: this.createbtnclick_create_editagentpatches_success,
+        error: this.createbtnclick_create_saveagentpatches_fail
+      }
+      this.dataCachesStore.save({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'patchagents',
+        object_data: this.patchagents_data,
+        callback: update_agent_callback
+      })
     }
   },
   mounted () {
@@ -366,5 +448,8 @@ export default defineComponent({
 }
 .patchagentinput-adddialogcreatebutton {
   margin: 10px;
+}
+.patchagentinput-qcard {
+  min-width: 70vw;
 }
 </style>
