@@ -81,6 +81,26 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="edit_dialog.visible">
+      <q-card>
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Selling Agent Notes</div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-card-section>
+          <div class="row">
+            <PatchAgentNotes
+              ref="PatchAgentNotes"
+            />
+          </div>
+          <q-card-actions align="right" class="text-primary">
+            <q-btn label="Cancel" @click="this.edit_dialog.visible = false" />
+          </q-card-actions>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -88,6 +108,7 @@
 import { defineComponent } from 'vue'
 import { useBackendConnectionStore } from 'stores/backend_connection'
 import { useDataCachesStore } from 'stores/data_caches'
+import PatchAgentNotes from './PatchAgentNotes.vue'
 
 import { uuidv4 } from 'node-common-library'
 
@@ -95,6 +116,9 @@ export default defineComponent({
   name: 'PatchAgentInput',
   props: ['ever_saved', 'loaded_project_id', 'patch_id', 'selling_agent', 'selling_agent_id'],
   emits: ['update:selling_agent', 'update:selling_agent_id'],
+  components: {
+    PatchAgentNotes
+  },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     const dataCachesStore = useDataCachesStore()
@@ -108,6 +132,9 @@ export default defineComponent({
       add_dialog: {
         visible: false,
         agent_name: ''
+      },
+      edit_dialog: {
+        visible: false
       },
       loaded: false,
       patchagents_data: {}
@@ -235,6 +262,7 @@ export default defineComponent({
       this.$emit('update:selling_agent_id', value)
     },
     notesbtnclick () {
+      const TTT = this
       if (!this.ever_saved) {
         return // can not connect to notes if not saved
       }
@@ -242,15 +270,26 @@ export default defineComponent({
         this.add_dialog.agent_name = this.selling_agent
         this.add_dialog.visible = true
       } else {
-        console.log('TODO show edit existing notes dialog')
-        // this.updateSellingAgentId('')
-        // this.updateSellingAgent('SET BLANK')
+        this.edit_dialog.visible = true
+        setTimeout(function () {
+          const selected_agent = TTT.patchagents_data.agents[TTT.selling_agent_id]
+          TTT.$refs.PatchAgentNotes.init(
+            selected_agent.agent_name,
+            selected_agent.agent_notes,
+            selected_agent.projects,
+            TTT.loaded_project_id
+          )
+        }, 100)
       }
     },
     createbtnclick () {
       const TTT = this
       if (this.add_dialog.agent_name === '') {
         return
+      }
+      const update_agent_callback = {
+        ok: TTT.createbtnclick_create_saveagentpatches_success,
+        error: TTT.createbtnclick_create_saveagentpatches_fail
       }
       if (typeof (this.add_dialog_linking_item.id) === 'undefined') {
         const new_agent_id = uuidv4()
@@ -262,31 +301,56 @@ export default defineComponent({
         this.patchagents_data.agents[new_agent_id] = new_agent
         this.updateSellingAgentId(new_agent_id)
         this.updateSellingAgent('')
-        const callback = {
-          ok: TTT.createbtnclick_create_saveagentpatches_success,
-          error: TTT.createbtnclick_create_saveagentpatches_fail
-        }
         TTT.dataCachesStore.save({
           backend_connection_store: TTT.backend_connection_store,
           object_type: 'patchagents',
           object_data: TTT.patchagents_data,
-          callback: callback
+          callback: update_agent_callback
         })
       } else {
         this.updateSellingAgentId(this.add_dialog_linking_item.id)
         this.updateSellingAgent('')
-        console.log('TODO add this project to the agent and save agent')
-        // Add project to this agent
-        // TODO Launch  view dialog
+        if (this.patchagents_data.agents[this.add_dialog_linking_item.id].projects.includes(this.loaded_project_id)) {
+          // Project already in this agent no need to add
+          this.add_dialog.visible = false
+          this.edit_dialog.visible = true
+          setTimeout(function () {
+            const selected_agent = TTT.patchagents_data.agents[TTT.selling_agent_id]
+            TTT.$refs.PatchAgentNotes.init(
+              selected_agent.agent_name,
+              selected_agent.agent_notes,
+              selected_agent.projects,
+              TTT.loaded_project_id
+            )
+          }, 100)
+          return
+        }
+        TTT.patchagents_data.agents[this.add_dialog_linking_item.id].projects.push(TTT.loaded_project_id)
+        TTT.dataCachesStore.save({
+          backend_connection_store: TTT.backend_connection_store,
+          object_type: 'patchagents',
+          object_data: TTT.patchagents_data,
+          callback: update_agent_callback
+        })
       }
     },
     createbtnclick_create_saveagentpatches_fail (response) {
       console.log('createbtnclick_create_saveagentpatches_fail')
     },
     createbtnclick_create_saveagentpatches_success (response) {
+      const TTT = this
       this.patchagents_data = response.data
-
-      // TODO Launch  view dialog
+      this.add_dialog.visible = false
+      this.edit_dialog.visible = true
+      setTimeout(function () {
+        const selected_agent = TTT.patchagents_data.agents[TTT.selling_agent_id]
+        TTT.$refs.PatchAgentNotes.init(
+          selected_agent.agent_name,
+          selected_agent.agent_notes,
+          selected_agent.projects,
+          TTT.loaded_project_id
+        )
+      }, 100)
     }
   },
   mounted () {

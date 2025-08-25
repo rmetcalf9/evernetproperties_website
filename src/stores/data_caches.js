@@ -119,6 +119,12 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
         data: undefined,
         callback: callback2
       })
+    },
+    get_direct_from_cache({object_type, object_id}) {
+      if (!Object.hasOwn(valid_objects, object_type)) {
+        return undefined
+      }
+      return this.cache_data[object_type][object_id]
     }
   }
 })
