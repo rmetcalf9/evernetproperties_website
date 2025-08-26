@@ -138,8 +138,7 @@ export default defineComponent({
       edit_dialog: {
         visible: false
       },
-      loaded: false,
-      patchagents_data: {}
+      loaded: false
     }
   },
   watch: {
@@ -149,7 +148,13 @@ export default defineComponent({
     }
   },
   computed: {
+    patchagents_data () {
+      return this.dataCachesStore.get_direct_from_cache({ object_type: 'patchagents', object_id: this.patch_id })
+    },
     caculated_selling_agent () {
+      if (typeof (this.patchagents_data) === 'undefined') {
+        return ''
+      }
       if (typeof (this.patchagents_data.agents) === 'undefined') {
         return ''
       }
@@ -254,7 +259,8 @@ export default defineComponent({
       console.log('patchagents load failed', response)
     },
     load_patchagents_api_success (response) {
-      this.patchagents_data = response.data
+      // this.patchagents_data = response.data
+      // No need to do this - I now use a computed property
       this.loaded = true
     },
     updateSellingAgent (value) {
@@ -338,7 +344,7 @@ export default defineComponent({
       }
     },
     createbtnclick_create_saveagentpatches_fail (response) {
-      console.log('ss', response)
+      console.log('createbtnclick_create_saveagentpatches_fail', response)
       if (typeof (response.response) !== 'undefined') {
         if (typeof (response.response.data) !== 'undefined') {
           if (typeof (response.response.data.message) !== 'undefined') {

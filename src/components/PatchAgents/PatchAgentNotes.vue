@@ -13,26 +13,30 @@
         v-model="agent_notes"
       />
     </div>
-    <div>
-      Projects with this agent ({{ projects.length }})
+    <div class="patchagentnotes-projectinfo">
+      <q-expansion-item
+        :label="'Projects with this agent (' + projects.length + ')'"
+        dense
+      >
       <ul>
-      <div v-for="project in shown_projects" :key='project.id'>
-        <li>
-          <div
-            v-if="project.id != current_project"
-          >
-            <a
-              class="patchagnetnotes-fake-link cursor-pointer"
-              @click.prevent="project_onRowClick({project_id: project.id, new_tab: true})"
+        <div v-for="project in shown_projects" :key='project.id'>
+          <li>
+            <div
+              v-if="project.id != current_project"
             >
-              {{ project.name }}
-            </a>
-          </div>
-          <div v-if="project.id == current_project">{{ project.name }} - this project</div>
-        </li>
-      </div>
-      </ul>
-      (Only loaded projects shown)
+              <a
+                class="patchagnetnotes-fake-link cursor-pointer"
+                @click.prevent="project_onRowClick({project_id: project.id, new_tab: true})"
+              >
+                {{ project.name }}
+              </a>
+            </div>
+            <div v-if="project.id == current_project">{{ project.name }} - this project</div>
+          </li>
+        </div>
+        </ul>
+        (Only loaded projects shown)
+      </q-expansion-item>
     </div>
   </div>
 </template>
@@ -145,5 +149,8 @@ export default defineComponent({
 
 .patchagnetnotes-fake-link:visited {
   color: #7b1fa2;
+}
+.patchagentnotes-projectinfo {
+  border: 1px solid #ccc;
 }
 </style>

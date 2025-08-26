@@ -1,27 +1,41 @@
 <template>
   <div>
-    <q-tabs v-model="tab" compact>
-      <q-tab name="edit" label="Edit" />
-      <q-tab name="view" label="View" />
-    </q-tabs>
-
     <div class="autolinkeditor-mainitems">
-      <!-- Editor (model stays untouched) -->
-      <q-editor
+      <div
+        style="position: relative;"
         v-if="tab==='edit'"
-        :model-value="modelValue"
-        @update:model-value="updateValue"
-        :content-class="'custom-editor'"
-        :readonly="readonly"
-        :toolbar="customtoolbar"
-      />
+      >
+        <!-- Editor (model stays untouched) -->
+        <q-editor
+          :model-value="modelValue"
+          @update:model-value="updateValue"
+          :content-class="'custom-editor'"
+          :readonly="readonly"
+          :toolbar="customtoolbar"
+        />
+        <q-btn
+          style="position: absolute; top: 0; right: 0;" icon="visibility" round
+          size="sm"
+          flat
+          @click="tab='view'"
+        />
+
+      </div>
 
       <!-- Display with clickable links -->
       <div
+        style="position: relative;"
         v-if="tab==='view'"
-        v-html="formattedContent"
         class="q-mt-md q-pa-sm border rounded"
-      />
+      >
+        <div v-html="formattedContent" />
+        <q-btn
+          style="position: absolute; top: 0; right: 0;" icon="edit" round
+          size="sm"
+          flat
+          @click="tab='edit'"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -93,6 +107,6 @@ export default defineComponent({
 }
 .autolinkeditor-mainitems {
   min-width: 150px;
-  min-height: 190px;
+  min-height: 100px;
 }
 </style>

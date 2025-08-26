@@ -37,6 +37,8 @@
           :loaded_project_id="loaded_project_id"
           @projectchanged="projectchanged"
           @navigate_away="navigate_away"
+          @patchidchanged="patchidchanged"
+          @sellingagentidchanged="sellingagentidchanged"
         />
         <Vision
           ref="Vision"
@@ -247,6 +249,14 @@ export default defineComponent({
         max: 190000
       },
       loaded_project_id: ''
+    }
+  },
+  watch: {
+    loaded_project_id: {
+      handler(newVal, oldVal) {
+        this.projectidchanged(newVal)
+      },
+      immediate: true
     }
   },
   computed: {
@@ -470,6 +480,27 @@ export default defineComponent({
     }
   },
   methods: {
+    projectidchanged(new_project_id) {
+      const TTT = this
+      if (new_project_id === '') {
+        return
+      }
+      this.$refs.BrrCalcToolbar.set_project_id(new_project_id)
+      // console.log('setting new project id to', new_project_id, typeof(new_project_id))
+      // if (typeof (this.$refs.BrrCalcToolbar) === 'undefined') {
+      //  setTimeout(function () {
+      //    TTT.projectidchanged(new_project_id)
+      //  }, 100)
+      //  return
+      // }
+      // this.$refs.BrrCalcToolbar.set_project_id(new_project_id)
+    },
+    patchidchanged(new_patch_id) {
+      this.$refs.BrrCalcToolbar.set_patch_id(new_patch_id)
+    },
+    sellingagentidchanged(new_selling_agent_id) {
+      this.$refs.BrrCalcToolbar.set_selling_agent_id(new_selling_agent_id)
+    },
     navigate_away(params) {
       const TTT = this
       if (!this.$refs.BrrCalcToolbar.is_project_changed) {

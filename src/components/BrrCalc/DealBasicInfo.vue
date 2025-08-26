@@ -76,7 +76,7 @@ function getDefaultSource() {
 
 export default defineComponent({
   name: 'DealBasicInfo',
-  emits: ['projectchanged', 'navigate_away'],
+  emits: ['projectchanged', 'navigate_away', 'patchidchanged', 'sellingagentidchanged'],
   props: ['ever_saved', 'loaded_project_id'],
   components: {
     Weblinks, PatchAgentInput
@@ -106,6 +106,12 @@ export default defineComponent({
     }
   },
   watch: {
+    'patch.id'(newVal, oldVal) {
+      this.$emit('patchidchanged', newVal)
+    },
+    selling_agent_id(newVal, oldVal) {
+      this.$emit('sellingagentidchanged', newVal)
+    },
     serializer_card_data(val) {
       if (this.emit_project_change_notification) {
         this.$emit('projectchanged', 'DealBasicInfo:serializer')

@@ -6,6 +6,7 @@
       :reason_project_not_savable="reason_project_not_savable"
     />
     <CallSellingAgent
+      ref="CallSellingAgent"
       @activity_log="(obj) => $emit('activity_log',obj)"
     />
     <ResearchCall
@@ -56,6 +57,15 @@ export default defineComponent({
     }
   },
   methods: {
+    set_project_id (project_id) {
+      this.$refs.CallSellingAgent.set_project_id(project_id)
+    },
+    set_patch_id (patch_id) {
+      this.$refs.CallSellingAgent.set_patch_id(patch_id)
+    },
+    set_selling_agent_id(selling_agent_id) {
+      this.$refs.CallSellingAgent.set_selling_agent_id(selling_agent_id)
+    },
     click_save_btn () {
       this.$refs.SaveToolbar.click_btn()
     },
