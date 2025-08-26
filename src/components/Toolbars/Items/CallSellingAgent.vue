@@ -133,7 +133,7 @@ export default defineComponent({
           selected_agent.agent_name,
           selected_agent.agent_notes,
           selected_agent.projects,
-          'TODO'
+          TTT.project_id
         )
       }, 100)
 

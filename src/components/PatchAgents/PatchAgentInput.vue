@@ -367,7 +367,7 @@ export default defineComponent({
     },
     createbtnclick_create_saveagentpatches_success (response) {
       const TTT = this
-      this.patchagents_data = response.data
+      // this.patchagents_data = response.data
       this.add_dialog.visible = false
       this.edit_dialog.visible = true
       setTimeout(function () {
@@ -397,7 +397,7 @@ export default defineComponent({
       })
     },
     createbtnclick_create_editagentpatches_success (response) {
-      this.patchagents_data = response.data
+      // this.patchagents_data = response.data
       this.edit_dialog.visible = false
     },
     unlinkfromagentnotesbtnclick () {
@@ -431,12 +431,14 @@ export default defineComponent({
     unlinkfromagentnotesbtn () {
       const TTT = this
       if (typeof (this.patchagents_data.agents[this.selling_agent_id] === 'undefined')) {
-        console.log('WARNING - agent not foudn. Just unlinking')
+        console.log('WARNING - agent not found. Just unlinking')
+        this.edit_dialog.visible = false
         this.updateSellingAgentId('')
         return
       }
       if (typeof (this.patchagents_data.agents[this.selling_agent_id]['projects']) === 'undefined') {
         console.log('WARNING - invalid agent format. Just unlinking')
+        this.edit_dialog.visible = false
         this.updateSellingAgentId('')
         return
       }
