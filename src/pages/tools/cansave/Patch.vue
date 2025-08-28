@@ -41,7 +41,8 @@
           />
         </div>
         <div class="patch-button-bar">
-          <q-btn color="primary" label="Add Project" @click="clicknewproject" />
+          <q-btn color="primary" label="Add Project" icon="add" @click="clicknewproject" />
+          <q-btn color="primary" label="Patch Agent Notes" icon="edit" @click="clickpatchagentnotes" />
         </div>
       </div>
       <div v-if="tab === 'rent_projects'">
@@ -233,6 +234,9 @@ export default defineComponent({
     },
     clicknewproject () {
       this.$router.push('/tools/brrcalc?patchid=' + this.$route.params.patchid)
+    },
+    clickpatchagentnotes () {
+      this.$router.push('/tools/agents/' + this.$route.params.patchid)
     },
     click_brrr_card () {
       this.$router.push('/tools/brrcalc')

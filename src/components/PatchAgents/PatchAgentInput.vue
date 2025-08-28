@@ -430,13 +430,14 @@ export default defineComponent({
     },
     unlinkfromagentnotesbtn () {
       const TTT = this
-      if (typeof (this.patchagents_data.agents[this.selling_agent_id] === 'undefined')) {
-        console.log('WARNING - agent not found. Just unlinking')
+      if (!this.selling_agent_id in this.patchagents_data.agents) {
+        console.log('WARNING - agent not found. Just unlinking agentid', this.selling_agent_id)
+        console.log('agents', this.patchagents_data.agents)
         this.edit_dialog.visible = false
         this.updateSellingAgentId('')
         return
       }
-      if (typeof (this.patchagents_data.agents[this.selling_agent_id]['projects']) === 'undefined') {
+      if (!'projects' in this.patchagents_data.agents[this.selling_agent_id]) {
         console.log('WARNING - invalid agent format. Just unlinking')
         this.edit_dialog.visible = false
         this.updateSellingAgentId('')

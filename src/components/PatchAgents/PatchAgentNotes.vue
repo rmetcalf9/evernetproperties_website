@@ -26,7 +26,7 @@
             >
               <a
                 class="patchagnetnotes-fake-link cursor-pointer"
-                @click.prevent="project_onRowClick({project_id: project.id, new_tab: true})"
+                @click.prevent="project_onRowClick({project_id: project.id})"
               >
                 {{ project.name }}
               </a>
@@ -54,7 +54,12 @@ function getPlainText(html) {
 
 export default defineComponent({
   name: 'PatchAgentNotes',
-  props: [],
+  props: {
+    openProjectInNewTab: {
+      type: Boolean,
+      default: true
+    }
+  },
   components: {
     AutoLinkEditor
   },
@@ -113,8 +118,8 @@ export default defineComponent({
       }
       this.$refs.AutoLinkEditor.setEdit(shouldStartInEditMode)
     },
-    project_onRowClick ({project_id, new_tab}) {
-      if (new_tab) {
+    project_onRowClick ({project_id}) {
+      if (this.openProjectInNewTab) {
         const route = this.$router.resolve('/tools/brrcalc')
         const absoluteURL = new URL(route.href, window.location.origin + window.location.pathname).href + '?projectid=' + project_id
         var handle = window.open(absoluteURL)

@@ -1,3 +1,9 @@
+/*
+  Weird adding path fix:
+  rm -rf node_modules/.vite
+  quasar dev
+*/
+
 const routes = [
   {
     path: '/',
@@ -45,6 +51,8 @@ const routes = [
       { path: 'tools/cansave/patches/:patchid', component: () => import('pages/tools/cansave/Patch.vue') },
       { path: 'tools/cansave/todo', component: () => import('pages/tools/cansave/Todo.vue') },
       { path: 'tools/cansave/toolsrent', component: () => import('pages/tools/cansave/ToolsRent.vue') },
+      { path: 'tools/agents/:patchid', component: () => import('pages/tools/cansave/agent/Agents.vue') },
+      { path: 'tools/agents/:patchid/:sellingagentid', component: () => import('pages/tools/cansave/agent/Agent.vue') },
     ]
   },
 
