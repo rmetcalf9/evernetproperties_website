@@ -13,6 +13,11 @@
         :openProjectInNewTab="false"
       />
     </div>
+    <div class="agent-actionbuttons">
+      <q-btn label="Cancel" @click="clickcancelbtn" />
+      <q-btn color="primary" icon="save" label="Save" @click="clicksavebtn" />
+
+    </div>
   </div>
 </q-page>
 </template>
@@ -107,6 +112,12 @@ export default defineComponent({
         timeout: 2000
       })
       this.$router.push('/tools/cansave/patches')
+    },
+    clickcancelbtn () {
+      this.$router.push('/tools/agents/' + this.$route.params.patchid)
+    },
+    clicksavebtn () {
+      console.log('TODO')
     }
   },
   mounted () {
@@ -117,5 +128,8 @@ export default defineComponent({
 </script>
 
 <style>
-
+.agent-actionbuttons > button {
+  margin-left: 5px;
+  margin-right: 5px;
+}
 </style>
