@@ -7,8 +7,8 @@
     </div>
     <div v-if="loaded">
       <h2>{{ patch_data.name }}</h2>
-      <p>Agents with notes:</p>
-      <div>
+      <div v-if="!there_are_zero_agents">
+        <p>Agents with notes:</p>
         <q-list dense>
           <q-item
             v-for="(agent, key) in patchagents_data.agents" :key='key'
@@ -23,6 +23,9 @@
             </q-item-section>
           </q-item>
         </q-list>
+      </div>
+      <div v-if="there_are_zero_agents">
+        There are no agent notes stored for this patch.
       </div>
     </div>
   </div>
@@ -53,6 +56,15 @@ export default defineComponent({
     }
   },
   computed: {
+    there_are_zero_agents () {
+      if (typeof (this.patchagents_data.agents) === 'undefined') {
+        return true
+      }
+      if (Object.keys(this.patchagents_data.agents).length === 0) {
+        return true
+      }
+      return false
+    },
     patch_data () {
       return this.dataCachesStore.get_direct_from_cache({ object_type: 'patches', object_id: this.$route.params.patchid })
     },

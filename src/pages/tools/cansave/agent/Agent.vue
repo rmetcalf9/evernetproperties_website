@@ -1,13 +1,12 @@
 <template>
 <q-page class="flex flex-center">
   <div class="cols">
-    <h1>Agent Notes</h1>
     <div v-if="!loaded">
       Loading...
     </div>
     <div v-if="loaded">
-      <h2>{{ patch_data.name }}</h2>
-      <p>Notes for {{ selected_agent.agent_name }}</p>
+      <h1>{{ patch_data.name }}</h1>
+      <h2>Agent Notes for {{ selected_agent.agent_name }}</h2>
       <PatchAgentNotes
         ref="PatchAgentNotes"
         :openProjectInNewTab="false"
@@ -16,7 +15,10 @@
     <div class="agent-actionbuttons">
       <q-btn label="Cancel" @click="clickcancelbtn" />
       <q-btn color="primary" icon="save" label="Save" @click="clicksavebtn" />
-
+      <q-btn
+        v-if="(selected_agent.projects.length === 0)"
+        color="negative" icon="delete" label="Delete" @click="clickdeletebtn"
+      />
     </div>
   </div>
 </q-page>
@@ -117,7 +119,81 @@ export default defineComponent({
       this.$router.push('/tools/agents/' + this.$route.params.patchid)
     },
     clicksavebtn () {
-      console.log('TODO')
+      const changed_agent_data = this.$refs.PatchAgentNotes.get_agent_data()
+      this.patchagents_data.agents[this.$route.params.sellingagentid]['agent_name'] = changed_agent_data['agent_name']
+      this.patchagents_data.agents[this.$route.params.sellingagentid]['agent_notes'] = changed_agent_data['agent_notes']
+
+      const update_agent_callback = {
+        ok: this.clicksavebtn_success,
+        error: this.clicksavebtn_fail
+      }
+      this.dataCachesStore.save({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'patchagents',
+        object_data: this.patchagents_data,
+        callback: update_agent_callback
+      })
+    },
+    clicksavebtn_success (response) {
+      this.$router.push('/tools/agents/' + this.$route.params.patchid)
+    },
+    clicksavebtn_fail (response) {
+      console.log('clicksavebtn_fail', response)
+      if (typeof (response.response) !== 'undefined') {
+        if (typeof (response.response.data) !== 'undefined') {
+          if (typeof (response.response.data.message) !== 'undefined') {
+            Notify.create({
+              color: 'bg-grey-2',
+              message: response.response.data.message,
+              timeout: 2000,
+              color: 'negative'
+            })
+            return
+          }
+        }
+      }
+      Notify.create({
+        color: 'bg-grey-2',
+        message: response.message,
+        timeout: 2000,
+        color: 'negative'
+      })
+    },
+    clickdeletebtn () {
+      if (this.selected_agent.projects.length !== 0) {
+        return
+      }
+      const TTT = this
+      this.$q.dialog({
+        title: 'Delete agent notes',
+        message: 'This will delete the notes for this agent (' + this.selected_agent.agent_name + '). Are you sure?',
+        html: false,
+        ok: {
+          push: true,
+          label: 'Delete',
+          color: 'red'
+        },
+        cancel: {
+          push: true,
+          label: 'Cancel',
+          color: 'primary'
+        },
+      }).onOk((data) => {
+        TTT.deleteagentconfirmed()
+      })
+    },
+    deleteagentconfirmed () {
+      delete this.patchagents_data.agents[this.$route.params.sellingagentid]
+      const update_agent_callback = {
+        ok: this.clicksavebtn_success,
+        error: this.clicksavebtn_fail
+      }
+      this.dataCachesStore.save({
+        backend_connection_store: this.backend_connection_store,
+        object_type: 'patchagents',
+        object_data: this.patchagents_data,
+        callback: update_agent_callback
+      })
     }
   },
   mounted () {
