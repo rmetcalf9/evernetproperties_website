@@ -43,7 +43,7 @@ function sellingAgent (project, dataCachesStore) {
     if (typeof (agents.agents[project.sub_section_details.dealbasicinfo.selling_agent_id]) === 'undefined') {
       return ''
     }
-    return agents.agents[project.sub_section_details.dealbasicinfo.selling_agent_id].agent_name
+    return agents.agents[project.sub_section_details.dealbasicinfo.selling_agent_id].agent_name + ' (📋)'
   }
   return '' // DOn't know what to use here
 }
