@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 200 200"
+   version="1.1"
+   id="svg17"
+   sodipodi:docname="focus_agentnotes.svg"
+   inkscape:version="1.4.2 (2aeb623e1d, 2025-05-12)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs17" />
+  <sodipodi:namedview
+     id="namedview17"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="2.1071782"
+     inkscape:cx="187.2172"
+     inkscape:cy="84.947727"
+     inkscape:window-width="1438"
+     inkscape:window-height="841"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg17" />
+  <!-- Document background -->
+  <rect
+     x="56.45557"
+     y="46.652138"
+     width="117.4333"
+     height="126.69505"
+     rx="7.828887"
+     ry="7.239717"
+     fill="#f8fafc"
+     stroke="#e2e8f0"
+     stroke-width="1.88214"
+     id="rect1" />
+  <!-- Document header area -->
+  <rect
+     x="56.45557"
+     y="46.652138"
+     width="117.4333"
+     height="31.673761"
+     rx="7.828887"
+     ry="7.239717"
+     fill="#f1f5f9"
+     id="rect2"
+     style="stroke-width:0.941068" />
+  <rect
+     x="56.45557"
+     y="71.086189"
+     width="117.4333"
+     height="7.239717"
+     fill="#f8fafc"
+     id="rect3"
+     style="stroke-width:0.941068" />
+  <!-- House icon -->
+  <g
+     transform="matrix(0.97861083,0,0,0.90496461,76.027781,55.701784)"
+     id="g5">
+    <polygon
+       points="12,12 2,12 2,7 0,7 7,0 14,7 12,7 "
+       fill="#64748b"
+       stroke="#475569"
+       stroke-width="0.5"
+       id="polygon3" />
+    <rect
+       x="4"
+       y="8"
+       width="2"
+       height="4"
+       fill="#475569"
+       id="rect4" />
+    <rect
+       x="9"
+       y="9"
+       width="2"
+       height="2"
+       fill="#475569"
+       id="rect5" />
+  </g>
+  <!-- Person silhouette -->
+  <g
+     transform="matrix(0.97861083,0,0,0.90496461,105.3861,55.701784)"
+     fill="#64748b"
+     id="g6">
+    <circle
+       cx="7"
+       cy="4"
+       r="3"
+       id="circle5" />
+    <path
+       d="M 1,12 Q 1,8 4,8 h 6 q 3,0 3,4 h -1 q 0,-2 -5,-2 -5,0 -5,2 z"
+       id="path5" />
+  </g>
+  <!-- Note lines with varying content -->
+  <g
+     stroke="#cbd5e1"
+     stroke-width="1.5"
+     stroke-linecap="round"
+     id="g10"
+     transform="matrix(0.97861083,0,0,0.90496461,17.311133,19.5032)">
+    <!-- Full lines -->
+    <line
+       x1="55"
+       y1="85"
+       x2="145"
+       y2="85"
+       id="line6" />
+    <line
+       x1="55"
+       y1="100"
+       x2="140"
+       y2="100"
+       id="line7" />
+    <line
+       x1="55"
+       y1="130"
+       x2="135"
+       y2="130"
+       id="line8" />
+    <!-- Partial lines (incomplete thoughts) -->
+    <line
+       x1="55"
+       y1="115"
+       x2="110"
+       y2="115"
+       id="line9" />
+    <line
+       x1="55"
+       y1="145"
+       x2="120"
+       y2="145"
+       id="line10" />
+  </g>
+  <!-- Key insights/bullet points -->
+  <g
+     fill="#3b82f6"
+     id="g14"
+     transform="matrix(0.97861083,0,0,0.90496461,17.311133,19.5032)">
+    <circle
+       cx="58"
+       cy="85"
+       r="2"
+       id="circle10" />
+    <circle
+       cx="58"
+       cy="100"
+       r="2"
+       id="circle11" />
+    <circle
+       cx="58"
+       cy="115"
+       r="2"
+       id="circle12" />
+    <circle
+       cx="58"
+       cy="130"
+       r="2"
+       id="circle13" />
+    <circle
+       cx="58"
+       cy="145"
+       r="2"
+       id="circle14" />
+  </g>
+  <!-- AI assistant pen/stylus -->
+  <g
+     transform="matrix(0.88692261,0.38245456,-0.41357881,0.82017647,115.17222,123.57413)"
+     id="g17">
+    <!-- Pen body -->
+    <rect
+       x="0"
+       y="-2"
+       width="35"
+       height="4"
+       rx="2"
+       fill="#6366f1"
+       id="rect14" />
+    <!-- Pen tip -->
+    <polygon
+       points="35,2 42,0 35,-2 "
+       fill="#4338ca"
+       id="polygon14" />
+    <!-- Pen details -->
+    <rect
+       x="5"
+       y="-2"
+       width="2"
+       height="4"
+       fill="#8b5cf6"
+       opacity="0.7"
+       id="rect15" />
+    <rect
+       x="10"
+       y="-2"
+       width="2"
+       height="4"
+       fill="#8b5cf6"
+       opacity="0.7"
+       id="rect16" />
+    <!-- Writing trail -->
+    <circle
+       cx="45"
+       cy="0"
+       r="1"
+       fill="#3b82f6"
+       opacity="0.6"
+       id="circle16">
+      <animate
+         attributeName="opacity"
+         values="0.6;0.2;0.6"
+         dur="1.5s"
+         repeatCount="indefinite" />
+    </circle>
+    <circle
+       cx="48"
+       cy="-1"
+       r="0.5"
+       fill="#3b82f6"
+       opacity="0.4"
+       id="circle17">
+      <animate
+         attributeName="opacity"
+         values="0.4;0.1;0.4"
+         dur="1.5s"
+         repeatCount="indefinite"
+         begin="0.2s" />
+    </circle>
+  </g>
+  <ellipse
+     cx="34.568325"
+     cy="33.605591"
+     fill="none"
+     stroke="#e5e7eb"
+     stroke-width="0.647388"
+     opacity="0.3"
+     id="circle1"
+     rx="29.387848"
+     ry="28.879549" />
+  <ellipse
+     cx="34.568325"
+     cy="33.605591"
+     fill="none"
+     stroke="#3b82f6"
+     stroke-width="0.971094"
+     opacity="0.6"
+     id="circle2"
+     rx="22.857212"
+     ry="22.461874">
+    <animate
+       attributeName="r"
+       values="65;75;65"
+       dur="2s"
+       repeatCount="indefinite" />
+    <animate
+       attributeName="opacity"
+       values="0.8;0.3;0.8"
+       dur="2s"
+       repeatCount="indefinite" />
+  </ellipse>
+  <ellipse
+     cx="34.568325"
+     cy="33.605591"
+     fill="#3b82f6"
+     opacity="0.1"
+     id="circle3"
+     rx="14.693924"
+     ry="14.439775"
+     style="stroke-width:0.323696" />
+  <ellipse
+     cx="34.568325"
+     cy="33.605591"
+     fill="#3b82f6"
+     stroke="#1e40af"
+     stroke-width="0.647388"
+     id="circle14-6"
+     rx="3.9183793"
+     ry="3.8506064" />
+  <ellipse
+     cx="34.568325"
+     cy="33.605591"
+     fill="#ffffff"
+     id="circle15"
+     rx="1.9591897"
+     ry="1.9253032"
+     style="stroke-width:0.323696" />
+  <g
+     stroke="#3b82f6"
+     stroke-width="1.5"
+     opacity="0.6"
+     id="g18"
+     transform="matrix(0.32653162,0,0,0.32088387,1.9151631,1.5172039)">
+    <line
+       x1="100"
+       y1="88"
+       x2="100"
+       y2="48"
+       id="line15" />
+    <line
+       x1="112"
+       y1="100"
+       x2="152"
+       y2="100"
+       id="line16" />
+    <line
+       x1="88"
+       y1="100"
+       x2="48"
+       y2="100"
+       id="line17" />
+    <line
+       x1="100"
+       y1="112"
+       x2="100"
+       y2="152"
+       id="line18" />
+  </g>
+  <g
+     stroke="#1e40af"
+     stroke-width="1"
+     opacity="0.4"
+     id="g20"
+     transform="matrix(0.32653162,0,0,0.32088387,1.9151631,1.5172039)">
+    <line
+       x1="94"
+       y1="100"
+       x2="106"
+       y2="100"
+       id="line19" />
+    <line
+       x1="100"
+       y1="94"
+       x2="100"
+       y2="106"
+       id="line20" />
+  </g>
+  <ellipse
+     cx="34.568325"
+     cy="14.352558"
+     opacity="0.4"
+     id="circle4"
+     rx="2.612253"
+     ry="2.567071"
+     style="stroke-width:0.323696" />
+  <ellipse
+     cx="54.160221"
+     cy="33.605591"
+     opacity="0.4"
+     id="circle7"
+     rx="2.2857213"
+     ry="2.2461872"
+     style="stroke-width:0.323696" />
+  <ellipse
+     cx="14.976423"
+     cy="33.605591"
+     opacity="0.4"
+     id="circle8"
+     rx="2.2857213"
+     ry="2.2461872"
+     style="stroke-width:0.323696" />
+  <ellipse
+     cx="34.568325"
+     cy="52.858624"
+     opacity="0.4"
+     id="circle11-7"
+     rx="2.612253"
+     ry="2.567071"
+     style="stroke-width:0.323696" />
+</svg>
