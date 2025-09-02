@@ -4,6 +4,7 @@ import Training_r2r_overview from './Training_r2r_overview.vue'
 import Training_r2r_leads from './Training_r2r_leads.vue'
 import Training_r2r_calls from './Training_r2r_calls.vue'
 import Training_r2r_workflow from './Training_r2r_workflow.vue'
+import Training_focus_agentnotes from './Training_focus_agentnotes.vue'
 
 //// NOTE:
 // make youtubevidref undefined for comming soon
@@ -70,11 +71,22 @@ const glob_tutorials = [
     weight: 3,
     id: 'r2r_workflow',
     svg: true,
-    name: ' Managing the Rent‑to‑Rent Workflow from Lead to Completion',
+    name: 'Managing the Rent‑to‑Rent Workflow from Lead to Completion',
     section: 'Rent-to-Rent',
     description: 'Navigate the entirety of the Rent‑to‑Rent lifecycle - progress leads through the workflow, manage milestones, and finalise projects.',
     component: Training_r2r_workflow,
     youtubevidref: 'Y7YB3kke35s',
+    published: true
+  },
+  {
+    weight: 1,
+    id: 'focus_agentnotes',
+    svg: true,
+    name: 'Feature Focus - Agent Notes',
+    section: 'Agent Notes',
+    description: 'The agent notes feature will help you keep track of agents you build relationships with. It puts important information at your finger tips to help you secure deals.',
+    component: Training_focus_agentnotes,
+    youtubevidref: undefined,
     published: true
   }
 ]
