@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 200 200"
+   version="1.1"
+   id="svg17"
+   sodipodi:docname="agentnotes_only.svg"
+   inkscape:version="1.4.2 (2aeb623e1d, 2025-05-12)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs17" />
+  <sodipodi:namedview
+     id="namedview17"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.49"
+     inkscape:cx="296.30873"
+     inkscape:cy="122.81879"
+     inkscape:window-width="1438"
+     inkscape:window-height="841"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg17" />
+  <!-- Document background -->
+  <rect
+     x="17.144468"
+     y="18.750433"
+     width="159.81389"
+     height="158.33739"
+     rx="10.65426"
+     ry="9.0478506"
+     fill="#f8fafc"
+     stroke="#e2e8f0"
+     stroke-width="2.45457"
+     id="rect1" />
+  <!-- Document header area -->
+  <rect
+     x="17.144468"
+     y="18.750433"
+     width="159.81389"
+     height="39.584343"
+     rx="10.65426"
+     ry="9.0478506"
+     fill="#f1f5f9"
+     id="rect2"
+     style="stroke-width:1.22728" />
+  <rect
+     x="17.144468"
+     y="49.286938"
+     width="159.81389"
+     height="9.0478506"
+     fill="#f8fafc"
+     id="rect3"
+     style="stroke-width:1.22728" />
+  <!-- House icon -->
+  <g
+     transform="matrix(1.3317824,0,0,1.1309813,43.780111,30.060246)"
+     id="g5">
+    <polygon
+       points="2,7 0,7 7,0 14,7 12,7 12,12 2,12 "
+       fill="#64748b"
+       stroke="#475569"
+       stroke-width="0.5"
+       id="polygon3" />
+    <rect
+       x="4"
+       y="8"
+       width="2"
+       height="4"
+       fill="#475569"
+       id="rect4" />
+    <rect
+       x="9"
+       y="9"
+       width="2"
+       height="2"
+       fill="#475569"
+       id="rect5" />
+  </g>
+  <!-- Person silhouette -->
+  <g
+     transform="matrix(1.3317824,0,0,1.1309813,83.733575,30.060246)"
+     fill="#64748b"
+     id="g6">
+    <circle
+       cx="7"
+       cy="4"
+       r="3"
+       id="circle5" />
+    <path
+       d="M 1,12 Q 1,8 4,8 h 6 q 3,0 3,4 h -1 q 0,-2 -5,-2 -5,0 -5,2 z"
+       id="path5" />
+  </g>
+  <!-- Note lines with varying content -->
+  <g
+     stroke="#cbd5e1"
+     stroke-width="1.5"
+     stroke-linecap="round"
+     id="g10"
+     transform="matrix(1.3317824,0,0,1.1309813,-36.126832,-15.179004)">
+    <!-- Full lines -->
+    <line
+       x1="55"
+       y1="85"
+       x2="145"
+       y2="85"
+       id="line6" />
+    <line
+       x1="55"
+       y1="100"
+       x2="140"
+       y2="100"
+       id="line7" />
+    <line
+       x1="55"
+       y1="130"
+       x2="135"
+       y2="130"
+       id="line8" />
+    <!-- Partial lines (incomplete thoughts) -->
+    <line
+       x1="55"
+       y1="115"
+       x2="110"
+       y2="115"
+       id="line9" />
+    <line
+       x1="55"
+       y1="145"
+       x2="120"
+       y2="145"
+       id="line10" />
+  </g>
+  <!-- Key insights/bullet points -->
+  <g
+     fill="#3b82f6"
+     id="g14"
+     transform="matrix(1.3317824,0,0,1.1309813,-36.126832,-15.179004)">
+    <circle
+       cx="58"
+       cy="85"
+       r="2"
+       id="circle10" />
+    <circle
+       cx="58"
+       cy="100"
+       r="2"
+       id="circle11" />
+    <circle
+       cx="58"
+       cy="115"
+       r="2"
+       id="circle12" />
+    <circle
+       cx="58"
+       cy="130"
+       r="2"
+       id="circle13" />
+    <circle
+       cx="58"
+       cy="145"
+       r="2"
+       id="circle14" />
+  </g>
+  <!-- AI assistant pen/stylus -->
+  <g
+     transform="matrix(1.2070048,0.47797333,-0.56283558,1.0250171,97.051415,114.88384)"
+     id="g17">
+    <!-- Pen body -->
+    <rect
+       x="0"
+       y="-2"
+       width="35"
+       height="4"
+       rx="2"
+       fill="#6366f1"
+       id="rect14" />
+    <!-- Pen tip -->
+    <polygon
+       points="35,-2 35,2 42,0 "
+       fill="#4338ca"
+       id="polygon14" />
+    <!-- Pen details -->
+    <rect
+       x="5"
+       y="-2"
+       width="2"
+       height="4"
+       fill="#8b5cf6"
+       opacity="0.7"
+       id="rect15" />
+    <rect
+       x="10"
+       y="-2"
+       width="2"
+       height="4"
+       fill="#8b5cf6"
+       opacity="0.7"
+       id="rect16" />
+    <!-- Writing trail -->
+    <circle
+       cx="45"
+       cy="0"
+       r="1"
+       fill="#3b82f6"
+       opacity="0.6"
+       id="circle16">
+      <animate
+         attributeName="opacity"
+         values="0.6;0.2;0.6"
+         dur="1.5s"
+         repeatCount="indefinite" />
+    </circle>
+    <circle
+       cx="48"
+       cy="-1"
+       r="0.5"
+       fill="#3b82f6"
+       opacity="0.4"
+       id="circle17">
+      <animate
+         attributeName="opacity"
+         values="0.4;0.1;0.4"
+         dur="1.5s"
+         repeatCount="indefinite"
+         begin="0.2s" />
+    </circle>
+  </g>
+</svg>

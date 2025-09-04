@@ -86,7 +86,7 @@ const glob_tutorials = [
     section: 'Agent Notes',
     description: 'The agent notes feature will help you keep track of agents you build relationships with. It puts important information at your finger tips to help you secure deals.',
     component: Training_focus_agentnotes,
-    youtubevidref: undefined,
+    youtubevidref: 'B_hvyeNnY8I',
     published: true
   }
 ]
