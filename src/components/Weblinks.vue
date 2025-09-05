@@ -46,6 +46,16 @@ function new_weblink_record(label, displaytext) {
   }
 }
 
+function incrementEndingNumber(str) {
+  const match = str.match(/\s\((\d+)\)$/);
+  if (match) {
+    const num = parseInt(match[1], 10) + 1;
+    return str.replace(/\s\(\d+\)$/, ` (${num})`);
+  } else {
+    return str + " (1)";
+  }
+}
+
 export default defineComponent({
   name: 'WebLinksComponent',
   props: ['weblinks'],
@@ -106,12 +116,25 @@ export default defineComponent({
       this.edit_dialog.visible = false
       TTT.$emit("updateweblinks", newweblinks)
     },
+    get_uinque_weblink_display_text (display_text) {
+      // works by adding ' (1)' to the end of the display text if a conflict is found
+      // unless the display_text already ends with ' (1)' in which case add ' (2)'
+      // (actually ' (x') will work')
+      const matches = this.weblinks.filter(function (weblink) {
+        return weblink.displaytext === display_text
+      })
+      if (matches.length === 0) {
+        return display_text
+      }
+      return this.get_uinque_weblink_display_text(incrementEndingNumber(display_text))
+    },
     apiaddweblink({url, displaytext}) {
       // Called from another part of the app
+      console.log('apiaddweblink', this.weblinks)
       const newweblinks = this.weblinks.filter(function (weblink) {
         return true
       })
-      newweblinks.push(new_weblink_record(url, displaytext))
+      newweblinks.push(new_weblink_record(url, this.get_uinque_weblink_display_text(displaytext)))
       this.$emit("updateweblinks", newweblinks)
     },
     clickweblink (weblink) {
