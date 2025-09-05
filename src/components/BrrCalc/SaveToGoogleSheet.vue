@@ -6,7 +6,13 @@
     </q-card-section>
     <q-card-section>
       <div>
-        <q-btn color="primary" icon="save" label="Export to google sheets" @click="click_export" />
+        <q-btn
+          color="primary"
+          icon="save"
+          label="Export to google sheets"
+          @click="click_export"
+          :disabled="!this.export_possible"
+        />
       </div>
       <div class="textdiv">
         This feature will generate a spreadsheet containing all the current values for this project and output it to a document in your google drive.
@@ -29,7 +35,20 @@ import sheet_refurb_cost from './SaveToGoogleSheetSheets/refurb_cost.js'
 export default defineComponent({
   name: 'SaveToGoogleSheetCompoennt',
   emits: ['apiaddweblink', 'activity_log'],
-  props: ['serialized_data', 'patch', 'refurb_cost_total', 'stampduty_total', 'othercosts_items_detail', 'caculated_loan_details', 'finance_bridgecost', 'finance_bridgeamount', 'gdv_total', 'refinance_costs'],
+  props: [
+    'serialized_data',
+    'patch',
+    'refurb_cost_total',
+    'stampduty_total',
+    'othercosts_items_detail',
+    'caculated_loan_details',
+    'finance_bridgecost',
+    'finance_bridgeamount',
+    'gdv_total',
+    'refinance_costs',
+    'ever_saved',
+    'loaded_project_id'
+  ],
   setup () {
     const backend_connection_store = useBackendConnectionStore()
     return {
@@ -44,9 +63,29 @@ export default defineComponent({
     security_role_cansave () {
       return this.backend_connection_store.security_role_cansave
     },
+    export_possible () {
+      if (!this.ever_saved) {
+        return false
+      }
+      if (typeof (this.loaded_project_id) === 'undefined') {
+        return false
+      }
+      if (this.loaded_project_id === '') {
+        return false
+      }
+      return true
+    }
   },
   methods: {
     click_export () {
+      if (!this.export_possible) {
+        Notify.create({
+          color: 'negative',
+          message: 'Can not export at the moment - please try again later',
+          timeout: 2000
+        })
+        return
+      }
       Loading.show()
       const tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: this.$rjmgclientid,

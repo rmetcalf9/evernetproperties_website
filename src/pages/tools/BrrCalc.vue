@@ -165,6 +165,8 @@
           :finance_bridgeamount="finance_bridgeamount"
           :refinance_costs="refinance_costs"
           :gdv_total="gdv_total"
+          :ever_saved="ever_saved"
+          :loaded_project_id="loaded_project_id"          
           @apiaddweblink="apiaddweblink"
           @activity_log="activity_log"
         />
