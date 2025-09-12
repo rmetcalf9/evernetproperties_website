@@ -99,7 +99,7 @@ function startChange({backend_connection_store, dataCachesStore, projectId}) {
             const orig_workflow_used_id = proj.workflow.workflow_used_id
             const orig_current_stage = proj.workflow.current_stage
             change_workflow_state(proj, {workflow_id: workflow_id, workflow_stage: workflow_stage})
-            const text = 'From ' + Workflow_main.workflows[orig_workflow_used_id].stages[orig_current_stage].name + ' to ' + Workflow_main.workflows[workflow_id].stages[workflow_stage].name + '<BR>' + notes
+            const text = 'From ' + Workflow_main.workflow2(backend_connection_store, dataCachesStore)[orig_workflow_used_id].stages[orig_current_stage].name + ' to ' + Workflow_main.workflow2(backend_connection_store, dataCachesStore)[workflow_id].stages[workflow_stage].name + '<BR>' + notes
             log_activity(proj, {type: 'wf_move', text: text, head_notes: 'Progressed through workflow'})
           },
           change_address: function ({address, postcode}) {

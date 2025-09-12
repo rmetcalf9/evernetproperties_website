@@ -162,7 +162,7 @@ export default defineComponent({
       return this.$refs.RentProjectData.cumulatively_loaded_agents
     },
     selectedStageText () {
-      return Workflow_main.workflows[this.selected_stage.workflow_id].stages[this.selected_stage.stage_id].name
+      return Workflow_main.workflow2(this.dataCachesStore)[this.selected_stage.workflow_id].stages[this.selected_stage.stage_id].name
     },
     user_profile () {
       return this.backend_connection_store.user_profile

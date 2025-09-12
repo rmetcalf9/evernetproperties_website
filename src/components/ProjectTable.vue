@@ -253,7 +253,7 @@ export default defineComponent({
       return commonProjectValues.dealsource(row)
     },
     getWorkflowStage ({workflow_used_id, current_stage}) {
-      return Workflow_main.workflows[workflow_used_id].stages[current_stage]
+      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[workflow_used_id].stages[current_stage]
     }
   },
   mounted () {

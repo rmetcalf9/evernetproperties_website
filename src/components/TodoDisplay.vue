@@ -48,7 +48,10 @@
 
 <script>
 import { defineComponent } from 'vue'
+
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import { Notify } from 'quasar'
 import TodoItem from './TodoItem.vue'
 import Workflow_main from '../components/Workflow/Workflow_main.js'
@@ -67,8 +70,10 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -173,7 +178,7 @@ export default defineComponent({
         if (!TTT.show_only_active) {
           return true
         }
-        return utils.boolean_undefined_to_false(Workflow_main.workflows[x.project_workflow.workflow_used_id].stages[x.project_workflow.current_stage].active)
+        return utils.boolean_undefined_to_false(Workflow_main.workflow2(TTT.backend_connection_store, TTT.dataCachesStore)[x.project_workflow.workflow_used_id].stages[x.project_workflow.current_stage].active)
       })
       this.loaded = true
     }

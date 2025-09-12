@@ -73,7 +73,10 @@
 import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 import utils from '../../utils.js'
+
 import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import 'add-to-calendar-button'
 import {rentalprojectcalendardescription} from '../../components/utils.js'
 import { DateTime } from 'luxon'
@@ -95,8 +98,10 @@ export default defineComponent({
   },
   setup () {
     const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
     return {
-      backend_connection_store
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -208,7 +213,7 @@ export default defineComponent({
       if (this.current_workflow_position.current_stage === -1) {
         return default_workflow_stage_data()
       }
-      return Workflow_main.workflows[this.current_workflow_position.workflow_used_id]._stage_calc_fn(this.current_workflow_position.current_stage)
+      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[this.current_workflow_position.workflow_used_id]._stage_calc_fn(this.current_workflow_position.current_stage)
     }
   },
   methods: {

@@ -35,12 +35,15 @@
 <script>
 import { defineComponent } from 'vue'
 
+import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import Workflow_main from '../Workflow/Workflow_main.js'
 
 function get_default_workflow_data (default_workflow_id) {
   return {
     workflow_used_id: default_workflow_id,
-    current_stage: Workflow_main.workflows[default_workflow_id].initial_stage
+    current_stage: Workflow_main.get_default_workflow_initial_stage(default_workflow_id)
   }
 }
 
@@ -51,6 +54,14 @@ export default defineComponent({
     default_workflow_id: {
       type: String,
       default: Workflow_main.default_workflow_id
+    }
+  },
+  setup () {
+    const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
+    return {
+      backend_connection_store,
+      dataCachesStore
     }
   },
   data () {
@@ -64,7 +75,7 @@ export default defineComponent({
       return this.workflow_data
     },
     workflow_model () {
-      return Workflow_main.workflows[this.workflow_data.workflow_used_id]
+      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[this.workflow_data.workflow_used_id]
     }
   },
   watch: {

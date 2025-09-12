@@ -8,6 +8,9 @@ import { defineComponent } from 'vue'
 import { Notify } from 'quasar'
 import * as d3 from 'd3'
 
+import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import Workflow_main from './Workflow_main.js'
 
 const stage_height = 130
@@ -335,6 +338,14 @@ export default defineComponent({
   name: 'WorkflowChart',
   props: ['patch_data', 'workflow_id'],
   emits: ['onclickstage'],
+  setup () {
+    const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
+    return {
+      backend_connection_store,
+      dataCachesStore
+    }
+  },
   data () {
     return {
       allzoomedelements: undefined,
@@ -351,7 +362,7 @@ export default defineComponent({
   },
   computed: {
     workflow () {
-      return Workflow_main.workflows[this.workflow_id]
+      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[this.workflow_id]
     }
   },
   methods: {

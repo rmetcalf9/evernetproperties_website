@@ -37,12 +37,24 @@
 
 <script>
 import { defineComponent } from 'vue'
+
+import { useBackendConnectionStore } from 'stores/backend_connection'
+import { useDataCachesStore } from 'stores/data_caches'
+
 import Workflow_main from './Workflow/Workflow_main.js'
 
 
 export default defineComponent({
   name: 'PatchCard',
   props: ['patch'],
+  setup () {
+    const backend_connection_store = useBackendConnectionStore()
+    const dataCachesStore = useDataCachesStore()
+    return {
+      backend_connection_store,
+      dataCachesStore
+    }
+  },
   data () {
     return {
     }
@@ -73,10 +85,10 @@ export default defineComponent({
       return due + notdue + done
     },
     get_workflow_name (workflow_type_id) {
-      return Workflow_main.workflows[workflow_type_id].name
+      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[workflow_type_id].name
     },
     get_workflow_stage_name (workflow_type_id, stage_id) {
-      return Workflow_main.workflows[workflow_type_id].stages[stage_id].name
+      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[workflow_type_id].stages[stage_id].name
     },
     click_patch (patch_id) {
       this.$router.push("/tools/cansave/patches/" + patch_id)

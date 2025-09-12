@@ -8,9 +8,11 @@
 
 <script>
 import { defineComponent } from 'vue'
+
 import { useBackendConnectionStore } from 'stores/backend_connection'
-import { usePatchLocalSettingsStore } from 'stores/patch_local_settings'
 import { useDataCachesStore } from 'stores/data_caches'
+
+import { usePatchLocalSettingsStore } from 'stores/patch_local_settings'
 import Workflow_main from '../components/Workflow/Workflow_main.js'
 import utils from '../components/utils.js'
 import commonProjectValues from '../components/commonProjectValues.js'
@@ -161,7 +163,7 @@ export default defineComponent({
           workflow_id: x.workflow_id,
           stage_id: x.stage_id,
           stage:  Workflow_main.getWorkflowStage(x.workflow_id, x.stage_id),
-          stage_selected: utils.boolean_undefined_to_false(Workflow_main.workflows[x.workflow_id].stages[x.stage_id].active)
+          stage_selected: utils.boolean_undefined_to_false(Workflow_main.workflow2(TTT.backend_connection_store, TTT.dataCachesStore)[x.workflow_id].stages[x.stage_id].active)
         })
         return {
           id: x.project_id,
@@ -257,7 +259,7 @@ export default defineComponent({
         workflow_id: project.workflow.workflow_used_id,
         stage_id: project.workflow.current_stage,
         stage: Workflow_main.getWorkflowStage(project.workflow.workflow_used_id, project.workflow.current_stage),
-        stage_selected: utils.boolean_undefined_to_false(Workflow_main.workflows[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active),
+        stage_selected: utils.boolean_undefined_to_false(Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active),
         source: source,
         source_selected: true,
         agent: agent,
