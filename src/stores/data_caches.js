@@ -8,14 +8,21 @@ import { defineStore } from 'pinia'
 // Only objects in this dict are valid objects to cache
 const valid_objects = {
   projects: {
+    apiprefix: 'privateUserAPIPrefix',
     url: '/projects',
     getOnSaveCacheInvalidationList: projectGetOnSaveCacheInvalidationList
   },
   patches: { // Save might not work because it uses /me/patches endpoint
+    apiprefix: 'privateUserAPIPrefix',
     url: '/patches'
   },
   patchagents: {
+    apiprefix: 'privateUserAPIPrefix',
     url: '/patchagents'
+  },
+  static: {
+    apiprefix: 'infoutilityAPIPrefix',
+    url: '/static'
   }
 }
 
@@ -86,7 +93,7 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
         })
       }
       backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
+        apiprefix: valid_objects[object_type].apiprefix,
         url: valid_objects[object_type].url,
         method: 'POST',
         data: object_data,
@@ -110,13 +117,16 @@ export const useDataCachesStore = defineStore('dataCachesStore', {
       }
       const callback2 = {
         ok: function (response) {
+          if (typeof (response.data.id) === 'undefined') {
+            console.log('Warning response object has no ID - will save into cache and always re save')
+          }
           TTT.cache_data[object_type][response.data.id] = response.data
           callback.ok(response)
         },
         error: callback.error
       }
       backend_connection_store.call_api({
-        apiprefix: 'privateUserAPIPrefix',
+        apiprefix: valid_objects[object_type].apiprefix,
         url: valid_objects[object_type].url + '/' + object_id,
         method: 'GET',
         data: undefined,

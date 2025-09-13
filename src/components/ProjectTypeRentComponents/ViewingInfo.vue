@@ -217,7 +217,7 @@ export default defineComponent({
       if (typeof (this.workflows) === 'undefined') {
         return default_workflow_stage_data()
       }
-      return this.workflows[this.current_workflow_position.workflow_used_id]._stage_calc_fn(this.current_workflow_position.current_stage)
+      return this.workflows[this.current_workflow_position.workflow_used_id].stages[this.current_workflow_position.current_stage].calculated
     }
   },
   methods: {

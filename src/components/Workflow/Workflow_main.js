@@ -1,25 +1,21 @@
-import Workflow from './FirstWorkflow.js'
-import {stage_calc_fn as firstworkflow_stage_calc_fn} from './FirstWorkflow.js'
-import FirstRentWorkflow from './FirstRentWorkflow.js'
-import {stage_calc_fn as firstrentworkflow_stage_calc_fn} from './FirstRentWorkflow.js'
-
-function get_workflows () {
-  let ret_val = {}
-  ret_val[Workflow.id] = Workflow
-  ret_val[Workflow.id]._stage_calc_fn = firstworkflow_stage_calc_fn
-  ret_val[FirstRentWorkflow.id] = FirstRentWorkflow
-  ret_val[FirstRentWorkflow.id]._stage_calc_fn = firstrentworkflow_stage_calc_fn
-  return ret_val
-}
-
-const workflows_local = get_workflows()
-
 function get_workflow_stage_key (workflow_id, stage_id) {
   return workflow_id + ":" + stage_id
 }
 
 function access_workflows_callback(backend_connection_store, dataCachesStore, callback) {
-    callback.ok(workflows_local)
+  const callback_int = {
+    ok: function (response) {
+      callback.ok(response.data.workflows)
+    },
+    error: callback.error
+  }
+  dataCachesStore.get({
+    backend_connection_store: backend_connection_store,
+    object_type: 'static',
+    object_id: 'workflows',
+    skip_cache: false,
+    callback: callback_int
+  })
 }
 
 // TODO add workflow3 which is ASYNC and migrate everytihng to that
