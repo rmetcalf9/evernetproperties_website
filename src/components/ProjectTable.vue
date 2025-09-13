@@ -1,5 +1,5 @@
 <template>
-  <div class="projecttablecontainer">
+  <div class="projecttablecontainer" v-if="loaded">
     <div class="projecttablestyle">
       <div class="row">
         <div class="col-grow">
@@ -123,6 +123,8 @@ export default defineComponent({
   },
   data () {
     return {
+      loaded: false,
+      workflows: undefined,
       filter: '',
       columns: [
         {
@@ -253,11 +255,30 @@ export default defineComponent({
       return commonProjectValues.dealsource(row)
     },
     getWorkflowStage ({workflow_used_id, current_stage}) {
-      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[workflow_used_id].stages[current_stage]
+      return this.workflows[workflow_used_id].stages[current_stage]
     }
   },
   mounted () {
-    this.$refs.ProjectTableFilters.emit_filter_changed_signal()
+    this.loaded = false
+    const TTT = this
+    const callback = {
+      ok: function (response) {
+        TTT.workflows = response
+        TTT.loaded = true
+        setTimeout(function () {
+          TTT.$refs.ProjectTableFilters.emit_filter_changed_signal()
+        }, 50)
+      },
+      error: function (response) {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'Unable to load workflow information',
+          timeout: 2000,
+          color: 'negative'
+        })
+      }
+    }
+    Workflow_main.workflow3(this.backend_connection_store, this.dataCachesStore, callback)
   }
 })
 </script>

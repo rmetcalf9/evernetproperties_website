@@ -348,6 +348,7 @@ export default defineComponent({
   },
   data () {
     return {
+      workflow: undefined,
       allzoomedelements: undefined,
       boudaryRect: undefined,
       svg: undefined,
@@ -361,9 +362,6 @@ export default defineComponent({
     }
   },
   computed: {
-    workflow () {
-      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[this.workflow_id]
-    }
   },
   methods: {
     initChart () {
@@ -464,7 +462,22 @@ export default defineComponent({
 
   },
   mounted () {
-    this.initChart()
+    const TTT = this
+    const callback = {
+      ok: function (response) {
+        TTT.workflow = response[TTT.workflow_id]
+        TTT.initChart()
+      },
+      error: function (response) {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'Unable to load workflow information',
+          timeout: 2000,
+          color: 'negative'
+        })
+      }
+    }
+    Workflow_main.workflow3(this.backend_connection_store, this.dataCachesStore, callback)
   }
 })
 </script>

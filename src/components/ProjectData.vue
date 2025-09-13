@@ -149,7 +149,7 @@ export default defineComponent({
         return TTT.is_project_included_in_current_filters(x)
       })
     },
-    refresh ({project_info_to_load, patch_id, get_cur_filter_fn}) {
+    refresh ({project_info_to_load, patch_id, get_cur_filter_fn, workflows}) {
       const TTT = this
       this.get_cur_filter_fn = get_cur_filter_fn
       this.patch_id = patch_id
@@ -163,7 +163,7 @@ export default defineComponent({
           workflow_id: x.workflow_id,
           stage_id: x.stage_id,
           stage:  Workflow_main.getWorkflowStage(x.workflow_id, x.stage_id),
-          stage_selected: utils.boolean_undefined_to_false(Workflow_main.workflow2(TTT.backend_connection_store, TTT.dataCachesStore)[x.workflow_id].stages[x.stage_id].active)
+          stage_selected: utils.boolean_undefined_to_false(workflows[x.workflow_id].stages[x.stage_id].active)
         })
         return {
           id: x.project_id,
@@ -181,7 +181,7 @@ export default defineComponent({
         ok: function (response) {
           // console.log('patch agents GOT', response)
           // Not bothering to store it - will do a cache only lookup when needed
-          TTT.recursive_load_project_details()
+          TTT.recursive_load_project_details(workflows)
         },
         error: function (response) {
           console.log('Error when getting agent data for patch')
@@ -214,7 +214,7 @@ export default defineComponent({
       }
       return undefined
     },
-    recursive_load_project_details () {
+    recursive_load_project_details (workflows) {
       const item_to_load = this._get_next_item_to_load()
       if (typeof (item_to_load) === 'undefined') {
         return
@@ -225,15 +225,15 @@ export default defineComponent({
         ok: function (response) {
           item_to_load.loaded=true
           item_to_load.item=response.data
-          TTT.add_to_cumulatively_loaded(response.data)
+          TTT.add_to_cumulatively_loaded(response.data, workflows)
           TTT.projecttablefilterchanged(TTT.get_cur_filter_fn())
           TTT.recompute_filtered_projects()
-          TTT.recursive_load_project_details()
+          TTT.recursive_load_project_details(workflows)
         },
         error: function (response) {
           item_to_load.loaded=true
           item_to_load.address='TODO LOAD FAIL'
-          TTT.recursive_load_project_details()
+          TTT.recursive_load_project_details(workflows)
         }
       }
       this.dataCachesStore.get({
@@ -244,7 +244,7 @@ export default defineComponent({
         callback: callback
       })
     },
-    add_to_cumulatively_loaded (project) {
+    add_to_cumulatively_loaded (project, workflows) {
       // called from load project - so always loaded at this point
       const workflow_stage_id = Workflow_main.get_workflow_stage_key(project.workflow.workflow_used_id, project.workflow.current_stage)
 
@@ -259,7 +259,7 @@ export default defineComponent({
         workflow_id: project.workflow.workflow_used_id,
         stage_id: project.workflow.current_stage,
         stage: Workflow_main.getWorkflowStage(project.workflow.workflow_used_id, project.workflow.current_stage),
-        stage_selected: utils.boolean_undefined_to_false(Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active),
+        stage_selected: utils.boolean_undefined_to_false(workflows[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active),
         source: source,
         source_selected: true,
         agent: agent,

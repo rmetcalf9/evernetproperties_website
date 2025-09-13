@@ -78,6 +78,7 @@ export default defineComponent({
   },
   data () {
     return {
+      workflows: undefined,
       show_only_active: true,
       loaded: false,
       loaded_todo_data: undefined,
@@ -149,6 +150,24 @@ export default defineComponent({
   methods: {
     refresh () {
       const TTT = this
+      const callback = {
+        ok: function (response) {
+          TTT.workflows = response
+          TTT.refresh_second()
+        },
+        error: function (response) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Unable to load workflow information',
+            timeout: 2000,
+            color: 'negative'
+          })
+        }
+      }
+      Workflow_main.workflow3(this.backend_connection_store, this.dataCachesStore, callback)
+    },
+    refresh_second () {
+      const TTT = this
       let url = '/me/todos?done=false'
       if (typeof (this.patch_id) !== 'undefined') {
         url = '/me/todos?done=false&patch_id=' + this.patch_id
@@ -178,7 +197,7 @@ export default defineComponent({
         if (!TTT.show_only_active) {
           return true
         }
-        return utils.boolean_undefined_to_false(Workflow_main.workflow2(TTT.backend_connection_store, TTT.dataCachesStore)[x.project_workflow.workflow_used_id].stages[x.project_workflow.current_stage].active)
+        return utils.boolean_undefined_to_false(TTT.workflows[x.project_workflow.workflow_used_id].stages[x.project_workflow.current_stage].active)
       })
       this.loaded = true
     }

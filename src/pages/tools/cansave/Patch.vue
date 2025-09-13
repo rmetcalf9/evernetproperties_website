@@ -126,6 +126,7 @@ export default defineComponent({
   },
   data () {
     return {
+      workflows: undefined,
       loaded: false,
       patch_data: {},
       tab: 'projects',
@@ -160,9 +161,6 @@ export default defineComponent({
     },
     rent_cumulatively_loaded_agents () {
       return this.$refs.RentProjectData.cumulatively_loaded_agents
-    },
-    selectedStageText () {
-      return Workflow_main.workflow2(this.dataCachesStore)[this.selected_stage.workflow_id].stages[this.selected_stage.stage_id].name
     },
     user_profile () {
       return this.backend_connection_store.user_profile
@@ -244,6 +242,24 @@ export default defineComponent({
     refresh () {
       const TTT = this
       const callback = {
+        ok: function (response) {
+          TTT.workflows = response
+          TTT.refresh_second()
+        },
+        error: function (response) {
+          Notify.create({
+            color: 'bg-grey-2',
+            message: 'Unable to load workflow information',
+            timeout: 2000,
+            color: 'negative'
+          })
+        }
+      }
+      Workflow_main.workflow3(this.backend_connection_store, this.dataCachesStore, callback)
+    },
+    refresh_second () {
+      const TTT = this
+      const callback = {
         ok: TTT.refresh_success,
         error: function (response) {
           Notify.create({
@@ -313,12 +329,14 @@ export default defineComponent({
       this.$refs.BuyProjectData.refresh({
         project_info_to_load: project_info_to_load,
         patch_id: this.patch_data.id,
-        get_cur_filter_fn: this.get_buy_current_project_filter
+        get_cur_filter_fn: this.get_buy_current_project_filter,
+        workflows: this.workflows
       })
       this.$refs.RentProjectData.refresh({
         project_info_to_load: rent_project_info_to_load,
         patch_id: this.patch_data.id,
-        get_cur_filter_fn: this.get_rent_current_project_filter
+        get_cur_filter_fn: this.get_rent_current_project_filter,
+        workflows: this.workflows
       })
       this.loaded = true
     },

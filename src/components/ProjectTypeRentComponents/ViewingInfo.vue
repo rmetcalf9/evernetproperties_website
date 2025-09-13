@@ -106,6 +106,7 @@ export default defineComponent({
   },
   data () {
     return {
+      workflows: undefined,
       emit_project_change_notification: true,
       current_workflow_position: {
         workflow_used_id: -1,
@@ -213,7 +214,10 @@ export default defineComponent({
       if (this.current_workflow_position.current_stage === -1) {
         return default_workflow_stage_data()
       }
-      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[this.current_workflow_position.workflow_used_id]._stage_calc_fn(this.current_workflow_position.current_stage)
+      if (typeof (this.workflows) === 'undefined') {
+        return default_workflow_stage_data()
+      }
+      return this.workflows[this.current_workflow_position.workflow_used_id]._stage_calc_fn(this.current_workflow_position.current_stage)
     }
   },
   methods: {
@@ -254,6 +258,23 @@ export default defineComponent({
       this.current_workflow_position.workflow_used_id = workflow_used_id
       this.current_workflow_position.current_stage = current_stage
     }
+  },
+  mounted () {
+    const TTT = this
+    const callback = {
+      ok: function (response) {
+        TTT.workflows = response
+      },
+      error: function (response) {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'Unable to load workflow information',
+          timeout: 2000,
+          color: 'negative'
+        })
+      }
+    }
+    Workflow_main.workflow3(this.backend_connection_store, this.dataCachesStore, callback)
   }
 })
 

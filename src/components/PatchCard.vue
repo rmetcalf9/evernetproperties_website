@@ -1,6 +1,6 @@
 <template>
   <q-card inline class="q-ma-sm card-style tool-card" @click="click_patch(patch.from_user_profile.id)">
-    <q-card-section>
+    <q-card-section v-if="loaded">
       <div class="text-h6">{{ patch.from_user_profile.name }}</div>
       <div class="row">
         <div>
@@ -57,6 +57,8 @@ export default defineComponent({
   },
   data () {
     return {
+      loaded: false,
+      workflows: undefined
     }
   },
   methods: {
@@ -85,14 +87,33 @@ export default defineComponent({
       return due + notdue + done
     },
     get_workflow_name (workflow_type_id) {
-      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[workflow_type_id].name
+      return this.workflows[workflow_type_id].name
     },
     get_workflow_stage_name (workflow_type_id, stage_id) {
-      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[workflow_type_id].stages[stage_id].name
+      return this.workflows[workflow_type_id].stages[stage_id].name
     },
     click_patch (patch_id) {
       this.$router.push("/tools/cansave/patches/" + patch_id)
     }
+  },
+  mounted () {
+    this.loaded = false
+    const TTT = this
+    const callback = {
+      ok: function (response) {
+        TTT.loaded=true
+        TTT.workflows = response
+      },
+      error: function (response) {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'Unable to load workflow information',
+          timeout: 2000,
+          color: 'negative'
+        })
+      }
+    }
+    Workflow_main.workflow3(this.backend_connection_store, this.dataCachesStore, callback)
   }
 })
 

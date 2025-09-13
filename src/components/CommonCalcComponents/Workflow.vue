@@ -1,6 +1,6 @@
 <template>
 <q-card inline class="q-ma-sm card-style">
-  <q-card-section>
+  <q-card-section v-if="loaded">
     <div class="text-h6">Workflow - {{ workflow_model.name }}</div>
     <div class="col">
       <div>
@@ -66,6 +66,8 @@ export default defineComponent({
   },
   data () {
     return {
+      loaded: false,
+      workflows: undefined,
       workflow_data: get_default_workflow_data(Workflow_main.default_workflow_id),
       emit_project_change_notification: true
     }
@@ -75,7 +77,7 @@ export default defineComponent({
       return this.workflow_data
     },
     workflow_model () {
-      return Workflow_main.workflow2(this.backend_connection_store, this.dataCachesStore)[this.workflow_data.workflow_used_id]
+      return this.workflows[this.workflow_data.workflow_used_id]
     }
   },
   watch: {
@@ -114,6 +116,23 @@ export default defineComponent({
   },
   mounted () {
     this.workflow_data = get_default_workflow_data(this.default_workflow_id)
+    this.loaded = false
+    const TTT = this
+    const callback = {
+      ok: function (response) {
+        TTT.workflows = response
+        TTT.loaded = true
+      },
+      error: function (response) {
+        Notify.create({
+          color: 'bg-grey-2',
+          message: 'Unable to load workflow information',
+          timeout: 2000,
+          color: 'negative'
+        })
+      }
+    }
+    Workflow_main.workflow3(this.backend_connection_store, this.dataCachesStore, callback)
   }
 })
 </script>

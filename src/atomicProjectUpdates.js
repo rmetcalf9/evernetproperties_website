@@ -67,66 +67,59 @@ function change_viewing_information(proj, {viewing_timestamp, call_timestamp, ca
 
 function startChange({backend_connection_store, dataCachesStore, projectId}) {
   return new Promise(function(successFn, errorFn) {
-    const callback = {
+    const callbackFirst = {
       ok: function (response) {
-        let proj = response.data
-        const active_change_object = {
-          complete: function (successFn2) {
-            const savecallback = {
-              ok: function (response) {
-                if (typeof (successFn2) !== 'undefined') {
-                  successFn2(response)
+        const workflows = response
+        const callback = {
+          ok: function (response) {
+            let proj = response.data
+            const active_change_object = {
+              complete: function (successFn2) {
+                const savecallback = {
+                  ok: function (response) {
+                    if (typeof (successFn2) !== 'undefined') {
+                      successFn2(response)
+                    }
+                  },
+                  error: errorFn
                 }
-              },
-              error: errorFn
-            }
-            // backend_connection_store.call_api({
-            //   apiprefix: 'privateUserAPIPrefix',
-            //   url: '/projects',
-            //   method: 'POST',
-            //   data: proj,
-            //   callback: savecallback
-            // })
-            dataCachesStore.save({
-              backend_connection_store: this.backend_connection_store,
-              object_type: 'projects',
-              object_data: proj,
-              callback: savecallback
-            })
+                dataCachesStore.save({
+                  backend_connection_store: this.backend_connection_store,
+                  object_type: 'projects',
+                  object_data: proj,
+                  callback: savecallback
+                })
 
+              },
+              change_workflow_state: function ({workflow_id, workflow_stage, notes}) {
+                const orig_workflow_used_id = proj.workflow.workflow_used_id
+                const orig_current_stage = proj.workflow.current_stage
+                change_workflow_state(proj, {workflow_id: workflow_id, workflow_stage: workflow_stage})
+                const text = 'From ' + workflows[orig_workflow_used_id].stages[orig_current_stage].name + ' to ' + workflows[workflow_id].stages[workflow_stage].name + '<BR>' + notes
+                log_activity(proj, {type: 'wf_move', text: text, head_notes: 'Progressed through workflow'})
+              },
+              change_address: function ({address, postcode}) {
+                change_address(proj, {address: address, postcode: postcode})
+              },
+              change_viewing_information: function ({viewing_timestamp, call_timestamp, call_notes}) {
+                change_viewing_information(proj, {viewing_timestamp: viewing_timestamp, call_timestamp: call_timestamp, call_notes: call_notes})
+              }
+            }
+            successFn({active_change_object})
           },
-          change_workflow_state: function ({workflow_id, workflow_stage, notes}) {
-            const orig_workflow_used_id = proj.workflow.workflow_used_id
-            const orig_current_stage = proj.workflow.current_stage
-            change_workflow_state(proj, {workflow_id: workflow_id, workflow_stage: workflow_stage})
-            const text = 'From ' + Workflow_main.workflow2(backend_connection_store, dataCachesStore)[orig_workflow_used_id].stages[orig_current_stage].name + ' to ' + Workflow_main.workflow2(backend_connection_store, dataCachesStore)[workflow_id].stages[workflow_stage].name + '<BR>' + notes
-            log_activity(proj, {type: 'wf_move', text: text, head_notes: 'Progressed through workflow'})
-          },
-          change_address: function ({address, postcode}) {
-            change_address(proj, {address: address, postcode: postcode})
-          },
-          change_viewing_information: function ({viewing_timestamp, call_timestamp, call_notes}) {
-            change_viewing_information(proj, {viewing_timestamp: viewing_timestamp, call_timestamp: call_timestamp, call_notes: call_notes})
-          }
+          error: errorFn
         }
-        successFn({active_change_object})
+        dataCachesStore.get({
+          backend_connection_store: backend_connection_store,
+          object_type: 'projects',
+          object_id: projectId,
+          skip_cache: false,
+          callback: callback
+        })
       },
       error: errorFn
     }
-    dataCachesStore.get({
-      backend_connection_store: backend_connection_store,
-      object_type: 'projects',
-      object_id: projectId,
-      skip_cache: false,
-      callback: callback
-    })
-    // backend_connection_store.call_api({
-    //   apiprefix: 'privateUserAPIPrefix',
-    //   url: '/projects/' + projectId,
-    //   method: 'GET',
-    //   data: undefined,
-    //   callback: callback
-    // })
+    Workflow_main.workflow3(backend_connection_store, dataCachesStore, callbackFirst)
   })
 }
 
