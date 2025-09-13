@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <div>
+    <div v-if="loaded">
       <h1>Select Patch</h1>
       <div v-for="patch in active_patches" :key="patch">
         <PatchCard
@@ -46,6 +46,8 @@ export default defineComponent({
   },
   data () {
     return {
+      loaded: false,
+      workflows: undefined,
       patches_data:{}
     }
   },
@@ -80,11 +82,12 @@ export default defineComponent({
   },
   methods: {
     patch_has_active_projects (patch) {
+      const TTT = this
       let activeProjects = false
       Object.keys(patch.detail.workflow_lookup).forEach(function (workflow_id) {
         Object.keys(patch.detail.workflow_lookup[workflow_id]).forEach(function (stage_id) {
           if (patch.detail.workflow_lookup[workflow_id][stage_id].length > 0) {
-            if (Workflow_main.isActiveStage(workflow_id, stage_id)) {
+            if (Workflow_main.isActiveStage(TTT.workflows, workflow_id, stage_id)) {
               activeProjects = true
             }
           }
@@ -128,6 +131,8 @@ export default defineComponent({
     }
   },
   mounted () {
+    this.loaded = false
+    const TTT = this
     this.patches_data = this.user_profile.patches.map(function (x) {
       return {
         from_user_profile: x,
@@ -136,7 +141,17 @@ export default defineComponent({
         detail: {}
       }
     })
-    this.recursive_load_project_details()
+    const callback = {
+      ok: function (response) {
+        TTT.workflows = response
+        TTT.loaded = true
+        TTT.recursive_load_project_details()
+      },
+      error: function (response) {
+        console.log('Error loading workflows', response)
+      }
+    }
+    Workflow_main.workflow3(this.backend_connection_store, this.dataCachesStore, callback)
   }
 })
 </script>

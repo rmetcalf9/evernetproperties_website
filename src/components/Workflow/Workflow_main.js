@@ -12,23 +12,23 @@ function get_workflows () {
   return ret_val
 }
 
-const workflows = get_workflows()
+const workflows_local = get_workflows()
 
 function get_workflow_stage_key (workflow_id, stage_id) {
   return workflow_id + ":" + stage_id
 }
 
 function access_workflows_callback(backend_connection_store, dataCachesStore, callback) {
-    callback.ok(workflows)
+    callback.ok(workflows_local)
 }
 
 // TODO add workflow3 which is ASYNC and migrate everytihng to that
 
-function getWorkflowStage (workflow_id, stage_id) {
+function getWorkflowStage (workflows, workflow_id, stage_id) {
   return workflows[workflow_id].stages[stage_id]
 }
 
-function isActiveStage (workflow_id, stage_id) {
+function isActiveStage (workflows, workflow_id, stage_id) {
   if (typeof(workflows[workflow_id].stages[stage_id].active) === 'undefined') {
     return false
   }
@@ -52,6 +52,6 @@ export default {
   get_default_workflow_initial_stage: get_default_workflow_initial_stage,
   workflow3: access_workflows_callback, // Returns all possible workflows
   get_workflow_stage_key: get_workflow_stage_key,
-  getWorkflowStage: getWorkflowStage, // TODO REFACTOR depends on local json
-  isActiveStage: isActiveStage // TODO REFACTOR depends on local json
+  getWorkflowStage: getWorkflowStage,
+  isActiveStage: isActiveStage
 }

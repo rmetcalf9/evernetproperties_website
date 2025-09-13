@@ -162,7 +162,7 @@ export default defineComponent({
           workflow_stage_id: workflow_stage_id,
           workflow_id: x.workflow_id,
           stage_id: x.stage_id,
-          stage:  Workflow_main.getWorkflowStage(x.workflow_id, x.stage_id),
+          stage:  Workflow_main.getWorkflowStage(workflows, x.workflow_id, x.stage_id),
           stage_selected: utils.boolean_undefined_to_false(workflows[x.workflow_id].stages[x.stage_id].active)
         })
         return {
@@ -258,7 +258,7 @@ export default defineComponent({
         workflow_stage_id: workflow_stage_id,
         workflow_id: project.workflow.workflow_used_id,
         stage_id: project.workflow.current_stage,
-        stage: Workflow_main.getWorkflowStage(project.workflow.workflow_used_id, project.workflow.current_stage),
+        stage: Workflow_main.getWorkflowStage(workflows, project.workflow.workflow_used_id, project.workflow.current_stage),
         stage_selected: utils.boolean_undefined_to_false(workflows[project.workflow.workflow_used_id].stages[project.workflow.current_stage].active),
         source: source,
         source_selected: true,
