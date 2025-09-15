@@ -74,6 +74,7 @@ export default defineComponent({
         offer_made: { sent: true, name: 'Offer made' },
         offer_rejected: { sent: false, name: 'Offer rejected' },
         offer_accepted: {sent: false, name: 'Offer accepted' },
+        agent_research: {sent: false, name: 'Agent Research'},
       }
 
       let prev_data_string = ""
