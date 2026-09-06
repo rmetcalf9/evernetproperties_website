@@ -37,7 +37,7 @@
           alt="Evernet properties logo"
           src="~assets/main_logo.svg"
         >
-        <div>Evernet Properties Limited |  Company Number: 15345182 | Company registered office : 86-90, Paul Street, London EC2A 4NE</div>
+        <div>Evernet Property Management Limited |  Company Number: 16643642</div>
       </div>
     </q-page-container>
 
