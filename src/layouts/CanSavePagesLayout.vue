@@ -28,11 +28,6 @@
       </div>
       <div class="bottom-sub-toolbar bg-grey-5 fit column wrap justify-center items-center content-center text-white">
         <img
-          alt="PIMS Logo"
-          src="~assets/PIMS Logo White.png"
-          class="pims-logo"
-        >Membership number 34541 (Robert Metcalf)
-        <img
           class="bottom-logo"
           alt="Evernet properties logo"
           src="~assets/main_logo.svg"
