@@ -20,7 +20,7 @@ export const useRightmoveLocationCodeStore = defineStore('rightmoveLocationCode'
       let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: 'https://api.metcarob.com/property_backend/v0/public/api/rmproxy/typeahead?query=' + postcode_in_rightmove_query_form + '&limit=10&exclude=STREET',
+        url: 'https://api2.metcarob.com/property_backend/v0/public/api/rmproxy/typeahead?query=' + postcode_in_rightmove_query_form + '&limit=10&exclude=STREET',
       };
 
 

@@ -15,7 +15,7 @@ import utils from '../utils.js'
 
 const seconds_to_wait_for_user_to_login = 10
 
-const backend_endpoint = 'https://api.metcarob.com/property_backend/v0'
+const backend_endpoint = 'https://api2.metcarob.com/property_backend/v0'
 
 const api_prefixes = {
   infoAPIPrefix: { url: '/public/api/info', add_token: false },
